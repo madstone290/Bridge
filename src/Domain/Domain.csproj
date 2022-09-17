@@ -7,4 +7,8 @@
 	<RootNamespace>Bridge.Domain</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Users\Events\" />
+  </ItemGroup>
+
 </Project>
