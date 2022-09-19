@@ -2,7 +2,11 @@
 using Bridge.Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,20 +38,36 @@ namespace Bridge.IntegrationTests.Config
               {
                   webHostBuilder.ConfigureTestServices(services =>
                   {
+                      services.RemoveAll<DbContextOptions<BridgeContext>>();
 
+                      var jsonString = File.ReadAllText("Secrets/bridge_test_secret.json");
+                      var jObj = JObject.Parse(jsonString);
+                      var connectionStringObj = jObj["ConnectionString"];
+                      if (connectionStringObj == null)
+                          throw new Exception("DB 연결 문자열 불러오기에 실패하였습니다");
+
+                      var connectionString = connectionStringObj.ToString();
+                      services.AddDbContext<BridgeContext>(options =>
+                      {
+                          options.UseNpgsql(connectionString);
+                      });
                   });
               });
 
-            // 슈퍼유저 생성
+            
             using var scope = webApplicationFactory.Services.CreateScope();
 
+            // DB 마이그레이션
             var bridgeContext = scope.ServiceProvider.GetRequiredService<BridgeContext>();
-            if(!bridgeContext.Users.Any(x=> x.IdentityUserId == Seeds.RootUser.IdentityUserId))
+            bridgeContext.Database.Migrate();
+
+            // 슈퍼유저 생성
+            if (!bridgeContext.Users.Any(x => x.IdentityUserId == Seeds.RootUser.IdentityUserId))
                 bridgeContext.Users.Add(Seeds.RootUser);
             bridgeContext.SaveChanges();
         }
 
-        
+
     }
 
 }

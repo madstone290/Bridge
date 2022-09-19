@@ -5,6 +5,11 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 
 var builder = WebApplication.CreateBuilder(args);
 
+if (builder.Environment.IsProduction())
+    builder.Configuration.AddJsonFile("Secrets/db_context_prod_secret.json");
+else
+    builder.Configuration.AddJsonFile("Secrets/db_context_dev_secret.json");
+
 builder.Services.AddControllers(options =>
 {
     var noContentFormatter = options.OutputFormatters.OfType<HttpNoContentOutputFormatter>().FirstOrDefault();

@@ -1,11 +1,12 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Bridge.Infrastructure.Migrations.Bridge
+namespace Bridge.Infrastructure.Migrations.Bridge.Postgresql
 {
-    public partial class Init : Migration
+    public partial class InitBridgeContext : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,12 +15,12 @@ namespace Bridge.Infrastructure.Migrations.Bridge
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Location_Latitude = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Location_Longitude = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Categories = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ContactNumber = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Location_Latitude = table.Column<string>(type: "text", nullable: false),
+                    Location_Longitude = table.Column<string>(type: "text", nullable: false),
+                    Categories = table.Column<string>(type: "text", nullable: false),
+                    ContactNumber = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -31,10 +32,10 @@ namespace Bridge.Infrastructure.Migrations.Bridge
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    IsAdmin = table.Column<bool>(type: "bit", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IdentityUserId = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    IsAdmin = table.Column<bool>(type: "boolean", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    IdentityUserId = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -46,12 +47,12 @@ namespace Bridge.Infrastructure.Migrations.Bridge
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Day = table.Column<int>(type: "int", nullable: false),
-                    OpenTime = table.Column<TimeSpan>(type: "time", nullable: false),
-                    CloseTime = table.Column<TimeSpan>(type: "time", nullable: false),
-                    BreakStartTime = table.Column<TimeSpan>(type: "time", nullable: true),
-                    BreakEndTime = table.Column<TimeSpan>(type: "time", nullable: true),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Day = table.Column<string>(type: "text", nullable: false),
+                    OpenTime = table.Column<TimeSpan>(type: "interval", nullable: false),
+                    CloseTime = table.Column<TimeSpan>(type: "interval", nullable: false),
+                    BreakStartTime = table.Column<TimeSpan>(type: "interval", nullable: true),
+                    BreakEndTime = table.Column<TimeSpan>(type: "interval", nullable: true),
                     PlaceId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
@@ -70,10 +71,11 @@ namespace Bridge.Infrastructure.Migrations.Bridge
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
                     PlaceId = table.Column<long>(type: "bigint", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: true)
+                    Price = table.Column<decimal>(type: "numeric(18,4)", precision: 18, scale: 4, nullable: true),
+                    Categories = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -83,7 +85,7 @@ namespace Bridge.Infrastructure.Migrations.Bridge
                         column: x => x.PlaceId,
                         principalTable: "Places",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(

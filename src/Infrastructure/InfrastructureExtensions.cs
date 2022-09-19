@@ -12,11 +12,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Bridge.Infrastructure
 {
@@ -24,16 +19,16 @@ namespace Bridge.Infrastructure
     {
         public static void AddInfrastructureDependency(this IServiceCollection services, IConfiguration configuration)
         {
+            var bridgeConnString = configuration["DbContext:BridgeContext:ConnectionString"];
             services.AddDbContext<BridgeContext>(options =>
             {
-                //options.UseInMemoryDatabase("Bridge");
-                options.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=BridgeDemoDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+                options.UseNpgsql(bridgeConnString);
             });
 
+            var identityConnString = configuration["DbContext:IdentityContext:ConnectionString"];
             services.AddDbContext<IdentityContext>(options =>
             {
-                //options.UseInMemoryDatabase("Identity");
-                options.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=BridgeIdentityDemoDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+                options.UseNpgsql(identityConnString);
             });
 
             services.AddIdentity<IdentityUser, IdentityRole>()
