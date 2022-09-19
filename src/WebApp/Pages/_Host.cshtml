@@ -1,0 +1,10 @@
+﻿@page "/"
+@namespace Bridge.WebApp.Pages
+@using Bridge.WebApp
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "_Layout";
+}
+
+<component type="typeof(App)" render-mode="Server" />

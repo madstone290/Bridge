@@ -4,11 +4,16 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-	<RootNamespace>Bridge.Web</RootNamespace>
+	<RootNamespace>Bridge.WebApp</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
     <Folder Include="Data\" />
+    <Folder Include="wwwroot\css\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MudBlazor" Version="6.0.15" />
   </ItemGroup>
 
 </Project>
