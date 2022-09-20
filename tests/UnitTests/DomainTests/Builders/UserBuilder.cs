@@ -1,6 +1,6 @@
 ﻿using Bridge.Domain.Users.Entities;
 
-namespace Bridge.DomainTests.Builders
+namespace Bridge.UnitTests.DomainTests.Builders
 {
     public class UserBuilder
     {

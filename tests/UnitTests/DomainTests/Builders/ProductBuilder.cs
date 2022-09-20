@@ -2,7 +2,7 @@
 using Bridge.Domain.Products.Entities;
 using Bridge.Domain.Users.Entities;
 
-namespace Bridge.DomainTests.Builders
+namespace Bridge.UnitTests.DomainTests.Builders
 {
     public class ProductBuilder
     {
@@ -14,6 +14,6 @@ namespace Bridge.DomainTests.Builders
                 place);
         }
 
-       
+
     }
 }

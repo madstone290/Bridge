@@ -2,7 +2,7 @@
 using Bridge.Domain.Places.Entities;
 using Bridge.Domain.Places.Exceptions;
 using Bridge.Domain.Users.Entities;
-using Bridge.DomainTests.Builders;
+using Bridge.UnitTests.DomainTests.Builders;
 using FluentAssertions;
 using System;
 using System.Collections.Generic;
@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace Bridge.DomainTests.Places
+namespace Bridge.UnitTests.DomainTests
 {
     public class PlaceUnitTests : IClassFixture<UserBuilder>, IClassFixture<PlaceBuilder>
     {
@@ -46,7 +46,7 @@ namespace Bridge.DomainTests.Places
             var location = Location.Default();
 
             // Act
-            var action = () =>  
+            var action = () =>
             {
                 var place = Place.Create(user, name, location);
             };
@@ -152,7 +152,7 @@ namespace Bridge.DomainTests.Places
             // Assert
             place.ContactNumber.Should().Be(contactNumber);
         }
-        
+
         [Fact]
         public void Default_OpeningTimes_Are_Empty()
         {
@@ -175,12 +175,12 @@ namespace Bridge.DomainTests.Places
             var closeTime = TimeSpan.FromHours(18);
 
             // Act
-            place.AddOpeningTime(day,openTime, closeTime);
+            place.AddOpeningTime(day, openTime, closeTime);
 
             // Assert
             place.OpeningTimes.Should().Contain(
-                x=> x.Day == day && 
-                x.OpenTime == openTime && 
+                x => x.Day == day &&
+                x.OpenTime == openTime &&
                 x.CloseTime == closeTime);
         }
 
@@ -189,8 +189,8 @@ namespace Bridge.DomainTests.Places
         {
             // Arrange
             var place = NewPlace();
-            var day= DayOfWeek.Friday;
-            var oldOpenTime= TimeSpan.FromHours(6);
+            var day = DayOfWeek.Friday;
+            var oldOpenTime = TimeSpan.FromHours(6);
             var oldCloseTime = TimeSpan.FromHours(18);
             place.AddOpeningTime(day, oldOpenTime, oldCloseTime);
 
@@ -200,7 +200,7 @@ namespace Bridge.DomainTests.Places
             place.AddOpeningTime(day, newOpenTime, newCloseTime);
 
             // Assert
-            place.OpeningTimes.Should().NotContain(x => 
+            place.OpeningTimes.Should().NotContain(x =>
                 x.Day == day &&
                 x.OpenTime == oldOpenTime &&
                 x.CloseTime == oldCloseTime);

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Bridge.DomainTests.Users
+namespace Bridge.UnitTests.DomainTests
 {
     public class UserUnitTests
     {

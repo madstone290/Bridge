@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Bridge.DomainTests.ValueObjects
+namespace Bridge.UnitTests.DomainTests
 {
     public class LocationTests
     {

@@ -3,13 +3,13 @@ using Bridge.Domain.Places.Entities;
 using Bridge.Domain.Products.Entities;
 using Bridge.Domain.Products.Exception;
 using Bridge.Domain.Users.Entities;
-using Bridge.DomainTests.Builders;
+using Bridge.UnitTests.DomainTests.Builders;
 using FluentAssertions;
 
-namespace Bridge.DomainTests.Products
+namespace Bridge.UnitTests.DomainTests
 {
     public class ProductUnitTests : IClassFixture<UserBuilder>, IClassFixture<PlaceBuilder>, IClassFixture<ProductBuilder>
-    { 
+    {
         private readonly UserBuilder _userBuilder;
         private readonly PlaceBuilder _placeBuilder;
         private readonly ProductBuilder _productBuilder;
@@ -47,7 +47,7 @@ namespace Bridge.DomainTests.Products
             var user = _userBuilder.BuildNormalUser();
             var place = NewPlace();
             var name = Guid.NewGuid().ToString();
-            
+
             // Act
             var action = () => Product.Create(user, name, place);
 

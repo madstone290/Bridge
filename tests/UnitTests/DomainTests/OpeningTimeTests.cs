@@ -1,9 +1,9 @@
 ﻿using Bridge.Domain.Places.Entities;
 using Bridge.Domain.Places.Exceptions;
-using Bridge.DomainTests.Builders;
+using Bridge.UnitTests.DomainTests.Builders;
 using FluentAssertions;
 
-namespace Bridge.DomainTests.ValueObjects
+namespace Bridge.UnitTests.DomainTests
 {
     public class OpeningTimeTests : IClassFixture<PlaceBuilder>
     {
@@ -46,7 +46,7 @@ namespace Bridge.DomainTests.ValueObjects
             var day = DayOfWeek.Friday;
             var openTime = TimeSpan.FromHours(0);
             var closeTime = TimeSpan.FromHours(25);
-            
+
             // Act
             var action = () => { var _ = OpeningTime.Between(day, openTime, closeTime); };
 
