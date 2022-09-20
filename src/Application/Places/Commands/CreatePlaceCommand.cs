@@ -28,12 +28,12 @@ namespace Bridge.Application.Places.Commands
         /// <summary>
         /// 장소 위도
         /// </summary>
-        public decimal Latitude { get; set; }
+        public double Latitude { get; set; }
 
         /// <summary>
         /// 장소 경도
         /// </summary>
-        public decimal Longitude { get; set; }
+        public double Longitude { get; set; }
 
         /// <summary>
         /// 장소 카테고리

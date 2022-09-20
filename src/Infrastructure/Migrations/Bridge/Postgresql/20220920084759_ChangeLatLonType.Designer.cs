@@ -3,6 +3,7 @@ using System;
 using Bridge.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Bridge.Infrastructure.Migrations.Bridge.Postgresql
 {
     [DbContext(typeof(BridgeContext))]
-    partial class BridgeContextModelSnapshot : ModelSnapshot
+    [Migration("20220920084759_ChangeLatLonType")]
+    partial class ChangeLatLonType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -102,25 +104,6 @@ namespace Bridge.Infrastructure.Migrations.Bridge.Postgresql
 
             modelBuilder.Entity("Bridge.Domain.Places.Entities.Place", b =>
                 {
-                    b.OwnsOne("Bridge.Domain.Common.ValueObjects.Location", "Location", b1 =>
-                        {
-                            b1.Property<long>("PlaceId")
-                                .HasColumnType("bigint");
-
-                            b1.Property<double>("Latitude")
-                                .HasColumnType("double precision");
-
-                            b1.Property<double>("Longitude")
-                                .HasColumnType("double precision");
-
-                            b1.HasKey("PlaceId");
-
-                            b1.ToTable("Places");
-
-                            b1.WithOwner()
-                                .HasForeignKey("PlaceId");
-                        });
-
                     b.OwnsMany("Bridge.Domain.Places.Entities.OpeningTime", "OpeningTimes", b1 =>
                         {
                             b1.Property<long>("Id")
@@ -157,9 +140,6 @@ namespace Bridge.Infrastructure.Migrations.Bridge.Postgresql
                             b1.WithOwner()
                                 .HasForeignKey("PlaceId");
                         });
-
-                    b.Navigation("Location")
-                        .IsRequired();
 
                     b.Navigation("OpeningTimes");
                 });

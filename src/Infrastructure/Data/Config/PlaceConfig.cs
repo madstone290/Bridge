@@ -12,17 +12,7 @@ namespace Bridge.Infrastructure.Data.Config
         public void Configure(EntityTypeBuilder<Place> builder)
         {
             // Location
-            var locationBuilder = builder.OwnsOne(x => x.Location);
-            locationBuilder.Property(x => x.Latitude)
-                .HasConversion(new ValueConverter<decimal, string>(
-                    value => value.ToString(),
-                    providerValue => decimal.Parse(providerValue))
-                );
-            locationBuilder.Property(x => x.Longitude)
-               .HasConversion(new ValueConverter<decimal, string>(
-                   value => value.ToString(),
-                   providerValue => decimal.Parse(providerValue))
-               );
+            builder.OwnsOne(x => x.Location);
 
             // OpeningTimes
             var timeBuilder = builder.OwnsMany(x => x.OpeningTimes);

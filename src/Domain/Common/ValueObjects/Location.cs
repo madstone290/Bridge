@@ -9,13 +9,13 @@ namespace Bridge.Domain.Common.ValueObjects
 {
     public class Location : ValueObject
     {
-        public const decimal MinLatitude = -90;
-        public const decimal MaxLatitude = 90;
-        public const decimal MinLongitude = -180;
-        public const decimal MaxLongitude = 180;
+        public const double MinLatitude = -90;
+        public const double MaxLatitude = 90;
+        public const double MinLongitude = -180;
+        public const double MaxLongitude = 180;
 
         private Location() { }
-        private Location(decimal latitude, decimal longitude)
+        private Location(double latitude, double longitude)
         {
             if (latitude < MinLatitude || MaxLatitude < latitude)
             {
@@ -33,14 +33,14 @@ namespace Bridge.Domain.Common.ValueObjects
 
         public static Location Default() => new(0, 0);
 
-        public static Location From(decimal latitude, decimal longitude)
+        public static Location From(double latitude, double longitude)
         {
             return new Location(latitude, longitude);
         }
 
 
-        public decimal Latitude { get; private set; }
-        public decimal Longitude { get; private set; }
+        public double Latitude { get; private set; }
+        public double Longitude { get; private set; }
 
         protected override IEnumerable<object?> GetEqualityPropertyValues()
         {

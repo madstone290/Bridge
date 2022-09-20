@@ -30,8 +30,8 @@ namespace Bridge.IntegrationTests
             {
                 UserId = await _apiService.CreateAdminUserAsync(_client),
                 Name = Guid.NewGuid().ToString(),
-                Latitude = 1.422334M,
-                Longitude = 1.233222M,
+                Latitude = 1.422334,
+                Longitude = 1.233222,
                 Categories = new List<PlaceCategory>()
                 {
                     PlaceCategory.Restaurant,
@@ -62,8 +62,8 @@ namespace Bridge.IntegrationTests
             {
                 UserId = await _apiService.CreateAdminUserAsync(_client),
                 Name = Guid.NewGuid().ToString(),
-                Latitude = 1.422334M,
-                Longitude = 1.233222M,
+                Latitude = 1.422334,
+                Longitude = 1.233222,
                 Categories = new List<PlaceCategory>()
                 {
                     PlaceCategory.Restaurant,
