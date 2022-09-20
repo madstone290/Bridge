@@ -17,13 +17,18 @@ namespace Bridge.UnitTests.DomainTests
             // Arrange
             var latitude = new Random().Next(90);
             var longitude = new Random().Next(180);
+            var easting = new Random().Next(1000000);
+            var northing = new Random().Next(2000000);
+            
 
             // Act
-            var location = Location.From(latitude, longitude);
+            var location = Location.Create(latitude, longitude, easting, northing);
 
             // Assert
             location.Latitude.Should().Be(latitude);
             location.Longitude.Should().Be(longitude);
+            location.Easting.Should().Be(easting);
+            location.Northing.Should().Be(northing);
         }
 
         [Fact]
@@ -56,7 +61,7 @@ namespace Bridge.UnitTests.DomainTests
             // Arrange
 
             // Act
-            var action = () => { var location = Location.From(-91, 0); };
+            var action = () => { var location = Location.Create(-91, 0, 0, 0); };
 
             // Assert
             action.Should().ThrowExactly<InvalidLocationException>();
@@ -68,7 +73,7 @@ namespace Bridge.UnitTests.DomainTests
             // Arrange
 
             // Act
-            var action = () => { var location = Location.From(91, 0); };
+            var action = () => { var location = Location.Create(91, 0, 0, 0); };
 
             // Assert
             action.Should().ThrowExactly<InvalidLocationException>();
@@ -80,7 +85,7 @@ namespace Bridge.UnitTests.DomainTests
             // Arrange
 
             // Act
-            var action = () => { var location = Location.From(0, -181); };
+            var action = () => { var location = Location.Create(0, -181, 0, 0); };
 
             // Assert
             action.Should().ThrowExactly<InvalidLocationException>();
@@ -93,7 +98,7 @@ namespace Bridge.UnitTests.DomainTests
             // Arrange
 
             // Act
-            var action = () => { var location = Location.From(0, 181); };
+            var action = () => { var location = Location.Create(0, 181, 0, 0); };
 
             // Assert
             action.Should().ThrowExactly<InvalidLocationException>();

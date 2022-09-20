@@ -1,12 +1,11 @@
 ﻿using Bridge.Domain.Common.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Bridge.Domain.Common.ValueObjects
 {
+    /// <summary>
+    /// 위치.
+    /// 위도, 경도 및 UTM-K도법의 좌표를 가진다.
+    /// </summary>
     public class Location : ValueObject
     {
         public const double MinLatitude = -90;
@@ -15,7 +14,7 @@ namespace Bridge.Domain.Common.ValueObjects
         public const double MaxLongitude = 180;
 
         private Location() { }
-        private Location(double latitude, double longitude)
+        private Location(double latitude, double longitude, double easting, double northing)
         {
             if (latitude < MinLatitude || MaxLatitude < latitude)
             {
@@ -29,18 +28,44 @@ namespace Bridge.Domain.Common.ValueObjects
 
             Latitude = latitude;
             Longitude = longitude;
+            Easting = easting;
+            Northing = northing;
         }
 
-        public static Location Default() => new(0, 0);
+        public static Location Default() => new(0, 0, 0, 0);
 
-        public static Location From(double latitude, double longitude)
+        /// <summary>
+        /// 위치를 생성한다
+        /// </summary>
+        /// <param name="latitude">위도</param>
+        /// <param name="longitude">경도</param>
+        /// <param name="easting">UTM-K도법의 동쪽방향 좌표</param>
+        /// <param name="northing">UTM-K도법의 북쪽방향 좌표</param>
+        /// <returns></returns>
+        public static Location Create(double latitude, double longitude, double easting, double northing)
         {
-            return new Location(latitude, longitude);
+            return new Location(latitude, longitude, easting, northing);
         }
 
-
+        /// <summary>
+        /// 위도
+        /// </summary>
         public double Latitude { get; private set; }
+
+        /// <summary>
+        /// 경도
+        /// </summary>
         public double Longitude { get; private set; }
+
+        /// <summary>
+        /// UTM-K도법의 동쪽방향 좌표
+        /// </summary>
+        public double Easting { get; private set; }
+
+        /// <summary>
+        /// UTM-K도법의 북쪽방향 좌표
+        /// </summary>
+        public double Northing { get; private set; }
 
         protected override IEnumerable<object?> GetEqualityPropertyValues()
         {

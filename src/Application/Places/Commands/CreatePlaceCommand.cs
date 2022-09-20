@@ -36,6 +36,16 @@ namespace Bridge.Application.Places.Commands
         public double Longitude { get; set; }
 
         /// <summary>
+        /// UTM-K E좌표
+        /// </summary>
+        public double Easting { get; set; }
+
+        /// <summary>
+        /// UTM-K N좌표
+        /// </summary>
+        public double Northing { get; set; }
+
+        /// <summary>
         /// 장소 카테고리
         /// </summary>
         public List<PlaceCategory> Categories { get; set; } = new();
@@ -68,7 +78,7 @@ namespace Bridge.Application.Places.Commands
 
         public override async Task<long> HandleCommand(CreatePlaceCommand command, CancellationToken cancellationToken)
         {
-            var location = Location.From(command.Latitude, command.Longitude);
+            var location = Location.Create(command.Latitude, command.Longitude, command.Easting, command.Northing);
 
             var user = await _userRepository.FindByIdAsync(command.UserId) ?? throw new UserNotFoundException(new { command.UserId });
 

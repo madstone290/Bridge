@@ -132,7 +132,7 @@ namespace Bridge.UnitTests.DomainTests
             // Arrange
             var place = NewPlace();
             // Act
-            var locationToChange = Location.From(1, 1);
+            var locationToChange = Location.Create(1, 1, 0, 0);
             place.SetLocation(locationToChange);
 
             // Assert
