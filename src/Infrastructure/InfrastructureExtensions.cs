@@ -1,4 +1,5 @@
 ﻿using Bridge.Application.Common;
+using Bridge.Application.Common.Services;
 using Bridge.Application.Places.Repos;
 using Bridge.Application.Products.Repos;
 using Bridge.Application.Users.ReadRepos;
@@ -8,6 +9,7 @@ using Bridge.Domain.Users.Repos;
 using Bridge.Infrastructure.Data;
 using Bridge.Infrastructure.Data.ReadRepos;
 using Bridge.Infrastructure.Data.Repos;
+using Bridge.Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -34,6 +36,8 @@ namespace Bridge.Infrastructure
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<IdentityContext>()
                 .AddDefaultTokenProviders();
+
+            services.AddScoped<IAddressMapService, DemoAddressMapService>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 

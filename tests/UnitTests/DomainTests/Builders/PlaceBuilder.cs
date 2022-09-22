@@ -11,6 +11,7 @@ namespace Bridge.UnitTests.DomainTests.Builders
             var place = Place.Create(
                 user,
                 name ?? Guid.NewGuid().ToString(),
+                Guid.NewGuid().ToString(),
                 location ?? PlaceLocation.Create(0,0,0,0));
 
             return place;

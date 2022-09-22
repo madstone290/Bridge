@@ -30,8 +30,7 @@ namespace Bridge.IntegrationTests
             {
                 UserId = await _apiService.CreateAdminUserAsync(_client),
                 Name = Guid.NewGuid().ToString(),
-                Latitude = 1.422334,
-                Longitude = 1.233222,
+                Address = "대구시 수성구",
                 Categories = new List<PlaceCategory>()
                 {
                     PlaceCategory.Restaurant,
@@ -62,8 +61,7 @@ namespace Bridge.IntegrationTests
             {
                 UserId = await _apiService.CreateAdminUserAsync(_client),
                 Name = Guid.NewGuid().ToString(),
-                Latitude = 1.422334,
-                Longitude = 1.233222,
+                Address = "대구시 수성구",
                 Categories = new List<PlaceCategory>()
                 {
                     PlaceCategory.Restaurant,
@@ -114,10 +112,14 @@ namespace Bridge.IntegrationTests
             place.Should().NotBeNull();
             place.Id.Should().Be(query.Id);
             place.Name.Should().Be(command.Name);
-            place.Latitude.Should().Be(command.Latitude);
-            place.Longitude.Should().Be(command.Longitude);
+            place.ContactNumber.Should().Be(command.ContactNumber);
+            place.Address.Should().Be(command.Address);
             place.Categories.Should().BeEquivalentTo(command.Categories);
             place.OpeningTimes.Should().BeEquivalentTo(command.OpeningTimes);
+            place.Location.Latitude.Should().NotBe(0);
+            place.Location.Longitude.Should().NotBe(0);
+            place.Location.Easting.Should().NotBe(0);
+            place.Location.Northing.Should().NotBe(0);
 
 
         }

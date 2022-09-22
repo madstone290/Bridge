@@ -30,8 +30,15 @@ namespace Bridge.Infrastructure.Data.ReadRepos
                 {
                     Id = x.Id,
                     Name = x.Name,
-                    Latitude = x.Location.Latitude,
-                    Longitude = x.Location.Longitude,
+                    Address = x.Address,
+                    Location = new PlaceLocationDto()
+                    {
+                       
+                        Latitude = x.Location.Latitude,
+                        Longitude = x.Location.Longitude,
+                        Easting = x.Location.Easting,
+                        Northing = x.Location.Northing
+                    },
                     Categories = x.Categories.ToList(),
                     ContactNumber = x.ContactNumber,
                     OpeningTimes = x.OpeningTimes.Select(t=> new OpeningTimeDto()

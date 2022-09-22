@@ -16,14 +16,14 @@ namespace Bridge.Application.Places.ReadModels
         public string Name { get; set; } = string.Empty;
 
         /// <summary>
-        /// 장소 위도
+        /// 주소
         /// </summary>
-        public double Latitude { get; set; }
+        public string Address { get; set; } = string.Empty;
 
         /// <summary>
-        /// 장소 경도
+        /// 위치
         /// </summary>
-        public double Longitude { get; set; }
+        public PlaceLocationDto Location { get; set; } = new();
 
         /// <summary>
         /// 장소 카테고리

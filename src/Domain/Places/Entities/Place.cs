@@ -29,10 +29,10 @@ namespace Bridge.Domain.Places.Entities
         private ISet<PlaceCategory> _categories = new HashSet<PlaceCategory>();
 
         private Place() { }
-        private Place(string name, PlaceLocation location)
+        private Place(string name, string address, PlaceLocation location)
         {
             SetName(name);
-            SetLocation(location);
+            SetAddressLocation(address, location);
         }
 
         /// <summary>
@@ -41,18 +41,23 @@ namespace Bridge.Domain.Places.Entities
         /// <param name="name"></param>
         /// <param name="location"></param>
         /// <returns></returns>
-        public static Place Create(User user, string name, PlaceLocation location)
+        public static Place Create(User user, string name, string address, PlaceLocation location)
         {
             if (!user.IsAdmin)
                 throw new NoPermissionException();
 
-            return new Place(name, location);
+            return new Place(name, address, location);
         }
 
         /// <summary>
         /// 장소명
         /// </summary>
         public string Name { get; private set; } = string.Empty;
+
+        /// <summary>
+        /// 주소
+        /// </summary>
+        public string Address { get; private set; } = string.Empty;
 
         /// <summary>
         /// 장소위치
@@ -91,14 +96,16 @@ namespace Bridge.Domain.Places.Entities
         }
 
         /// <summary>
-        /// 위치를 변경한다.
+        /// 주소 및 위치를 변경한다.
         /// </summary>
+        /// <param name="address"></param>
         /// <param name="location"></param>
-        public void SetLocation(PlaceLocation location)
+        public void SetAddressLocation(string address, PlaceLocation location)
         {
-            if (Location == location)
+            if (Address == address)
                 return;
 
+            Address = address;
             Location = location;
         }
 

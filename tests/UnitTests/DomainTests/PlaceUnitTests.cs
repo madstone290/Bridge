@@ -4,12 +4,6 @@ using Bridge.Domain.Places.Exceptions;
 using Bridge.Domain.Users.Entities;
 using Bridge.UnitTests.DomainTests.Builders;
 using FluentAssertions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace Bridge.UnitTests.DomainTests
 {
@@ -43,12 +37,13 @@ namespace Bridge.UnitTests.DomainTests
             // Arrange
             var name = string.Empty;
             var user = NewAdmin();
+            var address = "대구시 수성구";
             var location = PlaceLocation.Create(0,0,0,0);
 
             // Act
             var action = () =>
             {
-                var place = Place.Create(user, name, location);
+                var place = Place.Create(user, name, address, location);
             };
 
             // Assert
@@ -132,10 +127,12 @@ namespace Bridge.UnitTests.DomainTests
             // Arrange
             var place = NewPlace();
             // Act
+            var address = "서울시 황금동";
             var locationToChange = PlaceLocation.Create(1, 1, 0, 0);
-            place.SetLocation(locationToChange);
+            place.SetAddressLocation(address, locationToChange);
 
             // Assert
+            place.Address.Should().Be(address);
             place.Location.Should().Be(locationToChange);
         }
 
