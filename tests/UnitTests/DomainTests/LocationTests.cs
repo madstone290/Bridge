@@ -1,11 +1,6 @@
-﻿using Bridge.Domain.Common.Exceptions;
-using Bridge.Domain.Common.ValueObjects;
+﻿using Bridge.Domain.Common.ValueObjects;
+using Bridge.Domain.Places.Exceptions;
 using FluentAssertions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Bridge.UnitTests.DomainTests
 {
@@ -22,7 +17,7 @@ namespace Bridge.UnitTests.DomainTests
             
 
             // Act
-            var location = Location.Create(latitude, longitude, easting, northing);
+            var location = PlaceLocation.Create(latitude, longitude, easting, northing);
 
             // Assert
             location.Latitude.Should().Be(latitude);
@@ -32,39 +27,15 @@ namespace Bridge.UnitTests.DomainTests
         }
 
         [Fact]
-        public void Default_Latitude_Is_Zero()
-        {
-            // Arrange
-
-            // Act
-            var location = Location.Default();
-
-            // Assert
-            location.Latitude.Should().Be(0);
-        }
-
-        [Fact]
-        public void Default_Longitude_Is_Zero()
-        {
-            // Arrange
-
-            // Act
-            var location = Location.Default();
-
-            // Assert
-            location.Longitude.Should().Be(0);
-        }
-
-        [Fact]
         public void Latitude_Cannot_Be_Less_Than_Negative90()
         {
             // Arrange
 
             // Act
-            var action = () => { var location = Location.Create(-91, 0, 0, 0); };
+            var action = () => { var location = PlaceLocation.Create(-91, 0, 0, 0); };
 
             // Assert
-            action.Should().ThrowExactly<InvalidLocationException>();
+            action.Should().ThrowExactly<InvalidPlaceLocationException>();
         }
 
         [Fact]
@@ -73,10 +44,10 @@ namespace Bridge.UnitTests.DomainTests
             // Arrange
 
             // Act
-            var action = () => { var location = Location.Create(91, 0, 0, 0); };
+            var action = () => { var location = PlaceLocation.Create(91, 0, 0, 0); };
 
             // Assert
-            action.Should().ThrowExactly<InvalidLocationException>();
+            action.Should().ThrowExactly<InvalidPlaceLocationException>();
         }
 
         [Fact]
@@ -85,10 +56,10 @@ namespace Bridge.UnitTests.DomainTests
             // Arrange
 
             // Act
-            var action = () => { var location = Location.Create(0, -181, 0, 0); };
+            var action = () => { var location = PlaceLocation.Create(0, -181, 0, 0); };
 
             // Assert
-            action.Should().ThrowExactly<InvalidLocationException>();
+            action.Should().ThrowExactly<InvalidPlaceLocationException>();
         }
 
 
@@ -98,10 +69,10 @@ namespace Bridge.UnitTests.DomainTests
             // Arrange
 
             // Act
-            var action = () => { var location = Location.Create(0, 181, 0, 0); };
+            var action = () => { var location = PlaceLocation.Create(0, 181, 0, 0); };
 
             // Assert
-            action.Should().ThrowExactly<InvalidLocationException>();
+            action.Should().ThrowExactly<InvalidPlaceLocationException>();
         }
     }
 }

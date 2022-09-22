@@ -1,29 +1,29 @@
-﻿using Bridge.Domain.Common.Exceptions;
+﻿using Bridge.Domain.Places.Exceptions;
 
 namespace Bridge.Domain.Common.ValueObjects
 {
     /// <summary>
-    /// 위치.
+    /// 장소의 위치.
     /// 위도, 경도 및 UTM-K도법의 좌표를 가진다.
     /// </summary>
-    public class Location : ValueObject
+    public class PlaceLocation : ValueObject
     {
         public const double MinLatitude = -90;
         public const double MaxLatitude = 90;
         public const double MinLongitude = -180;
         public const double MaxLongitude = 180;
 
-        private Location() { }
-        private Location(double latitude, double longitude, double easting, double northing)
+        private PlaceLocation() { }
+        private PlaceLocation(double latitude, double longitude, double easting, double northing)
         {
             if (latitude < MinLatitude || MaxLatitude < latitude)
             {
-                throw new InvalidLocationException();
+                throw new InvalidPlaceLocationException();
             }
 
             if (longitude < MinLongitude || MaxLongitude < longitude)
             {
-                throw new InvalidLocationException();
+                throw new InvalidPlaceLocationException();
             }
 
             Latitude = latitude;
@@ -31,8 +31,6 @@ namespace Bridge.Domain.Common.ValueObjects
             Easting = easting;
             Northing = northing;
         }
-
-        public static Location Default() => new(0, 0, 0, 0);
 
         /// <summary>
         /// 위치를 생성한다
@@ -42,9 +40,9 @@ namespace Bridge.Domain.Common.ValueObjects
         /// <param name="easting">UTM-K도법의 동쪽방향 좌표</param>
         /// <param name="northing">UTM-K도법의 북쪽방향 좌표</param>
         /// <returns></returns>
-        public static Location Create(double latitude, double longitude, double easting, double northing)
+        public static PlaceLocation Create(double latitude, double longitude, double easting, double northing)
         {
-            return new Location(latitude, longitude, easting, northing);
+            return new PlaceLocation(latitude, longitude, easting, northing);
         }
 
         /// <summary>

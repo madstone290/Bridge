@@ -1,8 +1,6 @@
 ﻿using Bridge.Application.Common;
-using Bridge.Application.Common.Exceptions;
 using Bridge.Application.Common.Exceptions.EntityNotFoundExceptions;
 using Bridge.Application.Places.Dtos;
-using Bridge.Application.Places.ReadModels;
 using Bridge.Domain.Common.ValueObjects;
 using Bridge.Domain.Places.Entities;
 using Bridge.Domain.Places.Repos;
@@ -78,7 +76,7 @@ namespace Bridge.Application.Places.Commands
 
         public override async Task<long> HandleCommand(CreatePlaceCommand command, CancellationToken cancellationToken)
         {
-            var location = Location.Create(command.Latitude, command.Longitude, command.Easting, command.Northing);
+            var location = PlaceLocation.Create(command.Latitude, command.Longitude, command.Easting, command.Northing);
 
             var user = await _userRepository.FindByIdAsync(command.UserId) ?? throw new UserNotFoundException(new { command.UserId });
 

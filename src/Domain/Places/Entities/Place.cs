@@ -3,11 +3,6 @@ using Bridge.Domain.Common.Exceptions;
 using Bridge.Domain.Common.ValueObjects;
 using Bridge.Domain.Places.Exceptions;
 using Bridge.Domain.Users.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Bridge.Domain.Places.Entities
 {
@@ -34,7 +29,7 @@ namespace Bridge.Domain.Places.Entities
         private ISet<PlaceCategory> _categories = new HashSet<PlaceCategory>();
 
         private Place() { }
-        private Place(string name, Location location)
+        private Place(string name, PlaceLocation location)
         {
             SetName(name);
             SetLocation(location);
@@ -46,7 +41,7 @@ namespace Bridge.Domain.Places.Entities
         /// <param name="name"></param>
         /// <param name="location"></param>
         /// <returns></returns>
-        public static Place Create(User user, string name, Location location)
+        public static Place Create(User user, string name, PlaceLocation location)
         {
             if (!user.IsAdmin)
                 throw new NoPermissionException();
@@ -62,7 +57,7 @@ namespace Bridge.Domain.Places.Entities
         /// <summary>
         /// 장소위치
         /// </summary>
-        public Location Location { get; private set; } = null!;
+        public PlaceLocation Location { get; private set; } = null!;
 
         /// <summary>
         /// 장소 카테고리
@@ -99,7 +94,7 @@ namespace Bridge.Domain.Places.Entities
         /// 위치를 변경한다.
         /// </summary>
         /// <param name="location"></param>
-        public void SetLocation(Location location)
+        public void SetLocation(PlaceLocation location)
         {
             if (Location == location)
                 return;

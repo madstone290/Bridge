@@ -43,7 +43,7 @@ namespace Bridge.UnitTests.DomainTests
             // Arrange
             var name = string.Empty;
             var user = NewAdmin();
-            var location = Location.Default();
+            var location = PlaceLocation.Create(0,0,0,0);
 
             // Act
             var action = () =>
@@ -132,7 +132,7 @@ namespace Bridge.UnitTests.DomainTests
             // Arrange
             var place = NewPlace();
             // Act
-            var locationToChange = Location.Create(1, 1, 0, 0);
+            var locationToChange = PlaceLocation.Create(1, 1, 0, 0);
             place.SetLocation(locationToChange);
 
             // Assert
