@@ -15,7 +15,8 @@ namespace Bridge.Infrastructure.Services
                 if(utmIndex < 0)
                     return Tuple.Create(100000d, 200000d);
 
-                string[] eastingNorthing = address.Substring(utmIndex, address.Length - utmIndex).Split(",");
+                var eastingNorthingStr = address.Substring(utmIndex + 4, address.Length - (utmIndex + 4));
+                var eastingNorthing = eastingNorthingStr.Split(",");
                 return Tuple.Create(double.Parse(eastingNorthing[0]), double.Parse(eastingNorthing[1]));
             }
         }

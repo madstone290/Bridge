@@ -66,8 +66,6 @@ namespace Bridge.Application.Places.Commands
 
         public override async Task<long> HandleCommand(CreatePlaceCommand command, CancellationToken cancellationToken)
         {
-            
-
             var user = await _userRepository.FindByIdAsync(command.UserId) ?? throw new UserNotFoundException(new { command.UserId });
             
             var latitudeLongitude = await _addressMapService.GetLatitudeAndLongitudeAsync(command.Address);

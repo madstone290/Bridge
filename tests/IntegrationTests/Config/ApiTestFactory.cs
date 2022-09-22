@@ -1,5 +1,7 @@
-﻿using Bridge.Domain.Users.Entities;
+﻿using Bridge.Application.Common.Services;
+using Bridge.Domain.Users.Entities;
 using Bridge.Infrastructure.Data;
+using Bridge.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
@@ -38,6 +40,8 @@ namespace Bridge.IntegrationTests.Config
               {
                   webHostBuilder.ConfigureTestServices(services =>
                   {
+
+                      // replace BridgeContext
                       services.RemoveAll<DbContextOptions<BridgeContext>>();
 
                       var jsonString = File.ReadAllText("Secrets/bridge_test_secret.json");
@@ -51,6 +55,11 @@ namespace Bridge.IntegrationTests.Config
                       {
                           options.UseNpgsql(connectionString);
                       });
+
+                      // replace IAddressMapService
+                      services.RemoveAll<IAddressMapService>();
+                      services.AddScoped<IAddressMapService, DemoAddressMapService>();
+
                   });
               });
 

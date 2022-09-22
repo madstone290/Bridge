@@ -19,6 +19,18 @@ namespace Bridge.Infrastructure.Data.ReadRepos
                 .SelectPlaceReadModel()
                 .FirstOrDefaultAsync();
         }
+
+        public async Task<List<PlaceReadModel>> GetPlacesByEastingBetweenAndNorthingBetween(double leftEasting,
+                                                                                            double rightEasting,
+                                                                                            double bottomNorthing,
+                                                                                            double topNorthing)
+        {
+            return await Set
+               .Where(x => leftEasting <= x.Location.Easting  && x.Location.Easting <= rightEasting)
+               .Where(x => bottomNorthing <= x.Location.Northing && x.Location.Northing <= topNorthing)
+               .SelectPlaceReadModel()
+               .ToListAsync();
+        }
     }
 
     public static class PlaceReadRepositoryExtensions

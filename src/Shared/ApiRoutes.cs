@@ -23,6 +23,7 @@ namespace Bridge.Shared
         public static class Places
         {
             public const string Get = "/api/Places/{Id}";
+            public const string GetList = "/api/Places";
             public const string Create = "/api/Places";
             public const string AddOpeningTime = "/api/Places/{Id}/OpeningTimes";
             public const string UpdateCategories = "/api/Places/{Id}/Categories";

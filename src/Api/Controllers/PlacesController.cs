@@ -25,6 +25,15 @@ namespace Bridge.Api.Controllers
             return Ok(place);
         }
 
+        [HttpGet]
+        [Route(ApiRoutes.Places.GetList)]
+        [ProducesResponseType(typeof(PlaceReadModel), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetPlaces([FromQuery] GetPlacesByRegionQuery query)
+        {
+            var place = await _mediator.Send(query);
+            return Ok(place);
+        }
+
         [HttpPost]
         [Route(ApiRoutes.Places.Create)]
         [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
