@@ -26,7 +26,7 @@ namespace Bridge.IntegrationTests.ApiServices
 
         public async Task<ProductReadModel?> GetProductAsync(HttpClient client, GetProductByIdQuery query)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, ApiRoutes.Products.Get.Replace("{Id}", $"{query.Id}"));
+            var request = new HttpRequestMessage(HttpMethod.Get, ApiRoutes.Products.Get.Replace("{id}", $"{query.Id}"));
             var response = await client.SendAsync(request);
             return await response.Content.ReadFromJsonAsync<ProductReadModel>();
         }

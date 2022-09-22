@@ -4,7 +4,6 @@ using Bridge.Application.Places.ReadModels;
 using Bridge.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 
 namespace Bridge.Api.Controllers
 {
@@ -20,8 +19,12 @@ namespace Bridge.Api.Controllers
         [HttpGet]
         [Route(ApiRoutes.Places.Get)]
         [ProducesResponseType(typeof(PlaceReadModel), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetPlace([FromRoute] GetPlaceByIdQuery query)
+        public async Task<IActionResult> GetPlace([FromRoute] long id)
         {
+            var query = new GetPlaceByIdQuery()
+            {
+                Id = id
+            };
             var place = await _mediator.Send(query);
             return Ok(place);
         }
@@ -74,9 +77,9 @@ namespace Bridge.Api.Controllers
         [HttpPost]
         [Route(ApiRoutes.Places.AddOpeningTime)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> AddOpeningTime([FromRoute] long Id, [FromBody] AddOpeningTimeCommand command)
+        public async Task<IActionResult> AddOpeningTime([FromRoute] long id, [FromBody] AddOpeningTimeCommand command)
         {
-            command.PlaceId = Id;
+            command.PlaceId = id;
             await _mediator.Send(command);
             return Ok();
         }
@@ -84,9 +87,9 @@ namespace Bridge.Api.Controllers
         [HttpPost]
         [Route(ApiRoutes.Places.UpdateCategories)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> AddCategory([FromRoute] long Id, [FromBody] UpdatePlaceCategoryCommand command)
+        public async Task<IActionResult> AddCategory([FromRoute] long id, [FromBody] UpdatePlaceCategoryCommand command)
         {
-            command.PlaceId = Id;
+            command.PlaceId = id;
             await _mediator.Send(command);
             return Ok();
         }

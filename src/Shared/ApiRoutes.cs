@@ -15,28 +15,28 @@ namespace Bridge.Shared
     {
         public static class AdminUsers
         {
-            public const string Get = "/api/AdminUsers/{Id}";
+            public const string Get = "/api/AdminUsers/{id}";
 
             public const string Create = "/api/AdminUsers";
         }
 
         public static class Places
         {
-            public const string Get = "/api/Places/{Id}";
+            public const string Get = "/api/Places/{id}";
             public const string GetList = "/api/Places";
             public const string Create = "/api/Places";
-            public const string AddOpeningTime = "/api/Places/{Id}/OpeningTimes";
-            public const string UpdateCategories = "/api/Places/{Id}/Categories";
+            public const string AddOpeningTime = "/api/Places/{id}/OpeningTimes";
+            public const string UpdateCategories = "/api/Places/{id}/Categories";
         }
 
         public static class Products
         {
-            public const string Get = "/api/Products/{Id}";
+            public const string Get = "/api/Products/{id}";
             public const string GetList = "/api/Products";
 
             public const string Create = "/api/Products";
 
-            public const string Update = "/api/Products/{Id}";
+            public const string Update = "/api/Products/{id}";
         }
     }
 }

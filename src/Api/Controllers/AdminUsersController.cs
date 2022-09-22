@@ -19,8 +19,12 @@ namespace Bridge.Api.Controllers
         [HttpGet]
         [Route(ApiRoutes.AdminUsers.Get)]
         [ProducesResponseType(typeof(UserReadModel), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAdminUser([FromRoute] GetAdminUserByIdQuery query)
+        public async Task<IActionResult> GetAdminUser([FromRoute] long id)
         {
+            var query = new GetAdminUserByIdQuery() 
+            { 
+                Id = id
+            };
             var adminUser = await _mediator.Send(query);
             return Ok(adminUser);
         }

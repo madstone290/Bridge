@@ -58,18 +58,15 @@ namespace Bridge.IntegrationTests
             var createResponse = await _client.SendAsync(createRequest);
 
             // Act
-            var query = new GetAdminUserByIdQuery()
-            {
-                Id = await createResponse.Content.ReadFromJsonAsync<long>()
-            };
-            var request = new HttpRequestMessage(HttpMethod.Get, ApiRoutes.AdminUsers.Get.Replace("{Id}", $"{query.Id}"));
+            var userId = await createResponse.Content.ReadFromJsonAsync<long>();
+            var request = new HttpRequestMessage(HttpMethod.Get, ApiRoutes.AdminUsers.Get.Replace("{id}", $"{userId}"));
             var response = await _client.SendAsync(request);
 
             // Assert
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
             var user = await response.Content.ReadFromJsonAsync<UserReadModel>() ?? default!;
             user.Should().NotBeNull();
-            user.Id.Should().Be(query.Id);
+            user.Id.Should().Be(userId);
             user.Name.Should().Be(command.Name);
 
         }

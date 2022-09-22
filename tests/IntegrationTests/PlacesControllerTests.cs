@@ -100,18 +100,15 @@ namespace Bridge.IntegrationTests
             var createResponse = await _client.SendAsync(createRequest);
 
             // Act
-            var query = new GetPlaceByIdQuery()
-            {
-                Id = await createResponse.Content.ReadFromJsonAsync<long>()
-            };
-            var request = new HttpRequestMessage(HttpMethod.Get, ApiRoutes.Places.Get.Replace("{Id}", $"{query.Id}"));
+            var id = await createResponse.Content.ReadFromJsonAsync<long>();
+            var request = new HttpRequestMessage(HttpMethod.Get, ApiRoutes.Places.Get.Replace("{id}", $"{id}"));
             var response = await _client.SendAsync(request);
 
             // Assert
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
             var place = await response.Content.ReadFromJsonAsync<PlaceReadModel>() ?? default!;
             place.Should().NotBeNull();
-            place.Id.Should().Be(query.Id);
+            place.Id.Should().Be(id);
             place.Name.Should().Be(command.Name);
             place.ContactNumber.Should().Be(command.ContactNumber);
             place.Address.Should().Be(command.Address);
@@ -145,13 +142,13 @@ namespace Bridge.IntegrationTests
             };
 
             // Act
-            var addRequest = new HttpRequestMessage(HttpMethod.Post, ApiRoutes.Places.AddOpeningTime.Replace("{Id}", $"{placeId}"))
+            var addRequest = new HttpRequestMessage(HttpMethod.Post, ApiRoutes.Places.AddOpeningTime.Replace("{id}", $"{placeId}"))
             {
                 Content = JsonContent.Create(command)
             };
             var addResponse = await _client.SendAsync(addRequest);
 
-            var getRequest = new HttpRequestMessage(HttpMethod.Get, ApiRoutes.Places.Get.Replace("{Id}", $"{placeId}"));
+            var getRequest = new HttpRequestMessage(HttpMethod.Get, ApiRoutes.Places.Get.Replace("{id}", $"{placeId}"));
             var getResponse = await _client.SendAsync(getRequest);
 
             // Assert
@@ -173,13 +170,13 @@ namespace Bridge.IntegrationTests
             };
 
             // Act
-            var addRequest = new HttpRequestMessage(HttpMethod.Post, ApiRoutes.Places.UpdateCategories.Replace("{Id}", $"{placeId}"))
+            var addRequest = new HttpRequestMessage(HttpMethod.Post, ApiRoutes.Places.UpdateCategories.Replace("{id}", $"{placeId}"))
             {
                 Content = JsonContent.Create(command)
             };
             var addResponse = await _client.SendAsync(addRequest);
 
-            var getRequest = new HttpRequestMessage(HttpMethod.Get, ApiRoutes.Places.Get.Replace("{Id}", $"{placeId}"));
+            var getRequest = new HttpRequestMessage(HttpMethod.Get, ApiRoutes.Places.Get.Replace("{id}", $"{placeId}"));
             var getResponse = await _client.SendAsync(getRequest);
 
             // Assert

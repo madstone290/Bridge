@@ -19,8 +19,12 @@ namespace Bridge.Api.Controllers
         [HttpGet]
         [Route(ApiRoutes.Products.Get)]
         [ProducesResponseType(typeof(ProductReadModel), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetProduct([FromRoute] GetProductByIdQuery query)
+        public async Task<IActionResult> GetProduct([FromRoute] long id)
         {
+            var query = new GetProductByIdQuery()
+            {
+                Id = id
+            };
             var place = await _mediator.Send(query);
             return Ok(place);
         }
@@ -28,8 +32,12 @@ namespace Bridge.Api.Controllers
         [HttpGet]
         [Route(ApiRoutes.Products.GetList)]
         [ProducesResponseType(typeof(List<ProductReadModel>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetProducts([FromQuery] GetProductsByPlaceIdQuery query)
+        public async Task<IActionResult> GetProducts([FromQuery] long placeId)
         {
+            var query = new GetProductsByPlaceIdQuery()
+            {
+                PlaceId = placeId
+            };
             var place = await _mediator.Send(query);
             return Ok(place);
         }

@@ -70,7 +70,7 @@ namespace Bridge.IntegrationTests
             };
 
             // Act
-            var request = new HttpRequestMessage(HttpMethod.Put, ApiRoutes.Products.Update.Replace("{Id}", $"{productId}"))
+            var request = new HttpRequestMessage(HttpMethod.Put, ApiRoutes.Products.Update.Replace("{id}", $"{productId}"))
             {
                 Content = JsonContent.Create(command)
             };
@@ -108,7 +108,7 @@ namespace Bridge.IntegrationTests
             var productId = await _apiService.CreateProductAsync(_client, command);
 
             // Act
-            var getRequest = new HttpRequestMessage(HttpMethod.Get, ApiRoutes.Products.Get.Replace("{Id}", $"{productId}"));
+            var getRequest = new HttpRequestMessage(HttpMethod.Get, ApiRoutes.Products.Get.Replace("{id}", $"{productId}"));
             var getResponse = await _client.SendAsync(getRequest);
 
             // Assert
@@ -147,7 +147,7 @@ namespace Bridge.IntegrationTests
 
             // Act
             var query = new GetProductsByPlaceIdQuery() { PlaceId = placeId };
-            var request = new HttpRequestMessage(HttpMethod.Get, ApiRoutes.Products.GetList + query.ToQueryString());
+            var request = new HttpRequestMessage(HttpMethod.Get, ApiRoutes.Products.GetList.AddQueryParam(query));
             var response = await _client.SendAsync(request);
 
             // Assert
