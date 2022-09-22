@@ -7,7 +7,7 @@ namespace Bridge.Application.Places.Queries
     /// <summary>
     /// 영역에 포함된 장소를 이름으로 검색한다.
     /// </summary>
-    public class GetPlacesByNameAndRegionQuery : IQuery<List<PlaceReadModel>> 
+    public class GetPlacesByNameAndRegionQuery : IQuery<List<PlaceReadModel>>
     {
         /// <summary>
         /// 검색할 장소의 이름
@@ -46,9 +46,10 @@ namespace Bridge.Application.Places.Queries
 
         public override async Task<List<PlaceReadModel>> HandleQuery(GetPlacesByNameAndRegionQuery query, CancellationToken cancellationToken)
         {
-            var places = await _repository.GetPlacesByEastingBetweenAndNorthingBetween(query.LeftEasting, query.RightEasting, query.BottomNorthing, query.TopNorthing);
-            return places.Where(x => x.Name.Contains(query.Name)).ToList();
-
+            return await _repository.FilterAsync(x =>
+                x.Name.Contains(query.Name) &&
+                query.LeftEasting <= x.Location.Easting && x.Location.Easting <= query.RightEasting &&
+                query.BottomNorthing <= x.Location.Northing && x.Location.Northing <= query.TopNorthing);
         }
     }
 

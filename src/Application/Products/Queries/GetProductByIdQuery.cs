@@ -1,11 +1,6 @@
 ﻿using Bridge.Application.Common;
 using Bridge.Application.Products.ReadModels;
 using Bridge.Application.Products.Repos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Bridge.Application.Products.Queries
 {

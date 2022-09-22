@@ -1,13 +1,10 @@
-﻿using Bridge.Application.Users.ReadModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Bridge.Application.Common;
+using Bridge.Application.Users.ReadModels;
+using Bridge.Domain.Users.Entities;
 
 namespace Bridge.Application.Users.ReadRepos
 {
-    public interface IUserReadRepository
+    public interface IUserReadRepository : IReadRepository<User, UserReadModel>
     {
         /// <summary>
         /// 아이디로 사용자 조회

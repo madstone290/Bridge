@@ -1,6 +1,7 @@
 ﻿using Bridge.Application.Common;
 using Bridge.Application.Places.ReadModels;
 using Bridge.Application.Places.Repos;
+using Bridge.Domain.Common;
 
 namespace Bridge.Application.Places.Queries
 {
@@ -41,7 +42,9 @@ namespace Bridge.Application.Places.Queries
 
         public override async Task<List<PlaceReadModel>> HandleQuery(GetPlacesByRegionQuery query, CancellationToken cancellationToken)
         {
-            return await _repository.GetPlacesByEastingBetweenAndNorthingBetween(query.LeftEasting, query.RightEasting, query.BottomNorthing, query.TopNorthing);
+            return await _repository.FilterAsync(x =>
+                query.LeftEasting <= x.Location.Easting && x.Location.Easting <= query.RightEasting &&
+                query.BottomNorthing <= x.Location.Northing && x.Location.Northing <= query.TopNorthing);
         }
     }
 }
