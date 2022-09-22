@@ -7,8 +7,20 @@
     <MudContainer>
         <MudAutocomplete Placeholder="검색어를 입력하세요"
                          T="string"
+                         @bind-Text="_searchText"
                          Adornment="Adornment.End"
+                         SearchFunc="async (text) => new List<string>()"
                          AdornmentIcon="@Icons.Material.Filled.Search"
-                         Variant="Variant.Filled" />
+                         Variant="Variant.Filled" 
+                         OnKeyUp="AutoComplete_OnKeyUpAsync" />
+
+        <MudList>
+            @{
+                foreach(var place in _placeList){
+                    <MudListItem>@place</MudListItem>
+                }
+            }
+            
+        </MudList>
     </MudContainer>
 </div>

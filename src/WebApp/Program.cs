@@ -1,3 +1,4 @@
+using Bridge.WebApp.Api.ApiClients;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
@@ -36,6 +37,7 @@ builder.Services.AddSingleton<HttpClient>((sp) =>
     };
 });
 
+builder.Services.AddScoped<PlaceApiClient>();
 
 var app = builder.Build();
 
