@@ -7,12 +7,27 @@ namespace Bridge.Infrastructure.Services
     /// </summary>
     public class DemoAddressMapService : IAddressMapService
     {
+        class UtmK_Provider
+        {
+            public Tuple<double, double> Provide(string address)
+            {
+                var utmIndex = address.IndexOf("utm:");
+                if(utmIndex < 0)
+                    return Tuple.Create(100000d, 200000d);
+
+                string[] eastingNorthing = address.Substring(utmIndex, address.Length - utmIndex).Split(",");
+                return Tuple.Create(double.Parse(eastingNorthing[0]), double.Parse(eastingNorthing[1]));
+            }
+        }
+
+        static readonly UtmK_Provider utmK_Provider = new();
+
         public Func<string, Tuple<double, double>> GetLatitudeAndLongitudeFunc { get; set; } = 
             (address) => new Tuple<double, double>(32.3333, 127.6666);
 
 
         public Func<string, Tuple<double, double>> GetUTM_K_EastingAndNorthingFunc { get; set; } =
-            (address) => new Tuple<double, double>(960447, 1945318);
+            (address) => utmK_Provider.Provide(address);
 
         public async Task<Tuple<double, double>> GetLatitudeAndLongitudeAsync(string address)
         {
