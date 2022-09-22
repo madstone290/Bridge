@@ -28,8 +28,6 @@ namespace Bridge.Application.Places.Queries
         /// 영역 아래쪽의 북향
         /// </summary>
         public double BottomNorthing { get; set; }
-
-        
     }
 
     public class GetPlacesByRegionQueryHandler : QueryHandler<GetPlacesByRegionQuery, List<PlaceReadModel>>
