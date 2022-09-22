@@ -247,6 +247,70 @@ namespace Bridge.IntegrationTests
                 place.Location.Northing.Should().BeInRange(query.BottomNorthing, query.TopNorthing);
             }
         }
+
+
+        [Fact]
+        public async Task Get_Places_By_Name_And_Region_Return_Ok_With_Content()
+        {
+            // Arrange
+            var command1 = new CreatePlaceCommand()
+            {
+                UserId = await _apiService.CreateAdminUserAsync(_client),
+                Name = "가나다",
+                Address = "대구시 수성구 utm:1000,1000",
+            };
+            var command2 = new CreatePlaceCommand()
+            {
+                UserId = await _apiService.CreateAdminUserAsync(_client),
+                Name = "가나마",
+                Address = "대구시 수성구 utm:1000,2000",
+            };
+            var command3 = new CreatePlaceCommand()
+            {
+                UserId = await _apiService.CreateAdminUserAsync(_client),
+                Name = "가나바",
+                Address = "대구시 수성구 utm:2000,2000",
+            };
+            var command4 = new CreatePlaceCommand()
+            {
+                UserId = await _apiService.CreateAdminUserAsync(_client),
+                Name = "다라바",
+                Address = "대구시 수성구 utm:2000, 1000",
+            };
+            await _apiService.CreatePlaceAsync(_client, command1);
+            await _apiService.CreatePlaceAsync(_client, command2);
+            await _apiService.CreatePlaceAsync(_client, command3);
+            await _apiService.CreatePlaceAsync(_client, command4);
+
+
+
+            // Act
+            var query = new GetPlacesByNameAndRegionQuery()
+            {
+                Name = "다",
+                LeftEasting = 1000,
+                RightEasting = 2000,
+                BottomNorthing = 1000,
+                TopNorthing = 1000
+            };
+            var request = new HttpRequestMessage(HttpMethod.Get, ApiRoutes.Places.GetList.AddQueryParam(query));
+            var response = await _client.SendAsync(request);
+
+            // Assert
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+            var places = await response.Content.ReadFromJsonAsync<List<PlaceReadModel>>() ?? default!;
+            places.Should().Contain(x => x.Name == command1.Name);
+            places.Should().Contain(x => x.Name == command4.Name);
+
+            foreach (var place in places)
+            {
+                place.Name.Should().Contain(query.Name);
+                place.Location.Easting.Should().BeInRange(query.LeftEasting, query.RightEasting);
+                place.Location.Northing.Should().BeInRange(query.BottomNorthing, query.TopNorthing);
+            }
+        }
+
+
     }
 }
 

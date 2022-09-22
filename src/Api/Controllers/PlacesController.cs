@@ -4,6 +4,7 @@ using Bridge.Application.Places.ReadModels;
 using Bridge.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace Bridge.Api.Controllers
 {
@@ -27,11 +28,38 @@ namespace Bridge.Api.Controllers
 
         [HttpGet]
         [Route(ApiRoutes.Places.GetList)]
-        [ProducesResponseType(typeof(PlaceReadModel), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetPlaces([FromQuery] GetPlacesByRegionQuery query)
+        [ProducesResponseType(typeof(List<PlaceReadModel>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetPlaces([FromQuery] string? name,
+                                                   [FromQuery] double leftEasting,
+                                                   [FromQuery] double rightEasting,
+                                                   [FromQuery] double bottomNorthing,
+                                                   [FromQuery] double topNorthing)
         {
-            var place = await _mediator.Send(query);
-            return Ok(place);
+            List<PlaceReadModel> places;
+            if (name == null)
+            {
+                var query = new GetPlacesByRegionQuery()
+                {
+                    LeftEasting = leftEasting,
+                    RightEasting = rightEasting,
+                    BottomNorthing = bottomNorthing,
+                    TopNorthing = topNorthing
+                };
+                places = await _mediator.Send(query);
+            }
+            else
+            {
+                var query = new GetPlacesByNameAndRegionQuery()
+                {
+                    Name = name,
+                    LeftEasting = leftEasting,
+                    RightEasting = rightEasting,
+                    BottomNorthing = bottomNorthing,
+                    TopNorthing = topNorthing
+                };
+                places = await _mediator.Send(query);
+            }
+            return Ok(places);
         }
 
         [HttpPost]
