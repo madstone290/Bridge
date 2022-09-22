@@ -5,6 +5,14 @@
     /// </summary>
     public class ErrorContent
     {
+
+        public ErrorContent() { }
+        public ErrorContent(string message, string? code = null)
+        {
+            Message = message;
+            Code = code;
+        }
+
         /// <summary>
         /// 에러 메시지
         /// </summary>
@@ -14,5 +22,7 @@
         /// 에러 코드
         /// </summary>
         public string? Code { get; set; }
+
+        
     }
 }
