@@ -1,4 +1,5 @@
 ﻿using Bridge.WebApp.Api.ApiClients;
+using Bridge.WebApp.Extensions;
 using Bridge.WebApp.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -59,13 +60,16 @@ namespace Bridge.WebApp.Pages
                 return;
             }
 
-            var places = await PlaceApiClient.GetPlacesByNameAndRegion(_searchText, 
+            var result = await PlaceApiClient.GetPlacesByNameAndRegion(_searchText, 
                 _centerEasting - _eastingSearchRange,
                 _centerEasting + _eastingSearchRange, 
                 _centerNorthing - _northingSearchRange,
                 _centerNorthing + _northingSearchRange);
 
-            _placeList.AddRange(places.Select(x=>
+            if (!Snackbar.CheckSuccess(result))
+                return;
+
+            _placeList.AddRange(result.Data!.Select(x=>
             {
                 var place = PlaceModel.ToPlaceModel(x);
                 place.CalcDistance(_centerEasting, _centerNorthing);

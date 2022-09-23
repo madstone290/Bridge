@@ -10,7 +10,7 @@ namespace Bridge.WebApp.Api.ApiClients
         {
         }
 
-        public async Task<List<PlaceReadModel>> GetPlacesByNameAndRegion(string name,
+        public async Task<ApiResult<List<PlaceReadModel>>> GetPlacesByNameAndRegion(string name,
                                                                          double leftEasting,
                                                                          double rightEasting,
                                                                          double bottomNorthing,

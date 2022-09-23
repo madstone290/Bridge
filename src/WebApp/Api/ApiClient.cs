@@ -1,5 +1,5 @@
 ﻿using Bridge.Shared.ApiContract;
-using Bridge.WebApp.Api.Exceptions;
+using System.Xml.Linq;
 
 namespace Bridge.WebApp.Api
 {
@@ -12,47 +12,63 @@ namespace Bridge.WebApp.Api
             _httpClient = httpClient;
         }
 
-        protected async Task<TData> SendAsync<TData>(HttpMethod method, string uri, object? content = null)
+        virtual protected async Task<ApiResult<TData>> SendAsync<TData>(HttpMethod method, string uri, object? content = null)
         {
             var request = new HttpRequestMessage(method, uri);
             if (content != null)
                 request.Content = JsonContent.Create(content);
 
-
             var response = await _httpClient.SendAsync(request);
 
+            return await BuildResultAsync<TData>(response);
+
+        }
+
+        /// <summary>
+        /// 응답코드에 맞는 결과객체를 생성한다.
+        /// </summary>
+        /// <typeparam name="TData"></typeparam>
+        /// <param name="response"></param>
+        /// <returns></returns>
+        private async Task<ApiResult<TData>> BuildResultAsync<TData>(HttpResponseMessage response)
+        {
             if (response.IsSuccessStatusCode)
             {
                 try
                 {
-                    return await response.Content.ReadFromJsonAsync<TData>() ?? default!;
+                    var data = await response.Content.ReadFromJsonAsync<TData>();
+                    return ApiResult<TData>.SuccessResult(data);
                 }
                 catch
                 {
-                    throw new ContentParsingException(response.Content);
+                    var responseContentString = await response.Content.ReadAsStringAsync();
+                    return ApiResult<TData>.ContentParsingErrorResult(responseContentString);
                 }
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
             {
-                throw new ServerErrorException();
+                return ApiResult<TData>.ServerErrorResult();
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
                 try
                 {
+
                     var errorContent = await response.Content.ReadFromJsonAsync<ErrorContent>() ?? null!;
-                    throw new BadRequestException(errorContent);
+                    return ApiResult<TData>.BadRequestResult(errorContent);
                 }
                 catch
                 {
-                    throw new ContentParsingException(response.Content);
+                    var responseContentString = await response.Content.ReadAsStringAsync();
+                    return ApiResult<TData>.ContentParsingErrorResult(responseContentString);
                 }
             }
             else
             {
-                throw new UnsupportedStatusCodeExpception(response.StatusCode);
+                return ApiResult<TData>.UnsupportedStatusCodeResult(response.StatusCode);
             }
-
         }
+
+
     }
 }
