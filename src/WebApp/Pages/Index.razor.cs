@@ -1,21 +1,43 @@
 ﻿using Bridge.WebApp.Api.ApiClients;
+using Bridge.WebApp.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-using System.Data;
 
 namespace Bridge.WebApp.Pages
 {
     public partial class Index
     {
+        /// <summary>
+        /// 검색어
+        /// </summary>
         private string? _searchText;
-        private List<string> _placeList = new()
-        {
-            "1번",
-            "2번"
-        };
+        
+        /// <summary>
+        /// 검색된 장소 목록
+        /// </summary>
+        private List<PlaceModel> _placeList = new();
+        
+        /// <summary>
+        /// 현위치 동향
+        /// </summary>
+        private double _centerEasting = 5000;
 
-        public double CenterEasting { get; set; } = 10000;
-        public double CenterNorthing { get; set; } = 10000;
+        /// <summary>
+        /// 현위치 북향
+        /// </summary>
+        private double _centerNorthing = 5000;
+
+        /// <summary>
+        /// 동향 검색 범위(m). 좌우로 각각 적용된다.
+        /// ex) 5000: 중심위치에서 좌5km, 우5km
+        /// </summary>
+        private double _eastingSearchRange = 4000;
+
+        /// <summary>
+        /// 북향 검색 범위(m). 상하로 각각 적용된다.
+        /// ex) 5000: 중심위치에서 상5km, 하5km
+        /// </summary>
+        private double _northingSearchRange = 4000;
 
         [Inject]
         public PlaceApiClient PlaceApiClient { get; set; } = null!;
@@ -32,19 +54,24 @@ namespace Bridge.WebApp.Pages
         {
             _placeList.Clear();
 
-            if (_searchText == null)
+            if (string.IsNullOrWhiteSpace(_searchText))
             {
                 return;
             }
 
-            _placeList.Add(_searchText + "1");
-            _placeList.Add(_searchText + "2");
-            _placeList.Add(_searchText + "3");
-            _placeList.Add(_searchText + "4");
-            _placeList.Add(_searchText + "5");
-            StateHasChanged();
-            //var places = await PlaceApiClient.GetPlacesByNameAndRegion(_searchText, CenterEasting - 3000, CenterEasting + 3000, CenterNorthing - 3000, CenterNorthing + 3000);
-            //_placeList.AddRange(places.Select(x=> x.Name));
+            var places = await PlaceApiClient.GetPlacesByNameAndRegion(_searchText, 
+                _centerEasting - _eastingSearchRange,
+                _centerEasting + _eastingSearchRange, 
+                _centerNorthing - _northingSearchRange,
+                _centerNorthing + _northingSearchRange);
+
+            _placeList.AddRange(places.Select(x=>
+            {
+                var place = PlaceModel.ToPlaceModel(x);
+                place.CalcDistance(_centerEasting, _centerNorthing);
+                return place;
+            }).OrderBy(x=> x.Distance));
         }
+
     }
 }

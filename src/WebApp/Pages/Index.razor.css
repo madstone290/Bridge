@@ -4,3 +4,12 @@
 ::deep .mud-input > input.mud-input-root.mud-input-root-filled {
     padding: 10px 12px 10px 12px;
 }
+
+::deep .place-item {
+    display: flex;
+    flex-direction: row;
+}
+
+::deep .place-item > *{
+    margin: 5px;
+}

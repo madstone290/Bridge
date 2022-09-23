@@ -11,16 +11,31 @@
                          Adornment="Adornment.End"
                          SearchFunc="async (text) => new List<string>()"
                          AdornmentIcon="@Icons.Material.Filled.Search"
-                         Variant="Variant.Filled" 
+                         Variant="Variant.Filled"
                          OnKeyUp="AutoComplete_OnKeyUpAsync" />
 
         <MudList>
             @{
-                foreach(var place in _placeList){
-                    <MudListItem>@place</MudListItem>
+                foreach (var place in _placeList)
+                {
+                    <MudListItem>
+                        <div class="place-item">
+                            <MudImage  Width="100" Height="100" />
+                            <div>
+                                <MudText>@place.Name</MudText>
+                                <MudText>@place.Address</MudText>
+                                <MudText>@place.DistanceString</MudText>
+                                <MudText>@place.ContactNumber</MudText>
+                            </div>
+                            <div>
+                                <MudText>@place.CategoriesString</MudText>
+                            </div>
+                        </div>
+
+                    </MudListItem>
                 }
             }
-            
+
         </MudList>
     </MudContainer>
 </div>
