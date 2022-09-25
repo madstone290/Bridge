@@ -59,6 +59,11 @@ namespace Bridge.WebApp.Models
         public double Longitude { get; set; }
 
         /// <summary>
+        /// 위경도문자열
+        /// </summary>
+        public string LatitudeLongitudeString => $"{Latitude:0.0000},{Latitude:0.0000}";
+
+        /// <summary>
         /// UTM-K도법의 동쪽방향 좌표
         /// </summary>
         public double Easting { get; set; }
@@ -69,6 +74,11 @@ namespace Bridge.WebApp.Models
         public double Northing { get; set; }
 
         /// <summary>
+        /// 동북향 문자열
+        /// </summary>
+        public string EastingNorthingString => $"{Easting:0},{Northing:0}";
+
+        /// <summary>
         /// 장소 카테고리
         /// </summary>
         public List<PlaceCategory> Categories { get; set; } = new();
@@ -76,7 +86,7 @@ namespace Bridge.WebApp.Models
         /// <summary>
         /// 카테고리 문자열
         /// </summary>
-        public string CategoriesString => string.Concat(Categories);
+        public string CategoriesString => string.Join(", ", Categories);
 
         /// <summary>
         /// 연락처
@@ -88,7 +98,10 @@ namespace Bridge.WebApp.Models
         /// </summary>
         public List<OpeningTimeDto> OpeningTimes { get; set; } = new();
 
-
+        /// <summary>
+        /// 영업시간 보여주기 여부
+        /// </summary>
+        public bool ShowOpeningTimes { get; set; }
 
         /// <summary>
         /// 주어진 UTM-K 좌표에서의 거리를 계산한다.

@@ -1,0 +1,50 @@
+﻿@using Bridge.WebApp.Pages.Admin.Models
+
+<div>
+    <MudForm Model="OpeningTime">
+        <div class="opening-time-list-item">
+            <div style="width:100px;">
+                <MudText>@OpeningTime.DayString</MudText>
+            </div>
+            <MudText>영업 시간</MudText>
+            <div style="width:100px;">
+                <AdvTimePicker @bind-Time="OpeningTime.OpenTime"
+                               Editable="true"
+                               Disabled="@(OpeningTime.Dayoff || OpeningTime.TwentyFourHours)" />
+            </div>
+            <MudText>~</MudText>
+            <div style="width:100px;">
+                <AdvTimePicker @bind-Time="OpeningTime.CloseTime"
+                               Editable="true"
+                               Disabled="@(OpeningTime.Dayoff || OpeningTime.TwentyFourHours)" />
+            </div>
+
+            <MudText>휴식 시간</MudText>
+            <div style="width:100px;">
+                <AdvTimePicker @bind-Time="OpeningTime.BreakStartTime"
+                               Editable="true"
+                                  Disabled="@(OpeningTime.Dayoff)"/>
+            </div>
+            <MudText>~</MudText>
+            <div style="width:100px;">
+                <AdvTimePicker @bind-Time="OpeningTime.BreakEndTime"
+                               Editable="true" 
+                               Disabled="@(OpeningTime.Dayoff)" />
+            </div>
+
+            <MudSwitch @bind-Checked="OpeningTime.Dayoff"
+                       T="bool"
+                       Label="휴무일"
+                       Color="Color.Info" />
+            <MudSwitch @bind-Checked="OpeningTime.TwentyFourHours"
+                       T="bool"
+                       Label="24시간"
+                       Color="Color.Success" />
+        </div>
+    </MudForm>
+</div>
+
+@code {
+    [Parameter]
+    public OpeningTimeFormModel OpeningTime { get; set; } = null!;
+}

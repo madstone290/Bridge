@@ -1,6 +1,7 @@
 ﻿.page {
     margin-top: 100px;
 }
+
 ::deep .mud-input > input.mud-input-root.mud-input-root-filled {
     padding: 10px 12px 10px 12px;
 }

@@ -1,0 +1,19 @@
+﻿.page {
+    margin-top: 100px;
+}
+
+::deep .mud-input-control > .mud-input-control-input-container > div.mud-input.mud-input-text {
+    margin-top: 0px;
+}
+
+::deep .mud-toolbar > * {
+    margin:0px 2px 0px 2px;
+}
+
+::deep .button-group > *{
+    margin: 0px 2px 0px 2px;
+}
+
+::deep .search-field {
+    width: 300px;
+}

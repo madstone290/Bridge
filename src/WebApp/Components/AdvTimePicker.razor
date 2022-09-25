@@ -1,0 +1,17 @@
+﻿@inherits MudTimePicker
+
+@{
+    base.BuildRenderTree(__builder);
+}
+
+@code {
+    protected override Task OnInitializedAsync()
+    {
+        if (string.IsNullOrWhiteSpace(Label))
+        {
+            Class += " adv-no-label";
+        }
+
+        return base.OnInitializedAsync();
+    }
+}

@@ -1,0 +1,11 @@
+﻿
+/* adv-no-label: MudInput에 라벨이 적용되지 않을 경우 탑 마진을 제거한다*/
+/* 일반 인풋 */
+.adv-no-label.mud-input-control > .mud-input-control-input-container > div.mud-input.mud-input-text{
+    margin-top: 0px;
+}
+
+/* Date,Time Picker 인풋 */
+.adv-no-label .mud-input-control > .mud-input-control-input-container > div.mud-input.mud-input-text {
+    margin-top: 0px;
+}

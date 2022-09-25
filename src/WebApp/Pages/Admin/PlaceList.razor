@@ -1,0 +1,89 @@
+﻿@using Bridge.WebApp.Models
+@attribute [Route(PageRoutes.Admin.PlaceList)]
+
+<div class="page">
+    <MudToolBar>
+        <div class="button-group">
+            <MudButton Variant="Variant.Filled"
+                       Color="Color.Primary"
+                       IconColor="Color.Surface"
+                       OnClick="Create_Click"
+                       StartIcon="@Icons.Material.Filled.Add">추가</MudButton>
+            <MudButton Variant="Variant.Filled"
+                       StartIcon="@Icons.Material.Filled.Refresh"
+                       IconColor="Color.Surface"
+                       OnClick="Load_Click"
+                       Color="Color.Secondary">조회</MudButton>
+        </div>
+        <div class="search-field">
+            <MudTextField T="string"
+                          @bind-Text="_searchString"
+                          Placeholder="검색">
+            </MudTextField>
+        </div>
+    </MudToolBar>
+
+    <MudTable T="PlaceModel"
+              Items="_places"
+              Filter="Search">
+        <HeaderContent>
+            <MudTh>이름</MudTh>
+            <MudTh>카테고리</MudTh>
+            <MudTh>주소</MudTh>
+            <MudTh>연락처</MudTh>
+            <MudTh>위경도</MudTh>
+            <MudTh>동북향</MudTh>
+            <MudTh>영업시간</MudTh>
+        </HeaderContent>
+
+        <RowTemplate>
+            <MudTd DataLabel="이름">
+                <MudHighlighter Text="@context.Name" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="카테고리">
+                <MudHighlighter Text="@context.CategoriesString" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="주소">
+                <MudHighlighter Text="@context.Address" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="연락처">
+                <MudHighlighter Text="@context.ContactNumber" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="위경도">
+                <MudHighlighter Text="@context.LatitudeLongitudeString" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="동북향">
+                <MudHighlighter Text="@context.EastingNorthingString" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd>
+                <MudButton OnClick="@(()=> ToggleShowOpeningTime_Click(context))">영업시간 보기</MudButton>
+            </MudTd>
+        </RowTemplate>
+
+        <ChildRowContent>
+            @if (context.ShowOpeningTimes)
+            {
+                <MudTr>
+                    <td colspan="4">
+                        <MudList>
+                            @foreach (var time in context.OpeningTimes)
+                            {
+                                <MudListItem>@($"{time.Day} {time.OpenTime:hh\\:mm} {time.CloseTime:hh\\:mm}")</MudListItem>
+                            }
+                        </MudList>
+                    </td>
+                </MudTr>
+            }
+        </ChildRowContent>
+
+        <FooterContent>
+            <MudTFootRow>
+                <MudTd colSpan="100">총 @(_places.Count)개의 행</MudTd>
+            </MudTFootRow>
+        </FooterContent>
+    </MudTable>
+</div>
+
+@code {
+
+}
