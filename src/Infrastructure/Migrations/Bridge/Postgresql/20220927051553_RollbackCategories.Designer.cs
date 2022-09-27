@@ -3,6 +3,7 @@ using System;
 using Bridge.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Bridge.Infrastructure.Migrations.Bridge.Postgresql
 {
     [DbContext(typeof(BridgeContext))]
-    partial class BridgeContextModelSnapshot : ModelSnapshot
+    [Migration("20220927051553_RollbackCategories")]
+    partial class RollbackCategories
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,7 +53,7 @@ namespace Bridge.Infrastructure.Migrations.Bridge.Postgresql
 
                     b.HasKey("Id");
 
-                    b.ToTable("Places", (string)null);
+                    b.ToTable("Places");
                 });
 
             modelBuilder.Entity("Bridge.Domain.Products.Entities.Product", b =>
@@ -85,7 +87,7 @@ namespace Bridge.Infrastructure.Migrations.Bridge.Postgresql
 
                     b.HasIndex("PlaceId");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("Bridge.Domain.Users.Entities.User", b =>
@@ -109,12 +111,12 @@ namespace Bridge.Infrastructure.Migrations.Bridge.Postgresql
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Bridge.Domain.Places.Entities.Place", b =>
                 {
-                    b.OwnsOne("Bridge.Domain.Places.Entities.Place.Location#Bridge.Domain.Common.ValueObjects.PlaceLocation", "Location", b1 =>
+                    b.OwnsOne("Bridge.Domain.Common.ValueObjects.PlaceLocation", "Location", b1 =>
                         {
                             b1.Property<long>("PlaceId")
                                 .HasColumnType("bigint");
@@ -133,13 +135,13 @@ namespace Bridge.Infrastructure.Migrations.Bridge.Postgresql
 
                             b1.HasKey("PlaceId");
 
-                            b1.ToTable("Places", (string)null);
+                            b1.ToTable("Places");
 
                             b1.WithOwner()
                                 .HasForeignKey("PlaceId");
                         });
 
-                    b.OwnsMany("Bridge.Domain.Places.Entities.Place.OpeningTimes#Bridge.Domain.Places.Entities.OpeningTime", "OpeningTimes", b1 =>
+                    b.OwnsMany("Bridge.Domain.Places.Entities.OpeningTime", "OpeningTimes", b1 =>
                         {
                             b1.Property<long>("Id")
                                 .ValueGeneratedOnAdd()
@@ -170,7 +172,7 @@ namespace Bridge.Infrastructure.Migrations.Bridge.Postgresql
 
                             b1.HasIndex("PlaceId");
 
-                            b1.ToTable("OpeningTime", (string)null);
+                            b1.ToTable("OpeningTime");
 
                             b1.WithOwner()
                                 .HasForeignKey("PlaceId");

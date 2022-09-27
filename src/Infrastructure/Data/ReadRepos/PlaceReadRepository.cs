@@ -26,7 +26,7 @@ namespace Bridge.Infrastructure.Data.ReadRepos
                 Easting = x.Location.Easting,
                 Northing = x.Location.Northing
             },
-            Categories = x.CategoryItems.Select(x=> x.Category).ToList(),
+            Categories = x.Categories.ToList(),
             ContactNumber = x.ContactNumber,
             OpeningTimes = x.OpeningTimes.Select(t => new OpeningTimeDto()
             {

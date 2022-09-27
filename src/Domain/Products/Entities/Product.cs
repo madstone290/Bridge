@@ -3,8 +3,6 @@ using Bridge.Domain.Common.Exceptions;
 using Bridge.Domain.Places.Entities;
 using Bridge.Domain.Products.Exception;
 using Bridge.Domain.Users.Entities;
-using Bridge.Domain.Users.Exceptions;
-using System.Collections.Generic;
 
 namespace Bridge.Domain.Products.Entities
 {
@@ -22,7 +20,7 @@ namespace Bridge.Domain.Products.Entities
         /// <summary>
         /// 제품 카테고리
         /// </summary>
-        private ISet<ProductCategoryItem> _categoryItems = new HashSet<ProductCategoryItem>();
+        private ISet<ProductCategory> _categories = new HashSet<ProductCategory>();
 
         private Product() { }
         private Product(string name, Place place)
@@ -68,7 +66,7 @@ namespace Bridge.Domain.Products.Entities
         /// <summary>
         /// 제품 카테고리
         /// </summary>
-        public IEnumerable<ProductCategoryItem> CategoryItems => _categoryItems;
+        public IEnumerable<ProductCategory> Categories => _categories;
 
         /// <summary>
         /// 제품명을 변경한다.
@@ -122,7 +120,8 @@ namespace Bridge.Domain.Products.Entities
         /// <param name="category"></param>
         public void AddCategory(ProductCategory category)
         {
-            _categoryItems.Add(new ProductCategoryItem(category));
+            _categories = new HashSet<ProductCategory>(_categories);
+            _categories.Add(category);
         }
 
         /// <summary>
@@ -131,9 +130,8 @@ namespace Bridge.Domain.Products.Entities
         /// <param name="category"></param>
         public void RemoveCategory(ProductCategory category)
         {
-            var categoryItem = _categoryItems.FirstOrDefault(x => x.Category == category);
-            if(categoryItem != null)
-                _categoryItems.Remove(categoryItem);
+            _categories = new HashSet<ProductCategory>(_categories);
+            _categories.Remove(category);
         }
 
         /// <summary>
@@ -142,9 +140,7 @@ namespace Bridge.Domain.Products.Entities
         /// <param name="categories"></param>
         public void UpdateCategories(IEnumerable<ProductCategory> categories)
         {
-            _categoryItems.Clear();
-            foreach (var category in categories)
-                AddCategory(category);
+            _categories = new HashSet<ProductCategory>(categories);
         }
 
     }

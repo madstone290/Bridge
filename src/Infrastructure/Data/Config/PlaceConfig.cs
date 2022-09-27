@@ -25,10 +25,12 @@ namespace Bridge.Infrastructure.Data.Config
                 .HasConversion<string>();
 
             // Categories
-            var categoryBuilder = builder.OwnsMany(x => x.CategoryItems);
-            categoryBuilder.HasKey(x => x.Id);
-            categoryBuilder.Property(x => x.Category)
-                .HasConversion<string>();
+            builder.Property(x => x.Categories)
+                .HasConversion(new ValueConverter<IEnumerable<PlaceCategory>, string>(
+                    value => JsonSerializer.Serialize(value, JsonOptions.Default),
+                    providerValue => JsonSerializer.Deserialize<HashSet<PlaceCategory>>(providerValue, JsonOptions.Default) ?? new HashSet<PlaceCategory>())
+                );
+
         }
     }
 }

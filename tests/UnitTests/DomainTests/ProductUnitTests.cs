@@ -138,7 +138,7 @@ namespace Bridge.UnitTests.DomainTests
             var product = NewProduct();
 
             // Assert
-            product.CategoryItems.Should().BeEmpty();
+            product.Categories.Should().BeEmpty();
         }
 
         [Fact]
@@ -154,7 +154,7 @@ namespace Bridge.UnitTests.DomainTests
             product.AddCategory(category);
 
             // Assert
-            product.CategoryItems.Should().Contain(x=> x.Category == category);
+            product.Categories.Should().Contain(category);
         }
 
         [Fact]
@@ -169,7 +169,7 @@ namespace Bridge.UnitTests.DomainTests
             product.AddCategory(category);
 
             // Assert
-            product.CategoryItems.Should().HaveCount(1);
+            product.Categories.Should().HaveCount(1);
         }
 
         [Fact]
@@ -184,7 +184,7 @@ namespace Bridge.UnitTests.DomainTests
             product.RemoveCategory(category);
 
             // Assert
-            product.CategoryItems.Should().HaveCount(0);
+            product.Categories.Should().HaveCount(0);
         }
 
         [Fact]
@@ -203,7 +203,7 @@ namespace Bridge.UnitTests.DomainTests
             product.UpdateCategories(categories);
 
             // Assert
-            product.CategoryItems.Select(x=> x.Category).Should().Contain(categories);
+            product.Categories.Should().Contain(categories);
         }
 
     }

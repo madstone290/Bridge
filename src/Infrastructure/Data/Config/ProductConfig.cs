@@ -1,4 +1,5 @@
-﻿using Bridge.Domain.Products.Entities;
+﻿using Bridge.Domain.Places.Entities;
+using Bridge.Domain.Products.Entities;
 using Bridge.Shared.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -29,10 +30,12 @@ namespace Bridge.Infrastructure.Data.Config
                 .HasPrecision(18, 4);
 
             // Categories
-            var categoryBuilder = builder.OwnsMany(x => x.CategoryItems);
-            categoryBuilder.HasKey(x => x.Id);
-            categoryBuilder.Property(x => x.Category)
-                .HasConversion<string>();
+            builder.Property(x => x.Categories)
+                .HasConversion(new ValueConverter<IEnumerable<ProductCategory>, string>(
+                    value => JsonSerializer.Serialize(value, JsonOptions.Default),
+                    providerValue => JsonSerializer.Deserialize<HashSet<ProductCategory>>(providerValue, JsonOptions.Default) ?? new HashSet<ProductCategory>())
+                );
+
         }
     }
 }

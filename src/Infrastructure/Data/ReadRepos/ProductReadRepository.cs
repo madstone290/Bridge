@@ -18,7 +18,7 @@ namespace Bridge.Infrastructure.Data.ReadRepos
             Name = x.Name,
             PlaceId = x.PlaceId,
             Price = x.Price,
-            Categories = x.CategoryItems.Select(x=> x.Category).ToList(),
+            Categories = x.Categories.ToList(),
         };
 
         public async Task<ProductReadModel?> GetProductByIdAsync(long id)
