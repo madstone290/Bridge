@@ -13,62 +13,40 @@ namespace Bridge.Domain.Places.Entities
     /// </summary>
     public class OpeningTime : Entity
     {
-        /// <summary>
-        /// 24시간 영업의 시작시간
-        /// </summary>
-        private static readonly TimeSpan StartTimeOf24Hours = TimeSpan.Zero;
-
-        /// <summary>
-        /// 24시간 영업의 종료시간
-        /// </summary>
-        private static readonly TimeSpan CloseTimeOf24Hours = TimeSpan.FromHours(24);
-
         private OpeningTime() { }
-        private OpeningTime(DayOfWeek day, TimeSpan openTime, TimeSpan closeTime)
+        private OpeningTime(DayOfWeek day)
         {
-            ValidateTime(openTime, closeTime);
-
             Day = day;
-            OpenTime = openTime;
-            CloseTime = closeTime;
         }
 
         /// <summary>
-        /// 시작/종료 시간으로 영업시간 생성
+        /// 주어진 요일의 영업시간을 생성한다.
         /// </summary>
-        /// <param name="openTime"></param>
-        /// <param name="closeTime"></param>
+        /// <param name="day">영업요일</param>
         /// <returns></returns>
-        public static OpeningTime Between(DayOfWeek day, TimeSpan openTime, TimeSpan closeTime)
+        public static OpeningTime Create(DayOfWeek day)
         {
-            return new OpeningTime(day, openTime, closeTime);
+            return new OpeningTime(day);
         }
 
         /// <summary>
         /// 24시간 영업
         /// </summary>
         /// <returns></returns>
-        public static OpeningTime TwentyFourHours(DayOfWeek day)
+        public static OpeningTime CreateTwentyFourHours(DayOfWeek day)
         {
-            return new OpeningTime(day, StartTimeOf24Hours, CloseTimeOf24Hours);
+            return new OpeningTime(day)
+            {
+                TwentyFourHours = true
+            };
         }
 
-        /// <summary>
-        /// 주어진 시간이 유효한지 검사한다
-        /// </summary>
-        /// <param name="start"></param>
-        /// <param name="end"></param>
-        /// <exception cref="InvalidTimeException"></exception>
-        private static void ValidateTime(TimeSpan start, TimeSpan end)
+        public static OpeningTime CreateDayoff(DayOfWeek day)
         {
-            if (start < StartTimeOf24Hours || CloseTimeOf24Hours < start)
-                throw new InvalidTimeException();
-
-            if (end < StartTimeOf24Hours || CloseTimeOf24Hours < end)
-                throw new InvalidTimeException();
-
-            if (end < start)
-                throw new InvalidTimeException();
+            return new OpeningTime(day)
+            {
+                Dayoff = true
+            };
         }
 
         /// <summary>
@@ -77,14 +55,24 @@ namespace Bridge.Domain.Places.Entities
         public DayOfWeek Day { get; private set; }
 
         /// <summary>
+        /// 휴무일
+        /// </summary>
+        public bool Dayoff { get; private set;  }
+
+        /// <summary>
+        /// 24시간 영업 여부
+        /// </summary>
+        public bool TwentyFourHours { get; private set; }
+
+        /// <summary>
         /// 개점 시간
         /// </summary>
-        public TimeSpan OpenTime { get; private set; }
+        public TimeSpan? OpenTime { get; private set; }
 
         /// <summary>
         /// 폐점 시간
         /// </summary>
-        public TimeSpan CloseTime { get; private set; }
+        public TimeSpan? CloseTime { get; private set; }
 
         /// <summary>
         /// 휴식 시작시간
@@ -96,10 +84,21 @@ namespace Bridge.Domain.Places.Entities
         /// </summary>
         public TimeSpan? BreakEndTime { get; private set; }
 
+
         /// <summary>
-        /// 24시간 영업 여부
+        /// 영업시간을 설정한다.
         /// </summary>
-        public bool Is24Hours => OpenTime == TimeSpan.Zero && CloseTime == TimeSpan.FromDays(1);
+        /// <param name="openTime"></param>
+        /// <param name="closeTime"></param>
+        internal void SetOpenCloseTime(TimeSpan openTime, TimeSpan closeTime)
+        {
+            OpenTime = openTime;
+            CloseTime = closeTime;
+
+            Dayoff = false;
+            TwentyFourHours = false;
+        }
+
 
         /// <summary>
         /// 휴식시간을 설정한다.
@@ -108,10 +107,10 @@ namespace Bridge.Domain.Places.Entities
         /// <param name="breakEndTime"></param>
         internal void SetBreakTime(TimeSpan breakStartTime, TimeSpan breakEndTime)
         {
-            ValidateTime(breakStartTime, breakEndTime);
-
             BreakStartTime = breakStartTime;
             BreakEndTime = breakEndTime;
+
+            Dayoff = false;
         }
 
         /// <summary>
@@ -123,5 +122,28 @@ namespace Bridge.Domain.Places.Entities
             BreakEndTime = null;
         }
 
+        /// <summary>
+        /// 휴무일 설정
+        /// </summary>
+        internal void SetDayoff()
+        {
+            Dayoff = true;
+            TwentyFourHours = false;
+            OpenTime = null;
+            CloseTime = null;
+            BreakStartTime = null;
+            BreakEndTime = null;
+        }
+
+        /// <summary>
+        /// 24시간 영업설정
+        /// </summary>
+        internal void SetTwentyFourHours()
+        {
+            TwentyFourHours = true;
+            Dayoff = false;
+            OpenTime = null;
+            CloseTime = null;
+        }
     }
 }

@@ -34,6 +34,14 @@ namespace Bridge.Domain.Places.Entities
             Type = type;
             SetName(name);
             SetAddressLocation(address, location);
+
+            _openingTimes.Add(OpeningTime.Create(DayOfWeek.Sunday));
+            _openingTimes.Add(OpeningTime.Create(DayOfWeek.Monday));
+            _openingTimes.Add(OpeningTime.Create(DayOfWeek.Tuesday));
+            _openingTimes.Add(OpeningTime.Create(DayOfWeek.Wednesday));
+            _openingTimes.Add(OpeningTime.Create(DayOfWeek.Thursday));
+            _openingTimes.Add(OpeningTime.Create(DayOfWeek.Friday));
+            _openingTimes.Add(OpeningTime.Create(DayOfWeek.Saturday));
         }
 
         /// <summary>
@@ -155,22 +163,47 @@ namespace Bridge.Domain.Places.Entities
             ContactNumber = contactNumber;
         }
 
-        /// <summary>
-        /// 영업시간을 추가한다.
-        /// 동일한 요일에 등록된 영업시간이 존재할 경우 업데이트한다.
-        /// </summary>
-        /// <param name="openingHours"></param>
-        public void AddOpeningTime(DayOfWeek day, TimeSpan openTime, TimeSpan closeTime, TimeSpan? breakStartTime = null, TimeSpan? breakEndTime = null)
+        private OpeningTime GetOrCreateOpeningTime(DayOfWeek day)
         {
-            var oldTime = _openingTimes.FirstOrDefault(x => x.Day == day);
-            if (oldTime != null)
-                _openingTimes.Remove(oldTime);
+            var openingTime = _openingTimes.FirstOrDefault(x => x.Day == day);
+            if (openingTime == null)
+            {
+                openingTime = OpeningTime.Create(day);
+                _openingTimes.Add(openingTime);
+            }
+            return openingTime;
+        }
 
-            var openingTime = OpeningTime.Between(day, openTime, closeTime);
-            _openingTimes.Add(openingTime);
+        /// <summary>
+        /// 휴무일을 설정한다.
+        /// </summary>
+        /// <param name="day"></param>
+        public void SetDayoff(DayOfWeek day) 
+        {
+            var openingTime = GetOrCreateOpeningTime(day);
+            openingTime.SetDayoff();
+        }
 
-            if (breakStartTime.HasValue && breakEndTime.HasValue)
-                openingTime.SetBreakTime(breakStartTime.Value, breakEndTime.Value);
+        /// <summary>
+        /// 24시간 영업시간을 설정한다.
+        /// </summary>
+        /// <param name="day"></param>
+        public void SetTwentyFourHours(DayOfWeek day)
+        {
+            var openingTime = GetOrCreateOpeningTime(day);
+            openingTime.SetTwentyFourHours();
+        }
+
+        /// <summary>
+        /// 개점, 폐점 시간을 설정한다.
+        /// </summary>
+        /// <param name="day"></param>
+        /// <param name="openTime"></param>
+        /// <param name="closeTime"></param>
+        public void SetOpenCloseTime(DayOfWeek day, TimeSpan openTime, TimeSpan closeTime)
+        {
+            var openingTime = GetOrCreateOpeningTime(day);
+            openingTime.SetOpenCloseTime(openTime, closeTime);
         }
 
         /// <summary>
@@ -181,10 +214,7 @@ namespace Bridge.Domain.Places.Entities
         /// <param name="breakEndTime">휴식종료시간</param>
         public void SetBreakTime(DayOfWeek day, TimeSpan breakStartTime, TimeSpan breakEndTime)
         {
-            var openingTime = _openingTimes.FirstOrDefault(x => x.Day == day);
-            if (openingTime == null)
-                return;
-
+            var openingTime = GetOrCreateOpeningTime(day);
             openingTime.SetBreakTime(breakStartTime, breakEndTime);
         }
 
@@ -194,12 +224,10 @@ namespace Bridge.Domain.Places.Entities
         /// <param name="day">영업요일</param>
         public void ClearBreakTime(DayOfWeek day)
         {
-            var openingTime = _openingTimes.FirstOrDefault(x => x.Day == day);
-            if (openingTime == null)
-                return;
-
+            var openingTime = GetOrCreateOpeningTime(day);
             openingTime.ClearBreakTime();
         }
 
     }
 }
+

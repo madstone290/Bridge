@@ -34,12 +34,18 @@ namespace Bridge.Application.Places.Commands
         {
             var place = await _placeRepository.FindByIdAsync(command.PlaceId) ?? throw new PlaceNotFoundException(new { command.PlaceId });
 
-            place.AddOpeningTime(
-                command.OpeningTime.Day,
-                command.OpeningTime.OpenTime,
-                command.OpeningTime.CloseTime,
-                command.OpeningTime.BreakStartTime,
-                command.OpeningTime.BreakEndTime);
+            var openingTimeDto = command.OpeningTime;
+            if (openingTimeDto.OpenTime.HasValue && openingTimeDto.CloseTime.HasValue)
+                place.SetOpenCloseTime(openingTimeDto.Day, openingTimeDto.OpenTime.Value, openingTimeDto.CloseTime.Value);
+            
+            if (openingTimeDto.BreakStartTime.HasValue && openingTimeDto.BreakEndTime.HasValue)
+                place.SetBreakTime(openingTimeDto.Day, openingTimeDto.BreakStartTime.Value, openingTimeDto.BreakEndTime.Value);
+
+            if(openingTimeDto.Dayoff)
+                place.SetDayoff(openingTimeDto.Day);
+
+            if (openingTimeDto.TwentyFourHours)
+                place.SetTwentyFourHours(openingTimeDto.Day);
 
             await _unitOfWork.CommitAsync();
             return Unit.Value;

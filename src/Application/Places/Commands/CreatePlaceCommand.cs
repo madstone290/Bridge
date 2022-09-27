@@ -86,8 +86,17 @@ namespace Bridge.Application.Places.Commands
 
             foreach (var openingTimeDto in command.OpeningTimes)
             {
-                place.AddOpeningTime(openingTimeDto.Day, openingTimeDto.OpenTime, openingTimeDto.CloseTime,
-                    openingTimeDto.BreakStartTime, openingTimeDto.BreakEndTime);
+                if (openingTimeDto.OpenTime.HasValue && openingTimeDto.CloseTime.HasValue)
+                    place.SetOpenCloseTime(openingTimeDto.Day, openingTimeDto.OpenTime.Value, openingTimeDto.CloseTime.Value);
+
+                if (openingTimeDto.BreakStartTime.HasValue && openingTimeDto.BreakEndTime.HasValue)
+                    place.SetBreakTime(openingTimeDto.Day, openingTimeDto.BreakStartTime.Value, openingTimeDto.BreakEndTime.Value);
+
+                if (openingTimeDto.Dayoff)
+                    place.SetDayoff(openingTimeDto.Day);
+
+                if (openingTimeDto.TwentyFourHours)
+                    place.SetTwentyFourHours(openingTimeDto.Day);
             }
 
             await _placeRepository.AddAsync(place);

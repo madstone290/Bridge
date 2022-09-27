@@ -114,12 +114,13 @@ namespace Bridge.IntegrationTests
             place.ContactNumber.Should().Be(command.ContactNumber);
             place.Address.Should().Be(command.Address);
             place.Categories.Should().BeEquivalentTo(command.Categories);
-            place.OpeningTimes.Should().BeEquivalentTo(command.OpeningTimes);
             place.Location.Latitude.Should().NotBe(0);
             place.Location.Longitude.Should().NotBe(0);
             place.Location.Easting.Should().NotBe(0);
             place.Location.Northing.Should().NotBe(0);
-
+            place.OpeningTimes.Should().ContainEquivalentOf(command.OpeningTimes[0]);
+            place.OpeningTimes.Should().ContainEquivalentOf(command.OpeningTimes[1]);
+            place.OpeningTimes.Should().ContainEquivalentOf(command.OpeningTimes[2]);
 
         }
 

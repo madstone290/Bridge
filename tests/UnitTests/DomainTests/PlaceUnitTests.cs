@@ -163,38 +163,19 @@ namespace Bridge.UnitTests.DomainTests
         }
 
         [Fact]
-        public void OpeningTime_Is_Added()
-        {
-            // Arrange
-            var place = NewPlace();
-            var day = DayOfWeek.Friday;
-            var openTime = TimeSpan.FromHours(6);
-            var closeTime = TimeSpan.FromHours(18);
-
-            // Act
-            place.AddOpeningTime(day, openTime, closeTime);
-
-            // Assert
-            place.OpeningTimes.Should().Contain(
-                x => x.Day == day &&
-                x.OpenTime == openTime &&
-                x.CloseTime == closeTime);
-        }
-
-        [Fact]
-        public void SameDay_OpeningTime_Is_Updated()
+        public void OpeningTime_Is_Updated()
         {
             // Arrange
             var place = NewPlace();
             var day = DayOfWeek.Friday;
             var oldOpenTime = TimeSpan.FromHours(6);
             var oldCloseTime = TimeSpan.FromHours(18);
-            place.AddOpeningTime(day, oldOpenTime, oldCloseTime);
+            place.SetOpenCloseTime(day, oldOpenTime, oldCloseTime);
 
             // Act
             var newOpenTime = TimeSpan.FromHours(3);
             var newCloseTime = TimeSpan.FromHours(10);
-            place.AddOpeningTime(day, newOpenTime, newCloseTime);
+            place.SetOpenCloseTime(day, newOpenTime, newCloseTime);
 
             // Assert
             place.OpeningTimes.Should().NotContain(x =>
