@@ -1,4 +1,6 @@
-﻿using Bridge.WebApp.Api.ApiClients;
+﻿using Bridge.Application.Places.Commands;
+using Bridge.WebApp.Api.ApiClients;
+using Bridge.WebApp.Extensions;
 using Bridge.WebApp.Pages.Admin.Models;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
@@ -41,11 +43,29 @@ namespace Bridge.WebApp.Pages.Admin
 
                 if (FormMode == FormMode.Create)
                 {
-                    // 추가
+                    var command = new CreatePlaceCommand()
+                    {
+                        Type = _place.Type,
+                        Name = _place.Name,
+                        Address = _place.Address,
+                        Categories = _place.Categories.ToList(),
+                        ContactNumber = _place.ContactNumber,
+                        OpeningTimes = _place.OpeningTimes.Select(t => new Application.Places.Dtos.OpeningTimeDto()
+                        {
+                            Day = t.Day,
+                            Dayoff = t.Dayoff,
+                            TwentyFourHours = t.TwentyFourHours,
+                            BreakEndTime = t.BreakEndTime,
+                            BreakStartTime = t.BreakStartTime,
+                            OpenTime = t.OpenTime,
+                            CloseTime = t.CloseTime, 
+                        }).ToList(),
+                        UserId = 1,
+                    };
+                    var result = await PlaceApiClient.CreatePlace(command);
 
-                    // 성공 -> Home 이동
-
-                    // 실패 -> 메시지 출력
+                    if (Snackbar.CheckSuccess(result))
+                        NavManager.NavigateTo(PageRoutes.Admin.PlaceList);
                 }
                 else
                 {

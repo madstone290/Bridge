@@ -29,6 +29,11 @@ namespace Bridge.WebApp.Pages.Admin.Models
         public long Id { get; set; }
 
         /// <summary>
+        /// 장소유형
+        /// </summary>
+        public PlaceType Type { get; set; }
+
+        /// <summary>
         /// 장소명
         /// </summary>
         public string Name { get; set; } = string.Empty;
@@ -51,11 +56,6 @@ namespace Bridge.WebApp.Pages.Admin.Models
         /// 연락처
         /// </summary>
         public string? ContactNumber { get; set; }
-
-        /// <summary>
-        /// 영업시간 사용여부
-        /// </summary>
-        public bool UseOpeningTimes { get; set; }
 
         /// <summary>
         /// 영업시간

@@ -1,4 +1,6 @@
-﻿using Bridge.WebApp.Api.ApiClients;
+﻿using Bridge.Domain.Places.Entities;
+using Bridge.WebApp.Api.ApiClients;
+using Bridge.WebApp.Extensions;
 using Bridge.WebApp.Models;
 using Microsoft.AspNetCore.Components;
 
@@ -9,7 +11,12 @@ namespace Bridge.WebApp.Pages.Admin
         /// <summary>
         /// 장소 목록
         /// </summary>
-        private readonly List<PlaceModel> _places = new();
+        private readonly List<PlaceListModel> _places = new();
+
+        /// <summary>
+        /// 셀렉트 인풋에서 선택한 장소유형
+        /// </summary>
+        private PlaceType? _selectedPlaceType;
 
         /// <summary>
         /// 검색어
@@ -24,7 +31,7 @@ namespace Bridge.WebApp.Pages.Admin
         /// </summary>
         /// <param name="place"></param>
         /// <returns></returns>
-        private bool Search(PlaceModel place)
+        private bool Search(PlaceListModel place)
         {
             if (string.IsNullOrWhiteSpace(_searchString))
                 return true;
@@ -33,49 +40,25 @@ namespace Bridge.WebApp.Pages.Admin
                 place.CategoriesString.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true;
         }
 
-        protected override async Task OnInitializedAsync()
-        {
-            LoadPlaceList();
-
-            await Task.Delay(300);
-            _places.Add(new PlaceModel()
-            {
-                Name = "test1",
-                Categories = new List<Domain.Places.Entities.PlaceCategory>() { Domain.Places.Entities.PlaceCategory.Cafeteria, Domain.Places.Entities.PlaceCategory.Restaurant },
-                OpeningTimes = new List<Application.Places.Dtos.OpeningTimeDto>()
-                {
-                    new Application.Places.Dtos.OpeningTimeDto()
-                    {
-                        Day = DayOfWeek.Monday,
-                        OpenTime = TimeSpan.FromHours(9),
-                        CloseTime= TimeSpan.FromHours(18),
-                    },
-                    new Application.Places.Dtos.OpeningTimeDto()
-                    {
-                        Day = DayOfWeek.Tuesday,
-                        OpenTime = TimeSpan.FromHours(10),
-                        CloseTime= TimeSpan.FromHours(15),
-                    }
-                }
-            });
-        }
-
-        private void LoadPlaceList()
-        {
-            
-        }
-
         private void Create_Click()
         {
             NavManager.NavigateTo(PageRoutes.Admin.PlaceCreate);
         }
 
-        private void Load_Click()
+        private async Task Load_ClickAsync()
         {
-            LoadPlaceList();
+            if (!_selectedPlaceType.HasValue)
+                return;
+
+            var places = await PlaceApiClient.GetPlacesByPlaceType(_selectedPlaceType.Value);
+            if (!Snackbar.CheckSuccess(places))
+                return;
+
+            _places.Clear();
+            _places.AddRange(places.Data!.Select(x => PlaceListModel.ToPlaceModel(x)));
         }
 
-        private void ToggleShowOpeningTime_Click(PlaceModel place)
+        private void ToggleShowOpeningTime_Click(PlaceListModel place)
         {
             place.ShowOpeningTimes = !place.ShowOpeningTimes;
         }

@@ -9,9 +9,8 @@
 ::deep .mud-toolbar > * {
     margin:0px 2px 0px 2px;
 }
-
-::deep .button-group > *{
-    margin: 0px 2px 0px 2px;
+::deep .place-type-select {
+    width: 300px;
 }
 
 ::deep .search-field {

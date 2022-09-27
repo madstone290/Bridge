@@ -16,7 +16,7 @@ namespace Bridge.WebApp.Pages
         /// <summary>
         /// 검색된 장소 목록
         /// </summary>
-        private List<PlaceModel> _placeList = new();
+        private List<PlaceListModel> _placeList = new();
         
         /// <summary>
         /// 현위치 동향
@@ -71,7 +71,7 @@ namespace Bridge.WebApp.Pages
 
             _placeList.AddRange(result.Data!.Select(x=>
             {
-                var place = PlaceModel.ToPlaceModel(x);
+                var place = PlaceListModel.ToPlaceModel(x);
                 place.CalcDistance(_centerEasting, _centerNorthing);
                 return place;
             }).OrderBy(x=> x.Distance));

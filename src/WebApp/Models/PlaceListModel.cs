@@ -4,11 +4,11 @@ using Bridge.Domain.Places.Entities;
 
 namespace Bridge.WebApp.Models
 {
-    public class PlaceModel
+    public class PlaceListModel
     {
-        public static PlaceModel ToPlaceModel(PlaceReadModel x)
+        public static PlaceListModel ToPlaceModel(PlaceReadModel x)
         {
-            return new PlaceModel()
+            return new PlaceListModel()
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -19,7 +19,16 @@ namespace Bridge.WebApp.Models
                 Northing = x.Location.Northing,
                 Categories = x.Categories,
                 ContactNumber = x.ContactNumber,
-                OpeningTimes = x.OpeningTimes
+                OpeningTimes = x.OpeningTimes.Select(t => new OpeningTimeListModel()
+                {
+                    Day  = t.Day,
+                    Dayoff = t.Dayoff,
+                    TwentyFourHours = t.TwentyFourHours,
+                    OpenTime = t.OpenTime,
+                    CloseTime = t.CloseTime,
+                    BreakStartTime = t.BreakStartTime,
+                    BreakEndTime = t.BreakEndTime
+                }).ToList()
             };
         }
 
@@ -27,6 +36,16 @@ namespace Bridge.WebApp.Models
         /// 아이디
         /// </summary>
         public long Id { get; set; }
+
+        /// <summary>
+        /// 장소유형
+        /// </summary>
+        public PlaceType Type { get; set; }
+
+        /// <summary>
+        /// 장소유형
+        /// </summary>
+        public string TypeString => Type.ToString();
 
         /// <summary>
         /// 장소명
@@ -96,7 +115,7 @@ namespace Bridge.WebApp.Models
         /// <summary>
         /// 영업시간
         /// </summary>
-        public List<OpeningTimeDto> OpeningTimes { get; set; } = new();
+        public List<OpeningTimeListModel> OpeningTimes { get; set; } = new();
 
         /// <summary>
         /// 영업시간 보여주기 여부
