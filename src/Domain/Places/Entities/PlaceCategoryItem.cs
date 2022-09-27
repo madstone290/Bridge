@@ -17,5 +17,17 @@ namespace Bridge.Domain.Places.Entities
         /// 카테고리
         /// </summary>
         public PlaceCategory Category { get; set; }
+
+        public override int GetHashCode()
+        {
+            return Category.GetHashCode();
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is PlaceCategoryItem item)
+                return Category == item.Category;
+            return false;
+        }
     }
 }
