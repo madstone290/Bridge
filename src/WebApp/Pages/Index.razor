@@ -4,14 +4,19 @@
 
 <div class="page">
     <MudContainer>
-        <MudAutocomplete Placeholder="검색어를 입력하세요"
+        <div class="search-line">
+            <MudAutocomplete Placeholder="검색어를 입력하세요"
                          T="string"
                          @bind-Text="_searchText"
-                         Adornment="Adornment.End"
-                         SearchFunc="async (text) => new List<string>()"
+                         Adornment="Adornment.Start"
                          AdornmentIcon="@Icons.Material.Filled.Search"
+                         SearchFunc="async (text) => new List<string>()"
                          Variant="Variant.Filled"
                          OnKeyUp="AutoComplete_OnKeyUpAsync" />
+            <MudIconButton OnClick="Settings_ClickAsync"
+                Icon="@Icons.Material.Filled.Settings" />
+        </div>
+        
 
         <MudList>
             @{
