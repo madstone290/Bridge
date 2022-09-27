@@ -124,8 +124,13 @@ namespace Bridge.IntegrationTests
 
         }
 
-        [Fact]
-        public async Task Add_OpeningTime_Return_Ok()
+        [Theory]
+        [InlineData(DayOfWeek.Sunday, true, false, null, null, null, null)]
+        [InlineData(DayOfWeek.Monday, false, true, null, null, null, null)]
+        [InlineData(DayOfWeek.Tuesday, false, false, 6, 18, null , null)]
+        [InlineData(DayOfWeek.Wednesday, false, false, 6, 18, 15, 16)]
+        public async Task Add_OpeningTime_Return_Ok(DayOfWeek day, bool dayoff, bool twentyFourHours, double? openTime, double? closeTime,
+            double? breakStartTime, double? breakEndTime)
         {
             // Arrange
             var userId = await _apiService.CreateAdminUserAsync(_client);
@@ -135,11 +140,13 @@ namespace Bridge.IntegrationTests
                 PlaceId = placeId,
                 OpeningTime = new OpeningTimeDto()
                 {
-                    Day = DayOfWeek.Monday,
-                    OpenTime = TimeSpan.FromHours(8),
-                    CloseTime = TimeSpan.FromHours(18),
-                    BreakStartTime = TimeSpan.FromHours(14),
-                    BreakEndTime = TimeSpan.FromHours(16),
+                    Day = day,
+                    Dayoff = dayoff,
+                    TwentyFourHours = twentyFourHours,
+                    OpenTime = openTime.HasValue ? TimeSpan.FromHours(openTime.Value) : null,
+                    CloseTime = closeTime.HasValue ? TimeSpan.FromHours(closeTime.Value): null,
+                    BreakStartTime = breakStartTime.HasValue ? TimeSpan.FromHours(breakStartTime.Value): null,
+                    BreakEndTime = breakEndTime.HasValue ? TimeSpan.FromHours(breakEndTime.Value): null,
                 }
             };
 
@@ -158,7 +165,7 @@ namespace Bridge.IntegrationTests
             var place = await getResponse.Content.ReadFromJsonAsync<PlaceReadModel>() ?? null!;
             place.OpeningTimes.Should().ContainEquivalentOf(command.OpeningTime);
         }
-
+     
         [Fact]
         public async Task Update_Categories_Return_Ok()
         {
@@ -372,5 +379,6 @@ namespace Bridge.IntegrationTests
         }
     }
 }
+
 
 
