@@ -60,7 +60,7 @@ namespace Bridge.UnitTests.DomainTests
             var place = NewPlace();
 
             // Assert
-            place.Categories.Should().BeEmpty();
+            place.CategoryItems.Should().BeEmpty();
         }
 
         [Fact]
@@ -74,7 +74,7 @@ namespace Bridge.UnitTests.DomainTests
             place.AddCategory(category);
 
             // Assert
-            place.Categories.Should().Contain(category);
+            place.CategoryItems.Should().Contain(x=> x.Category == category);
         }
 
         [Fact]
@@ -89,7 +89,7 @@ namespace Bridge.UnitTests.DomainTests
             place.AddCategory(category);
 
             // Assert
-            place.Categories.Should().HaveCount(1);
+            place.CategoryItems.Should().HaveCount(1);
         }
 
         [Fact]
@@ -104,7 +104,7 @@ namespace Bridge.UnitTests.DomainTests
             place.RemoveCategory(category);
 
             // Assert
-            place.Categories.Should().HaveCount(0);
+            place.CategoryItems.Should().HaveCount(0);
         }
 
         [Fact]

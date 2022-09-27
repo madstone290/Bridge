@@ -26,7 +26,7 @@ namespace Bridge.Domain.Places.Entities
         /// <summary>
         /// 장소 범주
         /// </summary>
-        private ISet<PlaceCategory> _categories = new HashSet<PlaceCategory>();
+        private ISet<PlaceCategoryItem> _categoryItems = new HashSet<PlaceCategoryItem>();
 
         private Place() { }
         private Place(string name, string address, PlaceLocation location)
@@ -67,7 +67,7 @@ namespace Bridge.Domain.Places.Entities
         /// <summary>
         /// 장소 카테고리
         /// </summary>
-        public IEnumerable<PlaceCategory> Categories => _categories;
+        public IEnumerable<PlaceCategoryItem> CategoryItems => _categoryItems;
 
         /// <summary>
         /// 연락처
@@ -115,9 +115,7 @@ namespace Bridge.Domain.Places.Entities
         /// <param name="category"></param>
         public void AddCategory(PlaceCategory category)
         {
-            _categories = new HashSet<PlaceCategory>(_categories);
-
-            _categories.Add(category);
+            _categoryItems.Add(new PlaceCategoryItem(category));
         }
 
         /// <summary>
@@ -126,9 +124,9 @@ namespace Bridge.Domain.Places.Entities
         /// <param name="category"></param>
         public void RemoveCategory(PlaceCategory category)
         {
-            _categories = new HashSet<PlaceCategory>(_categories);
-
-            _categories.Remove(category);
+            var categoryItem = _categoryItems.FirstOrDefault(c => c.Category == category);
+            if(categoryItem != null)
+                _categoryItems.Remove(categoryItem);
         }
 
         /// <summary>
@@ -137,7 +135,9 @@ namespace Bridge.Domain.Places.Entities
         /// <param name="categories"></param>
         public void UpdateCategories(IEnumerable<PlaceCategory> categories)
         {
-            _categories = new HashSet<PlaceCategory>(categories);
+            _categoryItems.Clear();
+            foreach(var category in categories)
+                AddCategory(category);
         }
 
         /// <summary>
