@@ -14,6 +14,7 @@ namespace Bridge.Infrastructure.Data.ReadRepos
         protected override Expression<Func<Product, ProductReadModel>> SelectExpression { get; } = x => new ProductReadModel()
         {
             Id = x.Id,
+            Type = x.Type,
             Name = x.Name,
             PlaceId = x.PlaceId,
             Price = x.Price,

@@ -20,6 +20,10 @@ namespace Bridge.Infrastructure.Data.Config
                 .HasForeignKey(x => x.PlaceId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            // ProductType
+            builder.Property(x => x.Type)
+                .HasConversion<string>();
+
             // Price
             builder.Property(x => x.Price)
                 .HasPrecision(18, 4);

@@ -40,6 +40,11 @@ namespace Bridge.Domain.Products.Entities
         }
 
         /// <summary>
+        /// 제품 유형
+        /// </summary>
+        public ProductType Type { get; private set; }
+
+        /// <summary>
         /// 제품명
         /// </summary>
         public string Name { get; private set; } = string.Empty;

@@ -50,6 +50,11 @@ namespace Bridge.Domain.Places.Entities
         }
 
         /// <summary>
+        /// 장소 유형
+        /// </summary>
+        public PlaceType Type { get; private set; }
+
+        /// <summary>
         /// 장소명
         /// </summary>
         public string Name { get; private set; } = string.Empty;

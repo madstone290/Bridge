@@ -14,6 +14,10 @@ namespace Bridge.Infrastructure.Data.Config
             // Location
             builder.OwnsOne(x => x.Location);
 
+            // PlaceType
+            builder.Property(x => x.Type)
+                .HasConversion<string>();
+
             // OpeningTimes
             var timeBuilder = builder.OwnsMany(x => x.OpeningTimes);
             timeBuilder.HasKey(x => x.Id);

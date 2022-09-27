@@ -15,6 +15,7 @@ namespace Bridge.Infrastructure.Data.ReadRepos
         protected override Expression<Func<Place, PlaceReadModel>> SelectExpression { get; } = x => new PlaceReadModel()
         {
             Id = x.Id,
+            Type = x.Type,
             Name = x.Name,
             Address = x.Address,
             Location = new PlaceLocationDto()

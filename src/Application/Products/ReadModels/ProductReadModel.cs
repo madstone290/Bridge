@@ -1,4 +1,5 @@
-﻿using Bridge.Domain.Products.Entities;
+﻿using Bridge.Domain.Places.Entities;
+using Bridge.Domain.Products.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,11 @@ namespace Bridge.Application.Products.ReadModels
         /// 아이디
         /// </summary>
         public long Id { get; set; }
+
+        /// <summary>
+        /// 제품유형
+        /// </summary>
+        public ProductType Type { get; set; }
 
         /// <summary>
         /// 제품명
