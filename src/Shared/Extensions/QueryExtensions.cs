@@ -30,6 +30,21 @@ namespace Bridge.Shared.Extensions
         }
 
         /// <summary>
+        /// 문자열에 라우트 파라미터를 추가한다.
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string AddRouteParam(this string uri, string name, object value)
+        {
+            if (uri.Contains(name))
+                return uri.Replace(name, value.ToString());
+            return uri;
+        }
+
+
+        /// <summary>
         /// 쿼리 파라미터를 추가한다.
         /// </summary>
         /// <param name="uri"></param>
