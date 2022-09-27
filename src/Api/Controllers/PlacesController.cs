@@ -1,4 +1,5 @@
-﻿using Bridge.Application.Places.Commands;
+﻿using Bridge.Api.Controllers.Dtos;
+using Bridge.Application.Places.Commands;
 using Bridge.Application.Places.Queries;
 using Bridge.Application.Places.ReadModels;
 using Bridge.Shared;
@@ -62,6 +63,17 @@ namespace Bridge.Api.Controllers
                 };
                 places = await _mediator.Send(query);
             }
+            return Ok(places);
+        }
+
+        [HttpPost]
+        [Route(ApiRoutes.Places.Search)]
+        [ProducesResponseType(typeof(List<PlaceReadModel>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetPlaces([FromBody] PlaceSearchDto searchDto)
+        {
+            List<PlaceReadModel> places;
+            var query = new GetPlacesByPlaceTypeQuery() { PlaceType = searchDto.PlaceType };
+            places = await _mediator.Send(query);
             return Ok(places);
         }
 

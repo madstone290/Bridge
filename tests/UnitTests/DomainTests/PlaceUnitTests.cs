@@ -43,7 +43,7 @@ namespace Bridge.UnitTests.DomainTests
             // Act
             var action = () =>
             {
-                var place = Place.Create(user, name, address, location);
+                var place = Place.Create(user, PlaceType.Restaurant, name, address, location);
             };
 
             // Assert

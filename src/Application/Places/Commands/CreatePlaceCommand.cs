@@ -21,6 +21,11 @@ namespace Bridge.Application.Places.Commands
         public long UserId { get; set; }
 
         /// <summary>
+        /// 장소유형
+        /// </summary>
+        public PlaceType Type { get; set; }
+
+        /// <summary>
         /// 장소명
         /// </summary>
         public string Name { get; set; } = string.Empty;
@@ -73,7 +78,7 @@ namespace Bridge.Application.Places.Commands
 
             var location = PlaceLocation.Create(latitudeLongitude.Item1, latitudeLongitude.Item2, eatingNorthing.Item1, eatingNorthing.Item2);
 
-            var place = Place.Create(user, command.Name, command.Address, location);
+            var place = Place.Create(user, command.Type, command.Name, command.Address, location);
             place.SetContactNumber(command.ContactNumber);
 
             foreach (var category in command.Categories)

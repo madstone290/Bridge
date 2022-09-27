@@ -29,8 +29,9 @@ namespace Bridge.Domain.Places.Entities
         private ISet<PlaceCategory> _categories = new HashSet<PlaceCategory>();
 
         private Place() { }
-        private Place(string name, string address, PlaceLocation location)
+        private Place(PlaceType type, string name, string address, PlaceLocation location)
         {
+            Type = type;
             SetName(name);
             SetAddressLocation(address, location);
         }
@@ -41,12 +42,12 @@ namespace Bridge.Domain.Places.Entities
         /// <param name="name"></param>
         /// <param name="location"></param>
         /// <returns></returns>
-        public static Place Create(User user, string name, string address, PlaceLocation location)
+        public static Place Create(User user, PlaceType type, string name, string address, PlaceLocation location)
         {
             if (!user.IsAdmin)
                 throw new NoPermissionException();
 
-            return new Place(name, address, location);
+            return new Place(type, name, address, location);
         }
 
         /// <summary>

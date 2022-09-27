@@ -1,4 +1,5 @@
-﻿using Bridge.Application.Places.Commands;
+﻿using Bridge.Api.Controllers.Dtos;
+using Bridge.Application.Places.Commands;
 using Bridge.Application.Places.Dtos;
 using Bridge.Application.Places.Queries;
 using Bridge.Application.Places.ReadModels;
@@ -308,6 +309,66 @@ namespace Bridge.IntegrationTests
         }
 
 
+        [Fact]
+        public async Task Get_Places_By_PlaceType_Return_Ok_With_Content()
+        {
+            // Arrange
+            var command1 = new CreatePlaceCommand()
+            {
+                UserId = await _apiService.CreateAdminUserAsync(_client),
+                Name = Guid.NewGuid().ToString(),
+                Type = PlaceType.Cafeteria,
+                Address = "대구시 수성구 utm:1000,1000",
+            };
+            var command2 = new CreatePlaceCommand()
+            {
+                UserId = await _apiService.CreateAdminUserAsync(_client),
+                Name = Guid.NewGuid().ToString(),
+                Type = PlaceType.Cafeteria,
+                Address = "대구시 수성구 utm:1000,2000",
+            };
+            var command3 = new CreatePlaceCommand()
+            {
+                UserId = await _apiService.CreateAdminUserAsync(_client),
+                Name = Guid.NewGuid().ToString(),
+                Type = PlaceType.Restaurant,
+                Address = "대구시 수성구 utm:2000,2000",
+            };
+            var command4 = new CreatePlaceCommand()
+            {
+                UserId = await _apiService.CreateAdminUserAsync(_client),
+                Name = "다라바",
+                Type = PlaceType.Restaurant,
+                Address = "대구시 수성구 utm:2000, 1000",
+            };
+            await _apiService.CreatePlaceAsync(_client, command1);
+            await _apiService.CreatePlaceAsync(_client, command2);
+
+
+            // Act
+            var searchDto = new PlaceSearchDto()
+            {
+                PlaceType = PlaceType.Cafeteria
+            };
+            var request = new HttpRequestMessage(HttpMethod.Post, ApiRoutes.Places.Search)
+            {
+                Content = JsonContent.Create(searchDto)
+            };
+            var response = await _client.SendAsync(request);
+
+            // Assert
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+            var places = await response.Content.ReadFromJsonAsync<List<PlaceReadModel>>() ?? default!;
+            places.Should().Contain(x => x.Name == command1.Name);
+            places.Should().Contain(x => x.Name == command2.Name);
+            places.Should().NotContain(x => x.Name == command3.Name);
+            places.Should().NotContain(x => x.Name == command4.Name);
+
+            foreach (var place in places)
+            {
+                place.Type.Should().Be(searchDto.PlaceType);
+            }
+        }
     }
 }
 
