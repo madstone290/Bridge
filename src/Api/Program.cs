@@ -1,3 +1,4 @@
+using Bridge.Api.ActionFilters;
 using Bridge.Application;
 using Bridge.Infrastructure;
 using MediatR;
@@ -26,6 +27,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddMediatR(typeof(ApplicationReference).Assembly);
 
 builder.Services.AddInfrastructureDependency(builder.Configuration);
+
+builder.Services.AddScoped<ExceptionFilter>();
+
 
 var app = builder.Build();
 

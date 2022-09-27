@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Bridge.Api.ActionFilters;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Bridge.Api.Controllers
 {
@@ -6,6 +7,7 @@ namespace Bridge.Api.Controllers
     [Produces("application/json")]
     [Consumes("application/json")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ServiceFilter(typeof(ExceptionFilter))]
     public class ApiController : ControllerBase
     {
 
