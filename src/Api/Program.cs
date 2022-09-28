@@ -11,6 +11,8 @@ if (builder.Environment.IsProduction())
 else
     builder.Configuration.AddJsonFile("Secrets/db_context_dev_secret.json");
 
+builder.Configuration.AddJsonFile("Secrets/mail_service_config.json");
+
 builder.Services.AddControllers(options =>
 {
     var noContentFormatter = options.OutputFormatters.OfType<HttpNoContentOutputFormatter>().FirstOrDefault();

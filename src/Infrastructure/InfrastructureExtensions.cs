@@ -36,7 +36,13 @@ namespace Bridge.Infrastructure
                 .AddEntityFrameworkStores<IdentityContext>()
                 .AddDefaultTokenProviders();
 
+            // todo: options 적용할 것
+            var mailServiceConfig = configuration.GetSection("MailService").Get<MailService.Config>()
+                ?? throw new Exception("메일 서비스 설정을 찾을 수 없습니다");
+            services.AddSingleton(mailServiceConfig);
+
             services.AddScoped<IAddressMapService, DemoAddressMapService>();
+            services.AddScoped<IMailService, MailService>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -45,7 +51,6 @@ namespace Bridge.Infrastructure
 
             services.AddScoped<IPlaceReadRepository, PlaceReadRepository>();
             services.AddScoped<IProductReadRepository, ProductReadRepository>();
-
         }
 
     }
