@@ -8,6 +8,8 @@ using Bridge.Infrastructure.Data;
 using Bridge.Infrastructure.Data.ReadRepos;
 using Bridge.Infrastructure.Data.Repos;
 using Bridge.Infrastructure.Identity;
+using Bridge.Infrastructure.Identity.Entities;
+using Bridge.Infrastructure.Identity.Services;
 using Bridge.Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -40,6 +42,14 @@ namespace Bridge.Infrastructure
             var mailServiceConfig = configuration.GetSection("MailService").Get<MailService.Config>()
                 ?? throw new Exception("메일 서비스 설정을 찾을 수 없습니다");
             services.AddSingleton(mailServiceConfig);
+
+            var tokenServiceConfig = configuration.GetSection("TokenService").Get<TokenService.Config>()
+               ?? throw new Exception("토큰 서비스 설정을 찾을 수 없습니다");
+            services.AddSingleton(tokenServiceConfig);
+
+            services.AddScoped<UserService, UserService>();
+            services.AddScoped<IClaimService, ClaimService>();
+            services.AddScoped<ITokenService, TokenService>();
 
             services.AddScoped<IAddressMapService, DemoAddressMapService>();
             services.AddScoped<IMailService, MailService>();

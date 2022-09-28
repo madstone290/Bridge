@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,11 +13,13 @@ namespace Bridge.Shared
     /// </summary>
     public static class ApiRoutes
     {
-        public static class AdminUsers
+        public static class Users
         {
-            public const string Get = "/api/AdminUsers/{id}";
-
-            public const string Create = "/api/AdminUsers";
+            public const string Register = "/api/Users/Register";
+            public const string SendVerificationEmail = "/api/Users/SendVerificationEmail";
+            public const string VerifyEmail = "/api/Users/VerifyEmail";
+            public const string Login = "/api/Users/Login";
+            public const string Refresh = "/api/Users/Refresh";
         }
 
         public static class Places

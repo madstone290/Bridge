@@ -1,5 +1,4 @@
-
-namespace Bridge.Infrastructure.Identity
+namespace Bridge.Infrastructure.Identity.Entities
 {
     /// <summary>
     /// 사용자 타입

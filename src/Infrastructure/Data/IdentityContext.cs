@@ -1,4 +1,4 @@
-using Bridge.Infrastructure.Identity;
+using Bridge.Infrastructure.Identity.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,6 +14,8 @@ namespace Bridge.Infrastructure.Data
         {
             builder.Entity<BridgeUser>().OwnsOne(x => x.UserDetails)
                 .Property(x=> x.UserType).HasConversion<string>();
+
+            builder.Entity<BridgeUser>().OwnsOne(x => x.RefreshTokenDetails);
 
             base.OnModelCreating(builder);
         }

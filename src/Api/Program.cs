@@ -12,6 +12,7 @@ else
     builder.Configuration.AddJsonFile("Secrets/db_context_dev_secret.json");
 
 builder.Configuration.AddJsonFile("Secrets/mail_service_config.json");
+builder.Configuration.AddJsonFile("Secrets/token_service_config.json");
 
 builder.Services.AddControllers(options =>
 {

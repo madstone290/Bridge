@@ -1,4 +1,4 @@
-namespace Bridge.Infrastructure.Identity
+namespace Bridge.Infrastructure.Identity.Entities
 {
     /// <summary>
     /// 사용자 상세정보.
@@ -6,14 +6,19 @@ namespace Bridge.Infrastructure.Identity
     /// </summary>
     public class UserDetails
     {
+        public static UserDetails NewUserDetails(string userName) => new()
+        {
+            UserName = userName,
+        };
+
         /// <summary>
         /// 사용자 타입
         /// </summary>
-        public UserType UserType { get; set; } = UserType.Consumer;
+        public UserType UserType { get; private set; } = UserType.Consumer;
 
         /// <summary>
         /// 사용자 이름
         /// </summary>
-        public string UserName { get; set; } = string.Empty;
+        public string UserName { get; private set; } = string.Empty;
     }
 }
