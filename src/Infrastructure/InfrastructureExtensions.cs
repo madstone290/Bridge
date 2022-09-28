@@ -1,4 +1,4 @@
-﻿using Bridge.Application.Common;
+using Bridge.Application.Common;
 using Bridge.Application.Common.Services;
 using Bridge.Application.Places.Repos;
 using Bridge.Application.Products.Repos;
@@ -7,6 +7,7 @@ using Bridge.Domain.Products.Repos;
 using Bridge.Infrastructure.Data;
 using Bridge.Infrastructure.Data.ReadRepos;
 using Bridge.Infrastructure.Data.Repos;
+using Bridge.Infrastructure.Identity;
 using Bridge.Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -31,7 +32,7 @@ namespace Bridge.Infrastructure
                 options.UseNpgsql(identityConnString);
             });
 
-            services.AddIdentity<IdentityUser, IdentityRole>()
+            services.AddIdentity<BridgeUser, BridgeRole>()
                 .AddEntityFrameworkStores<IdentityContext>()
                 .AddDefaultTokenProviders();
 
