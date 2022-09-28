@@ -1,89 +1,46 @@
-﻿using Bridge.Domain.Common.Exceptions;
 using Bridge.Domain.Places.Entities;
 using Bridge.Domain.Products.Entities;
 using Bridge.Domain.Products.Exception;
-using Bridge.Domain.Users.Entities;
 using Bridge.UnitTests.DomainTests.Builders;
 using FluentAssertions;
 
 namespace Bridge.UnitTests.DomainTests
 {
-    public class ProductUnitTests : IClassFixture<UserBuilder>, IClassFixture<PlaceBuilder>, IClassFixture<ProductBuilder>
+    public class ProductUnitTests : IClassFixture<PlaceBuilder>, IClassFixture<ProductBuilder>
     {
-        private readonly UserBuilder _userBuilder;
         private readonly PlaceBuilder _placeBuilder;
         private readonly ProductBuilder _productBuilder;
 
-        public ProductUnitTests(UserBuilder userBuilder, PlaceBuilder placeBuilder, ProductBuilder productBuilder)
+        public ProductUnitTests(PlaceBuilder placeBuilder, ProductBuilder productBuilder)
         {
-            _userBuilder = userBuilder;
             _placeBuilder = placeBuilder;
             _productBuilder = productBuilder;
-        }
-        private User NewAdminUser()
-        {
-            return _userBuilder.BuildAdminUser();
         }
 
         private Place NewPlace()
         {
-            var user = _userBuilder.BuildAdminUser();
-            var place = _placeBuilder.Build(user);
+            var place = _placeBuilder.Build();
             return place;
         }
 
         private Product NewProduct()
         {
-            var user = _userBuilder.BuildAdminUser();
-            var place = _placeBuilder.Build(user);
-            var product = _productBuilder.Build(user, place);
+            var place = _placeBuilder.Build();
+            var product = _productBuilder.Build(place);
             return product;
         }
-
-        [Fact]
-        public void NoAdminUser_Cannot_Create_Product()
-        {
-            // Arrange
-            var user = _userBuilder.BuildNormalUser();
-            var place = NewPlace();
-            var name = Guid.NewGuid().ToString();
-
-            // Act
-            var action = () => Product.Create(user, name, place);
-
-            // Assert
-            action.Should().ThrowExactly<NoPermissionException>();
-        }
-
-        [Fact]
-        public void AdminUser_Can_Create_Product()
-        {
-            // Arrange
-            var user = _userBuilder.BuildAdminUser();
-            var place = NewPlace();
-            var name = Guid.NewGuid().ToString();
-
-            // Act
-            var product = Product.Create(user, name, place);
-
-            // Assert
-            product.Name.Should().Be(name);
-        }
-
-
 
         [Fact]
         public void Product_Name_Cannot_Be_Empty()
         {
             // Arrange
             var name = string.Empty;
-            var user = NewAdminUser();
             var place = NewPlace();
 
             // Act
             var action = () =>
             {
-                var product = Product.Create(user, name, place);
+                var product = Product.Create(name, place);
             };
 
             // Assert

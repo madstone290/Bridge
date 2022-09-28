@@ -1,33 +1,23 @@
-﻿using Bridge.Domain.Common.ValueObjects;
+using Bridge.Domain.Common.ValueObjects;
 using Bridge.Domain.Places.Entities;
 using Bridge.Domain.Places.Exceptions;
-using Bridge.Domain.Users.Entities;
 using Bridge.UnitTests.DomainTests.Builders;
 using FluentAssertions;
 
 namespace Bridge.UnitTests.DomainTests
 {
-    public class PlaceUnitTests : IClassFixture<UserBuilder>, IClassFixture<PlaceBuilder>
+    public class PlaceUnitTests : IClassFixture<PlaceBuilder>
     {
-        private readonly UserBuilder _userBuilder;
         private readonly PlaceBuilder _placeBuilder;
 
-        public PlaceUnitTests(UserBuilder userBuilder, PlaceBuilder placeBuilder)
+        public PlaceUnitTests(PlaceBuilder placeBuilder)
         {
-            _userBuilder = userBuilder;
             _placeBuilder = placeBuilder;
-        }
-
-        private User NewAdmin()
-        {
-            var user = _userBuilder.BuildAdminUser();
-            return user;
         }
 
         private Place NewPlace()
         {
-            var user = _userBuilder.BuildAdminUser();
-            var place = _placeBuilder.Build(user);
+            var place = _placeBuilder.Build();
             return place;
         }
 
@@ -36,14 +26,13 @@ namespace Bridge.UnitTests.DomainTests
         {
             // Arrange
             var name = string.Empty;
-            var user = NewAdmin();
             var address = "대구시 수성구";
             var location = PlaceLocation.Create(0,0,0,0);
 
             // Act
             var action = () =>
             {
-                var place = Place.Create(user, PlaceType.Restaurant, name, address, location);
+                var place = Place.Create(PlaceType.Restaurant, name, address, location);
             };
 
             // Assert
@@ -151,7 +140,7 @@ namespace Bridge.UnitTests.DomainTests
         }
 
         [Fact]
-        public void Default_OpeningTimes_Are_Empty()
+        public void Default_OpeningTimes_Have_7()
         {
             // Arrange
 
@@ -159,7 +148,7 @@ namespace Bridge.UnitTests.DomainTests
             var place = NewPlace();
 
             // Assert
-            place.OpeningTimes.Should().BeEmpty();
+            place.OpeningTimes.Should().HaveCount(7);
         }
 
         [Fact]

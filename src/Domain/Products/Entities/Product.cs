@@ -1,8 +1,6 @@
-﻿using Bridge.Domain.Common;
-using Bridge.Domain.Common.Exceptions;
+using Bridge.Domain.Common;
 using Bridge.Domain.Places.Entities;
 using Bridge.Domain.Products.Exception;
-using Bridge.Domain.Users.Entities;
 
 namespace Bridge.Domain.Products.Entities
 {
@@ -29,11 +27,8 @@ namespace Bridge.Domain.Products.Entities
             PlaceId = place.Id;
         }
 
-        public static Product Create(User user, string name, Place place)
+        public static Product Create(string name, Place place)
         {
-            if (!user.IsAdmin)
-                throw new NoPermissionException();
-
             return new Product(name, place);
         }
 

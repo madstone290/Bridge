@@ -1,4 +1,4 @@
-﻿using Bridge.Application.Products.Commands;
+using Bridge.Application.Products.Commands;
 using Bridge.Application.Products.Queries;
 using Bridge.Application.Products.ReadModels;
 using Bridge.Domain.Products.Entities;
@@ -27,11 +27,9 @@ namespace Bridge.IntegrationTests
         public async Task Create_Product_Return_Ok_With_Id()
         {
             // Arrange
-            var userId = await _apiService.CreateAdminUserAsync(_client);
-            var placeId = await _apiService.CreatePlaceAsync(_client, userId);
+            var placeId = await _apiService.CreatePlaceAsync(_client);
             var command = new CreateProductCommand()
             {
-                UserId = userId,
                 PlaceId = placeId,
                 Name = Guid.NewGuid().ToString(),
                 Price = 30M,
@@ -90,11 +88,9 @@ namespace Bridge.IntegrationTests
         public async Task Get_Product_Return_Ok_With_Content()
         {
             // Arrange
-            var userId = await _apiService.CreateAdminUserAsync(_client);
-            var placeId = await _apiService.CreatePlaceAsync(_client, userId);
+            var placeId = await _apiService.CreatePlaceAsync(_client);
             var command = new CreateProductCommand()
             {
-                UserId = userId,
                 PlaceId = placeId,
                 Name = Guid.NewGuid().ToString(),
                 Price = 30M,
@@ -125,18 +121,15 @@ namespace Bridge.IntegrationTests
         public async Task Get_Product_List_Return_Ok_With_Content()
         {
             // Arrange
-            var userId = await _apiService.CreateAdminUserAsync(_client);
-            var placeId = await _apiService.CreatePlaceAsync(_client, userId);
+            var placeId = await _apiService.CreatePlaceAsync(_client);
             var product1 = new CreateProductCommand()
             {
-                UserId = userId,
                 PlaceId = placeId,
                 Name = Guid.NewGuid().ToString(),
                 Price = 30M,
             };
             var product2 = new CreateProductCommand()
             {
-                UserId = userId,
                 PlaceId = placeId,
                 Name = Guid.NewGuid().ToString(),
                 Price = 40M,

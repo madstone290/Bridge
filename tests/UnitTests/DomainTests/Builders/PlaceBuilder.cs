@@ -1,15 +1,13 @@
-﻿using Bridge.Domain.Common.ValueObjects;
+using Bridge.Domain.Common.ValueObjects;
 using Bridge.Domain.Places.Entities;
-using Bridge.Domain.Users.Entities;
 
 namespace Bridge.UnitTests.DomainTests.Builders
 {
     public class PlaceBuilder
     {
-        public Place Build(User user, string? name = null, PlaceLocation? location = null)
+        public Place Build(string? name = null, PlaceLocation? location = null)
         {
             var place = Place.Create(
-                user,
                 PlaceType.Restaurant,
                 name ?? Guid.NewGuid().ToString(),
                 Guid.NewGuid().ToString(),

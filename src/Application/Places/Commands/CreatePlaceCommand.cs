@@ -1,12 +1,9 @@
 ﻿using Bridge.Application.Common;
-using Bridge.Application.Common.Exceptions.EntityNotFoundExceptions;
 using Bridge.Application.Common.Services;
 using Bridge.Application.Places.Dtos;
 using Bridge.Domain.Common.ValueObjects;
 using Bridge.Domain.Places.Entities;
 using Bridge.Domain.Places.Repos;
-using Bridge.Domain.Users.Repos;
-using System.Net;
 
 namespace Bridge.Application.Places.Commands
 {
@@ -15,11 +12,6 @@ namespace Bridge.Application.Places.Commands
     /// </summary>
     public class CreatePlaceCommand : ICommand<long>
     {
-        /// <summary>
-        /// 장소를 생성하는 사용자의 아이디
-        /// </summary>
-        public long UserId { get; set; }
-
         /// <summary>
         /// 장소유형
         /// </summary>
@@ -54,31 +46,26 @@ namespace Bridge.Application.Places.Commands
     public class CreatePlaceCommandHandler : CommandHandler<CreatePlaceCommand, long>
     {
         private readonly IAddressMapService _addressMapService;
-        private readonly IUserRepository _userRepository;
         private readonly IPlaceRepository _placeRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public CreatePlaceCommandHandler(IAddressMapService addressMapService,
-                                         IUserRepository userRepository,
                                          IPlaceRepository placeRepository,
                                          IUnitOfWork unitOfWork)
         {
             _addressMapService = addressMapService;
-            _userRepository = userRepository;
             _placeRepository = placeRepository;
             _unitOfWork = unitOfWork;
         }
 
         public override async Task<long> HandleCommand(CreatePlaceCommand command, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.FindByIdAsync(command.UserId) ?? throw new UserNotFoundException(new { command.UserId });
-            
             var latitudeLongitude = await _addressMapService.GetLatitudeAndLongitudeAsync(command.Address);
             var eatingNorthing = await _addressMapService.GetUTM_K_EastingAndNorthingAsync(command.Address);
 
             var location = PlaceLocation.Create(latitudeLongitude.Item1, latitudeLongitude.Item2, eatingNorthing.Item1, eatingNorthing.Item2);
 
-            var place = Place.Create(user, command.Type, command.Name, command.Address, location);
+            var place = Place.Create(command.Type, command.Name, command.Address, location);
             place.SetContactNumber(command.ContactNumber);
 
             foreach (var category in command.Categories)

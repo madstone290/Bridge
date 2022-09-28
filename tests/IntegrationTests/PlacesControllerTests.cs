@@ -1,4 +1,4 @@
-﻿using Bridge.Api.Controllers.Dtos;
+using Bridge.Api.Controllers.Dtos;
 using Bridge.Application.Places.Commands;
 using Bridge.Application.Places.Dtos;
 using Bridge.Application.Places.Queries;
@@ -30,7 +30,6 @@ namespace Bridge.IntegrationTests
             // Arrange
             var command = new CreatePlaceCommand()
             {
-                UserId = await _apiService.CreateAdminUserAsync(_client),
                 Name = Guid.NewGuid().ToString(),
                 Address = "대구시 수성구",
                 Categories = new List<PlaceCategory>()
@@ -61,7 +60,6 @@ namespace Bridge.IntegrationTests
             // Arrange
             var command = new CreatePlaceCommand()
             {
-                UserId = await _apiService.CreateAdminUserAsync(_client),
                 Name = Guid.NewGuid().ToString(),
                 Address = "대구시 수성구",
                 Categories = new List<PlaceCategory>()
@@ -133,8 +131,7 @@ namespace Bridge.IntegrationTests
             double? breakStartTime, double? breakEndTime)
         {
             // Arrange
-            var userId = await _apiService.CreateAdminUserAsync(_client);
-            var placeId = await _apiService.CreatePlaceAsync(_client, userId);
+            var placeId = await _apiService.CreatePlaceAsync(_client);
             var command = new AddOpeningTimeCommand()
             {
                 PlaceId = placeId,
@@ -170,8 +167,7 @@ namespace Bridge.IntegrationTests
         public async Task Update_Categories_Return_Ok()
         {
             // Arrange
-            var userId = await _apiService.CreateAdminUserAsync(_client);
-            var placeId = await _apiService.CreatePlaceAsync(_client, userId);
+            var placeId = await _apiService.CreatePlaceAsync(_client);
             var command = new UpdatePlaceCategoryCommand()
             {
                 PlaceId = placeId,
@@ -201,25 +197,21 @@ namespace Bridge.IntegrationTests
             // Arrange
             var command1 = new CreatePlaceCommand()
             {
-                UserId = await _apiService.CreateAdminUserAsync(_client),
                 Name = Guid.NewGuid().ToString(),
                 Address = "대구시 수성구 utm:1000,1000",
             };
             var command2 = new CreatePlaceCommand()
             {
-                UserId = await _apiService.CreateAdminUserAsync(_client),
                 Name = Guid.NewGuid().ToString(),
                 Address = "대구시 수성구 utm:1000,2000",
             };
             var command3 = new CreatePlaceCommand()
             {
-                UserId = await _apiService.CreateAdminUserAsync(_client),
                 Name = Guid.NewGuid().ToString(),
                 Address = "대구시 수성구 utm:2000,2000",
             };
             var command4 = new CreatePlaceCommand()
             {
-                UserId = await _apiService.CreateAdminUserAsync(_client),
                 Name = Guid.NewGuid().ToString(),
                 Address = "대구시 수성구 utm:2000, 1000",
             };
@@ -261,25 +253,21 @@ namespace Bridge.IntegrationTests
             // Arrange
             var command1 = new CreatePlaceCommand()
             {
-                UserId = await _apiService.CreateAdminUserAsync(_client),
                 Name = "가나다",
                 Address = "대구시 수성구 utm:1000,1000",
             };
             var command2 = new CreatePlaceCommand()
             {
-                UserId = await _apiService.CreateAdminUserAsync(_client),
                 Name = "가나마",
                 Address = "대구시 수성구 utm:1000,2000",
             };
             var command3 = new CreatePlaceCommand()
             {
-                UserId = await _apiService.CreateAdminUserAsync(_client),
                 Name = "가나바",
                 Address = "대구시 수성구 utm:2000,2000",
             };
             var command4 = new CreatePlaceCommand()
             {
-                UserId = await _apiService.CreateAdminUserAsync(_client),
                 Name = "다라바",
                 Address = "대구시 수성구 utm:2000, 1000",
             };
@@ -323,28 +311,24 @@ namespace Bridge.IntegrationTests
             // Arrange
             var command1 = new CreatePlaceCommand()
             {
-                UserId = await _apiService.CreateAdminUserAsync(_client),
                 Name = Guid.NewGuid().ToString(),
                 Type = PlaceType.Cafeteria,
                 Address = "대구시 수성구 utm:1000,1000",
             };
             var command2 = new CreatePlaceCommand()
             {
-                UserId = await _apiService.CreateAdminUserAsync(_client),
                 Name = Guid.NewGuid().ToString(),
                 Type = PlaceType.Cafeteria,
                 Address = "대구시 수성구 utm:1000,2000",
             };
             var command3 = new CreatePlaceCommand()
             {
-                UserId = await _apiService.CreateAdminUserAsync(_client),
                 Name = Guid.NewGuid().ToString(),
                 Type = PlaceType.Restaurant,
                 Address = "대구시 수성구 utm:2000,2000",
             };
             var command4 = new CreatePlaceCommand()
             {
-                UserId = await _apiService.CreateAdminUserAsync(_client),
                 Name = "다라바",
                 Type = PlaceType.Restaurant,
                 Address = "대구시 수성구 utm:2000, 1000",

@@ -1,5 +1,4 @@
-﻿using Bridge.Application.Common.Services;
-using Bridge.Domain.Users.Entities;
+using Bridge.Application.Common.Services;
 using Bridge.Infrastructure.Data;
 using Bridge.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -7,14 +6,7 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace Bridge.IntegrationTests.Config
 {
@@ -71,8 +63,7 @@ namespace Bridge.IntegrationTests.Config
             bridgeContext.Database.Migrate();
 
             // 슈퍼유저 생성
-            if (!bridgeContext.Users.Any(x => x.IdentityUserId == Seeds.RootUser.IdentityUserId))
-                bridgeContext.Users.Add(Seeds.RootUser);
+
             bridgeContext.SaveChanges();
         }
 

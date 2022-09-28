@@ -3,10 +3,12 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+
 # Secret files
 [Ss]ecret[s]/
 
 # User-specific files
+*.editorconfig
 *.rsuser
 *.suo
 *.user

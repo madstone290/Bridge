@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Common\Exceptions\" />
     <Folder Include="Common\ValueObjects\" />
-    <Folder Include="Users\Events\" />
   </ItemGroup>
 
 </Project>

@@ -1,9 +1,8 @@
-﻿using Bridge.Application.Common;
+using Bridge.Application.Common;
 using Bridge.Application.Common.Exceptions.EntityNotFoundExceptions;
 using Bridge.Domain.Places.Repos;
 using Bridge.Domain.Products.Entities;
 using Bridge.Domain.Products.Repos;
-using Bridge.Domain.Users.Repos;
 
 namespace Bridge.Application.Products.Commands
 {
@@ -13,11 +12,6 @@ namespace Bridge.Application.Products.Commands
         /// 제품명
         /// </summary>
         public string Name { get;  set; } = string.Empty;
-
-        /// <summary>
-        /// 제품을 생성하는 사용자의 아이디
-        /// </summary>
-        public long UserId { get; set; }
 
         /// <summary>
         /// 제품이 판매되는 장소
@@ -40,23 +34,20 @@ namespace Bridge.Application.Products.Commands
     {
         private readonly IProductRepository _productRepository;
         private readonly IPlaceRepository _placeRepository;
-        private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public CreateProductCommandHandler(IProductRepository productRepository, IPlaceRepository placeRepository, IUserRepository userRepository, IUnitOfWork unitOfWork)
+        public CreateProductCommandHandler(IProductRepository productRepository, IPlaceRepository placeRepository, IUnitOfWork unitOfWork)
         {
             _productRepository = productRepository;
             _placeRepository = placeRepository;
-            _userRepository = userRepository;
             _unitOfWork = unitOfWork;
         }
 
         public override async Task<long> HandleCommand(CreateProductCommand command, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.FindByIdAsync(command.UserId) ?? throw new UserNotFoundException(new { command.UserId });
             var place = await _placeRepository.FindByIdAsync(command.PlaceId) ?? throw new PlaceNotFoundException(new { command.PlaceId });
 
-            Product product = Product.Create(user, command.Name, place);
+            Product product = Product.Create(command.Name, place);
             product.SetPrice(command.Price);
 
             foreach (var category in command.Categories)

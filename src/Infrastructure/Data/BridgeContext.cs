@@ -1,6 +1,5 @@
 ﻿using Bridge.Domain.Places.Entities;
 using Bridge.Domain.Products.Entities;
-using Bridge.Domain.Users.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bridge.Infrastructure.Data
@@ -11,7 +10,6 @@ namespace Bridge.Infrastructure.Data
         {
         }
 
-        public DbSet<User> Users { get; set; } = null!;
         public DbSet<Place> Places { get; set; } = null!;
         public DbSet<Product> Products { get; set; } = null!;
 

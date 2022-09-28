@@ -1,8 +1,6 @@
-﻿using Bridge.Domain.Common;
-using Bridge.Domain.Common.Exceptions;
+using Bridge.Domain.Common;
 using Bridge.Domain.Common.ValueObjects;
 using Bridge.Domain.Places.Exceptions;
-using Bridge.Domain.Users.Entities;
 
 namespace Bridge.Domain.Places.Entities
 {
@@ -50,11 +48,8 @@ namespace Bridge.Domain.Places.Entities
         /// <param name="name"></param>
         /// <param name="location"></param>
         /// <returns></returns>
-        public static Place Create(User user, PlaceType type, string name, string address, PlaceLocation location)
+        public static Place Create(PlaceType type, string name, string address, PlaceLocation location)
         {
-            if (!user.IsAdmin)
-                throw new NoPermissionException();
-
             return new Place(type, name, address, location);
         }
 

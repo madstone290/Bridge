@@ -60,7 +60,6 @@ namespace Bridge.WebApp.Pages.Admin
                             OpenTime = t.OpenTime,
                             CloseTime = t.CloseTime, 
                         }).ToList(),
-                        UserId = 1,
                     };
                     var result = await PlaceApiClient.CreatePlace(command);
 
