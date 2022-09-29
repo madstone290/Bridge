@@ -4,7 +4,6 @@ using Bridge.Application.Places.Dtos;
 using Bridge.Application.Places.Queries;
 using Bridge.Application.Places.ReadModels;
 using Bridge.Domain.Places.Entities;
-using Bridge.IntegrationTests.ApiServices;
 using Bridge.IntegrationTests.Config;
 using Bridge.Shared;
 using Bridge.Shared.Extensions;
@@ -13,15 +12,15 @@ using System.Net.Http.Json;
 
 namespace Bridge.IntegrationTests
 {
-    public class PlacesControllerTests : IClassFixture<ApiTestFactory>, IClassFixture<ApiService>
+    public class PlacesControllerTests : IClassFixture<ApiTestFactory>
     {
-        private readonly HttpClient _client;
-        private readonly ApiService _apiService;
+        private readonly TestClient _client;
+        private readonly ApiClient _apiClient;
 
-        public PlacesControllerTests(ApiTestFactory apiTestFactory, ApiService apiService)
+        public PlacesControllerTests(ApiTestFactory apiTestFactory)
         {
             _client = apiTestFactory.Client;
-            _apiService = apiService;
+            _apiClient = apiTestFactory.ApiClient;
         }
 
         [Fact]
@@ -45,8 +44,8 @@ namespace Bridge.IntegrationTests
             {
                 Content = JsonContent.Create(command)
             };
-            var response = await _client.SendAsync(request);
-
+            var response = await _client.SendAsAdminAsync(request);
+            
             // Assert
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
             var id = await response.Content.ReadFromJsonAsync<long>();
@@ -96,12 +95,12 @@ namespace Bridge.IntegrationTests
             {
                 Content = JsonContent.Create(command)
             };
-            var createResponse = await _client.SendAsync(createRequest);
+            var createResponse = await _client.SendAsAdminAsync(createRequest);
 
             // Act
             var id = await createResponse.Content.ReadFromJsonAsync<long>();
             var request = new HttpRequestMessage(HttpMethod.Get, ApiRoutes.Places.Get.Replace("{id}", $"{id}"));
-            var response = await _client.SendAsync(request);
+            var response = await _client.SendAsAdminAsync(request);
 
             // Assert
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
@@ -131,7 +130,7 @@ namespace Bridge.IntegrationTests
             double? breakStartTime, double? breakEndTime)
         {
             // Arrange
-            var placeId = await _apiService.CreatePlaceAsync(_client);
+            var placeId = await _apiClient.CreatePlaceAsync();
             var command = new AddOpeningTimeCommand()
             {
                 PlaceId = placeId,
@@ -152,10 +151,10 @@ namespace Bridge.IntegrationTests
             {
                 Content = JsonContent.Create(command)
             };
-            var addResponse = await _client.SendAsync(addRequest);
+            var addResponse = await _client.SendAsAdminAsync(addRequest);
 
             var getRequest = new HttpRequestMessage(HttpMethod.Get, ApiRoutes.Places.Get.Replace("{id}", $"{placeId}"));
-            var getResponse = await _client.SendAsync(getRequest);
+            var getResponse = await _client.SendAsAdminAsync(getRequest);
 
             // Assert
             addResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
@@ -167,7 +166,7 @@ namespace Bridge.IntegrationTests
         public async Task Update_Categories_Return_Ok()
         {
             // Arrange
-            var placeId = await _apiService.CreatePlaceAsync(_client);
+            var placeId = await _apiClient.CreatePlaceAsync();
             var command = new UpdatePlaceCategoryCommand()
             {
                 PlaceId = placeId,
@@ -179,10 +178,10 @@ namespace Bridge.IntegrationTests
             {
                 Content = JsonContent.Create(command)
             };
-            var addResponse = await _client.SendAsync(addRequest);
+            var addResponse = await _client.SendAsAdminAsync(addRequest);
 
             var getRequest = new HttpRequestMessage(HttpMethod.Get, ApiRoutes.Places.Get.Replace("{id}", $"{placeId}"));
-            var getResponse = await _client.SendAsync(getRequest);
+            var getResponse = await _client.SendAsAdminAsync(getRequest);
 
             // Assert
             addResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
@@ -215,10 +214,10 @@ namespace Bridge.IntegrationTests
                 Name = Guid.NewGuid().ToString(),
                 Address = "대구시 수성구 utm:2000, 1000",
             };
-            await _apiService.CreatePlaceAsync(_client, command1);
-            await _apiService.CreatePlaceAsync(_client, command2);
-            await _apiService.CreatePlaceAsync(_client, command3);
-            await _apiService.CreatePlaceAsync(_client, command4);
+            await _apiClient.CreatePlaceAsync(command1);
+            await _apiClient.CreatePlaceAsync(command2);
+            await _apiClient.CreatePlaceAsync(command3);
+            await _apiClient.CreatePlaceAsync(command4);
 
 
 
@@ -231,7 +230,7 @@ namespace Bridge.IntegrationTests
                 TopNorthing = 1000
             };
             var request = new HttpRequestMessage(HttpMethod.Get, ApiRoutes.Places.GetList.AddQueryParam(query));
-            var response = await _client.SendAsync(request);
+            var response = await _client.SendAsAdminAsync(request);
 
             // Assert
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
@@ -271,10 +270,10 @@ namespace Bridge.IntegrationTests
                 Name = "다라바",
                 Address = "대구시 수성구 utm:2000, 1000",
             };
-            await _apiService.CreatePlaceAsync(_client, command1);
-            await _apiService.CreatePlaceAsync(_client, command2);
-            await _apiService.CreatePlaceAsync(_client, command3);
-            await _apiService.CreatePlaceAsync(_client, command4);
+            await _apiClient.CreatePlaceAsync(command1);
+            await _apiClient.CreatePlaceAsync(command2);
+            await _apiClient.CreatePlaceAsync(command3);
+            await _apiClient.CreatePlaceAsync(command4);
 
 
 
@@ -288,7 +287,7 @@ namespace Bridge.IntegrationTests
                 TopNorthing = 1000
             };
             var request = new HttpRequestMessage(HttpMethod.Get, ApiRoutes.Places.GetList.AddQueryParam(query));
-            var response = await _client.SendAsync(request);
+            var response = await _client.SendAsAdminAsync(request);
 
             // Assert
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
@@ -333,8 +332,8 @@ namespace Bridge.IntegrationTests
                 Type = PlaceType.Restaurant,
                 Address = "대구시 수성구 utm:2000, 1000",
             };
-            await _apiService.CreatePlaceAsync(_client, command1);
-            await _apiService.CreatePlaceAsync(_client, command2);
+            await _apiClient.CreatePlaceAsync(command1);
+            await _apiClient.CreatePlaceAsync(command2);
 
 
             // Act
@@ -346,7 +345,7 @@ namespace Bridge.IntegrationTests
             {
                 Content = JsonContent.Create(searchDto)
             };
-            var response = await _client.SendAsync(request);
+            var response = await _client.SendAsAdminAsync(request);
 
             // Assert
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);

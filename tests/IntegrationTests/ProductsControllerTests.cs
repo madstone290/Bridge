@@ -2,7 +2,6 @@ using Bridge.Application.Products.Commands;
 using Bridge.Application.Products.Queries;
 using Bridge.Application.Products.ReadModels;
 using Bridge.Domain.Products.Entities;
-using Bridge.IntegrationTests.ApiServices;
 using Bridge.IntegrationTests.Config;
 using Bridge.Shared;
 using Bridge.Shared.Extensions;
@@ -11,15 +10,15 @@ using System.Net.Http.Json;
 
 namespace Bridge.IntegrationTests
 {
-    public class ProductsControllerTests : IClassFixture<ApiTestFactory>, IClassFixture<ApiService>
+    public class ProductsControllerTests : IClassFixture<ApiTestFactory>
     {
-        private readonly HttpClient _client;
-        private readonly ApiService _apiService;
+        private readonly TestClient _client;
+        private readonly ApiClient _apiClient;
 
-        public ProductsControllerTests(ApiTestFactory apiTestFactory, ApiService apiService)
+        public ProductsControllerTests(ApiTestFactory apiTestFactory)
         {
             _client = apiTestFactory.Client;
-            _apiService = apiService;
+            _apiClient = apiTestFactory.ApiClient;
         }
 
 
@@ -27,7 +26,7 @@ namespace Bridge.IntegrationTests
         public async Task Create_Product_Return_Ok_With_Id()
         {
             // Arrange
-            var placeId = await _apiService.CreatePlaceAsync(_client);
+            var placeId = await _apiClient.CreatePlaceAsync();
             var command = new CreateProductCommand()
             {
                 PlaceId = placeId,
@@ -46,7 +45,7 @@ namespace Bridge.IntegrationTests
             {
                 Content = JsonContent.Create(command)
             };
-            var response = await _client.SendAsync(request);
+            var response = await _client.SendAsAdminAsync(request);
 
             // Assert
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
@@ -58,7 +57,7 @@ namespace Bridge.IntegrationTests
         public async Task Update_Product_Return_Ok()
         {
             // Arrange
-            var productId = await _apiService.CreateProductAsync(_client);
+            var productId = await _apiClient.CreateProductAsync();
             var command = new UpdateProductCommand()
             {
                 ProductId = productId,
@@ -72,12 +71,12 @@ namespace Bridge.IntegrationTests
             {
                 Content = JsonContent.Create(command)
             };
-            var response = await _client.SendAsync(request);
+            var response = await _client.SendAsAdminAsync(request);
 
             // Assert
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
             
-            var product = await _apiService.GetProductAsync(_client, productId) ?? default!;
+            var product = await _apiClient.GetProductAsync(productId) ?? default!;
             product.Should().NotBeNull();
             product.Name.Should().Be(command.Name.ToString());
             product.Price.Should().Be(command.Price);
@@ -88,7 +87,7 @@ namespace Bridge.IntegrationTests
         public async Task Get_Product_Return_Ok_With_Content()
         {
             // Arrange
-            var placeId = await _apiService.CreatePlaceAsync(_client);
+            var placeId = await _apiClient.CreatePlaceAsync();
             var command = new CreateProductCommand()
             {
                 PlaceId = placeId,
@@ -101,11 +100,11 @@ namespace Bridge.IntegrationTests
                     ProductCategory.Beverage
                 }
             };
-            var productId = await _apiService.CreateProductAsync(_client, command);
+            var productId = await _apiClient.CreateProductAsync(command);
 
             // Act
             var getRequest = new HttpRequestMessage(HttpMethod.Get, ApiRoutes.Products.Get.Replace("{id}", $"{productId}"));
-            var getResponse = await _client.SendAsync(getRequest);
+            var getResponse = await _client.SendAsAdminAsync(getRequest);
 
             // Assert
             getResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
@@ -121,7 +120,7 @@ namespace Bridge.IntegrationTests
         public async Task Get_Product_List_Return_Ok_With_Content()
         {
             // Arrange
-            var placeId = await _apiService.CreatePlaceAsync(_client);
+            var placeId = await _apiClient.CreatePlaceAsync();
             var product1 = new CreateProductCommand()
             {
                 PlaceId = placeId,
@@ -135,13 +134,13 @@ namespace Bridge.IntegrationTests
                 Price = 40M,
             };
 
-            await _apiService.CreateProductAsync(_client, product1);
-            await _apiService.CreateProductAsync(_client, product2);
+            await _apiClient.CreateProductAsync(product1);
+            await _apiClient.CreateProductAsync(product2);
 
             // Act
             var query = new GetProductsByPlaceIdQuery() { PlaceId = placeId };
             var request = new HttpRequestMessage(HttpMethod.Get, ApiRoutes.Products.GetList.AddQueryParam(query));
-            var response = await _client.SendAsync(request);
+            var response = await _client.SendAsAdminAsync(request);
 
             // Assert
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
