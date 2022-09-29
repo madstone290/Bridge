@@ -50,6 +50,7 @@ namespace Bridge.Infrastructure
             services.AddScoped<UserService, UserService>();
             services.AddScoped<IClaimService, ClaimService>();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IEmailVerificationService, EmailVerificationService>();
 
             services.AddScoped<IAddressMapService, DemoAddressMapService>();
             services.AddScoped<IMailService, MailService>();

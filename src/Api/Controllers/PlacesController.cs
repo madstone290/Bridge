@@ -1,9 +1,11 @@
-﻿using Bridge.Api.Controllers.Dtos;
+using Bridge.Api.Constants;
+using Bridge.Api.Controllers.Dtos;
 using Bridge.Application.Places.Commands;
 using Bridge.Application.Places.Queries;
 using Bridge.Application.Places.ReadModels;
 using Bridge.Shared;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bridge.Api.Controllers
@@ -77,6 +79,7 @@ namespace Bridge.Api.Controllers
             return Ok(places);
         }
 
+        [Authorize(Policy = PolicyConstants.AdminOrProvider)]
         [HttpPost]
         [Route(ApiRoutes.Places.Create)]
         [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
@@ -86,6 +89,7 @@ namespace Bridge.Api.Controllers
             return Ok(placeId);
         }
 
+        [Authorize(Policy = PolicyConstants.AdminOrProvider)]
         [HttpPost]
         [Route(ApiRoutes.Places.AddOpeningTime)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -96,6 +100,7 @@ namespace Bridge.Api.Controllers
             return Ok();
         }
 
+        [Authorize(Policy = PolicyConstants.AdminOrProvider)]
         [HttpPost]
         [Route(ApiRoutes.Places.UpdateCategories)]
         [ProducesResponseType(StatusCodes.Status200OK)]

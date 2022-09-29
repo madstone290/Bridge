@@ -1,8 +1,10 @@
-﻿using Bridge.Application.Products.Commands;
+using Bridge.Api.Constants;
+using Bridge.Application.Products.Commands;
 using Bridge.Application.Products.Queries;
 using Bridge.Application.Products.ReadModels;
 using Bridge.Shared;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bridge.Api.Controllers
@@ -42,6 +44,7 @@ namespace Bridge.Api.Controllers
             return Ok(place);
         }
 
+        [Authorize(Policy = PolicyConstants.AdminOrProvider)]
         [HttpPost]
         [Route(ApiRoutes.Products.Create)]
         [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
@@ -51,10 +54,11 @@ namespace Bridge.Api.Controllers
             return Ok(placeId);
         }
 
+        [Authorize(Policy = PolicyConstants.AdminOrProvider)]
         [HttpPut]
         [Route(ApiRoutes.Products.Update)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> CreateProduct([FromRoute] long id, [FromBody] UpdateProductCommand command)
+        public async Task<IActionResult> UpdateProduct([FromRoute] long id, [FromBody] UpdateProductCommand command)
         {
             command.ProductId = id;
             await _mediator.Send(command);

@@ -13,8 +13,11 @@ namespace Bridge.Infrastructure.Identity.Services
         /// <returns>검증이 성공하면 true 아니면 false</returns>
         bool Verify(string email);
     }
-
-    public class ProductionEmailVerificationService : IEmailVerificationService
+    
+    /// <summary>
+    /// 기본 이메일 검증 서비스
+    /// </summary>
+    public class EmailVerificationService : IEmailVerificationService
     {
         public bool Verify(string email)
         {
