@@ -50,7 +50,60 @@ namespace Bridge.IntegrationTests
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
             var id = await response.Content.ReadFromJsonAsync<long>();
             id.Should().BeGreaterThan(0);
+        }
 
+        [Fact]
+        public async Task Consumer_Cannot_Create_Place()
+        {
+            // Arrange
+            var command = new CreatePlaceCommand()
+            {
+                Name = Guid.NewGuid().ToString(),
+                Address = "대구시 수성구",
+                Categories = new List<PlaceCategory>()
+                {
+                    PlaceCategory.Restaurant,
+                    PlaceCategory.Cafeteria,
+                    PlaceCategory.Pharmacy
+                }
+            };
+
+            // Act
+            var request = new HttpRequestMessage(HttpMethod.Post, ApiRoutes.Places.Create)
+            {
+                Content = JsonContent.Create(command)
+            };
+            var response = await _client.SendAsConsumerAsync(request);
+
+            // Assert
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.Forbidden);
+        }
+
+        [Fact]
+        public async Task NoAuthentication_Cannot_Create_Place()
+        {
+            // Arrange
+            var command = new CreatePlaceCommand()
+            {
+                Name = Guid.NewGuid().ToString(),
+                Address = "대구시 수성구",
+                Categories = new List<PlaceCategory>()
+                {
+                    PlaceCategory.Restaurant,
+                    PlaceCategory.Cafeteria,
+                    PlaceCategory.Pharmacy
+                }
+            };
+
+            // Act
+            var request = new HttpRequestMessage(HttpMethod.Post, ApiRoutes.Places.Create)
+            {
+                Content = JsonContent.Create(command)
+            };
+            var response = await _client.SendAsync(request);
+
+            // Assert
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
         }
 
         [Fact]

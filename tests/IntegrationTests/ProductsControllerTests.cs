@@ -22,16 +22,15 @@ namespace Bridge.IntegrationTests
         }
 
 
-        [Fact]
-        public async Task Create_Product_Return_Ok_With_Id()
+
+        async Task<CreateProductCommand> DefaultCreateProductCommandAsync(long? placeId = null)
         {
-            // Arrange
-            var placeId = await _apiClient.CreatePlaceAsync();
-            var command = new CreateProductCommand()
+            placeId ??= await _apiClient.CreatePlaceAsync();
+            return new CreateProductCommand()
             {
-                PlaceId = placeId,
+                PlaceId = placeId.Value,
                 Name = Guid.NewGuid().ToString(),
-                Price = 30M,
+                Price = new Random().Next(100000),
                 Categories = new List<ProductCategory>()
                 {
                     ProductCategory.Stationery,
@@ -39,6 +38,13 @@ namespace Bridge.IntegrationTests
                     ProductCategory.Beverage
                 }
             };
+        }
+
+        [Fact]
+        public async Task Create_Product_Return_Ok_With_Id()
+        {
+            // Arrange
+            var command = await DefaultCreateProductCommandAsync();
 
             // Act
             var request = new HttpRequestMessage(HttpMethod.Post, ApiRoutes.Products.Create)
@@ -51,6 +57,40 @@ namespace Bridge.IntegrationTests
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
             var id = await response.Content.ReadFromJsonAsync<long>();
             id.Should().BeGreaterThan(0);
+        }
+
+        [Fact]
+        public async Task Create_Product_As_Consumer_Return_Forbidden()
+        {
+            // Arrange
+            var command = await DefaultCreateProductCommandAsync();
+
+            // Act
+            var request = new HttpRequestMessage(HttpMethod.Post, ApiRoutes.Products.Create)
+            {
+                Content = JsonContent.Create(command)
+            };
+            var response = await _client.SendAsConsumerAsync(request);
+
+            // Assert
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.Forbidden);
+        }
+
+        [Fact]
+        public async Task Create_Product_Without_Token_Return_Unauthorized()
+        {
+            // Arrange
+            var command = await DefaultCreateProductCommandAsync();
+
+            // Act
+            var request = new HttpRequestMessage(HttpMethod.Post, ApiRoutes.Products.Create)
+            {
+                Content = JsonContent.Create(command)
+            };
+            var response = await _client.SendAsync(request);
+
+            // Assert
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
         }
 
         [Fact]
@@ -75,7 +115,7 @@ namespace Bridge.IntegrationTests
 
             // Assert
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-            
+
             var product = await _apiClient.GetProductAsync(productId) ?? default!;
             product.Should().NotBeNull();
             product.Name.Should().Be(command.Name.ToString());
@@ -87,19 +127,7 @@ namespace Bridge.IntegrationTests
         public async Task Get_Product_Return_Ok_With_Content()
         {
             // Arrange
-            var placeId = await _apiClient.CreatePlaceAsync();
-            var command = new CreateProductCommand()
-            {
-                PlaceId = placeId,
-                Name = Guid.NewGuid().ToString(),
-                Price = 30M,
-                Categories = new List<ProductCategory>()
-                {
-                    ProductCategory.Stationery,
-                    ProductCategory.VeganFood,
-                    ProductCategory.Beverage
-                }
-            };
+            var command = await DefaultCreateProductCommandAsync();
             var productId = await _apiClient.CreateProductAsync(command);
 
             // Act
@@ -121,18 +149,8 @@ namespace Bridge.IntegrationTests
         {
             // Arrange
             var placeId = await _apiClient.CreatePlaceAsync();
-            var product1 = new CreateProductCommand()
-            {
-                PlaceId = placeId,
-                Name = Guid.NewGuid().ToString(),
-                Price = 30M,
-            };
-            var product2 = new CreateProductCommand()
-            {
-                PlaceId = placeId,
-                Name = Guid.NewGuid().ToString(),
-                Price = 40M,
-            };
+            var product1 = await DefaultCreateProductCommandAsync(placeId);
+            var product2 = await DefaultCreateProductCommandAsync(placeId);
 
             await _apiClient.CreateProductAsync(product1);
             await _apiClient.CreateProductAsync(product2);
