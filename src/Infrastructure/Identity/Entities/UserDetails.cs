@@ -6,9 +6,10 @@ namespace Bridge.Infrastructure.Identity.Entities
     /// </summary>
     public class UserDetails
     {
-        public static UserDetails NewUserDetails(string userName) => new()
+        public static UserDetails NewUserDetails(string userName, UserType userType) => new()
         {
             UserName = userName,
+            UserType = userType
         };
 
         /// <summary>

@@ -15,14 +15,16 @@ namespace Bridge.Infrastructure.Identity
         private readonly IClaimService _claimService;
         private readonly ITokenService _tokenService;
         private readonly IEmailVerificationService _emailVerificationService;
+        private readonly IAdminUserService _adminUserService;
 
-        public UserService(UserManager<BridgeUser> userManager, IMailService mailService, IClaimService claimService, ITokenService tokenService, IEmailVerificationService emailVerificationService)
+        public UserService(UserManager<BridgeUser> userManager, IMailService mailService, IClaimService claimService, ITokenService tokenService, IEmailVerificationService emailVerificationService, IAdminUserService adminUserService)
         {
             _userManager = userManager;
             _mailService = mailService;
             _claimService = claimService;
             _tokenService = tokenService;
             _emailVerificationService = emailVerificationService;
+            _adminUserService = adminUserService;
         }
 
         private static string IdentityErrorToString(IEnumerable<IdentityError> errors)
@@ -41,12 +43,13 @@ namespace Bridge.Infrastructure.Identity
             if(await _userManager.FindByEmailAsync(email) != null)
                 throw new AppException("이미 등록된 이메일입니다", new { email });
 
+            var userType = _adminUserService.VerifyAdmin(email) ? UserType.Admin : UserType.Consumer;
             var user = new BridgeUser()
             {
                 UserName = email,
                 Email = email,
                 EmailConfirmed = _emailVerificationService.Verify(email),
-                UserDetails = UserDetails.NewUserDetails(userName)
+                UserDetails = UserDetails.NewUserDetails(userName, userType)
             };
 
             var result = await _userManager.CreateAsync(user, password);
