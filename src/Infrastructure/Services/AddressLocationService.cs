@@ -8,10 +8,12 @@ namespace Bridge.Infrastructure.Services
     public class AddressLocationService : IAddressLocationService
     {
         private readonly GeoCodeApi _geoCodeApi;
+        private readonly ICoordinateService _coordinateService;
 
-        public AddressLocationService(GeoCodeApi geoCodeApi)
+        public AddressLocationService(GeoCodeApi geoCodeApi, ICoordinateService coordinateService)
         {
             _geoCodeApi = geoCodeApi;
+            _coordinateService = coordinateService;
         }
 
         public async Task<Tuple<Address, PlaceLocation>> CreateAddressLocationAsync(string baseAddress, string details)
@@ -33,10 +35,12 @@ namespace Bridge.Infrastructure.Services
                                   addressInfo.ROAD_NAME,
                                   addressInfo.POSTAL_CODE);
 
-            var latitude = double.Parse(addressInfo.Y);
             var longitude = double.Parse(addressInfo.X);
-            var easting = 100000;
-            var northing = 200000;
+            var latitude = double.Parse(addressInfo.Y);
+            var utm_k = _coordinateService.ConvertToUtmK(longitude, latitude);
+            var easting = utm_k.Item1;
+            var northing = utm_k.Item2;
+
             var location = PlaceLocation.Create(latitude, longitude, easting, northing);
 
             return new Tuple<Address, PlaceLocation>(address, location);

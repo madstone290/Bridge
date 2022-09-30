@@ -56,20 +56,24 @@ namespace Bridge.Infrastructure
             services.AddHttpClient<GeoCodeApi>();
             services.AddScoped<GeoCodeApi, GeoCodeApi>();
 
+            // identity services
             services.AddScoped<UserService, UserService>();
             services.AddScoped<IClaimService, ClaimService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IEmailVerificationService, EmailVerificationService>();
             services.AddScoped<IAdminUserService, AdminUserService>();
 
+            // infra services
             services.AddScoped<IAddressLocationService, AddressLocationService>();
             services.AddScoped<IMailService, MailService>();
+            services.AddScoped<IAdminUserService, AdminUserService>();
+            services.AddScoped<ICoordinateService, CoordinateService>();
 
+            // repositories
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-
             services.AddScoped<IPlaceRepository, PlaceRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
-
+            
             services.AddScoped<IPlaceReadRepository, PlaceReadRepository>();
             services.AddScoped<IProductReadRepository, ProductReadRepository>();
         }

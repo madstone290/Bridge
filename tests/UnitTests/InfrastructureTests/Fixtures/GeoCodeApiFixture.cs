@@ -3,7 +3,7 @@ using Bridge.Shared.Extensions;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
-namespace Bridge.UnitTests.UtilitiesTests.Fixtures
+namespace Bridge.UnitTests.InfrastructureTests.Fixtures
 {
     public class GeoCodeApiFixture
     {

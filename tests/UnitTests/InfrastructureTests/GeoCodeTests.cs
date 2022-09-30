@@ -1,9 +1,9 @@
 using Bridge.Infrastructure.NaverMaps;
 using Bridge.Infrastructure.NaverMaps.Data;
-using Bridge.UnitTests.UtilitiesTests.Fixtures;
+using Bridge.UnitTests.InfrastructureTests.Fixtures;
 using FluentAssertions;
 
-namespace Bridge.UnitTests.UtilitiesTests
+namespace Bridge.UnitTests.InfrastructureTests
 {
     public class GeoCodeTests : IClassFixture<GeoCodeApiFixture>
     {
