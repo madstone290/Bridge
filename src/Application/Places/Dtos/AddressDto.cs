@@ -6,9 +6,9 @@ namespace Bridge.Application.Places.Dtos
         public static AddressDto Empty { get; } = new AddressDto();
 
         /// <summary>
-        /// 도로명 주소
+        /// 기본주소
         /// </summary>
-        public string RoadAddress { get; set; } = string.Empty;
+        public string BaseAddress { get; set; } = string.Empty;
 
         /// <summary>
         /// 상세주소

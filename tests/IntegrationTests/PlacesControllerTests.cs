@@ -5,6 +5,7 @@ using Bridge.Application.Places.Queries;
 using Bridge.Application.Places.ReadModels;
 using Bridge.Domain.Places.Entities;
 using Bridge.IntegrationTests.Config;
+using Bridge.IntegrationTests.Data;
 using Bridge.Shared;
 using Bridge.Shared.Extensions;
 using FluentAssertions;
@@ -23,36 +24,11 @@ namespace Bridge.IntegrationTests
             _apiClient = apiTestFactory.ApiClient;
         }
 
-        public static AddressDto Seoul => new()
-        {
-            RoadAddress = "강남구 논현로 710",
-            Details = string.Empty
-        };
-
-        public static AddressDto Daegu1 => new()
-        {
-            RoadAddress = "대구시 수성구 청수로 25길 118-10",
-            Details = string.Empty
-        };
-
-        public static AddressDto Daegu2 => new()
-        {
-            RoadAddress = "수성구 유니버시아드로42길 127",
-            Details = string.Empty
-        };
-
-
-        public static AddressDto Busan => new()
-        {
-            RoadAddress = "연제구 중앙대로 1001",
-            Details = string.Empty
-        };
-
         public static AddressDto AddressDto(string? roadAddress = null, string? details = null)
         {
             return new()
             {
-                RoadAddress = roadAddress ?? "대구시 수성구 청수로 25길 118-10",
+                BaseAddress = roadAddress ?? "대구시 수성구 청수로 25길 118-10",
                 Details = details ?? "아테네 1440호"
             };
         }
@@ -196,7 +172,7 @@ namespace Bridge.IntegrationTests
             place.Id.Should().Be(id);
             place.Name.Should().Be(command.Name);
             place.ContactNumber.Should().Be(command.ContactNumber);
-            place.Address.RoadAddress.Should().NotBeEmpty();
+            place.Address.BaseAddress.Should().NotBeEmpty();
             place.Categories.Should().BeEquivalentTo(command.Categories);
             place.Location.Latitude.Should().NotBe(0);
             place.Location.Longitude.Should().NotBe(0);
@@ -284,26 +260,22 @@ namespace Bridge.IntegrationTests
             var command1 = new CreatePlaceCommand()
             {
                 Name = Guid.NewGuid().ToString(),
-                Address = Daegu1
-                //Address = AddressDto("utm:1000,1000"),
+                Address = AddressData.Daegu1
             };
             var command2 = new CreatePlaceCommand()
             {
                 Name = Guid.NewGuid().ToString(),
-                Address = Daegu2
-                //Address = AddressDto("utm:1000,2000"),
+                Address = AddressData.Daegu2
             };
             var command3 = new CreatePlaceCommand()
             {
                 Name = Guid.NewGuid().ToString(),
-                Address = Seoul
-                //Address = AddressDto("utm:2000,2000"),
+                Address = AddressData.Seoul1
             };
             var command4 = new CreatePlaceCommand()
             {
                 Name = Guid.NewGuid().ToString(),
-                Address = Busan
-                //Address = AddressDto("utm:2000,1000")
+                Address = AddressData.Seoul2
             };
             await _apiClient.CreatePlaceAsync(command1);
             await _apiClient.CreatePlaceAsync(command2);
@@ -313,12 +285,13 @@ namespace Bridge.IntegrationTests
 
 
             // Act
+            // 대구시 상하좌우 10km
             var query = new GetPlacesByRegionQuery()
             {
-                LeftEasting = 1000,
-                RightEasting = 2000,
-                BottomNorthing = 1000,
-                TopNorthing = 1000
+                LeftEasting = PlaceLocationData.Daegu.Easting - 10 * 1000,
+                RightEasting = PlaceLocationData.Daegu.Easting + 10 * 1000,
+                BottomNorthing = PlaceLocationData.Daegu.Northing - 10 * 1000,
+                TopNorthing = PlaceLocationData.Daegu.Northing + 10 * 1000,
             };
             var request = new HttpRequestMessage(HttpMethod.Get, ApiRoutes.Places.GetList.AddQueryParam(query));
             var response = await _client.SendAsAdminAsync(request);
@@ -327,7 +300,7 @@ namespace Bridge.IntegrationTests
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
             var places = await response.Content.ReadFromJsonAsync<List<PlaceReadModel>>() ?? default!;
             places.Should().Contain(x => x.Name == command1.Name);
-            places.Should().Contain(x => x.Name == command4.Name);
+            places.Should().Contain(x => x.Name == command2.Name);
 
             foreach(var place in places)
             {
@@ -344,26 +317,22 @@ namespace Bridge.IntegrationTests
             var command1 = new CreatePlaceCommand()
             {
                 Name = "가나다",
-                Address = Daegu1
-                //Address = AddressDto("utm:1000,1000"),
+                Address = AddressData.Seoul1
             };
             var command2 = new CreatePlaceCommand()
             {
-                Name = "가나마",
-                Address = Daegu2
-                //Address = AddressDto("utm:1000,2000"),
+                Name = "다람쥐",
+                Address = AddressData.Seoul2
             };
             var command3 = new CreatePlaceCommand()
             {
-                Name = "가나바",
-                Address = Seoul
-                //Address = AddressDto("utm:2000,2000"),
+                Name = "가나다",
+                Address = AddressData.Daegu1
             };
             var command4 = new CreatePlaceCommand()
             {
-                Name = "다다다",
-                Address = Busan
-                //Address = AddressDto("utm:2000,1000"),
+                Name = "다람쥐",
+                Address = AddressData.Daegu2
             };
             await _apiClient.CreatePlaceAsync(command1);
             await _apiClient.CreatePlaceAsync(command2);
@@ -371,13 +340,14 @@ namespace Bridge.IntegrationTests
             await _apiClient.CreatePlaceAsync(command4);
 
             // Act
+            // 서울시 상하좌우 10km
             var query = new GetPlacesByNameAndRegionQuery()
             {
                 Name = "다",
-                LeftEasting = 1000,
-                RightEasting = 2000,
-                BottomNorthing = 1000,
-                TopNorthing = 1000
+                LeftEasting = PlaceLocationData.Seoul.Easting - 10 * 1000,
+                RightEasting = PlaceLocationData.Seoul.Easting + 10 * 1000,
+                BottomNorthing = PlaceLocationData.Seoul.Northing - 10 * 1000,
+                TopNorthing = PlaceLocationData.Seoul.Northing + 10 * 1000,
             };
             var request = new HttpRequestMessage(HttpMethod.Get, ApiRoutes.Places.GetList.AddQueryParam(query));
             var response = await _client.SendAsAdminAsync(request);
@@ -386,7 +356,8 @@ namespace Bridge.IntegrationTests
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
             var places = await response.Content.ReadFromJsonAsync<List<PlaceReadModel>>() ?? default!;
             places.Should().Contain(x => x.Name == command1.Name);
-            
+            places.Should().Contain(x => x.Name == command2.Name);
+
 
             foreach (var place in places)
             {

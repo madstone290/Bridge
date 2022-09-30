@@ -49,7 +49,7 @@ namespace Bridge.WebApp.Pages.Admin
                         Name = _place.Name,
                         Address = new Application.Places.Dtos.AddressDto()
                         {
-                            RoadAddress = _place.Address,
+                            BaseAddress = _place.Address,
                             Details = _place.Address,
                         },
                         Categories = _place.Categories.ToList(),

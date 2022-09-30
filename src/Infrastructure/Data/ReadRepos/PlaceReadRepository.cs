@@ -19,7 +19,7 @@ namespace Bridge.Infrastructure.Data.ReadRepos
             Name = x.Name,
             Address =  new AddressDto()
             {
-                RoadAddress = x.Address.RoadAddress,
+                BaseAddress = x.Address.RoadAddress,
                 Details = x.Address.Details
             },
             Location = new PlaceLocationDto()

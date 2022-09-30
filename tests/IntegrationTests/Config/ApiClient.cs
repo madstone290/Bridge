@@ -57,7 +57,7 @@ namespace Bridge.IntegrationTests.Config
             {
                 Name = Guid.NewGuid().ToString(),
                 Categories = new List<PlaceCategory>() { PlaceCategory.Pharmacy },
-                Address = new AddressDto() { RoadAddress ="대구시 수성구 청수로 25길 118-10"},
+                Address = new AddressDto() { BaseAddress ="대구시 수성구 청수로 25길 118-10"},
                 OpeningTimes = new List<OpeningTimeDto>()
                 {
                     new OpeningTimeDto()

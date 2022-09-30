@@ -12,7 +12,7 @@ namespace Bridge.WebApp.Models
             {
                 Id = x.Id,
                 Name = x.Name,
-                Address = x.Address.RoadAddress,
+                Address = x.Address.BaseAddress,
                 Latitude = x.Location.Latitude,
                 Longitude = x.Location.Longitude,
                 Easting = x.Location.Easting,

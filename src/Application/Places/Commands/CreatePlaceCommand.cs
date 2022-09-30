@@ -60,7 +60,7 @@ namespace Bridge.Application.Places.Commands
 
         public override async Task<long> HandleCommand(CreatePlaceCommand command, CancellationToken cancellationToken)
         {
-            var addressLocation = await _addressLocationService.CreateAddressLocationAsync(command.Address.RoadAddress, command.Address.Details);
+            var addressLocation = await _addressLocationService.CreateAddressLocationAsync(command.Address.BaseAddress, command.Address.Details);
             var place = Place.Create(command.Type, command.Name, addressLocation.Item1, addressLocation.Item2);
             place.SetContactNumber(command.ContactNumber);
 
