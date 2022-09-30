@@ -1,4 +1,4 @@
-﻿using Bridge.Application.Places.Commands;
+using Bridge.Application.Places.Commands;
 using Bridge.WebApp.Api.ApiClients;
 using Bridge.WebApp.Extensions;
 using Bridge.WebApp.Pages.Admin.Models;
@@ -47,7 +47,11 @@ namespace Bridge.WebApp.Pages.Admin
                     {
                         Type = _place.Type,
                         Name = _place.Name,
-                        Address = _place.Address,
+                        Address = new Application.Places.Dtos.AddressDto()
+                        {
+                            RoadAddress = _place.Address,
+                            Details = _place.Address,
+                        },
                         Categories = _place.Categories.ToList(),
                         ContactNumber = _place.ContactNumber,
                         OpeningTimes = _place.OpeningTimes.Select(t => new Application.Places.Dtos.OpeningTimeDto()

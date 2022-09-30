@@ -10,7 +10,7 @@ namespace Bridge.UnitTests.DomainTests.Builders
             var place = Place.Create(
                 PlaceType.Restaurant,
                 name ?? Guid.NewGuid().ToString(),
-                Guid.NewGuid().ToString(),
+                new AddressBuilder().DaeguAddress1,
                 location ?? PlaceLocation.Create(0,0,0,0));
 
             return place;

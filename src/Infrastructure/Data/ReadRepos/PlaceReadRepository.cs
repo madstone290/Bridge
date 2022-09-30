@@ -1,4 +1,4 @@
-﻿using Bridge.Application.Places.Dtos;
+using Bridge.Application.Places.Dtos;
 using Bridge.Application.Places.ReadModels;
 using Bridge.Application.Places.Repos;
 using Bridge.Domain.Places.Entities;
@@ -17,7 +17,11 @@ namespace Bridge.Infrastructure.Data.ReadRepos
             Id = x.Id,
             Type = x.Type,
             Name = x.Name,
-            Address = x.Address,
+            Address =  new AddressDto()
+            {
+                RoadAddress = x.Address.RoadAddress,
+                Details = x.Address.Details
+            },
             Location = new PlaceLocationDto()
             {
 

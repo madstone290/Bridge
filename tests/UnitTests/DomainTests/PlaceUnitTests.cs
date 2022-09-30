@@ -6,13 +6,15 @@ using FluentAssertions;
 
 namespace Bridge.UnitTests.DomainTests
 {
-    public class PlaceUnitTests : IClassFixture<PlaceBuilder>
+    public class PlaceUnitTests : IClassFixture<PlaceBuilder>, IClassFixture<AddressBuilder>
     {
         private readonly PlaceBuilder _placeBuilder;
+        private readonly AddressBuilder _addressBuilder;
 
-        public PlaceUnitTests(PlaceBuilder placeBuilder)
+        public PlaceUnitTests(PlaceBuilder placeBuilder, AddressBuilder addressBuilder)
         {
             _placeBuilder = placeBuilder;
+            _addressBuilder = addressBuilder;
         }
 
         private Place NewPlace()
@@ -26,7 +28,7 @@ namespace Bridge.UnitTests.DomainTests
         {
             // Arrange
             var name = string.Empty;
-            var address = "대구시 수성구";
+            var address = _addressBuilder.DaeguAddress1;
             var location = PlaceLocation.Create(0,0,0,0);
 
             // Act
@@ -116,7 +118,7 @@ namespace Bridge.UnitTests.DomainTests
             // Arrange
             var place = NewPlace();
             // Act
-            var address = "서울시 황금동";
+            var address = _addressBuilder.SeoulAddress1;
             var locationToChange = PlaceLocation.Create(1, 1, 0, 0);
             place.SetAddressLocation(address, locationToChange);
 

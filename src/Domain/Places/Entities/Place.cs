@@ -6,7 +6,6 @@ namespace Bridge.Domain.Places.Entities
 {
     /**
      * 아래 항목 추가
-     * -휴무일
      * -대표 이미지
      * */
 
@@ -27,7 +26,7 @@ namespace Bridge.Domain.Places.Entities
         private ISet<PlaceCategory> _categories = new HashSet<PlaceCategory>();
 
         private Place() { }
-        private Place(PlaceType type, string name, string address, PlaceLocation location)
+        private Place(PlaceType type, string name, Address address, PlaceLocation location)
         {
             Type = type;
             SetName(name);
@@ -48,7 +47,7 @@ namespace Bridge.Domain.Places.Entities
         /// <param name="name"></param>
         /// <param name="location"></param>
         /// <returns></returns>
-        public static Place Create(PlaceType type, string name, string address, PlaceLocation location)
+        public static Place Create(PlaceType type, string name, Address address, PlaceLocation location)
         {
             return new Place(type, name, address, location);
         }
@@ -66,7 +65,7 @@ namespace Bridge.Domain.Places.Entities
         /// <summary>
         /// 주소
         /// </summary>
-        public string Address { get; private set; } = string.Empty;
+        public Address Address { get; private set; } = Address.Empty;
 
         /// <summary>
         /// 장소위치
@@ -109,7 +108,7 @@ namespace Bridge.Domain.Places.Entities
         /// </summary>
         /// <param name="address"></param>
         /// <param name="location"></param>
-        public void SetAddressLocation(string address, PlaceLocation location)
+        public void SetAddressLocation(Address address, PlaceLocation location)
         {
             if (Address == address)
                 return;

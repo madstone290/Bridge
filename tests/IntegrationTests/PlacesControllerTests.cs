@@ -23,6 +23,15 @@ namespace Bridge.IntegrationTests
             _apiClient = apiTestFactory.ApiClient;
         }
 
+        public static AddressDto AddressDto(string? roadAddress = null, string? details = null)
+        {
+            return new()
+            {
+                RoadAddress = roadAddress ?? "대구시 수성구 청수로 25길 118-10",
+                Details = details ?? "아테네 1440호"
+            };
+        }
+
         [Fact]
         public async Task Create_Place_Return_Ok_With_Id()
         {
@@ -30,7 +39,7 @@ namespace Bridge.IntegrationTests
             var command = new CreatePlaceCommand()
             {
                 Name = Guid.NewGuid().ToString(),
-                Address = "대구시 수성구",
+                Address = AddressDto(),
                 Categories = new List<PlaceCategory>()
                 {
                     PlaceCategory.Restaurant,
@@ -59,7 +68,7 @@ namespace Bridge.IntegrationTests
             var command = new CreatePlaceCommand()
             {
                 Name = Guid.NewGuid().ToString(),
-                Address = "대구시 수성구",
+                Address = AddressDto(),
                 Categories = new List<PlaceCategory>()
                 {
                     PlaceCategory.Restaurant,
@@ -86,7 +95,7 @@ namespace Bridge.IntegrationTests
             var command = new CreatePlaceCommand()
             {
                 Name = Guid.NewGuid().ToString(),
-                Address = "대구시 수성구",
+                Address = AddressDto(),
                 Categories = new List<PlaceCategory>()
                 {
                     PlaceCategory.Restaurant,
@@ -113,7 +122,7 @@ namespace Bridge.IntegrationTests
             var command = new CreatePlaceCommand()
             {
                 Name = Guid.NewGuid().ToString(),
-                Address = "대구시 수성구",
+                Address = AddressDto(),
                 Categories = new List<PlaceCategory>()
                 {
                     PlaceCategory.Restaurant,
@@ -162,7 +171,7 @@ namespace Bridge.IntegrationTests
             place.Id.Should().Be(id);
             place.Name.Should().Be(command.Name);
             place.ContactNumber.Should().Be(command.ContactNumber);
-            place.Address.Should().Be(command.Address);
+            place.Address.Should().BeEquivalentTo(command.Address);
             place.Categories.Should().BeEquivalentTo(command.Categories);
             place.Location.Latitude.Should().NotBe(0);
             place.Location.Longitude.Should().NotBe(0);
@@ -250,22 +259,22 @@ namespace Bridge.IntegrationTests
             var command1 = new CreatePlaceCommand()
             {
                 Name = Guid.NewGuid().ToString(),
-                Address = "대구시 수성구 utm:1000,1000",
+                Address = AddressDto("utm:1000,1000"),
             };
             var command2 = new CreatePlaceCommand()
             {
                 Name = Guid.NewGuid().ToString(),
-                Address = "대구시 수성구 utm:1000,2000",
+                Address = AddressDto("utm:1000,2000"),
             };
             var command3 = new CreatePlaceCommand()
             {
                 Name = Guid.NewGuid().ToString(),
-                Address = "대구시 수성구 utm:2000,2000",
+                Address = AddressDto("utm:2000,2000"),
             };
             var command4 = new CreatePlaceCommand()
             {
                 Name = Guid.NewGuid().ToString(),
-                Address = "대구시 수성구 utm:2000, 1000",
+                Address = AddressDto("utm:2000,1000")
             };
             await _apiClient.CreatePlaceAsync(command1);
             await _apiClient.CreatePlaceAsync(command2);
@@ -306,22 +315,22 @@ namespace Bridge.IntegrationTests
             var command1 = new CreatePlaceCommand()
             {
                 Name = "가나다",
-                Address = "대구시 수성구 utm:1000,1000",
+                Address = AddressDto("utm:1000,1000"),
             };
             var command2 = new CreatePlaceCommand()
             {
                 Name = "가나마",
-                Address = "대구시 수성구 utm:1000,2000",
+                Address = AddressDto("utm:1000,2000"),
             };
             var command3 = new CreatePlaceCommand()
             {
                 Name = "가나바",
-                Address = "대구시 수성구 utm:2000,2000",
+                Address = AddressDto("utm:2000,2000"),
             };
             var command4 = new CreatePlaceCommand()
             {
                 Name = "다라바",
-                Address = "대구시 수성구 utm:2000, 1000",
+                Address = AddressDto("utm:2000,1000"),
             };
             await _apiClient.CreatePlaceAsync(command1);
             await _apiClient.CreatePlaceAsync(command2);
@@ -365,25 +374,25 @@ namespace Bridge.IntegrationTests
             {
                 Name = Guid.NewGuid().ToString(),
                 Type = PlaceType.Cafeteria,
-                Address = "대구시 수성구 utm:1000,1000",
+                Address = AddressDto()
             };
             var command2 = new CreatePlaceCommand()
             {
                 Name = Guid.NewGuid().ToString(),
                 Type = PlaceType.Cafeteria,
-                Address = "대구시 수성구 utm:1000,2000",
+                Address = AddressDto()
             };
             var command3 = new CreatePlaceCommand()
             {
                 Name = Guid.NewGuid().ToString(),
                 Type = PlaceType.Restaurant,
-                Address = "대구시 수성구 utm:2000,2000",
+                Address = AddressDto()
             };
             var command4 = new CreatePlaceCommand()
             {
                 Name = "다라바",
                 Type = PlaceType.Restaurant,
-                Address = "대구시 수성구 utm:2000, 1000",
+                Address = AddressDto()
             };
             await _apiClient.CreatePlaceAsync(command1);
             await _apiClient.CreatePlaceAsync(command2);

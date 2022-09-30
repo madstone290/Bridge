@@ -1,4 +1,4 @@
-﻿using Bridge.Application.Places.Dtos;
+using Bridge.Application.Places.Dtos;
 using Bridge.Application.Places.ReadModels;
 using Bridge.Domain.Places.Entities;
 
@@ -12,12 +12,12 @@ namespace Bridge.WebApp.Models
             {
                 Id = x.Id,
                 Name = x.Name,
-                Address = x.Address,
+                Address = x.Address.RoadAddress,
                 Latitude = x.Location.Latitude,
                 Longitude = x.Location.Longitude,
                 Easting = x.Location.Easting,
                 Northing = x.Location.Northing,
-                Categories = x.Categories,
+                Categories = x.Categories.ToList(),
                 ContactNumber = x.ContactNumber,
                 OpeningTimes = x.OpeningTimes.Select(t => new OpeningTimeListModel()
                 {

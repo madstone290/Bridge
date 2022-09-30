@@ -1,4 +1,4 @@
-﻿using Bridge.Application.Places.Dtos;
+using Bridge.Application.Places.Dtos;
 using Bridge.Domain.Places.Entities;
 
 namespace Bridge.Application.Places.ReadModels
@@ -23,7 +23,7 @@ namespace Bridge.Application.Places.ReadModels
         /// <summary>
         /// 주소
         /// </summary>
-        public string Address { get; set; } = string.Empty;
+        public AddressDto Address { get; set; } = AddressDto.Empty;
 
         /// <summary>
         /// 위치
@@ -33,7 +33,7 @@ namespace Bridge.Application.Places.ReadModels
         /// <summary>
         /// 장소 카테고리
         /// </summary>
-        public List<PlaceCategory> Categories { get; set; } = new();
+        public IEnumerable<PlaceCategory> Categories { get; set; } = Enumerable.Empty<PlaceCategory>();
 
         /// <summary>
         /// 연락처

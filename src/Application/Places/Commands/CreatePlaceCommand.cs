@@ -1,4 +1,4 @@
-﻿using Bridge.Application.Common;
+using Bridge.Application.Common;
 using Bridge.Application.Common.Services;
 using Bridge.Application.Places.Dtos;
 using Bridge.Domain.Common.ValueObjects;
@@ -25,12 +25,12 @@ namespace Bridge.Application.Places.Commands
         /// <summary>
         /// 주소
         /// </summary>
-        public string Address { get; set; } = string.Empty;
+        public AddressDto Address { get; set; } = AddressDto.Empty;
 
         /// <summary>
         /// 장소 카테고리
         /// </summary>
-        public List<PlaceCategory> Categories { get; set; } = new();
+        public IEnumerable<PlaceCategory> Categories { get; set; } = Enumerable.Empty<PlaceCategory>();
 
         /// <summary>
         /// 연락처
@@ -60,12 +60,14 @@ namespace Bridge.Application.Places.Commands
 
         public override async Task<long> HandleCommand(CreatePlaceCommand command, CancellationToken cancellationToken)
         {
-            var latitudeLongitude = await _addressMapService.GetLatitudeAndLongitudeAsync(command.Address);
-            var eatingNorthing = await _addressMapService.GetUTM_K_EastingAndNorthingAsync(command.Address);
+            var latitudeLongitude = await _addressMapService.GetLatitudeAndLongitudeAsync(command.Address.RoadAddress);
+            var eatingNorthing = await _addressMapService.GetUTM_K_EastingAndNorthingAsync(command.Address.RoadAddress);
 
             var location = PlaceLocation.Create(latitudeLongitude.Item1, latitudeLongitude.Item2, eatingNorthing.Item1, eatingNorthing.Item2);
 
-            var place = Place.Create(command.Type, command.Name, command.Address, location);
+            // todo address service 적용
+            var address = Address.Create(command.Address.RoadAddress, string.Empty, command.Address.Details, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
+            var place = Place.Create(command.Type, command.Name, address, location);
             place.SetContactNumber(command.ContactNumber);
 
             foreach (var category in command.Categories)

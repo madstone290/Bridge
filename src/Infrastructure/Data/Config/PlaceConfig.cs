@@ -1,4 +1,4 @@
-﻿using Bridge.Domain.Places.Entities;
+using Bridge.Domain.Places.Entities;
 using Bridge.Shared.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -11,12 +11,15 @@ namespace Bridge.Infrastructure.Data.Config
     {
         public void Configure(EntityTypeBuilder<Place> builder)
         {
-            // Location
-            builder.OwnsOne(x => x.Location);
-
             // PlaceType
             builder.Property(x => x.Type)
                 .HasConversion<string>();
+
+            // Location
+            builder.OwnsOne(x => x.Location);
+
+            // Address
+            builder.OwnsOne(x => x.Address);
 
             // OpeningTimes
             var timeBuilder = builder.OwnsMany(x => x.OpeningTimes);
