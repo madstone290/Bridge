@@ -29,7 +29,7 @@ namespace Bridge.UnitTests.DomainTests
             // Arrange
             var name = string.Empty;
             var address = _addressBuilder.DaeguAddress1;
-            var location = PlaceLocation.Create(0,0,0,0);
+            var location = Location.Create(0,0,0,0);
 
             // Act
             var action = () =>
@@ -119,7 +119,7 @@ namespace Bridge.UnitTests.DomainTests
             var place = NewPlace();
             // Act
             var address = _addressBuilder.SeoulAddress1;
-            var locationToChange = PlaceLocation.Create(1, 1, 0, 0);
+            var locationToChange = Location.Create(1, 1, 0, 0);
             place.SetAddressLocation(address, locationToChange);
 
             // Assert

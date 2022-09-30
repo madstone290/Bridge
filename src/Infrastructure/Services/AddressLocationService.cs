@@ -16,7 +16,7 @@ namespace Bridge.Infrastructure.Services
             _coordinateService = coordinateService;
         }
 
-        public async Task<Tuple<Address, PlaceLocation>> CreateAddressLocationAsync(string baseAddress, string details)
+        public async Task<Tuple<Address, Location>> CreateAddressLocationAsync(string baseAddress, string details)
         {
             var responseBody = await _geoCodeApi.GetAddressInfo(baseAddress);
             if (responseBody.Status != NaverMaps.Data.GeoCodeResponseBody.StatusOk)
@@ -41,9 +41,9 @@ namespace Bridge.Infrastructure.Services
             var easting = utm_k.Item1;
             var northing = utm_k.Item2;
 
-            var location = PlaceLocation.Create(latitude, longitude, easting, northing);
+            var location = Location.Create(latitude, longitude, easting, northing);
 
-            return new Tuple<Address, PlaceLocation>(address, location);
+            return new Tuple<Address, Location>(address, location);
         }
     }
 }

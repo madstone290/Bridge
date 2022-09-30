@@ -26,7 +26,7 @@ namespace Bridge.Domain.Places.Entities
         private ISet<PlaceCategory> _categories = new HashSet<PlaceCategory>();
 
         private Place() { }
-        private Place(PlaceType type, string name, Address address, PlaceLocation location)
+        private Place(PlaceType type, string name, Address address, Location location)
         {
             Type = type;
             SetName(name);
@@ -47,7 +47,7 @@ namespace Bridge.Domain.Places.Entities
         /// <param name="name"></param>
         /// <param name="location"></param>
         /// <returns></returns>
-        public static Place Create(PlaceType type, string name, Address address, PlaceLocation location)
+        public static Place Create(PlaceType type, string name, Address address, Location location)
         {
             return new Place(type, name, address, location);
         }
@@ -70,7 +70,7 @@ namespace Bridge.Domain.Places.Entities
         /// <summary>
         /// 장소위치
         /// </summary>
-        public PlaceLocation Location { get; private set; } = null!;
+        public Location Location { get; private set; } = null!;
 
         /// <summary>
         /// 장소 카테고리
@@ -108,7 +108,7 @@ namespace Bridge.Domain.Places.Entities
         /// </summary>
         /// <param name="address"></param>
         /// <param name="location"></param>
-        public void SetAddressLocation(Address address, PlaceLocation location)
+        public void SetAddressLocation(Address address, Location location)
         {
             if (Address == address)
                 return;

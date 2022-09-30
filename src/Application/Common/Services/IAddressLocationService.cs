@@ -13,7 +13,7 @@ namespace Bridge.Application.Common.Services
         /// <param name="baseAddress">기본 주소</param>
         /// <param name="details">상세 주소</param>
         /// <returns></returns>
-        Task<Tuple<Address, PlaceLocation>> CreateAddressLocationAsync(string baseAddress, string details);
+        Task<Tuple<Address, Location>> CreateAddressLocationAsync(string baseAddress, string details);
 
     }
 }
