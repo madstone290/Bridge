@@ -45,29 +45,23 @@ namespace Bridge.Application.Places.Commands
 
     public class CreatePlaceCommandHandler : CommandHandler<CreatePlaceCommand, long>
     {
-        private readonly IAddressMapService _addressMapService;
+        private readonly IAddressLocationService _addressLocationService;
         private readonly IPlaceRepository _placeRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public CreatePlaceCommandHandler(IAddressMapService addressMapService,
+        public CreatePlaceCommandHandler(IAddressLocationService addressMapService,
                                          IPlaceRepository placeRepository,
                                          IUnitOfWork unitOfWork)
         {
-            _addressMapService = addressMapService;
+            _addressLocationService = addressMapService;
             _placeRepository = placeRepository;
             _unitOfWork = unitOfWork;
         }
 
         public override async Task<long> HandleCommand(CreatePlaceCommand command, CancellationToken cancellationToken)
         {
-            var latitudeLongitude = await _addressMapService.GetLatitudeAndLongitudeAsync(command.Address.RoadAddress);
-            var eatingNorthing = await _addressMapService.GetUTM_K_EastingAndNorthingAsync(command.Address.RoadAddress);
-
-            var location = PlaceLocation.Create(latitudeLongitude.Item1, latitudeLongitude.Item2, eatingNorthing.Item1, eatingNorthing.Item2);
-
-            // todo address service 적용
-            var address = Address.Create(command.Address.RoadAddress, string.Empty, command.Address.Details, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
-            var place = Place.Create(command.Type, command.Name, address, location);
+            var addressLocation = await _addressLocationService.CreateAddressLocationAsync(command.Address.RoadAddress, command.Address.Details);
+            var place = Place.Create(command.Type, command.Name, addressLocation.Item1, addressLocation.Item2);
             place.SetContactNumber(command.ContactNumber);
 
             foreach (var category in command.Categories)

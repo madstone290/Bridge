@@ -1,6 +1,7 @@
 using Bridge.Api.Constants;
 using Bridge.Api.Controllers.Dtos;
 using Bridge.Application.Places.Commands;
+using Bridge.Application.Places.Dtos;
 using Bridge.Application.Places.Queries;
 using Bridge.Application.Places.ReadModels;
 using Bridge.Shared;

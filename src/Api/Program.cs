@@ -20,6 +20,7 @@ else
 
 builder.Configuration.AddJsonFile("Secrets/mail_service_config.json");
 builder.Configuration.AddJsonFile("Secrets/token_service_config.json");
+builder.Configuration.AddJsonFile("Secrets/geocode_api_config.json");
 
 builder.Services.AddControllers(options =>
 {

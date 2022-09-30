@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Secrets\geocode_api_config.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="MediatR" Version="10.0.1" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.9" />
@@ -20,6 +24,9 @@
 
   <ItemGroup>
 	<InternalsVisibleTo Include="IntegrationTests" />
+	<None Include="Secrets\geocode_api_config.json">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</None>
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
   </ItemGroup>

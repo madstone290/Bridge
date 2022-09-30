@@ -10,6 +10,7 @@ using Bridge.Infrastructure.Data.Repos;
 using Bridge.Infrastructure.Identity;
 using Bridge.Infrastructure.Identity.Entities;
 using Bridge.Infrastructure.Identity.Services;
+using Bridge.Infrastructure.NaverMaps;
 using Bridge.Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -47,13 +48,21 @@ namespace Bridge.Infrastructure
                ?? throw new Exception("토큰 서비스 설정을 찾을 수 없습니다");
             services.AddSingleton(tokenServiceConfig);
 
+            var geocodeApiConfig = configuration.GetSection("GeoCodeApi").Get<GeoCodeApi.Config>()
+               ?? throw new Exception("Geocode API 설정을 찾을 수 없습니다");
+            services.AddSingleton(geocodeApiConfig);
+
+
+            services.AddHttpClient<GeoCodeApi>();
+            services.AddScoped<GeoCodeApi, GeoCodeApi>();
+
             services.AddScoped<UserService, UserService>();
             services.AddScoped<IClaimService, ClaimService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IEmailVerificationService, EmailVerificationService>();
             services.AddScoped<IAdminUserService, AdminUserService>();
 
-            services.AddScoped<IAddressMapService, DemoAddressMapService>();
+            services.AddScoped<IAddressLocationService, AddressLocationService>();
             services.AddScoped<IMailService, MailService>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();

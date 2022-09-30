@@ -64,8 +64,8 @@ namespace Bridge.IntegrationTests.Config
                       });
 
                       // replace IAddressMapService
-                      services.RemoveAll<IAddressMapService>();
-                      services.AddScoped<IAddressMapService, DemoAddressMapService>();
+                      //services.RemoveAll<IAddressLocationService>();
+                      //services.AddScoped<IAddressLocationService, TestAddressLocationService>();
 
                       // replace IAdminUserService
                       services.RemoveAll<IAdminUserService>();

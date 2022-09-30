@@ -20,6 +20,8 @@ namespace Bridge.IntegrationTests.Config.ApiClients
                 Content = JsonContent.Create(command)
             };
             var response = await Client.SendAsAdminAsync(request);
+            if (!response.IsSuccessStatusCode)
+                throw new Exception($"요청 실패 {response.StatusCode}");
             return await response.Content.ReadFromJsonAsync<long>();
         }
     }
