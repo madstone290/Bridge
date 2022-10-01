@@ -63,10 +63,6 @@ namespace Bridge.IntegrationTests.Config
                           options.UseNpgsql(connectionString);
                       });
 
-                      // replace IAddressMapService
-                      //services.RemoveAll<IAddressLocationService>();
-                      //services.AddScoped<IAddressLocationService, TestAddressLocationService>();
-
                       // replace IAdminUserService
                       services.RemoveAll<IAdminUserService>();
                       services.AddScoped<IAdminUserService, TestAdminUserService>();

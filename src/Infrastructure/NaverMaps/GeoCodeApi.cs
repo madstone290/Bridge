@@ -1,5 +1,7 @@
 using Bridge.Infrastructure.NaverMaps.Data;
 using Bridge.Shared.Extensions;
+using Microsoft.Extensions.Options;
+using System.ComponentModel.DataAnnotations;
 using System.Net.Http.Json;
 
 namespace Bridge.Infrastructure.NaverMaps
@@ -8,7 +10,10 @@ namespace Bridge.Infrastructure.NaverMaps
     {
         public class Config
         {
+            [Required]
             public string ClientId { get; set; } = string.Empty;
+
+            [Required]
             public string ClientSecret { get; set; } = string.Empty;
         }
 
@@ -22,10 +27,10 @@ namespace Bridge.Infrastructure.NaverMaps
         private readonly HttpClient _httpClient;
         private readonly Config _config;
 
-        public GeoCodeApi(HttpClient httpClient, Config config)
+        public GeoCodeApi(HttpClient httpClient, IOptions<Config> configOptions)
         {
             _httpClient = httpClient;
-            _config = config;
+            _config = configOptions.Value;
         }
 
         public async Task<GeoCodeResponseBody> GetAddressInfo(string address)

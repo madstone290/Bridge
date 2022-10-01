@@ -66,6 +66,8 @@ namespace Bridge.IntegrationTests.Config
                 Password = password
             };
             var response = await Client.PostAsJsonAsync(ApiRoutes.Users.Login, loginDto);
+            if (!response.IsSuccessStatusCode)
+                throw new Exception($"로그인 실패 {response.StatusCode}");
             var tokenResult = await response.Content.ReadFromJsonAsync<TokenResult>();
             if (tokenResult == null)
                 throw new Exception("로그인 응답 컨텐츠가 없습니다");

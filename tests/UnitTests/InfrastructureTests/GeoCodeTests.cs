@@ -2,16 +2,19 @@ using Bridge.Infrastructure.NaverMaps;
 using Bridge.Infrastructure.NaverMaps.Data;
 using Bridge.UnitTests.InfrastructureTests.Fixtures;
 using FluentAssertions;
+using Microsoft.Extensions.Options;
 
 namespace Bridge.UnitTests.InfrastructureTests
 {
     public class GeoCodeTests : IClassFixture<GeoCodeApiFixture>
     {
         private readonly GeoCodeApi.Config _config;
+        private readonly IOptions<GeoCodeApi.Config> _configOptions;
 
         public GeoCodeTests(GeoCodeApiFixture fixture)
         {
             _config = fixture.Config;
+            _configOptions = Options.Create(fixture.Config);
         }
 
         [Fact]
@@ -19,7 +22,7 @@ namespace Bridge.UnitTests.InfrastructureTests
         {
             // Arrange
             var httpClient = new HttpClient();
-            var naverApi = new GeoCodeApi(httpClient, _config);
+            var naverApi = new GeoCodeApi(httpClient, _configOptions);
 
             // Act
             var action = async () => await naverApi.GetAddressInfo(string.Empty);
@@ -36,7 +39,7 @@ namespace Bridge.UnitTests.InfrastructureTests
         {
             // Arrange
             var httpClient = new HttpClient();
-            var naverApi = new GeoCodeApi(httpClient, _config);
+            var naverApi = new GeoCodeApi(httpClient, _configOptions);
 
             // Act
             var responseBody = await naverApi.GetAddressInfo(address);
@@ -66,7 +69,7 @@ namespace Bridge.UnitTests.InfrastructureTests
         {
             // Arrange
             var httpClient = new HttpClient();
-            var naverApi = new GeoCodeApi(httpClient, _config);
+            var naverApi = new GeoCodeApi(httpClient, _configOptions);
 
             // Act
             var responseBody = await naverApi.GetAddressInfo(address);

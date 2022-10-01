@@ -7,6 +7,7 @@ using Bridge.Domain.Products.Repos;
 using Bridge.Infrastructure.Data;
 using Bridge.Infrastructure.Data.ReadRepos;
 using Bridge.Infrastructure.Data.Repos;
+using Bridge.Infrastructure.Extensions;
 using Bridge.Infrastructure.Identity;
 using Bridge.Infrastructure.Identity.Entities;
 using Bridge.Infrastructure.Identity.Services;
@@ -39,19 +40,10 @@ namespace Bridge.Infrastructure
                 .AddEntityFrameworkStores<IdentityContext>()
                 .AddDefaultTokenProviders();
 
-            // todo: options 적용할 것
-            var mailServiceConfig = configuration.GetSection("MailService").Get<MailService.Config>()
-                ?? throw new Exception("메일 서비스 설정을 찾을 수 없습니다");
-            services.AddSingleton(mailServiceConfig);
-
-            var tokenServiceConfig = configuration.GetSection("TokenService").Get<TokenService.Config>()
-               ?? throw new Exception("토큰 서비스 설정을 찾을 수 없습니다");
-            services.AddSingleton(tokenServiceConfig);
-
-            var geocodeApiConfig = configuration.GetSection("GeoCodeApi").Get<GeoCodeApi.Config>()
-               ?? throw new Exception("Geocode API 설정을 찾을 수 없습니다");
-            services.AddSingleton(geocodeApiConfig);
-
+            // Options 추가
+            services.AddOptionsEx<MailService.Config>(configuration.GetSection("MailService"));
+            services.AddOptionsEx<TokenService.Config>(configuration.GetSection("TokenService"));
+            services.AddOptionsEx<GeoCodeApi.Config>(configuration.GetSection("GeoCodeApi"));
 
             services.AddHttpClient<GeoCodeApi>();
             services.AddScoped<GeoCodeApi, GeoCodeApi>();

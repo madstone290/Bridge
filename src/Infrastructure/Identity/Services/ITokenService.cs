@@ -1,4 +1,6 @@
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -29,6 +31,7 @@ namespace Bridge.Infrastructure.Identity.Services
             /// <summary>
             /// 토큰 생성 키
             /// </summary>
+            [Required]
             public string Key { get; set; } = string.Empty;
 
             /// <summary>
@@ -44,14 +47,15 @@ namespace Bridge.Infrastructure.Identity.Services
             /// <summary>
             /// 액세스 토큰 만료시간 (분)
             /// </summary>
+            [Range(10, 120)]
             public int ExpiryInMinutes { get; set; } = 60;
         }
 
         private readonly Config _config;
 
-        public TokenService(Config config)
+        public TokenService(IOptions<Config> configOptions)
         {
-            _config = config;
+            _config = configOptions.Value;
         }
 
         public string GenenateAccessToken(IEnumerable<Claim> claims)
