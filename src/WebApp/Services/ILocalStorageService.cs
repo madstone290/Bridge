@@ -1,6 +1,4 @@
-
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace Bridge.WebApp.Services
 {
@@ -8,7 +6,7 @@ namespace Bridge.WebApp.Services
     {
         ValueTask<bool> ContainKeyAsync(string key, CancellationToken? cancellationToken = null);
 
-        ValueTask<TItem?> GetItemAsync<TItem>(string key, CancellationToken? cancellationToken = null);
+        ValueTask<TItem> GetItemAsync<TItem>(string key, CancellationToken? cancellationToken = null);
 
         ValueTask SetItemAsync<TItem>(string key, TItem item, CancellationToken? cancellationToken = null);
 
@@ -32,11 +30,11 @@ namespace Bridge.WebApp.Services
             return _blazoredLocalStorageService.ContainKeyAsync(key, cancellationToken);
         }
 
-        public async ValueTask<TItem?> GetItemAsync<TItem>(string key, CancellationToken? cancellationToken = null)
+        public async ValueTask<TItem> GetItemAsync<TItem>(string key, CancellationToken? cancellationToken = null)
         {
             var chiper = await _blazoredLocalStorageService.GetItemAsync<string>(key, cancellationToken);
             var json = _encryptionService.Decrypt(chiper)!;
-            return JsonSerializer.Deserialize<TItem>(json);
+            return JsonSerializer.Deserialize<TItem>(json)!;
         }
 
         public ValueTask RemoveItemAsync(string key, CancellationToken? cancellationToken = null)
