@@ -1,4 +1,5 @@
 using Bridge.WebApp.Api.ApiClients;
+using Bridge.WebApp.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
@@ -37,6 +38,7 @@ builder.Services.AddSingleton<HttpClient>((sp) =>
     };
 });
 
+builder.Services.AddScoped<IEncryptionService, EncryptionService>();
 builder.Services.AddScoped<PlaceApiClient>();
 
 var app = builder.Build();
