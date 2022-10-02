@@ -1,5 +1,4 @@
-﻿using Bridge.Shared.ApiContract;
-using System.Xml.Linq;
+using Bridge.Shared.ApiContract;
 
 namespace Bridge.WebApp.Api
 {

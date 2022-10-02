@@ -1,5 +1,6 @@
 using Blazored.LocalStorage;
 using Bridge.WebApp.Api.ApiClients;
+using Bridge.WebApp.Api.ApiClients.Identity;
 using Bridge.WebApp.Services;
 using MudBlazor;
 using MudBlazor.Services;
@@ -11,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
-// MudBlazor service
+// MudBlazor servicead
 builder.Services.AddMudServices(options =>
 {
     options.SnackbarConfiguration.PositionClass = Defaults.Classes.Position.TopCenter;
@@ -41,6 +42,8 @@ builder.Services.AddSingleton<HttpClient>((sp) =>
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddScoped<ILocalStorageService, EncryptionLocationStorageService>();
 builder.Services.AddScoped<IEncryptionService, EncryptionService>();
+
+builder.Services.AddScoped<UserApiClient>();
 builder.Services.AddScoped<PlaceApiClient>();
 
 var app = builder.Build();
