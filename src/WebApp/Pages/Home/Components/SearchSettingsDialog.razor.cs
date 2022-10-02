@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
-namespace Bridge.WebApp.Pages.Components
+namespace Bridge.WebApp.Pages.Home.Components
 {
     public partial class SearchSettingsDialog
     {

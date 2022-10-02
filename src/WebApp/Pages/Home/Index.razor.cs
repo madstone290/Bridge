@@ -1,13 +1,12 @@
-﻿using Bridge.WebApp.Api.ApiClients;
+using Bridge.WebApp.Api.ApiClients;
 using Bridge.WebApp.Extensions;
 using Bridge.WebApp.Models;
-using Bridge.WebApp.Pages.Components;
+using Bridge.WebApp.Pages.Home.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
-using static MudBlazor.Icons.Custom;
 
-namespace Bridge.WebApp.Pages
+namespace Bridge.WebApp.Pages.Home
 {
     public partial class Index
     {
