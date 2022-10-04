@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using Microsoft.Extensions.Options;
+using FluentValidation;
 using System.Linq.Expressions;
 
 namespace Bridge.WebApp.Pages
@@ -20,7 +19,6 @@ namespace Bridge.WebApp.Pages
                     return Array.Empty<string>();
                 return result.Errors.Select(e => e.ErrorMessage);
             };
-
 
         /// <summary>
         /// 하나의 모델 속성에 대해 유효성 검사를 실행한다.
