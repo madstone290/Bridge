@@ -33,11 +33,11 @@
         <div class="search-line">
             <MudAutocomplete Placeholder="검색어를 입력하세요"
                              T="string"
-                             @bind-Text="_searchText"
+                             @bind-Value="_searchText"
                              Adornment="Adornment.Start"
                              AdornmentIcon="@Icons.Material.Filled.Search"
                              SearchFunc="async (text) => new List<string>()"
-                             Variant="Variant.Filled"
+                             Variant="Variant.Outlined"
                              OnKeyUp="AutoComplete_OnKeyUpAsync" />
             <MudIconButton OnClick="Settings_ClickAsync"
                            Icon="@Icons.Material.Filled.Settings" />
