@@ -42,6 +42,7 @@ builder.Services.AddSingleton<HttpClient>((sp) =>
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddScoped<ILocalStorageService, EncryptionLocationStorageService>();
 builder.Services.AddScoped<IEncryptionService, EncryptionService>();
+builder.Services.AddScoped<ICookieService, CookieService>();
 
 builder.Services.AddScoped<UserApiClient>();
 builder.Services.AddScoped<PlaceApiClient>();
