@@ -3,6 +3,7 @@ using System.Security.Claims;
 using Bridge.WebApp.Api.ApiClients.Identity;
 using Bridge.Api.Controllers.Identity.Dtos;
 using Bridge.WebApp.Constants;
+using Bridge.Shared.Constants;
 
 namespace Bridge.WebApp.Services.Identity
 {
@@ -117,10 +118,7 @@ namespace Bridge.WebApp.Services.Identity
 
             var cliams = new List<Claim>()
             {
-                new Claim("Email", authState.Email),
-                new Claim("UserType", authState.UserType),
-                new Claim("AccessToken",  authState.AccessToken),
-                new Claim("RefreshToken", authState.RefreshToken),
+                new Claim(ClaimTypeConstants.UserType, authState.UserType),
             };
             var identity = new ClaimsIdentity(cliams, AuthConstants.SessionCookieScheme);
             return new ClaimsPrincipal(identity);
