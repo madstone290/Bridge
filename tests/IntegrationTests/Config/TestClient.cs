@@ -58,7 +58,7 @@ namespace Bridge.IntegrationTests.Config
             return Client.SendAsync(request);
         }
 
-        private async Task<TokenResult> LoginAsync(string email, string password)
+        private async Task<RefreshResult> LoginAsync(string email, string password)
         {
             var loginDto = new LoginDto()
             {
@@ -68,10 +68,10 @@ namespace Bridge.IntegrationTests.Config
             var response = await Client.PostAsJsonAsync(ApiRoutes.Users.Login, loginDto);
             if (!response.IsSuccessStatusCode)
                 throw new Exception($"로그인 실패 {response.StatusCode}");
-            var tokenResult = await response.Content.ReadFromJsonAsync<TokenResult>();
-            if (tokenResult == null)
+            var result = await response.Content.ReadFromJsonAsync<RefreshResult>();
+            if (result == null)
                 throw new Exception("로그인 응답 컨텐츠가 없습니다");
-            return tokenResult;
+            return result;
         }
 
         private void SetBearerToken(HttpRequestMessage request, string token)

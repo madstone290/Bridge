@@ -20,14 +20,14 @@ namespace Bridge.WebApp.Api.ApiClients.Identity
             return await SendAsync<Void>(HttpMethod.Post, ApiRoutes.Users.SendVerificationEmail, verificationDto);
         }
 
-        public async Task<ApiResult<TokenResult>> LoginAsync(LoginDto loginDto)
+        public async Task<ApiResult<RefreshResult>> LoginAsync(LoginDto loginDto)
         {
-            return await SendAsync<TokenResult>(HttpMethod.Post, ApiRoutes.Users.Login, loginDto);
+            return await SendAsync<RefreshResult>(HttpMethod.Post, ApiRoutes.Users.Login, loginDto);
         }
 
-        public async Task<ApiResult<TokenResult>> RefreshAsync(RefreshDto refreshDto)
+        public async Task<ApiResult<RefreshResult>> RefreshAsync(RefreshDto refreshDto)
         {
-            return await SendAsync<TokenResult>(HttpMethod.Post, ApiRoutes.Users.Refresh, refreshDto);
+            return await SendAsync<RefreshResult>(HttpMethod.Post, ApiRoutes.Users.Refresh, refreshDto);
         }
 
     }

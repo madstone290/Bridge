@@ -92,7 +92,7 @@ namespace Bridge.Infrastructure.Identity
         }
 
 
-        public async Task<TokenResult> LoginAsync(string email, string password)
+        public async Task<RefreshResult> LoginAsync(string email, string password)
         {
             var user = await _userManager.FindByEmailAsync(email);
             if (user == null || await _userManager.CheckPasswordAsync(user, password) == false)
@@ -111,14 +111,14 @@ namespace Bridge.Infrastructure.Identity
             if (!result.Succeeded)
                 throw new AppException(IdentityErrorToString(result.Errors));
 
-            return new TokenResult()
+            return new RefreshResult()
             {
                 AccessToken = accessToken,
                 RefreshToken = refreshToken,
             };
         }
 
-        public async Task<TokenResult> RefreshAsync(string email, string refreshToken)
+        public async Task<RefreshResult> RefreshAsync(string email, string refreshToken)
         {
             var user = await _userManager.FindByEmailAsync(email) ?? throw new AppException("사용자를 찾을 수 없습니다", new { email });
 
@@ -134,7 +134,7 @@ namespace Bridge.Infrastructure.Identity
             if (!result.Succeeded)
                 throw new AppException(IdentityErrorToString(result.Errors));
 
-            return new TokenResult()
+            return new RefreshResult()
             {
                 AccessToken = newAccessToken,
                 RefreshToken = newRefreshToken,

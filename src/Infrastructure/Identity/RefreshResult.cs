@@ -1,9 +1,9 @@
 namespace Bridge.Infrastructure.Identity
 {
     /// <summary>
-    /// 토큰 생성 후 반환되는 결과 데이터
+    /// 토큰 갱신 후 반환되는 결과 데이터
     /// </summary>
-    public class TokenResult
+    public class RefreshResult
     {
         /// <summary>
         /// 액세스 토큰
