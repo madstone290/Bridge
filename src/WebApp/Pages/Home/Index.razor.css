@@ -1,5 +1,4 @@
-﻿.page {
-    margin-top: 100px;
+.page {
 }
 
 /* AutoComplete의 라벨을 표시하기 위한 마진을 제거한다*/
@@ -11,6 +10,10 @@
 ::deep .mud-input-adornment-start.mud-input-root-filled-shrink
 {
     margin-top:0px;
+}
+
+::deep .search-container {
+    margin-top: 100px;
 }
 
 ::deep .search-line {

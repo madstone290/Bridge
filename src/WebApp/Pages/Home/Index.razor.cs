@@ -2,6 +2,7 @@ using Bridge.WebApp.Api.ApiClients;
 using Bridge.WebApp.Extensions;
 using Bridge.WebApp.Models;
 using Bridge.WebApp.Pages.Home.Components;
+using Bridge.WebApp.Services.Identity;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
@@ -35,8 +36,26 @@ namespace Bridge.WebApp.Pages.Home
         /// </summary>
         private double _searchDistance = 5000;
 
+        /// <summary>
+        /// 인증 여부
+        /// </summary>
+        private bool _isAuthenticated;
+
         [Inject]
         public PlaceApiClient PlaceApiClient { get; set; } = null!;
+
+        [Inject]
+        public IAuthService AuthService { get; set; } = null!;
+
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            if (firstRender)
+            {
+                var authState = await AuthService.GetAuthStateAsync();
+                _isAuthenticated = authState.IsAuthenticated;
+                StateHasChanged();
+            }
+        }
 
         public async Task AutoComplete_OnKeyUpAsync(KeyboardEventArgs args)
         {

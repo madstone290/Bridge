@@ -1,4 +1,4 @@
-﻿@using System.Net.Http
+@using System.Net.Http
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Components.Forms
@@ -11,6 +11,7 @@
 @using Bridge.WebApp.Components
 @using MudBlazor;
 
+@attribute [Authorize]
 @inject NavigationManager NavManager;
 @inject ISnackbar Snackbar;
 @inject IDialogService DialogService;

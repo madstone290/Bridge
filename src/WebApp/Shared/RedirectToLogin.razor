@@ -1,0 +1,10 @@
+@using Bridge.Shared.Extensions
+@using Bridge.WebApp.Pages
+
+@code {
+    protected override void OnInitialized()
+    {
+        // 로그인 후 이전 uri로 돌아간다
+        NavManager.NavigateTo(PageRoutes.Identity.Login.AddQueryParam("redirectUri", NavManager.Uri));
+    }
+}

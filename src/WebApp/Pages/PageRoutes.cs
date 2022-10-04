@@ -4,6 +4,12 @@
     {
         public const string Home = "/";
 
+        public static class Identity
+        {
+            public const string Login = "/Identity/Login";
+            public const string Logout = "/Identity/Logout";
+        }
+
         public static class Admin
         {
             public const string Home = "/Admin";

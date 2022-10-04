@@ -1,22 +1,48 @@
 @attribute [Route(PageRoutes.Home)]
+@attribute [AllowAnonymous]
 
 <PageTitle>브릿지</PageTitle>
 
 <div class="page">
-    <MudContainer>
+    <MudToolBar Class="toolbar">
+        <MudSpacer />
+
+        @if (_isAuthenticated)
+        {
+            <MudButton Size="Size.Medium"
+                   Variant="Variant.Text"
+                   Href="@(PageRoutes.Identity.Logout)">
+                로그아웃
+            </MudButton>
+        }
+        else
+        {
+            <MudButton Size="Size.Medium"
+                   Variant="Variant.Text">
+                가입하기
+            </MudButton>
+            <MudButton Size="Size.Medium"
+                   Variant="Variant.Text"
+                   Href="@(PageRoutes.Identity.Login)">
+                로그인
+            </MudButton>
+        }
+    </MudToolBar>
+
+    <MudContainer Class="search-container" MaxWidth="MaxWidth.Medium">
         <div class="search-line">
             <MudAutocomplete Placeholder="검색어를 입력하세요"
-                         T="string"
-                         @bind-Text="_searchText"
-                         Adornment="Adornment.Start"
-                         AdornmentIcon="@Icons.Material.Filled.Search"
-                         SearchFunc="async (text) => new List<string>()"
-                         Variant="Variant.Filled"
-                         OnKeyUp="AutoComplete_OnKeyUpAsync" />
+                             T="string"
+                             @bind-Text="_searchText"
+                             Adornment="Adornment.Start"
+                             AdornmentIcon="@Icons.Material.Filled.Search"
+                             SearchFunc="async (text) => new List<string>()"
+                             Variant="Variant.Filled"
+                             OnKeyUp="AutoComplete_OnKeyUpAsync" />
             <MudIconButton OnClick="Settings_ClickAsync"
-                Icon="@Icons.Material.Filled.Settings" />
+                           Icon="@Icons.Material.Filled.Settings" />
         </div>
-        
+
 
         <MudList>
             @{
@@ -24,7 +50,7 @@
                 {
                     <MudListItem>
                         <div class="place-item">
-                            <MudImage  Width="100" Height="100" />
+                            <MudImage Width="100" Height="100" />
                             <div>
                                 <MudText>@place.Name</MudText>
                                 <MudText>@place.Address</MudText>
