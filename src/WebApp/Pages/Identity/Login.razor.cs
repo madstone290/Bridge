@@ -14,6 +14,8 @@ namespace Bridge.WebApp.Pages.Identity
         private readonly LoginModel.Validator _validator = new();
 
         private MudForm? _form;
+        private MudTextField<string>? _passwordField;
+        private MudTextField<string>? _emailField;
 
         /// <summary>
         /// 에러 메시지
@@ -41,6 +43,11 @@ namespace Bridge.WebApp.Pages.Identity
             {
                 await LoadOptionsAsync();
                 StateHasChanged();
+
+                if (_loginModel.RememberMe)
+                    await _passwordField!.FocusAsync();
+                else
+                    await _emailField!.FocusAsync();
             }
         }
 
@@ -59,21 +66,12 @@ namespace Bridge.WebApp.Pages.Identity
         /// <returns></returns>
         private async Task LoadOptionsAsync()
         {
-            try
-            {
-                _loginModel.RememberMe = await LocalStorageService.TryGetItemAsync<bool>(LocalStorageKeyConstants.RememberMe);
+            _loginModel.RememberMe = await LocalStorageService.TryGetItemAsync<bool>(LocalStorageKeyConstants.RememberMe);
 
-                if (_loginModel.RememberMe)
-                {
-                    _loginModel.Email = await LocalStorageService.TryGetItemAsync<string>(LocalStorageKeyConstants.Email) ?? string.Empty;
-                }
-            }
-            catch
+            if (_loginModel.RememberMe)
             {
-                _loginModel.RememberMe = false;
-                _loginModel.Email = string.Empty;
+                _loginModel.Email = await LocalStorageService.TryGetItemAsync<string>(LocalStorageKeyConstants.Email) ?? string.Empty;
             }
-
         }
 
         /// <summary>

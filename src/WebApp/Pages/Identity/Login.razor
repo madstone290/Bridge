@@ -17,15 +17,16 @@
                     <MudText Typo="Typo.h3" Color="Color.Primary" Align="Align.Center">브릿지</MudText>
                 </MudItem>
                 <MudItem xs="12">
-                    <MudTextField @bind-Value="@_loginModel.Email"
+                    <MudTextField @ref="_emailField"
+                                  @bind-Value="@_loginModel.Email"
                                   For="@(()=>_loginModel.Email)"
-                                  Label="이메일"
-                                  AutoFocus="true" />
+                                  Label="이메일" />
 
                 </MudItem>
                 <MudItem xs="12">
 
-                    <MudTextField @bind-Value="@_loginModel.Password"
+                    <MudTextField @ref="_passwordField"
+                                  @bind-Value="@_loginModel.Password"
                                   For="@(()=>_loginModel.Password)"
                                   Label="비밀번호"
                                   OnKeyUp="Password_OnKeyUp"
