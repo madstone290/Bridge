@@ -1,10 +1,9 @@
-using Bridge.Api.Constants;
 using Bridge.Api.Controllers.Dtos;
 using Bridge.Application.Places.Commands;
-using Bridge.Application.Places.Dtos;
 using Bridge.Application.Places.Queries;
 using Bridge.Application.Places.ReadModels;
 using Bridge.Shared;
+using Bridge.Shared.Constants;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

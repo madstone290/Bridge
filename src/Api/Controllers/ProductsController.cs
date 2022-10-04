@@ -1,8 +1,8 @@
-using Bridge.Api.Constants;
 using Bridge.Application.Products.Commands;
 using Bridge.Application.Products.Queries;
 using Bridge.Application.Products.ReadModels;
 using Bridge.Shared;
+using Bridge.Shared.Constants;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

@@ -1,4 +1,4 @@
-namespace Bridge.Api.Constants
+namespace Bridge.Shared.Constants
 {
     public static class PolicyConstants
     {

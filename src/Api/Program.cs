@@ -1,8 +1,8 @@
 using Bridge.Api.ActionFilters;
-using Bridge.Api.Constants;
 using Bridge.Application;
 using Bridge.Infrastructure;
 using Bridge.Infrastructure.Identity.Services;
+using Bridge.Shared.Constants;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
