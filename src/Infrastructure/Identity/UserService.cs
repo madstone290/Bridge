@@ -92,7 +92,7 @@ namespace Bridge.Infrastructure.Identity
         }
 
 
-        public async Task<RefreshResult> LoginAsync(string email, string password)
+        public async Task<LoginResult> LoginAsync(string email, string password)
         {
             var user = await _userManager.FindByEmailAsync(email);
             if (user == null || await _userManager.CheckPasswordAsync(user, password) == false)
@@ -111,8 +111,9 @@ namespace Bridge.Infrastructure.Identity
             if (!result.Succeeded)
                 throw new AppException(IdentityErrorToString(result.Errors));
 
-            return new RefreshResult()
+            return new LoginResult()
             {
+                UserType = user.UserDetails.UserType.ToString(),
                 AccessToken = accessToken,
                 RefreshToken = refreshToken,
             };

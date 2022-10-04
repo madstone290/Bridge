@@ -20,9 +20,9 @@ namespace Bridge.WebApp.Api.ApiClients.Identity
             return await SendAsync<Void>(HttpMethod.Post, ApiRoutes.Users.SendVerificationEmail, verificationDto);
         }
 
-        public async Task<ApiResult<RefreshResult>> LoginAsync(LoginDto loginDto)
+        public async Task<ApiResult<LoginResult>> LoginAsync(LoginDto loginDto)
         {
-            return await SendAsync<RefreshResult>(HttpMethod.Post, ApiRoutes.Users.Login, loginDto);
+            return await SendAsync<LoginResult>(HttpMethod.Post, ApiRoutes.Users.Login, loginDto);
         }
 
         public async Task<ApiResult<RefreshResult>> RefreshAsync(RefreshDto refreshDto)

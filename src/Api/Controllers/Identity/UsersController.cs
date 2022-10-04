@@ -49,11 +49,11 @@ namespace Bridge.Api.Controllers.Identity
         [HttpPost]
         [AllowAnonymous]
         [Route(ApiRoutes.Users.Login)]
-        [ProducesResponseType(typeof(RefreshResult), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(LoginResult), StatusCodes.Status200OK)]
         public async Task<IActionResult> LoginAsync([FromBody] LoginDto loginDto)
         {
-            var tokenResult = await _userService.LoginAsync(loginDto.Email, loginDto.Password);
-            return Ok(tokenResult);
+            var result = await _userService.LoginAsync(loginDto.Email, loginDto.Password);
+            return Ok(result);
         }
 
         [HttpPost]
@@ -62,8 +62,8 @@ namespace Bridge.Api.Controllers.Identity
         [ProducesResponseType(typeof(RefreshResult), StatusCodes.Status200OK)]
         public async Task<IActionResult> RefreshAsync([FromBody] RefreshDto refreshDto)
         {
-            var tokenResult = await _userService.RefreshAsync(refreshDto.Email, refreshDto.RefreshToken);
-            return Ok(tokenResult);
+            var result = await _userService.RefreshAsync(refreshDto.Email, refreshDto.RefreshToken);
+            return Ok(result);
         }
 
     }

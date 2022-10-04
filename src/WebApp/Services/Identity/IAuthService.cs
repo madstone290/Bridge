@@ -61,11 +61,12 @@ namespace Bridge.WebApp.Services.Identity
             };
         }
 
-        public static AuthState Authenticated(string email, string accessToken, string refreshToken)
+        public static AuthState Authenticated(string email, string userType, string accessToken, string refreshToken)
         {
             return new AuthState()
             {
                 Email = email,
+                UserType = userType,
                 AccessToken = accessToken,
                 RefreshToken = refreshToken,
                 IsAuthenticated = true
@@ -81,6 +82,11 @@ namespace Bridge.WebApp.Services.Identity
         /// 사용자 이메일
         /// </summary>
         public string Email { get; init; } = string.Empty;
+
+        /// <summary>
+        /// 사용자 타입
+        /// </summary>
+        public string UserType { get; set; } = string.Empty;
 
         /// <summary>
         /// 액세스 토큰
@@ -112,6 +118,7 @@ namespace Bridge.WebApp.Services.Identity
             var cliams = new List<Claim>()
             {
                 new Claim("Email", authState.Email),
+                new Claim("UserType", authState.UserType),
                 new Claim("AccessToken",  authState.AccessToken),
                 new Claim("RefreshToken", authState.RefreshToken),
             };
@@ -121,18 +128,19 @@ namespace Bridge.WebApp.Services.Identity
 
         public async Task<AuthResult> LoginAsync(string email, string password)
         {
-            var loginResult = await _userApiClient.LoginAsync(new LoginDto()
+            var apiResult = await _userApiClient.LoginAsync(new LoginDto()
             {
                 Email = email,
                 Password = password
             });
 
-            if (!loginResult.Success)
-                return new AuthResult() { Success = false, Error = loginResult.ErrorMessage ?? string.Empty };
-            if (loginResult.Data == null)
+            if (!apiResult.Success)
+                return new AuthResult() { Success = false, Error = apiResult.ErrorMessage ?? string.Empty };
+            if (apiResult.Data == null)
                 return new AuthResult() { Success = false, Error = "토큰 데이터가 없습니다" };
 
-            var authState = AuthState.Authenticated(email, loginResult.Data.AccessToken, loginResult.Data.RefreshToken);
+            var loginResult = apiResult.Data;
+            var authState = AuthState.Authenticated(email, loginResult.UserType, loginResult.AccessToken, loginResult.RefreshToken);
             await _cookieService.SetCookieAsync(LocalStorageKeyConstants.AuthState, authState);
 
             var principal = GetPrincipalFromAuthState(authState);
