@@ -1,4 +1,5 @@
 using Blazored.LocalStorage;
+using Bridge.Infrastructure.Extensions;
 using Bridge.WebApp.Api.ApiClients;
 using Bridge.WebApp.Api.ApiClients.Identity;
 using Bridge.WebApp.Services;
@@ -9,6 +10,9 @@ using MudBlazor.Services;
 using ILocalStorageService = Bridge.WebApp.Services.ILocalStorageService;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Configuration.AddJsonFile("Secrets/encryption_service_config.json");
+builder.Services.AddOptionsEx<EncryptionService.Config>(builder.Configuration.GetSection("EncryptionService"));
 
 // Blazor and Razor services
 builder.Services.AddRazorPages();

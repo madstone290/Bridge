@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Options;
+using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -25,23 +27,32 @@ namespace Bridge.WebApp.Services
 
     public class EncryptionService : IEncryptionService
     {
-        /// <summary>
-        /// 16바이트 키. 128, 192, 256비트 중 하나의 길이만 가능하다.
-        /// </summary>
-        static readonly string aes_key = "super_secret_123";
+        public class Config
+        {
+            /// <summary>
+            /// AES 암호화 키(16자)
+            /// </summary>
+            [Required]
+            [StringLength(16, MinimumLength = 16)]
+            public string Key { get; set; } = string.Empty;
 
-        /// <summary>
-        /// 16바이트 IV
-        /// </summary>
-        static readonly string aes_iv = "super_secret_456";
+            /// <summary>
+            /// AES 초기화 벡터 문자열(16자)
+            /// </summary>
+            [Required]
+            [StringLength(16, MinimumLength = 16)]
+            public string IV { get; set; } = string.Empty;
+        }
 
         private readonly Aes aes;
 
-        public EncryptionService()
+        public EncryptionService(IOptions<Config> configOptions)
         {
+            var config = configOptions.Value;
+
             aes = Aes.Create();
-            aes.Key = Encoding.UTF8.GetBytes(aes_key);
-            aes.IV = Encoding.UTF8.GetBytes(aes_iv);
+            aes.Key = Encoding.UTF8.GetBytes(config.Key);
+            aes.IV = Encoding.UTF8.GetBytes(config.IV);
             aes.Mode = CipherMode.CBC;
             aes.Padding = PaddingMode.PKCS7;
         }
