@@ -2,6 +2,8 @@ using Blazored.LocalStorage;
 using Bridge.WebApp.Api.ApiClients;
 using Bridge.WebApp.Api.ApiClients.Identity;
 using Bridge.WebApp.Services;
+using Bridge.WebApp.Services.Identity;
+using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
 using MudBlazor.Services;
 using ILocalStorageService = Bridge.WebApp.Services.ILocalStorageService;
@@ -43,6 +45,8 @@ builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddScoped<ILocalStorageService, EncryptionLocationStorageService>();
 builder.Services.AddScoped<IEncryptionService, EncryptionService>();
 builder.Services.AddScoped<ICookieService, CookieService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<AuthenticationStateProvider>(sp => (AuthService)sp.GetRequiredService<IAuthService>());
 
 builder.Services.AddScoped<UserApiClient>();
 builder.Services.AddScoped<PlaceApiClient>();
