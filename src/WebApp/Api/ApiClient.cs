@@ -30,6 +30,62 @@ namespace Bridge.WebApp.Api
         }
 
         /// <summary>
+        /// 응답코드에 맞는 결과객체를 생성한다.
+        /// </summary>
+        /// <typeparam name="TData"></typeparam>
+        /// <param name="response"></param>
+        /// <returns></returns>
+        private static async Task<ApiResult<TData>> BuildResultAsync<TData>(HttpResponseMessage response)
+        {
+            if (response.IsSuccessStatusCode)
+            {
+                try
+                {
+                    if (typeof(TData) == typeof(Void))
+                    {
+                        return ApiResult<TData>.SuccessResult(default);
+                    }
+                    else
+                    {
+                        var data = await response.Content.ReadFromJsonAsync<TData>();
+                        return ApiResult<TData>.SuccessResult(data);
+                    }
+                }
+                catch
+                {
+                    var responseContentString = await response.Content.ReadAsStringAsync();
+                    return ApiResult<TData>.ContentParsingErrorResult(responseContentString);
+                }
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+            {
+                return ApiResult<TData>.ServerErrorResult();
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                try
+                {
+
+                    var errorContent = await response.Content.ReadFromJsonAsync<ErrorContent>() ?? null!;
+                    return ApiResult<TData>.BadRequestResult(errorContent);
+                }
+                catch
+                {
+                    var responseContentString = await response.Content.ReadAsStringAsync();
+                    return ApiResult<TData>.ContentParsingErrorResult(responseContentString);
+                }
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                return ApiResult<TData>.UnauthorizedResult();
+            }
+            else
+            {
+                return ApiResult<TData>.UnsupportedStatusCodeResult(response.StatusCode);
+            }
+        }
+
+        /// <summary>
         ///  Http요청을 전송한다. 인증여부에 따라 JWT 토큰을 추가한다.
         ///  <para>JWT토큰이 만료된 경우 재발급 후 1회 재시도 한다.</para>
         /// </summary>
@@ -74,56 +130,6 @@ namespace Bridge.WebApp.Api
                 return await BuildResultAsync<TData>(response);
             }
         }
-
-        /// <summary>
-        /// 응답코드에 맞는 결과객체를 생성한다.
-        /// </summary>
-        /// <typeparam name="TData"></typeparam>
-        /// <param name="response"></param>
-        /// <returns></returns>
-        private async Task<ApiResult<TData>> BuildResultAsync<TData>(HttpResponseMessage response)
-        {
-            if (response.IsSuccessStatusCode)
-            {
-                try
-                {
-                    var data = await response.Content.ReadFromJsonAsync<TData>();
-                    return ApiResult<TData>.SuccessResult(data);
-                }
-                catch
-                {
-                    var responseContentString = await response.Content.ReadAsStringAsync();
-                    return ApiResult<TData>.ContentParsingErrorResult(responseContentString);
-                }
-            }
-            else if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
-            {
-                return ApiResult<TData>.ServerErrorResult();
-            }
-            else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
-            {
-                try
-                {
-
-                    var errorContent = await response.Content.ReadFromJsonAsync<ErrorContent>() ?? null!;
-                    return ApiResult<TData>.BadRequestResult(errorContent);
-                }
-                catch
-                {
-                    var responseContentString = await response.Content.ReadAsStringAsync();
-                    return ApiResult<TData>.ContentParsingErrorResult(responseContentString);
-                }
-            }
-            else if(response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-            {
-                return ApiResult<TData>.UnauthorizedResult();
-            }
-            else
-            {
-                return ApiResult<TData>.UnsupportedStatusCodeResult(response.StatusCode);
-            }
-        }
-
 
     }
 }
