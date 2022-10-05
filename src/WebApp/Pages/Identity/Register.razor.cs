@@ -35,7 +35,7 @@ namespace Bridge.WebApp.Pages.Identity
 
             if (_form.IsValid)
             {
-                var result = await UserApiClient.RegisterAsync(new UserDto()
+                var result = await UserApiClient.RegisterAsync(new RegisterDto()
                 {
                     Email = _registerModel.Email,
                     Password = _registerModel.Password,
