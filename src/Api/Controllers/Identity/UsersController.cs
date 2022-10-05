@@ -38,6 +38,14 @@ namespace Bridge.Api.Controllers.Identity
             return Ok(callbackUri);
         }
 
+        /// <summary>
+        /// 회원가입 이메일을 검증한다.
+        /// 리디렉트 URI가 없는 경우 환영html을 출력한다.
+        /// </summary>
+        /// <param name="email">회원 이메일</param>
+        /// <param name="token">검증 토큰</param>
+        /// <param name="redirectUri">검증 후 리디렉트할 URI</param>
+        /// <returns></returns>
         [HttpGet]
         [AllowAnonymous]
         [Route(ApiRoutes.Users.VerifyEmail)]

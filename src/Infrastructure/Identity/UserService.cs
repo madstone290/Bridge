@@ -66,16 +66,18 @@ namespace Bridge.Infrastructure.Identity
         /// <param name="callbackUri">인증을 위한 콜백Uri</param>
         /// <returns></returns>
         /// <exception cref="AppException"></exception>
-        public async Task SendVerificationEmailAsync(string email,string redirectUri, string callbackUri)
+        public async Task SendVerificationEmailAsync(string email, string? redirectUri, string callbackUri)
         {
             var user = await _userManager.FindByEmailAsync(email) ?? throw new AppException("사용자를 찾을 수 없습니다", new { email });
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
             
             var callbackUriWithQuery = callbackUri
-                .AddQueryParam("redirectUri", Uri.EscapeDataString(redirectUri))
                 .AddQueryParam("token", Uri.EscapeDataString(token))
                 .AddQueryParam("email", Uri.EscapeDataString(user.Email));
+
+            if (redirectUri != null)
+                callbackUriWithQuery = callbackUriWithQuery.AddQueryParam("redirectUri", Uri.EscapeDataString(redirectUri));
 
             var subject = "브릿지 이메일 인증";
             string body = $"<a href=\"{callbackUriWithQuery}\">브릿지 회원 가입을 환영합니다. 링크를 눌러 회원 가입을 완료하세요.</a>";
