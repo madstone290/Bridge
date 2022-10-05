@@ -1,0 +1,19 @@
+<MudContainer MaxWidth="MaxWidth.Medium" Style="margin-top:150px; display:flex; flex-direction:column; align-items:center;">
+    <MudText Typo="Typo.h2" Color="Color.Info">
+        잘못된 주소입니다
+    </MudText>
+    <MudButton Style="margin-top: 50px;"
+               StartIcon="@Icons.Material.Filled.ArrowBack"
+               Color="Color.Info"
+               Variant="Variant.Filled"
+               OnClick="GoHome_Click">
+        홈으로 가기
+    </MudButton>
+</MudContainer>
+
+@code {
+    private void GoHome_Click()
+    {
+        NavManager.NavigateTo(Pages.PageRoutes.Home);
+    }
+}
