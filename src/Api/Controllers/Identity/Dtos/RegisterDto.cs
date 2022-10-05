@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Bridge.Api.Controllers.Identity.Dtos
 {
-    public class UserDto
+    public class RegisterDto
     {
         [EmailAddress]
         public string Email { get; set; } = string.Empty;

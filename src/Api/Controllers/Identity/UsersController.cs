@@ -21,9 +21,9 @@ namespace Bridge.Api.Controllers.Identity
         [AllowAnonymous]
         [Route(ApiRoutes.Users.Register)]
         [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
-        public async Task<IActionResult> CreateAsync([FromBody] UserDto userDto)
+        public async Task<IActionResult> CreateAsync([FromBody] RegisterDto registerDto)
         {
-            var userId = await _userService.RegisterAsync(userDto.Email, userDto.Password, userDto.UserName);
+            var userId = await _userService.RegisterAsync(registerDto.Email, registerDto.Password, registerDto.UserName);
             return Ok(userId);
         }
 

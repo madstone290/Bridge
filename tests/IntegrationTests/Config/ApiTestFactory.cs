@@ -93,7 +93,7 @@ namespace Bridge.IntegrationTests.Config
             {
                 testClient.SendAsync(new HttpRequestMessage(HttpMethod.Post, ApiRoutes.Users.Register)
                 {
-                    Content = JsonContent.Create(new UserDto()
+                    Content = JsonContent.Create(new RegisterDto()
                     {
                         Email = user.Email,
                         Password = user.Password

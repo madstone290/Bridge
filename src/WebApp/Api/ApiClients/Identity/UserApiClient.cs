@@ -10,9 +10,9 @@ namespace Bridge.WebApp.Api.ApiClients.Identity
         {
         }
 
-        public async Task<ApiResult<long>> RegisterAsync(UserDto userDto)
+        public async Task<ApiResult<long>> RegisterAsync(RegisterDto registerDto)
         {
-            return await SendAsync<long>(HttpMethod.Post, ApiRoutes.Users.Register, userDto);
+            return await SendAsync<long>(HttpMethod.Post, ApiRoutes.Users.Register, registerDto);
         }
 
         public async Task<ApiResult<Void>> SendVerificationEmailAsync(VerificationDto verificationDto)
