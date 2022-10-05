@@ -82,24 +82,28 @@ namespace Bridge.IntegrationTests.Config
             bridgeContext.Database.Migrate();
 
 
-            testClient = new TestClient(webApplicationFactory.CreateClient());
-
-            var placeApiClient = new PlaceApiClient(testClient);
-            var productApiClient = new ProductApiClient(testClient);
-            apiClient = new ApiClient(placeApiClient, productApiClient);
-
+            var httpClient = webApplicationFactory.CreateClient();
+            
             // 시드 생성
             foreach (var user in Seeds.TestUsers)
             {
-                testClient.SendAsync(new HttpRequestMessage(HttpMethod.Post, ApiRoutes.Users.Register)
+                var response = httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Post, ApiRoutes.Users.Register)
                 {
                     Content = JsonContent.Create(new RegisterDto()
                     {
                         Email = user.Email,
                         Password = user.Password
                     })
-                });
+                }).GetAwaiter().GetResult();
             }
+
+            testClient = new TestClient(httpClient);
+
+            var placeApiClient = new PlaceApiClient(testClient);
+            var productApiClient = new ProductApiClient(testClient);
+            apiClient = new ApiClient(placeApiClient, productApiClient);
+
+         
         }
 
 
