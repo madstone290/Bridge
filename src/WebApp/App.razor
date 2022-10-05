@@ -1,9 +1,17 @@
-﻿<CascadingAuthenticationState>
+﻿@using Bridge.WebApp.Services.Identity
+<CascadingAuthenticationState>
     <Router AppAssembly="@typeof(App).Assembly">
         <Found Context="routeData">
-            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" >
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
                 <NotAuthorized>
-                    <RedirectToLogin />
+                    @if (_authenticated)
+                    {
+                        <NoPermission />
+                    }
+                    else
+                    {
+                        <RedirectToLogin />
+                    }
                 </NotAuthorized>
             </AuthorizeRouteView>
         </Found>
@@ -15,3 +23,17 @@
         </NotFound>
     </Router>
 </CascadingAuthenticationState>
+
+@code {
+    private bool _authenticated;
+
+    [Inject]
+    public IAuthService AuthService { get; set; } = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthService.GetAuthStateAsync();
+        _authenticated = authState.IsAuthenticated;
+    }
+
+}
