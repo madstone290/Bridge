@@ -80,7 +80,7 @@ namespace Bridge.WebApp.Models
         /// <summary>
         /// 위경도문자열
         /// </summary>
-        public string LatitudeLongitudeString => $"{Latitude:0.0000},{Latitude:0.0000}";
+        public string LatitudeLongitudeString => $"{Latitude:0.000000},{Longitude:0.000000}";
 
         /// <summary>
         /// UTM-K도법의 동쪽방향 좌표
