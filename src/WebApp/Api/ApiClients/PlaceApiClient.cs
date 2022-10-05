@@ -1,15 +1,16 @@
-﻿using Bridge.Api.Controllers.Dtos;
+using Bridge.Api.Controllers.Dtos;
 using Bridge.Application.Places.Commands;
 using Bridge.Application.Places.ReadModels;
 using Bridge.Domain.Places.Entities;
 using Bridge.Shared;
 using Bridge.Shared.Extensions;
+using Bridge.WebApp.Services.Identity;
 
 namespace Bridge.WebApp.Api.ApiClients
 {
     public class PlaceApiClient : ApiClient
     {
-        public PlaceApiClient(HttpClient httpClient) : base(httpClient)
+        public PlaceApiClient(HttpClient httpClient, IAuthService authService) : base(httpClient, authService)
         {
         }
 

@@ -1,4 +1,4 @@
-﻿using Bridge.Shared.ApiContract;
+using Bridge.Shared.ApiContract;
 using System.Net;
 
 namespace Bridge.WebApp.Api
@@ -34,6 +34,19 @@ namespace Bridge.WebApp.Api
         /// <param name="error">400에러 컨텐츠</param>
         /// <returns></returns>
         public static ApiResult<TData> BadRequestResult(ErrorContent error) => new(false, default, error.Message, error.Code);
+
+        /// <summary>
+        /// 401권한없음 
+        /// </summary>
+        /// <returns></returns>
+        public static ApiResult<TData> UnauthorizedResult() => new(false, default, "권한이 없습니다");
+
+        /// <summary>
+        /// 인증실패 오류
+        /// </summary>
+        /// <param name="errorMessage"></param>
+        /// <returns></returns>
+        public static ApiResult<TData> AuthenticationErrorResult(string errorMessage) => new(false, default, $"인증에 실패하였습니다: {errorMessage}");
 
         /// <summary>
         /// 컨텐츠 파싱 에러
