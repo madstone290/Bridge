@@ -15,14 +15,11 @@ namespace Bridge.WebApp.Pages.Identity
         [Inject]
         public IAuthService AuthService { get; set; } = null!;
 
-        protected override async Task OnAfterRenderAsync(bool firstRender)
+        protected override async Task OnInitializedAsync()
         {
-            if (firstRender)
-            {
-                await AuthService.LogoutAsync();
+            await AuthService.LogoutAsync();
 
-                NavManager.NavigateTo(RedirectUri ?? PageRoutes.Home, true);
-            }
+            NavManager.NavigateTo(RedirectUri ?? PageRoutes.Home, true);
         }
       
     }

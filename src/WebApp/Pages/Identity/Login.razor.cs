@@ -37,18 +37,13 @@ namespace Bridge.WebApp.Pages.Identity
         [Inject]
         public IAuthService AuthService { get; set; } = null!;
 
-        protected override async Task OnAfterRenderAsync(bool firstRender)
+        protected override async Task OnInitializedAsync()
         {
-            if (firstRender)
-            {
-                await LoadOptionsAsync();
-                StateHasChanged();
-
-                if (_loginModel.RememberMe)
-                    await _passwordField!.FocusAsync();
-                else
-                    await _emailField!.FocusAsync();
-            }
+            await LoadOptionsAsync();
+            if (_loginModel.RememberMe)
+                await _passwordField!.FocusAsync();
+            else
+                await _emailField!.FocusAsync();
         }
 
         private async Task Password_OnKeyUp(KeyboardEventArgs e)
@@ -81,7 +76,7 @@ namespace Bridge.WebApp.Pages.Identity
         private async Task SaveOptionsAsync()
         {
             await LocalStorageService.SetItemAsync(LocalStorageKeyConstants.RememberMe, _loginModel.RememberMe);
-            
+
             if (_loginModel.RememberMe)
                 await LocalStorageService.SetItemAsync(LocalStorageKeyConstants.Email, _loginModel.Email);
             else

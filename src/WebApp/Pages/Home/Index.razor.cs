@@ -47,14 +47,10 @@ namespace Bridge.WebApp.Pages.Home
         [Inject]
         public IAuthService AuthService { get; set; } = null!;
 
-        protected override async Task OnAfterRenderAsync(bool firstRender)
+        protected override async Task OnInitializedAsync()
         {
-            if (firstRender)
-            {
-                var authState = await AuthService.GetAuthStateAsync();
-                _isAuthenticated = authState.IsAuthenticated;
-                StateHasChanged();
-            }
+            var authState = await AuthService.GetAuthStateAsync();
+            _isAuthenticated = authState.IsAuthenticated;
         }
 
         public async Task AutoComplete_OnKeyUpAsync(KeyboardEventArgs args)
