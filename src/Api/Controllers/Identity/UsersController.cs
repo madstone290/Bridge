@@ -9,10 +9,12 @@ namespace Bridge.Api.Controllers.Identity
     public class UsersController : ApiController
     {
         private readonly UserService _userService;
+        private readonly string _welcomeHtmlPath;
 
-        public UsersController(UserService userService)
+        public UsersController(UserService userService, IWebHostEnvironment hostEnvironment)
         {
             _userService = userService;
+            _welcomeHtmlPath = Path.Combine(hostEnvironment.WebRootPath, "welcome.html");
         }
 
         [HttpPost]
@@ -40,10 +42,18 @@ namespace Bridge.Api.Controllers.Identity
         [AllowAnonymous]
         [Route(ApiRoutes.Users.VerifyEmail)]
         [ProducesResponseType(StatusCodes.Status302Found)]
-        public async Task<IActionResult> VerifyEmailAsync([FromQuery] string email, [FromQuery] string token, [FromQuery] string redirectUri)
+        public async Task<IActionResult> VerifyEmailAsync([FromQuery] string email, [FromQuery] string token, [FromQuery] string? redirectUri)
         {
             await _userService.VerifyEmailAsync(email, token);
-            return Redirect(redirectUri);
+            if (string.IsNullOrEmpty(redirectUri))
+            {
+                var html = System.IO.File.ReadAllText(_welcomeHtmlPath);
+                return Content(html, "text/html");
+            }
+            else
+            {
+                return Redirect(redirectUri);
+            }
         }
 
         [HttpPost]
