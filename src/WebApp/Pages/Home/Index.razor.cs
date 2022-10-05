@@ -1,3 +1,4 @@
+using Bridge.Application.Places.Queries;
 using Bridge.WebApp.Api.ApiClients;
 using Bridge.WebApp.Extensions;
 using Bridge.WebApp.Models;
@@ -70,21 +71,22 @@ namespace Bridge.WebApp.Pages.Home
                 return;
             }
 
-            var result = await PlaceApiClient.GetPlacesByNameAndRegion(_searchText, 
-                _easting - _searchDistance,
-                _easting + _searchDistance, 
-                _northing - _searchDistance,
-                _northing + _searchDistance);
+            var query = new SearchPlacesQuery()
+            {
+                SearchText = _searchText
+            };
+            var result = await PlaceApiClient.SearchPlaces(query);
+             
 
             if (!Snackbar.CheckSuccess(result))
                 return;
 
-            _placeList.AddRange(result.Data!.Select(x=>
+            _placeList.AddRange(result.Data!.Select(x =>
             {
                 var place = PlaceListModel.ToPlaceModel(x);
                 place.CalcDistance(_easting, _northing);
                 return place;
-            }).OrderBy(x=> x.Distance));
+            }).OrderBy(x => x.Distance));
         }
 
         private async Task Settings_ClickAsync()

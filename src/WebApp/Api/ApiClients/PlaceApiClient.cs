@@ -1,5 +1,5 @@
-using Bridge.Api.Controllers.Dtos;
 using Bridge.Application.Places.Commands;
+using Bridge.Application.Places.Queries;
 using Bridge.Application.Places.ReadModels;
 using Bridge.Domain.Places.Entities;
 using Bridge.Shared;
@@ -25,36 +25,24 @@ namespace Bridge.WebApp.Api.ApiClients
         }
 
         /// <summary>
-        /// 이름 및 지역으로 장소목록 조회
+        /// 장소 목록을 조회한다.
         /// </summary>
-        /// <param name="name">이름. 이름을 포함하는 모든 장소를 조회한다.</param>
-        /// <param name="leftEasting"></param>
-        /// <param name="rightEasting"></param>
-        /// <param name="bottomNorthing"></param>
-        /// <param name="topNorthing"></param>
+        /// <param name="placeType">조회할 장소의 유형</param>
         /// <returns></returns>
-        public async Task<ApiResult<List<PlaceReadModel>>> GetPlacesByNameAndRegion(string name,
-                                                                         double leftEasting,
-                                                                         double rightEasting,
-                                                                         double bottomNorthing,
-                                                                         double topNorthing)
+        public async Task<ApiResult<List<PlaceReadModel>>> GetPlaceList(PlaceType placeType)
         {
             return await SendAsync<List<PlaceReadModel>>(HttpMethod.Get, ApiRoutes.Places.GetList
-                .AddQueryParam("name", name)
-                .AddQueryParam("leftEasting", leftEasting)
-                .AddQueryParam("rightEasting", rightEasting)
-                .AddQueryParam("bottomNorthing", bottomNorthing)
-                .AddQueryParam("topNorthing", topNorthing));
+                .AddQueryParam("placeType", placeType));
         }
 
         /// <summary>
-        /// 주어진 장소유형에 해당하는 모든 장소를 조회한다.
+        /// 장소를 검색한다
         /// </summary>
-        /// <param name="placeType">장소유형</param>
-        /// <returns>장소 목록</returns>
-        public async Task<ApiResult<List<PlaceReadModel>>> GetPlacesByPlaceType(PlaceType placeType)
+        /// <param name="query">검색 쿼리</param>
+        /// <returns></returns>
+        public async Task<ApiResult<List<PlaceReadModel>>> SearchPlaces(SearchPlacesQuery query)
         {
-            return await SendAsync<List<PlaceReadModel>>(HttpMethod.Post, ApiRoutes.Places.Search, new PlaceSearchDto() { PlaceType = placeType });
+            return await SendAsync<List<PlaceReadModel>>(HttpMethod.Post, ApiRoutes.Places.Search, query);
         }
 
         /// <summary>

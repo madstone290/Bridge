@@ -1,7 +1,7 @@
-using Bridge.Api.Controllers.Dtos;
 using Bridge.Application.Places.Commands;
 using Bridge.Application.Places.Queries;
 using Bridge.Application.Places.ReadModels;
+using Bridge.Domain.Places.Entities;
 using Bridge.Shared;
 using Bridge.Shared.Constants;
 using MediatR;
@@ -35,47 +35,19 @@ namespace Bridge.Api.Controllers
         [HttpGet]
         [Route(ApiRoutes.Places.GetList)]
         [ProducesResponseType(typeof(List<PlaceReadModel>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetPlaces([FromQuery] string? name,
-                                                   [FromQuery] double leftEasting,
-                                                   [FromQuery] double rightEasting,
-                                                   [FromQuery] double bottomNorthing,
-                                                   [FromQuery] double topNorthing)
+        public async Task<IActionResult> GetPlaces([FromQuery] PlaceType placeType)
         {
-            List<PlaceReadModel> places;
-            if (name == null)
-            {
-                var query = new GetPlacesByRegionQuery()
-                {
-                    LeftEasting = leftEasting,
-                    RightEasting = rightEasting,
-                    BottomNorthing = bottomNorthing,
-                    TopNorthing = topNorthing
-                };
-                places = await _mediator.Send(query);
-            }
-            else
-            {
-                var query = new GetPlacesByNameAndRegionQuery()
-                {
-                    Name = name,
-                    LeftEasting = leftEasting,
-                    RightEasting = rightEasting,
-                    BottomNorthing = bottomNorthing,
-                    TopNorthing = topNorthing
-                };
-                places = await _mediator.Send(query);
-            }
+            var query = new GetPlacesByPlaceTypeQuery() { PlaceType = placeType };
+            var places = await _mediator.Send(query);
             return Ok(places);
         }
 
         [HttpPost]
         [Route(ApiRoutes.Places.Search)]
         [ProducesResponseType(typeof(List<PlaceReadModel>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetPlaces([FromBody] PlaceSearchDto searchDto)
+        public async Task<IActionResult> SearchPlaces([FromBody] SearchPlacesQuery query)
         {
-            List<PlaceReadModel> places;
-            var query = new GetPlacesByPlaceTypeQuery() { PlaceType = searchDto.PlaceType };
-            places = await _mediator.Send(query);
+            var places = await _mediator.Send(query);
             return Ok(places);
         }
 

@@ -1,4 +1,4 @@
-﻿using Bridge.Domain.Places.Entities;
+using Bridge.Domain.Places.Entities;
 using Bridge.WebApp.Api.ApiClients;
 using Bridge.WebApp.Extensions;
 using Bridge.WebApp.Models;
@@ -50,7 +50,7 @@ namespace Bridge.WebApp.Pages.Admin
             if (!_selectedPlaceType.HasValue)
                 return;
 
-            var places = await PlaceApiClient.GetPlacesByPlaceType(_selectedPlaceType.Value);
+            var places = await PlaceApiClient.GetPlaceList(_selectedPlaceType.Value);
             if (!Snackbar.CheckSuccess(places))
                 return;
 

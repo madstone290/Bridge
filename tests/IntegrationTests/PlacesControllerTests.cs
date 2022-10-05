@@ -1,4 +1,3 @@
-using Bridge.Api.Controllers.Dtos;
 using Bridge.Application.Places.Commands;
 using Bridge.Application.Places.Dtos;
 using Bridge.Application.Places.Queries;
@@ -252,122 +251,6 @@ namespace Bridge.IntegrationTests
             place.Categories.Should().Contain(command.Categories);
         }
 
-
-        [Fact]
-        public async Task Get_Places_Within_Region_Return_Ok_With_Content()
-        {
-            // Arrange
-            var command1 = new CreatePlaceCommand()
-            {
-                Name = Guid.NewGuid().ToString(),
-                Address = AddressData.Daegu1
-            };
-            var command2 = new CreatePlaceCommand()
-            {
-                Name = Guid.NewGuid().ToString(),
-                Address = AddressData.Daegu2
-            };
-            var command3 = new CreatePlaceCommand()
-            {
-                Name = Guid.NewGuid().ToString(),
-                Address = AddressData.Seoul1
-            };
-            var command4 = new CreatePlaceCommand()
-            {
-                Name = Guid.NewGuid().ToString(),
-                Address = AddressData.Seoul2
-            };
-            await _apiClient.CreatePlaceAsync(command1);
-            await _apiClient.CreatePlaceAsync(command2);
-            await _apiClient.CreatePlaceAsync(command3);
-            await _apiClient.CreatePlaceAsync(command4);
-
-
-
-            // Act
-            // 대구시 상하좌우 10km
-            var query = new GetPlacesByRegionQuery()
-            {
-                LeftEasting = PlaceLocationData.Daegu.Easting - 10 * 1000,
-                RightEasting = PlaceLocationData.Daegu.Easting + 10 * 1000,
-                BottomNorthing = PlaceLocationData.Daegu.Northing - 10 * 1000,
-                TopNorthing = PlaceLocationData.Daegu.Northing + 10 * 1000,
-            };
-            var request = new HttpRequestMessage(HttpMethod.Get, ApiRoutes.Places.GetList.AddQueryParam(query));
-            var response = await _client.SendAsAdminAsync(request);
-
-            // Assert
-            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-            var places = await response.Content.ReadFromJsonAsync<List<PlaceReadModel>>() ?? default!;
-            places.Should().Contain(x => x.Name == command1.Name);
-            places.Should().Contain(x => x.Name == command2.Name);
-
-            foreach(var place in places)
-            {
-                place.Location.Easting.Should().BeInRange(query.LeftEasting, query.RightEasting);
-                place.Location.Northing.Should().BeInRange(query.BottomNorthing, query.TopNorthing);
-            }
-        }
-
-
-        [Fact]
-        public async Task Get_Places_By_Name_And_Region_Return_Ok_With_Content()
-        {
-            // Arrange
-            var command1 = new CreatePlaceCommand()
-            {
-                Name = "가나다",
-                Address = AddressData.Seoul1
-            };
-            var command2 = new CreatePlaceCommand()
-            {
-                Name = "다람쥐",
-                Address = AddressData.Seoul2
-            };
-            var command3 = new CreatePlaceCommand()
-            {
-                Name = "가나다",
-                Address = AddressData.Daegu1
-            };
-            var command4 = new CreatePlaceCommand()
-            {
-                Name = "다람쥐",
-                Address = AddressData.Daegu2
-            };
-            await _apiClient.CreatePlaceAsync(command1);
-            await _apiClient.CreatePlaceAsync(command2);
-            await _apiClient.CreatePlaceAsync(command3);
-            await _apiClient.CreatePlaceAsync(command4);
-
-            // Act
-            // 서울시 상하좌우 10km
-            var query = new GetPlacesByNameAndRegionQuery()
-            {
-                Name = "다",
-                LeftEasting = PlaceLocationData.Seoul.Easting - 10 * 1000,
-                RightEasting = PlaceLocationData.Seoul.Easting + 10 * 1000,
-                BottomNorthing = PlaceLocationData.Seoul.Northing - 10 * 1000,
-                TopNorthing = PlaceLocationData.Seoul.Northing + 10 * 1000,
-            };
-            var request = new HttpRequestMessage(HttpMethod.Get, ApiRoutes.Places.GetList.AddQueryParam(query));
-            var response = await _client.SendAsAdminAsync(request);
-
-            // Assert
-            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-            var places = await response.Content.ReadFromJsonAsync<List<PlaceReadModel>>() ?? default!;
-            places.Should().Contain(x => x.Name == command1.Name);
-            places.Should().Contain(x => x.Name == command2.Name);
-
-
-            foreach (var place in places)
-            {
-                place.Name.Should().Contain(query.Name);
-                place.Location.Easting.Should().BeInRange(query.LeftEasting, query.RightEasting);
-                place.Location.Northing.Should().BeInRange(query.BottomNorthing, query.TopNorthing);
-            }
-        }
-
-
         [Fact]
         public async Task Get_Places_By_PlaceType_Return_Ok_With_Content()
         {
@@ -398,16 +281,69 @@ namespace Bridge.IntegrationTests
             };
             await _apiClient.CreatePlaceAsync(command1);
             await _apiClient.CreatePlaceAsync(command2);
-
+            await _apiClient.CreatePlaceAsync(command3);
+            await _apiClient.CreatePlaceAsync(command4);
+            var placeType = PlaceType.Cafeteria;
 
             // Act
-            var searchDto = new PlaceSearchDto()
+            var request = new HttpRequestMessage(HttpMethod.Get, ApiRoutes.Places.GetList.AddQueryParam("placeType", placeType.ToString()));
+            var response = await _client.SendAsAdminAsync(request);
+
+            // Assert
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+            var places = await response.Content.ReadFromJsonAsync<List<PlaceReadModel>>() ?? default!;
+            places.Should().Contain(x => x.Name == command1.Name);
+            places.Should().Contain(x => x.Name == command2.Name);
+            places.Should().NotContain(x => x.Name == command3.Name);
+            places.Should().NotContain(x => x.Name == command4.Name);
+
+            foreach (var place in places)
             {
-                PlaceType = PlaceType.Cafeteria
+                place.Type.Should().Be(placeType);
+            }
+        }
+
+        [Fact]
+        public async Task Search_Places_Returns_Contents()
+        {
+            // Arrange
+            var command1 = new CreatePlaceCommand()
+            {
+                Name = "abc",
+                Type = PlaceType.Cafeteria,
+                Address = AddressDto()
+            };
+            var command2 = new CreatePlaceCommand()
+            {
+                Name = "aeg",
+                Type = PlaceType.Cafeteria,
+                Address = AddressDto()
+            };
+            var command3 = new CreatePlaceCommand()
+            {
+                Name = "sfe",
+                Type = PlaceType.Restaurant,
+                Address = AddressDto()
+            };
+            var command4 = new CreatePlaceCommand()
+            {
+                Name = "fbr",
+                Type = PlaceType.Restaurant,
+                Address = AddressDto()
+            };
+            await _apiClient.CreatePlaceAsync(command1);
+            await _apiClient.CreatePlaceAsync(command2);
+            await _apiClient.CreatePlaceAsync(command3);
+            await _apiClient.CreatePlaceAsync(command4);
+
+            // Act
+            var searchQuery = new SearchPlacesQuery()
+            {
+                SearchText = "a"
             };
             var request = new HttpRequestMessage(HttpMethod.Post, ApiRoutes.Places.Search)
             {
-                Content = JsonContent.Create(searchDto)
+                Content = JsonContent.Create(searchQuery)
             };
             var response = await _client.SendAsAdminAsync(request);
 
@@ -421,11 +357,12 @@ namespace Bridge.IntegrationTests
 
             foreach (var place in places)
             {
-                place.Type.Should().Be(searchDto.PlaceType);
+                place.Name.Should().Contain(searchQuery.SearchText);
             }
         }
     }
 }
+
 
 
 
