@@ -1,0 +1,62 @@
+@using Bridge.Api.Controllers.Identity.Dtos
+@using Bridge.Shared.Extensions
+@using Bridge.WebApp.Api.ApiClients.Identity
+@using Bridge.WebApp.Constants
+@using Bridge.WebApp.Pages.Identity.Models
+@using Bridge.WebApp.Services
+@using Bridge.WebApp.Services.Identity
+
+@attribute [Route(PageRoutes.Identity.Register)]
+@attribute [AllowAnonymous]
+
+<div class="page">
+    <MudContainer MaxWidth="MaxWidth.Small">
+        <MudForm @ref="_form" Model="_registerModel" Validation="_validator.ModelValidation">
+            <MudGrid Spacing="1">
+                <MudItem xs="12">
+                    <MudText Typo="Typo.h3" Color="Color.Primary" Align="Align.Center">회원 가입</MudText>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudTextField @bind-Value="@_registerModel.Email"
+                                  For="@(()=>_registerModel.Email)"
+                                  Label="이메일" />
+
+                </MudItem>
+                <MudItem xs="12">
+
+                    <MudTextField @bind-Value="@_registerModel.Password"
+                                  For="@(()=>_registerModel.Password)"
+                                  Label="비밀번호"
+                                  InputType="InputType.Password" />
+
+                </MudItem>
+                <MudItem xs="12">
+
+                    <MudTextField @bind-Value="@_registerModel.ConfirmPassword"
+                                  For="@(()=>_registerModel.ConfirmPassword)"
+                                  Label="비밀번호 확인"
+                                  InputType="InputType.Password" />
+                </MudItem>
+
+                <MudItem xs="12">
+
+                    <MudTextField @bind-Value="@_registerModel.UserName"
+                                  For="@(()=>_registerModel.UserName)"
+                                  Label="이름" />
+                </MudItem>
+
+                @if (!string.IsNullOrWhiteSpace(Error))
+                {
+                    <MudItem xs="12">
+                        <MudAlert Severity="Severity.Error">@Error</MudAlert>
+                    </MudItem>
+                }
+
+                <MudItem xs="12">
+                    <MudButton FullWidth="true" Variant="Variant.Filled" Color="Color.Primary" DisableElevation="true" OnClick="@Register_Click">가입</MudButton>
+                </MudItem>
+
+            </MudGrid>
+        </MudForm>
+    </MudContainer>
+</div>

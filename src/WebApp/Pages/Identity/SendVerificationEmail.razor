@@ -1,0 +1,28 @@
+@attribute [Route(PageRoutes.Identity.SendVerificationEmail)]
+@attribute [AllowAnonymous]
+
+
+<div class="page">
+    <MudContainer MaxWidth="MaxWidth.Small">
+        <MudGrid Spacing="1">
+            @if (!string.IsNullOrWhiteSpace(_error))
+            {
+                <MudItem xs="12">
+                    <MudAlert Severity="Severity.Error">@_error</MudAlert>
+                </MudItem>
+            }
+            else
+            {
+                <MudItem xs="12">
+                    <MudText Typo="Typo.body1" Color="Color.Info">@(Email)으로 인증메일을 전송하였습니다. 수신함을 확인하세요. 수신된 메일이 없을 경우 스팸 메일함을 확인해주세요.</MudText>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudButton FullWidth="true" Color="Color.Secondary" Variant="Variant.Filled" OnClick="@SendEmail_Click">이메일 재전송</MudButton>
+                </MudItem>
+            }
+            <MudItem xs="12">
+                <MudButton FullWidth="true" Color="Color.Primary" Variant="Variant.Filled" Href="@PageRoutes.Home">홈으로 이동</MudButton>
+            </MudItem>
+        </MudGrid>
+    </MudContainer>
+</div>

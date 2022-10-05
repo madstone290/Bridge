@@ -1,4 +1,4 @@
-﻿namespace Bridge.WebApp.Pages
+namespace Bridge.WebApp.Pages
 {
     public static class PageRoutes
     {
@@ -6,6 +6,8 @@
 
         public static class Identity
         {
+            public const string Register = "/Identity/Register";
+            public const string SendVerificationEmail = "/Identity/SendVerificationEmail";
             public const string Login = "/Identity/Login";
             public const string Logout = "/Identity/Logout";
         }
@@ -18,3 +20,4 @@
         }
     }
 }
+
