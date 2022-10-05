@@ -27,6 +27,12 @@ namespace Bridge.WebApp.Services.Identity
         Task<AuthResult> LogoutAsync();
 
         /// <summary>
+        /// 리프레시토큰을 이용해 상태를 갱신한다.
+        /// </summary>
+        /// <returns></returns>
+        Task<AuthResult> RefreshAsync();
+
+        /// <summary>
         /// 인증상태 조회
         /// </summary>
         /// <returns></returns>
@@ -98,6 +104,17 @@ namespace Bridge.WebApp.Services.Identity
         /// 리프레시 토큰
         /// </summary>
         public string RefreshToken { get; init; } = string.Empty;
+
+        /// <summary>
+        /// 토큰이 갱신된 새로운 인증 상태 인스턴스를 반환한다.
+        /// </summary>
+        /// <param name="accessToken"></param>
+        /// <param name="refreshToken"></param>
+        /// <returns></returns>
+        public AuthState Refresh(string accessToken, string refreshToken)
+        {
+            return Authenticated(Email, UserType, accessToken, refreshToken);
+        }
     }
 
     public class AuthService : AuthenticationStateProvider, IAuthService
@@ -135,7 +152,7 @@ namespace Bridge.WebApp.Services.Identity
             if (!apiResult.Success)
                 return new AuthResult() { Success = false, Error = apiResult.ErrorMessage ?? string.Empty };
             if (apiResult.Data == null)
-                return new AuthResult() { Success = false, Error = "토큰 데이터가 없습니다" };
+                return new AuthResult() { Success = false, Error = "결과 데이터가 없습니다" };
 
             var loginResult = apiResult.Data;
             var authState = AuthState.Authenticated(email, loginResult.UserType, loginResult.AccessToken, loginResult.RefreshToken);
@@ -152,6 +169,30 @@ namespace Bridge.WebApp.Services.Identity
             await _cookieService.SetCookieAsync(LocalStorageKeyConstants.AuthState, string.Empty, -1);
 
             NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(new ClaimsPrincipal())));
+
+            return new AuthResult() { Success = true };
+        }
+
+        public async Task<AuthResult> RefreshAsync()
+        {
+            var authState = await GetAuthStateAsync();
+            var apiResult = await _userApiClient.RefreshAsync(new RefreshDto()
+            {
+                Email = authState.Email,
+                RefreshToken = authState.RefreshToken
+            });
+
+            if (!apiResult.Success)
+                return new AuthResult() { Success = false, Error = apiResult.ErrorMessage ?? string.Empty };
+            if (apiResult.Data == null)
+                return new AuthResult() { Success = false, Error = "결과 데이터가 없습니다" };
+
+            var refreshResult = apiResult.Data;
+            authState = authState.Refresh(refreshResult.AccessToken, refreshResult.RefreshToken);
+            await _cookieService.SetCookieAsync(LocalStorageKeyConstants.AuthState, authState);
+
+            var principal = GetPrincipalFromAuthState(authState);
+            NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(principal)));
 
             return new AuthResult() { Success = true };
         }
