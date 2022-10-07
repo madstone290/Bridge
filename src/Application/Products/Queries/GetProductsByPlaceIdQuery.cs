@@ -1,4 +1,4 @@
-﻿using Bridge.Application.Common;
+using Bridge.Application.Common;
 using Bridge.Application.Products.ReadModels;
 using Bridge.Application.Products.Repos;
 
@@ -20,7 +20,7 @@ namespace Bridge.Application.Products.Queries
 
         public override async Task<List<ProductReadModel>> HandleQuery(GetProductsByPlaceIdQuery query, CancellationToken cancellationToken)
         {
-            return await _repository.GetProductsByPlaceIdAsync(query.PlaceId);
+            return await _repository.GetListAsync(x=> x.PlaceId == query.PlaceId);
         }
     }
 }

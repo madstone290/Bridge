@@ -21,7 +21,7 @@ namespace Bridge.Application.Places.Queries
 
         public override async Task<List<PlaceReadModel>> HandleQuery(GetPlacesByPlaceTypeQuery query, CancellationToken cancellationToken)
         {
-            return await _repository.FilterAsync(place =>  place.Type == query.PlaceType);
+            return await _repository.GetListAsync(place =>  place.Type == query.PlaceType);
 
         }
     }

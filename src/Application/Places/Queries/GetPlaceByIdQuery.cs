@@ -1,4 +1,4 @@
-﻿using Bridge.Application.Common;
+using Bridge.Application.Common;
 using Bridge.Application.Places.ReadModels;
 using Bridge.Application.Places.Repos;
 
@@ -26,7 +26,7 @@ namespace Bridge.Application.Places.Queries
 
         public override async Task<PlaceReadModel?> HandleQuery(GetPlaceByIdQuery query, CancellationToken cancellationToken)
         {
-            return await _repository.GetPlaceAsync(query.Id);
+            return await _repository.GetAsync(x => x.Id == query.Id);
         }
     }
 }

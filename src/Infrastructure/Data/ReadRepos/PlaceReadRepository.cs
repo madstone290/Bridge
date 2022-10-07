@@ -13,7 +13,7 @@ namespace Bridge.Infrastructure.Data.ReadRepos
         {
         }
 
-        protected override Expression<Func<Place, PlaceReadModel>> SelectExpression { get; } = x => new PlaceReadModel()
+        public override Expression<Func<Place, PlaceReadModel>> SelectExpression { get; } = x => new PlaceReadModel()
         {
             Id = x.Id,
             Type = x.Type,
@@ -44,12 +44,6 @@ namespace Bridge.Infrastructure.Data.ReadRepos
                 BreakStartTime = t.BreakStartTime
             }).ToList()
         };
-
-        public async Task<PlaceReadModel?> GetPlaceAsync(long id)
-        {
-            return (await FilterAsync(x => x.Id == id))
-                .FirstOrDefault();
-        }
 
         public async Task<List<PlaceReadModel>> SearchPlacesAsync(string searchText, double easting, double northing, int maxCount = 200, int? maxDistance = null)
         {
