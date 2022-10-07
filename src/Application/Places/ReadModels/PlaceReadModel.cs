@@ -5,6 +5,8 @@ namespace Bridge.Application.Places.ReadModels
 {
     public class PlaceReadModel
     {
+        #region Stored Properties
+
         /// <summary>
         /// 아이디
         /// </summary>
@@ -44,5 +46,18 @@ namespace Bridge.Application.Places.ReadModels
         /// 영업시간
         /// </summary>
         public List<OpeningTimeDto> OpeningTimes { get; set; } = new();
+
+        #endregion
+
+        #region Computed Properties
+
+        /// <summary>
+        /// 검색 지점에서 장소까지의 거리
+        /// </summary>
+        public double? Distance { get; set; }
+
+        #endregion
+
+
     }
 }

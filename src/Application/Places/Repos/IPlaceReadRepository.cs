@@ -1,4 +1,4 @@
-﻿using Bridge.Application.Common;
+using Bridge.Application.Common;
 using Bridge.Application.Places.ReadModels;
 using Bridge.Domain.Places.Entities;
 
@@ -12,5 +12,16 @@ namespace Bridge.Application.Places.Repos
         /// <param name="id">장소 아이디</param>
         /// <returns></returns>
         Task<PlaceReadModel?> GetPlaceAsync(long id);
+
+        /// <summary>
+        /// 주어진 위치에서 검색어로 장소를 검색한다.
+        /// </summary>
+        /// <param name="searchText">검색어</param>
+        /// <param name="easting">검색위치 동향</param>
+        /// <param name="northing">검색위치 북향</param>
+        /// <param name="maxCount">장소 검색 수</param>
+        /// <param name="maxDistance">최대 검색거리</param>
+        /// <returns></returns>
+        Task<List<PlaceReadModel>> SearchPlacesAsync(string searchText, double easting, double northing, int maxCount = 1000, int? maxDistance = null);
     }
 }
