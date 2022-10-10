@@ -3,6 +3,7 @@ using Bridge.WebApp.Api.ApiClients;
 using Bridge.WebApp.Extensions;
 using Bridge.WebApp.Models;
 using Bridge.WebApp.Pages.Home.Components;
+using Bridge.WebApp.Services;
 using Bridge.WebApp.Services.Identity;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -46,12 +47,12 @@ namespace Bridge.WebApp.Pages.Home
         /// <summary>
         /// 검색 중심위치의 주소
         /// </summary>
-        private string _centerAddress;
+        private string? _centerAddress;
 
         /// <summary>
         /// 검색 중심위치
         /// </summary>
-        private Point _centerLocation;
+        private GeoPoint? _centerLocation;
 
         [Inject]
         public PlaceApiClient PlaceApiClient { get; set; } = null!;
@@ -59,13 +60,17 @@ namespace Bridge.WebApp.Pages.Home
         [Inject]
         public IAuthService AuthService { get; set; } = null!;
 
+        [Inject]
+        public IHtmlGeoService GeoService { get; set; } = null!;
+
         protected override async Task OnInitializedAsync()
         {
-            _centerAddress = string.Empty;
-            _centerLocation = new Point(0, 0);
-
             var authState = await AuthService.GetAuthStateAsync();
             _isAuthenticated = authState.IsAuthenticated;
+
+            GeoService.SuccessCallback = new EventCallback<GeoPoint>(this, ShowLocation);
+            GeoService.ErrorCallback = new EventCallback<GeoError>(this, ShowError);
+            await GeoService.GetLocationAsync();
         }
 
         public async Task AutoComplete_OnKeyUpAsync(KeyboardEventArgs args)
@@ -123,5 +128,15 @@ namespace Bridge.WebApp.Pages.Home
             }
         }
 
+        private void ShowLocation(GeoPoint point)
+        {
+            _centerLocation = point;
+            _centerAddress = $"{point?.Latitude:0.000000}, {point?.Longitude:0.000000}";
+        }
+
+        private void ShowError(GeoError error)
+        {
+            Console.WriteLine(error.Message);
+        }
     }
 }
