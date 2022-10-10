@@ -31,6 +31,11 @@
     </MudToolBar>
 
     <MudContainer Class="search-container" MaxWidth="MaxWidth.Medium">
+        <div class="address-line">
+            <MudButton Style="flex: 1 1 auto;" Color="Color.Info">@_centerAddress</MudButton>
+            <MudIconButton OnClick="Settings_ClickAsync" Icon="@Icons.Material.Filled.Settings" />
+        </div>
+
         <div class="search-line">
             <MudAutocomplete Placeholder="검색어를 입력하세요"
                              T="string"
@@ -41,30 +46,27 @@
                              SearchFunc="async (text) => new List<string>()"
                              Variant="Variant.Outlined"
                              OnKeyUp="AutoComplete_OnKeyUpAsync" />
-            <MudIconButton OnClick="Settings_ClickAsync"
-                           Icon="@Icons.Material.Filled.Settings" />
         </div>
-
 
         <MudList>
             @{
                 foreach (var place in _placeList)
                 {
-                    <MudListItem>
-                        <div class="place-item">
-                            <MudImage Width="100" Height="100" />
-                            <div>
-                                <MudText>@place.Name</MudText>
-                                <MudText>@place.Address</MudText>
-                                <MudText>@place.DistanceString</MudText>
-                                <MudText>@place.ContactNumber</MudText>
+                        <MudListItem>
+                            <div class="place-item">
+                                <MudImage Width="100" Height="100" />
+                                <div>
+                                    <MudText>@place.Name</MudText>
+                                    <MudText>@place.Address</MudText>
+                                    <MudText>@place.DistanceString</MudText>
+                                    <MudText>@place.ContactNumber</MudText>
+                                </div>
+                                <div>
+                                    <MudText>@place.CategoriesString</MudText>
+                                </div>
                             </div>
-                            <div>
-                                <MudText>@place.CategoriesString</MudText>
-                            </div>
-                        </div>
 
-                    </MudListItem>
+                        </MudListItem>
                 }
             }
 

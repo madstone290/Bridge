@@ -16,6 +16,11 @@
     margin-top: 100px;
 }
 
+::deep .address-line {
+    display: flex;
+    flex-direction: row;
+}
+
 ::deep .search-line {
     display: flex;
     flex-direction: row;

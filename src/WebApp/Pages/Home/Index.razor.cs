@@ -7,6 +7,7 @@ using Bridge.WebApp.Services.Identity;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
+using System.Drawing;
 
 namespace Bridge.WebApp.Pages.Home
 {
@@ -42,6 +43,16 @@ namespace Bridge.WebApp.Pages.Home
         /// </summary>
         private bool _isAuthenticated;
 
+        /// <summary>
+        /// 검색 중심위치의 주소
+        /// </summary>
+        private string _centerAddress;
+
+        /// <summary>
+        /// 검색 중심위치
+        /// </summary>
+        private Point _centerLocation;
+
         [Inject]
         public PlaceApiClient PlaceApiClient { get; set; } = null!;
 
@@ -50,6 +61,9 @@ namespace Bridge.WebApp.Pages.Home
 
         protected override async Task OnInitializedAsync()
         {
+            _centerAddress = string.Empty;
+            _centerLocation = new Point(0, 0);
+
             var authState = await AuthService.GetAuthStateAsync();
             _isAuthenticated = authState.IsAuthenticated;
         }
