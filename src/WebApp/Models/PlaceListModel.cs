@@ -15,6 +15,7 @@ namespace Bridge.WebApp.Models
                 Address = x.Address.BaseAddress,
                 Latitude = x.Location.Latitude,
                 Longitude = x.Location.Longitude,
+                Distance = x.Distance,
                 Easting = x.Location.Easting,
                 Northing = x.Location.Northing,
                 Categories = x.Categories.ToList(),
@@ -60,12 +61,12 @@ namespace Bridge.WebApp.Models
         /// <summary>
         /// 거리
         /// </summary>
-        public double Distance { get; set; }
+        public double? Distance { get; set; }
 
         /// <summary>
         /// 거리
         /// </summary>
-        public string DistanceString { get; set; } = string.Empty;
+        public string DistanceString => $"{Distance:0}m";
 
         /// <summary>
         /// 위도
@@ -121,16 +122,5 @@ namespace Bridge.WebApp.Models
         /// 영업시간 보여주기 여부
         /// </summary>
         public bool ShowOpeningTimes { get; set; }
-
-        /// <summary>
-        /// 주어진 UTM-K 좌표에서의 거리를 계산한다.
-        /// </summary>
-        /// <param name="easting"></param>
-        /// <param name="northing"></param>
-        public void CalcDistance(double easting, double northing)
-        {
-            Distance = Math.Sqrt(Math.Pow(Math.Abs(Easting - easting), 2) + Math.Pow(Math.Abs(Northing - northing), 2));
-            DistanceString = string.Format("{0:0}m", Distance);
-        }
     }
 }

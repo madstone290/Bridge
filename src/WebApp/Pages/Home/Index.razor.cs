@@ -86,26 +86,25 @@ namespace Bridge.WebApp.Pages.Home
             _placeList.Clear();
 
             if (string.IsNullOrWhiteSpace(_searchText))
-            {
                 return;
-            }
+
+            if (_centerLocation == null)
+                return;
 
             var query = new SearchPlacesQuery()
             {
-                SearchText = _searchText
+                SearchText = _searchText,
+                Latitude = _centerLocation.Latitude,
+                Longitude = _centerLocation.Longitude
             };
             var result = await PlaceApiClient.SearchPlaces(query);
-             
 
             if (!Snackbar.CheckSuccess(result))
                 return;
 
-            _placeList.AddRange(result.Data!.Select(x =>
-            {
-                var place = PlaceListModel.ToPlaceModel(x);
-                place.CalcDistance(_easting, _northing);
-                return place;
-            }).OrderBy(x => x.Distance));
+            _placeList.AddRange(result.Data!
+                .Select(x => PlaceListModel.ToPlaceModel(x))
+                .OrderBy(x => x.Distance));
         }
 
         private async Task Settings_ClickAsync()
