@@ -8,6 +8,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Secrets\naver_api_config.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Secrets\naver_api_config.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Blazored.LocalStorage" Version="4.2.0" />
     <PackageReference Include="FluentValidation" Version="11.2.2" />
     <PackageReference Include="MudBlazor" Version="6.0.15" />

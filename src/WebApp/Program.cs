@@ -3,11 +3,9 @@ using Bridge.Infrastructure.Extensions;
 using Bridge.Shared.Constants;
 using Bridge.WebApp.Api.ApiClients;
 using Bridge.WebApp.Api.ApiClients.Identity;
-using Bridge.WebApp.Constants;
 using Bridge.WebApp.Services;
 using Bridge.WebApp.Services.Identity;
 using Bridge.WebApp.Services.Maps;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
 using MudBlazor.Services;
@@ -16,7 +14,9 @@ using ILocalStorageService = Bridge.WebApp.Services.ILocalStorageService;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddJsonFile("Secrets/encryption_service_config.json");
+builder.Configuration.AddJsonFile("Secrets/naver_api_config.json");
 builder.Services.AddOptionsEx<EncryptionService.Config>(builder.Configuration.GetSection("EncryptionService"));
+builder.Services.AddOptionsEx<NaverReverseGeocodeApi.Config>(builder.Configuration.GetSection("NaverApi"));
 
 // Blazor and Razor services
 builder.Services.AddRazorPages();
@@ -59,6 +59,8 @@ builder.Services.AddSingleton<HttpClient>((sp) =>
 });
 
 builder.Services.AddBlazoredLocalStorage();
+builder.Services.AddScoped<NaverReverseGeocodeApi>();
+builder.Services.AddScoped<IReverseGeocodeService, NaverReverseGeocodeService>();
 builder.Services.AddScoped<IDynamicMapService, NaverMapService>();
 builder.Services.AddScoped<IHtmlGeoService, HtmlGeoService>();
 builder.Services.AddScoped<ILocalStorageService, EncryptionLocationStorageService>();

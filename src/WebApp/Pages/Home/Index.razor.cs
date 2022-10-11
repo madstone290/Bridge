@@ -65,12 +65,15 @@ namespace Bridge.WebApp.Pages.Home
         [Inject]
         public IHtmlGeoService GeoService { get; set; } = null!;
 
+        [Inject]
+        public IReverseGeocodeService ReverseGeocodeService { get; set; } = null!;
+
         protected override async Task OnInitializedAsync()
         {
             var authState = await AuthService.GetAuthStateAsync();
             _isAuthenticated = authState.IsAuthenticated;
 
-            GeoService.SuccessCallback = new EventCallback<GeoPoint>(this, ShowLocation);
+            GeoService.SuccessCallback = new EventCallback<GeoPoint>(this, ShowLocationAsync);
             GeoService.ErrorCallback = new EventCallback<GeoError>(this, ShowError);
             await GeoService.GetLocationAsync();
         }
@@ -133,10 +136,11 @@ namespace Bridge.WebApp.Pages.Home
             }
         }
 
-        private void ShowLocation(GeoPoint point)
+        private async Task ShowLocationAsync(GeoPoint point)
         {
             _centerLocation = new LatLon(point.Latitude, point.Longitude);
-            _centerAddress = $"{point?.Latitude:0.000000}, {point?.Longitude:0.000000}";
+            var address = await ReverseGeocodeService.GetAddressAsync(point.Latitude, point.Longitude);
+            _centerAddress = address;
         }
 
         private void ShowError(GeoError error)
