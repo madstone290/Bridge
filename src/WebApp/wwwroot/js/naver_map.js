@@ -8,11 +8,6 @@
 const OnLocationChangedId = 'OnLocationChanged';
 
 /**
- * 닷넷참조 함수식별자. 주소 변경시 호출
- * */
-const OnAddressChangedId = 'OnAddressChanged';
-
-/**
  * 닷넷참조
  * */
 let _dotNetRef;
@@ -65,18 +60,6 @@ export function init(dotNetRef, id, centerX, centerY) {
         _marker.setPosition(e.latlng);
 
         _dotNetRef.invokeMethodAsync(OnLocationChangedId, e.latlng.x, e.latlng.y);
-
-        naver.maps.Service.reverseGeocode({ coords: e.latlng }, function (status, response) {
-            if (status !== naver.maps.Service.Status.OK) {
-               return alert('Something wrong!');
-            }
-
-            const result = response.v2; // 검색 결과의 컨테이너
-            const address = result.address.jibunAddress; // 검색 결과로 만든 주소
-
-            _dotNetRef.invokeMethodAsync(OnAddressChangedId, address);
-        });
-
     });
 }
 

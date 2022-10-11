@@ -22,12 +22,14 @@ namespace Bridge.WebApp.Pages.Home.Components
 
         [Inject]
         public IDynamicMapService MapService { get; set; } = null!;
+        
+        [Inject]
+        public IReverseGeocodeService ReverseGeocodeService { get; set; } = null!;
 
         protected override async Task OnInitializedAsync()
         {
 
             MapService.LocationChanged = new(this, OnLocationChanged);
-            MapService.AddressChanged = new(this, OnAddressChanged);
 
             var mapOptions = new NaverMapService.MapOptions()
             {
@@ -63,15 +65,13 @@ namespace Bridge.WebApp.Pages.Home.Components
 
         }
 
-        private void OnLocationChanged(MapPoint point)
+        private async void OnLocationChanged(MapPoint point)
         {
             Latitude = point.Y;
             Longitude = point.X;
-        }
 
-        private void OnAddressChanged(string address)
-        {
-            Address = address;
+            Address = await ReverseGeocodeService.GetAddressAsync(point.Y, point.X);
+            StateHasChanged();
         }
 
         async ValueTask IAsyncDisposable.DisposeAsync()

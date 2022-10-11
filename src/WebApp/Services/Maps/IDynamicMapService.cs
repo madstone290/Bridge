@@ -14,11 +14,6 @@ namespace Bridge.WebApp.Services.Maps
         public EventCallback<MapPoint> LocationChanged { get; set; }
 
         /// <summary>
-        /// 주소 변경 콜백
-        /// </summary>
-        public EventCallback<string> AddressChanged { get; set; }
-
-        /// <summary>
         /// 맵을 초기화한다
         /// </summary>
         /// <returns></returns>
@@ -94,20 +89,12 @@ namespace Bridge.WebApp.Services.Maps
         }
 
         public EventCallback<MapPoint> LocationChanged { get; set; }
-        public EventCallback<string> AddressChanged { get; set; }
 
         [JSInvokable]
         public void OnLocationChanged(double x, double y)
         {
             if (LocationChanged.HasDelegate)
                 LocationChanged.InvokeAsync(new MapPoint() { X = x, Y = y });
-        }
-
-        [JSInvokable]
-        public void OnAddressChanged(string address)
-        {
-            if (AddressChanged.HasDelegate)
-                AddressChanged.InvokeAsync(address);
         }
 
         public async Task InitAsync(IMapOptions mapOptions)
