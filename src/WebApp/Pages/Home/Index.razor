@@ -42,7 +42,8 @@
         </div>
 
         <div class="search-line">
-            <MudAutocomplete Placeholder="검색어를 입력하세요"
+            <MudAutocomplete @ref="_autoComplete"
+                             Placeholder="검색어를 입력하세요"
                              T="string"
                              @bind-Value="_searchText"
                              CoerceValue="true"
