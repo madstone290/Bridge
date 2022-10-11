@@ -1,4 +1,4 @@
-using Bridge.WebApp.Services;
+using Bridge.WebApp.Services.Maps;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 

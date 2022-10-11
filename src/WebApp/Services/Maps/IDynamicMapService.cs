@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
-namespace Bridge.WebApp.Services
+namespace Bridge.WebApp.Services.Maps
 {
     /// <summary>
     /// 동적 지도 서비스
@@ -79,7 +79,7 @@ namespace Bridge.WebApp.Services
         private const string InitId = "init";
         private const string CloseId = "close";
         private const string GetMarkerLocationId = "getMarkerLocation";
-        
+
 
         private readonly IJSRuntime _jsRuntime;
         private readonly DotNetObjectReference<NaverMapService> _dotNetRef;
@@ -139,9 +139,9 @@ namespace Bridge.WebApp.Services
             if (_module == null)
                 return;
             await _module.DisposeAsync();
-            
+
         }
 
-      
+
     }
 }

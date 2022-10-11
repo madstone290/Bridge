@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
-namespace Bridge.WebApp.Services
+namespace Bridge.WebApp.Services.Maps
 {
     /// <summary>
     /// HTML Geolocation 서비스
