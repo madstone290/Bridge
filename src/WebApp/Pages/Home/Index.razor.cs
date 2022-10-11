@@ -25,7 +25,12 @@ namespace Bridge.WebApp.Pages.Home
         /// 검색된 장소 목록
         /// </summary>
         private List<PlaceListModel> _placeList = new();
-        
+
+        /// <summary>
+        /// 검색 실행 여부. 실행 여부에 따라 빈 장소목록에 대한 출력이 다르다.
+        /// </summary>
+        private bool _searched;
+
         /// <summary>
         /// 현위치 동향
         /// </summary>
@@ -88,17 +93,17 @@ namespace Bridge.WebApp.Pages.Home
 
         private async Task SearchPlacesAsync()
         {
+            
             if (_searchField == null)
                 return;
-            await _searchField.BlurAsync();
-
-            _placeList.Clear();
-
             if (string.IsNullOrWhiteSpace(_searchText))
                 return;
-
             if (_centerLocation == null)
                 return;
+
+            await _searchField.BlurAsync();
+            _placeList.Clear();
+            _searched = true;
 
             var query = new SearchPlacesQuery()
             {

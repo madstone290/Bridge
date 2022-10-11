@@ -43,18 +43,25 @@
 
         <div class="search-line">
             <MudTextField @ref="_searchField"
-                             Placeholder="검색어를 입력하세요"
-                             T="string"
-                             @bind-Value="_searchText"
-                             Adornment="Adornment.Start"
-                             AdornmentIcon="@Icons.Material.Filled.Search"
-                             Variant="Variant.Outlined"
-                             OnKeyUp="AutoComplete_OnKeyUpAsync" />
+                          Placeholder="검색어를 입력하세요"
+                          T="string"
+                          @bind-Value="_searchText"
+                          Adornment="Adornment.Start"
+                          AdornmentIcon="@Icons.Material.Filled.Search"
+                          Variant="Variant.Outlined"
+                          OnKeyUp="AutoComplete_OnKeyUpAsync" />
         </div>
 
-        <MudList>
-            @{
-                foreach (var place in _placeList)
+        @if (_searched && !_placeList.Any())
+        {
+            <div style="padding:10px;">
+                <MudText>검색결과가 없습니다</MudText>
+            </div>
+        }
+        else
+        {
+            <MudList>
+                @foreach (var place in _placeList)
                 {
                     <MudListItem>
                         <div class="place-item">
@@ -69,11 +76,9 @@
                                 <MudText>@place.CategoriesString</MudText>
                             </div>
                         </div>
-
                     </MudListItem>
                 }
-            }
-
-        </MudList>
+            </MudList>
+        }
     </MudContainer>
 </div>
