@@ -8,7 +8,7 @@ using Bridge.WebApp.Services.Identity;
 
 namespace Bridge.WebApp.Api.ApiClients
 {
-    public class PlaceApiClient : ApiClient
+    public class PlaceApiClient : JwtApiClient
     {
         public PlaceApiClient(HttpClient httpClient, IAuthService authService) : base(httpClient, authService)
         {

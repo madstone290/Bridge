@@ -1,6 +1,7 @@
 using Bridge.Api.Controllers.Identity.Dtos;
 using Bridge.Infrastructure.Identity;
 using Bridge.Shared;
+using Bridge.WebApp.Services.Identity;
 
 namespace Bridge.WebApp.Api.ApiClients.Identity
 {
