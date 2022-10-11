@@ -58,6 +58,7 @@ builder.Services.AddSingleton<HttpClient>((sp) =>
 });
 
 builder.Services.AddBlazoredLocalStorage();
+builder.Services.AddScoped<IDynamicMapService, NaverMapService>();
 builder.Services.AddScoped<IHtmlGeoService, HtmlGeoService>();
 builder.Services.AddScoped<ILocalStorageService, EncryptionLocationStorageService>();
 builder.Services.AddScoped<IEncryptionService, EncryptionService>();

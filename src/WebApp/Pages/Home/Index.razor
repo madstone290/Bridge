@@ -32,8 +32,13 @@
 
     <MudContainer Class="search-container" MaxWidth="MaxWidth.Medium">
         <div class="address-line">
-            <MudButton Style="flex: 1 1 auto;" Color="Color.Info">@_centerAddress</MudButton>
-            <MudIconButton OnClick="Settings_ClickAsync" Icon="@Icons.Material.Filled.Settings" />
+            <MudButton Style="flex: 1 1 auto;"
+                       Color="Color.Info"
+                       OnClick="SelectLocation_ClickAsync">
+                @_centerAddress
+            </MudButton>
+            <MudIconButton OnClick="Settings_ClickAsync"
+                           Icon="@Icons.Material.Filled.Settings" />
         </div>
 
         <div class="search-line">
@@ -52,21 +57,21 @@
             @{
                 foreach (var place in _placeList)
                 {
-                        <MudListItem>
-                            <div class="place-item">
-                                <MudImage Width="100" Height="100" />
-                                <div>
-                                    <MudText>@place.Name</MudText>
-                                    <MudText>@place.Address</MudText>
-                                    <MudText>@place.DistanceString</MudText>
-                                    <MudText>@place.ContactNumber</MudText>
-                                </div>
-                                <div>
-                                    <MudText>@place.CategoriesString</MudText>
-                                </div>
+                    <MudListItem>
+                        <div class="place-item">
+                            <MudImage Width="100" Height="100" />
+                            <div>
+                                <MudText>@place.Name</MudText>
+                                <MudText>@place.Address</MudText>
+                                <MudText>@place.DistanceString</MudText>
+                                <MudText>@place.ContactNumber</MudText>
                             </div>
+                            <div>
+                                <MudText>@place.CategoriesString</MudText>
+                            </div>
+                        </div>
 
-                        </MudListItem>
+                    </MudListItem>
                 }
             }
 

@@ -8,7 +8,6 @@ using Bridge.WebApp.Services.Identity;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
-using System.Drawing;
 
 namespace Bridge.WebApp.Pages.Home
 {
@@ -52,7 +51,7 @@ namespace Bridge.WebApp.Pages.Home
         /// <summary>
         /// 검색 중심위치
         /// </summary>
-        private GeoPoint? _centerLocation;
+        private LatLon? _centerLocation;
 
         [Inject]
         public PlaceApiClient PlaceApiClient { get; set; } = null!;
@@ -129,7 +128,7 @@ namespace Bridge.WebApp.Pages.Home
 
         private void ShowLocation(GeoPoint point)
         {
-            _centerLocation = point;
+            _centerLocation = new LatLon(point.Latitude, point.Longitude);
             _centerAddress = $"{point?.Latitude:0.000000}, {point?.Longitude:0.000000}";
         }
 
@@ -137,5 +136,29 @@ namespace Bridge.WebApp.Pages.Home
         {
             Console.WriteLine(error.Message);
         }
+
+        private async Task SelectLocation_ClickAsync()
+        {
+            var dialogOptions = new DialogOptions()
+            {
+                MaxWidth = MaxWidth.Medium,
+                NoHeader = true
+            };
+            var dialogParameters = new DialogParameters
+            {
+                { nameof (LocationSelectionDialog.Longitude), _centerLocation?.Longitude },
+                { nameof (LocationSelectionDialog.Latitude), _centerLocation?.Latitude },
+                { nameof (LocationSelectionDialog.Address), _centerAddress }
+            };
+            var dialog = DialogService.Show<LocationSelectionDialog>(null, options: dialogOptions, parameters: dialogParameters);
+            var result = await dialog.Result;
+            if (!result.Cancelled)
+            {
+                var data = (dynamic)result.Data;
+                _centerLocation = new LatLon(data.Latitude, data.Longitude);
+                _centerAddress = data.Address;
+            }
+        }
+
     }
 }
