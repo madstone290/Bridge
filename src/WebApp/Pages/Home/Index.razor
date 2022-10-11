@@ -1,35 +1,9 @@
 @attribute [Route(PageRoutes.Home)]
 @attribute [AllowAnonymous]
 
-<PageTitle>브릿지</PageTitle>
+<PageTitle>플차</PageTitle>
 
 <div class="page">
-    <MudToolBar Class="toolbar">
-        <MudSpacer />
-
-        @if (_isAuthenticated)
-        {
-            <MudButton Size="Size.Medium"
-                   Variant="Variant.Text"
-                   Href="@(PageRoutes.Identity.Logout)">
-                로그아웃
-            </MudButton>
-        }
-        else
-        {
-            <MudButton Size="Size.Medium"
-                   Variant="Variant.Text"
-                   Href="@(PageRoutes.Identity.Register)">
-                가입하기
-            </MudButton>
-            <MudButton Size="Size.Medium"
-                   Variant="Variant.Text"
-                   Href="@(PageRoutes.Identity.Login)">
-                로그인
-            </MudButton>
-        }
-    </MudToolBar>
-
     <MudContainer Class="search-container" MaxWidth="MaxWidth.Medium">
         <div class="address-line">
             <MudButton Style="flex: 1 1 auto;"

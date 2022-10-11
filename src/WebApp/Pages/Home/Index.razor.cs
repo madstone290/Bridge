@@ -47,11 +47,6 @@ namespace Bridge.WebApp.Pages.Home
         private double _searchDistance = 5000;
 
         /// <summary>
-        /// 인증 여부
-        /// </summary>
-        private bool _isAuthenticated;
-
-        /// <summary>
         /// 검색 중심위치의 주소
         /// </summary>
         private string? _centerAddress;
@@ -65,9 +60,6 @@ namespace Bridge.WebApp.Pages.Home
         public PlaceApiClient PlaceApiClient { get; set; } = null!;
 
         [Inject]
-        public IAuthService AuthService { get; set; } = null!;
-
-        [Inject]
         public IHtmlGeoService GeoService { get; set; } = null!;
 
         [Inject]
@@ -75,9 +67,6 @@ namespace Bridge.WebApp.Pages.Home
 
         protected override async Task OnInitializedAsync()
         {
-            var authState = await AuthService.GetAuthStateAsync();
-            _isAuthenticated = authState.IsAuthenticated;
-
             GeoService.SuccessCallback = new EventCallback<GeoPoint>(this, ShowLocationAsync);
             GeoService.ErrorCallback = new EventCallback<GeoError>(this, ShowError);
             await GeoService.GetLocationAsync();

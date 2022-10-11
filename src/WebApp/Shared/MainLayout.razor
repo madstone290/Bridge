@@ -1,10 +1,37 @@
-﻿@inherits LayoutComponentBase
+@using Bridge.WebApp.Pages
+@inherits LayoutComponentBase
 
-<PageTitle>Web</PageTitle>
+<PageTitle>플차</PageTitle>
 
+<MudThemeProvider />
+<MudSnackbarProvider />
+<MudDialogProvider />
+
+<MudToolBar Class="toolbar">
+    <MudSpacer />
+
+    @if (_isAuthenticated)
+    {
+        <MudButton Size="Size.Medium"
+               Variant="Variant.Text"
+               Href="@(PageRoutes.Identity.Logout)">
+            로그아웃
+        </MudButton>
+    }
+    else
+    {
+        <MudButton Size="Size.Medium"
+               Variant="Variant.Text"
+               Href="@(PageRoutes.Identity.Register)">
+            가입하기
+        </MudButton>
+        <MudButton Size="Size.Medium"
+               Variant="Variant.Text"
+               Href="@(PageRoutes.Identity.Login)">
+            로그인
+        </MudButton>
+    }
+</MudToolBar>
 <main>
-    <MudThemeProvider />
-    <MudSnackbarProvider />
-    <MudDialogProvider />
     @Body
 </main>
