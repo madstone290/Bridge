@@ -14,7 +14,7 @@ namespace Bridge.WebApp.Pages.Home
     public partial class Index
     {
 
-        private MudAutocomplete<string>? _autoComplete;
+        private MudTextField<string>? _searchField;
 
         /// <summary>
         /// 검색어
@@ -88,9 +88,9 @@ namespace Bridge.WebApp.Pages.Home
 
         private async Task SearchPlacesAsync()
         {
-            if (_autoComplete == null)
+            if (_searchField == null)
                 return;
-            await _autoComplete.BlurAsync();
+            await _searchField.BlurAsync();
 
             _placeList.Clear();
 

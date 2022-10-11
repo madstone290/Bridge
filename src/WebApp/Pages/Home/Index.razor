@@ -42,14 +42,12 @@
         </div>
 
         <div class="search-line">
-            <MudAutocomplete @ref="_autoComplete"
+            <MudTextField @ref="_searchField"
                              Placeholder="검색어를 입력하세요"
                              T="string"
                              @bind-Value="_searchText"
-                             CoerceValue="true"
                              Adornment="Adornment.Start"
                              AdornmentIcon="@Icons.Material.Filled.Search"
-                             SearchFunc="async (text) => new List<string>()"
                              Variant="Variant.Outlined"
                              OnKeyUp="AutoComplete_OnKeyUpAsync" />
         </div>
