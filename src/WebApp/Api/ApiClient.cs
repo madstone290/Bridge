@@ -4,6 +4,9 @@ using Bridge.WebApp.Services.Identity;
 
 namespace Bridge.WebApp.Api
 {
+    /// <summary>
+    /// API 서버 통신에 사용되는 클라이언트
+    /// </summary>
     public abstract class ApiClient
     {
         private readonly HttpClient _httpClient;
