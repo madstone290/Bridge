@@ -1,3 +1,4 @@
+using Bridge.Shared;
 using Bridge.Shared.ApiContract;
 using System.Net;
 
@@ -6,21 +7,21 @@ namespace Bridge.WebApp.Api
     /// <summary>
     /// API 처리 결과
     /// </summary>
-    public class ApiResult<TData> : IApiResult
+    public class ApiResult<TData> : Result<TData>, IApiResult
     {
-        protected ApiResult(bool success, TData? data, string? errorMessage = null, string? errorCode = null)
+        protected ApiResult(bool success, TData? data, string? error = null, ApiError? apiError = null)
         {
             Success = success;
             Data = data;
-            ErrorMessage = errorMessage;
-            ErrorCode = errorCode;
+            Error = error;
+            ApiError = apiError;
         }
 
         /// <summary>
         /// 성공응답
         /// </summary>
         /// <returns></returns>
-        public static ApiResult<TData> SuccessResult(TData? data) => new(true, data);
+        public static new ApiResult<TData> SuccessResult(TData? data) => new(true, data);
 
         /// <summary>
         /// 500에러
@@ -31,9 +32,9 @@ namespace Bridge.WebApp.Api
         /// <summary>
         /// 400에러
         /// </summary>
-        /// <param name="error">400에러 컨텐츠</param>
+        /// <param name="errorContent">400에러 컨텐츠</param>
         /// <returns></returns>
-        public static ApiResult<TData> BadRequestResult(ErrorContent error) => new(false, default, error.Message, error.Code);
+        public static ApiResult<TData> BadRequestResult(ApiError errorContent) => new(false, default, errorContent.Message, errorContent);
 
         /// <summary>
         /// 401권한없음 
@@ -63,24 +64,9 @@ namespace Bridge.WebApp.Api
         public static ApiResult<TData> UnsupportedStatusCodeResult(HttpStatusCode statusCode) => new(false, default, $"지원하지 않는 상태코드입니다: {statusCode}");
 
         /// <summary>
-        /// API 처리 성공여부
+        /// API 에러
         /// </summary>
-        public bool Success { get; }
-
-        /// <summary>
-        /// API 반환 데이터
-        /// </summary>
-        public TData? Data { get; }
-
-        /// <summary>
-        /// 에러 메시지
-        /// </summary>
-        public string? ErrorMessage { get; }
-
-        /// <summary>
-        /// 에러 코드
-        /// </summary>
-        public string? ErrorCode { get; }
+        public ApiError? ApiError { get; }
 
     }
 
@@ -89,7 +75,7 @@ namespace Bridge.WebApp.Api
     /// </summary>
     public class ApiResult : ApiResult<Void>
     {
-        protected ApiResult(bool success, Void data, string? errorMessage = null, string? errorCode = null) : base(success, data, errorMessage, errorCode)
+        protected ApiResult(bool success, Void data, string? error = null, ApiError? apiError = null) : base(success, data, error, apiError)
         {
         }
     }

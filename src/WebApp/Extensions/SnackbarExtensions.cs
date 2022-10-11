@@ -14,7 +14,7 @@ namespace Bridge.WebApp.Extensions
             {
                 if (!result.Success)
                 {
-                    snackbar.Add(result.ErrorMessage, Severity.Error);
+                    snackbar.Add(result.Error, Severity.Error);
                     return false;
                 }
             }

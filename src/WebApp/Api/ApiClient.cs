@@ -53,7 +53,7 @@ namespace Bridge.WebApp.Api
                 try
                 {
 
-                    var errorContent = await response.Content.ReadFromJsonAsync<ErrorContent>() ?? null!;
+                    var errorContent = await response.Content.ReadFromJsonAsync<ApiError>() ?? null!;
                     return ApiResult<TData>.BadRequestResult(errorContent);
                 }
                 catch

@@ -150,7 +150,7 @@ namespace Bridge.WebApp.Services.Identity
             });
 
             if (!apiResult.Success)
-                return new AuthResult() { Success = false, Error = apiResult.ErrorMessage ?? string.Empty };
+                return new AuthResult() { Success = false, Error = apiResult.Error ?? string.Empty };
             if (apiResult.Data == null)
                 return new AuthResult() { Success = false, Error = "결과 데이터가 없습니다" };
 
@@ -183,7 +183,7 @@ namespace Bridge.WebApp.Services.Identity
             });
 
             if (!apiResult.Success)
-                return new AuthResult() { Success = false, Error = apiResult.ErrorMessage ?? string.Empty };
+                return new AuthResult() { Success = false, Error = apiResult.Error ?? string.Empty };
             if (apiResult.Data == null)
                 return new AuthResult() { Success = false, Error = "결과 데이터가 없습니다" };
 

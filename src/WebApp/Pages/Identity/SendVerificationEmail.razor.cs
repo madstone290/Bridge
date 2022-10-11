@@ -40,7 +40,7 @@ namespace Bridge.WebApp.Pages.Identity
             });
 
             if (!result.Success)
-                _error = result.ErrorMessage;
+                _error = result.Error;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Bridge.WebApp.Api
+namespace Bridge.WebApp.Api
 {
     public interface IApiResult
     {
@@ -10,6 +10,6 @@
         /// <summary>
         /// 에러 메시지
         /// </summary>
-        public string? ErrorMessage { get; }
+        public string? Error { get; }
     }
 }

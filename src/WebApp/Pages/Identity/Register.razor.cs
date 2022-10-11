@@ -49,7 +49,7 @@ namespace Bridge.WebApp.Pages.Identity
                 }
                 else
                 {
-                    Error = result.ErrorMessage;
+                    Error = result.Error;
                 }
 
             }
