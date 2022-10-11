@@ -82,7 +82,7 @@ namespace Bridge.WebApp.Services.Maps
         /// <param name="longitude">경도</param>
         /// <returns>응답바디</returns>
         /// <exception cref="Exception"></exception>
-        public async Task<ResponseBody> GetAddressResult(double latitude, double longitude)
+        public async Task<Bridge.Shared.Result<ResponseBody>> GetAddressResult(double latitude, double longitude)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, URI
                 .AddQueryParam("coords", $"{longitude},{latitude}")
@@ -95,9 +95,9 @@ namespace Bridge.WebApp.Services.Maps
             var body = await response.Content.ReadFromJsonAsync<ResponseBody>();
             
             if (body == null)
-                throw new Exception("응답 바디 변환에 실패하였습니다");
+                return Bridge.Shared.Result<ResponseBody>.FailResult("응답 바디 변환에 실패하였습니다");
 
-            return body;
+            return Bridge.Shared.Result<ResponseBody>.SuccessResult(body);
         }
 
     }

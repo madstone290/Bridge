@@ -24,6 +24,8 @@ namespace Bridge.Shared
     {
         public static Result<TData> SuccessResult(TData data) => new() { Success = true, Data = data };
 
+        public static new Result<TData> FailResult(string? error) => new() { Success = false, Error = error };
+
         public TData? Data { get; init; }
     }
 }

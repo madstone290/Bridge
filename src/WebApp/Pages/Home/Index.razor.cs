@@ -93,18 +93,13 @@ namespace Bridge.WebApp.Pages.Home
 
         private async Task SearchPlacesAsync()
         {
-            
             if (_searchField == null)
                 return;
             if (string.IsNullOrWhiteSpace(_searchText))
                 return;
             if (_centerLocation == null)
                 return;
-
-            await _searchField.BlurAsync();
-            _placeList.Clear();
-            _searched = true;
-
+            
             var query = new SearchPlacesQuery()
             {
                 SearchText = _searchText,
@@ -116,9 +111,13 @@ namespace Bridge.WebApp.Pages.Home
             if (!Snackbar.CheckSuccess(result))
                 return;
 
+            _placeList.Clear();
             _placeList.AddRange(result.Data!
                 .Select(x => PlaceListModel.ToPlaceModel(x))
                 .OrderBy(x => x.Distance));
+
+            _searched = true;
+            await _searchField.BlurAsync();
         }
 
         private async Task Settings_ClickAsync()
@@ -144,8 +143,8 @@ namespace Bridge.WebApp.Pages.Home
         private async Task ShowLocationAsync(GeoPoint point)
         {
             _centerLocation = new LatLon(point.Latitude, point.Longitude);
-            var address = await ReverseGeocodeService.GetAddressAsync(point.Latitude, point.Longitude);
-            _centerAddress = address;
+            var result = await ReverseGeocodeService.GetAddressAsync(point.Latitude, point.Longitude);
+            _centerAddress = result.Data;
         }
 
         private void ShowError(GeoError error)

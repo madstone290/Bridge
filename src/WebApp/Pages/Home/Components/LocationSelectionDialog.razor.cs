@@ -70,7 +70,8 @@ namespace Bridge.WebApp.Pages.Home.Components
             Latitude = point.Y;
             Longitude = point.X;
 
-            Address = await ReverseGeocodeService.GetAddressAsync(point.Y, point.X);
+            var result = await ReverseGeocodeService.GetAddressAsync(point.Y, point.X);
+            Address = result.Data;
             StateHasChanged();
         }
 

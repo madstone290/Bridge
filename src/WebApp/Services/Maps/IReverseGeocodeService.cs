@@ -1,3 +1,5 @@
+using Bridge.Shared;
+
 namespace Bridge.WebApp.Services.Maps
 {
     /// <summary>
@@ -12,7 +14,7 @@ namespace Bridge.WebApp.Services.Maps
         /// <param name="latitude">위도</param>
         /// <param name="longitude">경도</param>
         /// <returns>주소</returns>
-        Task<string> GetAddressAsync(double latitude, double longitude);
+        Task<Result<string>> GetAddressAsync(double latitude, double longitude);
     }
 
     public class NaverReverseGeocodeService : IReverseGeocodeService
@@ -24,12 +26,19 @@ namespace Bridge.WebApp.Services.Maps
             _api = api;
         }
 
-        public async Task<string> GetAddressAsync(double latitude, double longitude)
+        public async Task<Result<string>> GetAddressAsync(double latitude, double longitude)
         {
-            var body = await _api.GetAddressResult(latitude, longitude);
+            var result = await _api.GetAddressResult(latitude, longitude);
+            if (!result.Success)
+                return Result<string>.FailResult(result.Error);
 
-            var region = body.Results[0].Region;
-            return $"{region.Area1.Name} {region.Area2.Name} {region.Area3.Name} {region.Area4.Name}".Trim();
+            var responseBody = result.Data!;
+
+            if (!responseBody.Results.Any())
+                return Result<string>.FailResult("주소 검색결과가 없습니다");
+
+            var region = responseBody.Results[0].Region;
+            return Result<string>.SuccessResult($"{region.Area1.Name} {region.Area2.Name} {region.Area3.Name} {region.Area4.Name}".Trim());
         }
     }
 }
