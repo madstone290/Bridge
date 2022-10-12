@@ -1,7 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Bridge.Shared.Extensions
@@ -38,9 +40,8 @@ namespace Bridge.Shared.Extensions
         /// <returns></returns>
         public static string AddRouteParam(this string uri, string name, object value)
         {
-            if (uri.Contains(name))
-                return uri.Replace(name, value.ToString());
-            return uri;
+            var regex = new Regex($"{{{name}:?.*}}", RegexOptions.IgnoreCase);
+            return regex.Replace(uri, value.ToString()!);
         }
 
 
@@ -64,19 +65,16 @@ namespace Bridge.Shared.Extensions
         /// <returns></returns>
         public static string AddRouteParam(this string uri, object obj)
         {
+            var uriWithParam = uri;
             var properties = obj.GetType().GetProperties();
-
             foreach (var property in properties)
-            {    
-                var paramString = "{" + property.Name + "}";
-                var index = uri.IndexOf(paramString);
-                if (0 < index)
-                {
-                    var value = Convert.ToString(property.GetValue(obj, null));
-                    uri = uri.Replace(paramString, value);
-                }
+            {
+                var propertyValue = property.GetValue(obj);
+                if (propertyValue == null)
+                    continue;
+                uriWithParam = uriWithParam.AddRouteParam(property.Name, propertyValue);
             }
-            return uri;
+            return uriWithParam;
         }
 
         /// <summary>

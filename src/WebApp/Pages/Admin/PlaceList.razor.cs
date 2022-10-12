@@ -66,12 +66,13 @@ namespace Bridge.WebApp.Pages.Admin
 
         private void EditPlace_Click(PlaceListModel place)
         {
-            NavManager.NavigateTo(PageRoutes.Admin.PlaceUpdate.AddRouteParam("{PlaceId:long}", place.Id));
+            var uri = PageRoutes.Admin.PlaceUpdate.AddRouteParam("PlaceId", place.Id);
+            NavManager.NavigateTo(uri);
         }
 
         private void ManageProduct_Click(PlaceListModel place)
         {
-            NavManager.NavigateTo(PageRoutes.Admin.PlaceProductList.AddRouteParam("{PlaceId:long}", place.Id));
+            NavManager.NavigateTo(PageRoutes.Admin.PlaceProductList.AddRouteParam("PlaceId", place.Id));
         }
         
 
