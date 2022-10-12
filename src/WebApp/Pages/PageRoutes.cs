@@ -15,8 +15,9 @@ namespace Bridge.WebApp.Pages
         public static class Admin
         {
             public const string Home = "/Admin";
-            public const string PlaceList = "/Admin/PlaceList";
+            public const string PlaceList = "/Admin/Places";
             public const string PlaceCreate = "/Admin/Place";
+            public const string PlaceProducts = "/Admin/Places/{placeId}/Products";
         }
     }
 }

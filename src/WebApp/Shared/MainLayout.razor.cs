@@ -10,6 +10,16 @@ namespace Bridge.WebApp.Shared
         /// </summary>
         private bool _isAuthenticated;
 
+        /// <summary>
+        /// 관리자인가?
+        /// </summary>
+        private bool _isAdmin;
+
+        /// <summary>
+        /// 드로어 열림 상태
+        /// </summary>
+        private bool _drawerOpen;
+
         [Inject]
         public IAuthService AuthService { get; set; } = null!;
 
@@ -17,6 +27,12 @@ namespace Bridge.WebApp.Shared
         {
             var authState = await AuthService.GetAuthStateAsync();
             _isAuthenticated = authState.IsAuthenticated;
+            _isAdmin = authState.UserType == Bridge.Shared.Constants.ClaimConstants.Admin;
+        }
+
+        void DrawerToggle()
+        {
+            _drawerOpen = !_drawerOpen;
         }
 
     }

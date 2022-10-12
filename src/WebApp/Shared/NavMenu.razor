@@ -1,0 +1,9 @@
+@using Bridge.WebApp.Pages
+
+<MudNavMenu>
+    <MudNavLink Href="@PageRoutes.Home" Match="NavLinkMatch.All">홈</MudNavLink>
+    <MudNavLink Href="@PageRoutes.Admin.Home" Match="NavLinkMatch.All">관리자</MudNavLink>
+    <MudNavGroup Title="장소&제품" Expanded="true" Icon="@Icons.Material.Filled.Info">
+        <MudNavLink Href="@PageRoutes.Admin.PlaceList" Match="NavLinkMatch.Prefix">장소</MudNavLink>
+    </MudNavGroup>
+</MudNavMenu>
