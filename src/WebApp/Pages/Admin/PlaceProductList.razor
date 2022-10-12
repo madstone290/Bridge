@@ -1,0 +1,63 @@
+@using Bridge.Domain.Places.Entities
+@using Bridge.WebApp.Models
+@using Bridge.WebApp.Pages.Admin.Models
+@attribute [Route(PageRoutes.Admin.PlaceProductList)]
+@attribute [Authorize(Policy = Bridge.Shared.Constants.PolicyConstants.Admin)]
+
+<div class="page">
+    <MudToolBar>
+        <MudButton Variant="Variant.Filled"
+                   StartIcon="@Icons.Material.Filled.Refresh"
+                   IconColor="Color.Surface"
+                   OnClick="Load_ClickAsync"
+                   Color="Color.Secondary">조회</MudButton>
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   IconColor="Color.Surface"
+                   OnClick="Create_Click"
+                   StartIcon="@Icons.Material.Filled.Add">추가</MudButton>
+
+        <div class="search-field">
+            <MudTextField T="string"
+                          @bind-Text="_searchString"
+                          Placeholder="검색">
+            </MudTextField>
+        </div>
+    </MudToolBar>
+
+    <MudTable T="ProductModel"
+              Items="_products"
+              Filter="Search" >
+        <HeaderContent>
+            <MudTh>타입</MudTh>
+            <MudTh>제품명</MudTh>
+            <MudTh>가격</MudTh>
+            <MudTh>카테고리</MudTh>
+        </HeaderContent>
+
+        <RowTemplate>
+            <MudTd DataLabel="타입">
+                <MudHighlighter Text="@context.TypeString" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="제품명">
+                <MudHighlighter Text="@context.Name" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="가격">
+                <MudHighlighter Text="@context.PriceString" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="카테고리">
+                <MudHighlighter Text="@context.CategoriesString" HighlightedText="@_searchString" />
+            </MudTd>
+        </RowTemplate>
+
+        <FooterContent>
+            <MudTFootRow>
+                <MudTd colSpan="100">총 @(_products.Count)개의 행</MudTd>
+            </MudTFootRow>
+        </FooterContent>
+    </MudTable>
+</div>
+
+@code {
+
+}

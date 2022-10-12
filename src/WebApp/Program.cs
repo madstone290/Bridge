@@ -39,6 +39,10 @@ builder.Services.AddMudServices(options =>
 
 builder.Services.AddAuthorization(options =>
 {
+    options.AddPolicy(PolicyConstants.Admin, policyBuilder =>
+    {
+        policyBuilder.RequireClaim(ClaimTypeConstants.UserType, ClaimConstants.Admin);
+    });
     options.AddPolicy(PolicyConstants.AdminOrProvider, policyBuilder =>
     {
         policyBuilder.RequireClaim(ClaimTypeConstants.UserType, ClaimConstants.Admin, ClaimConstants.Provider);
@@ -71,6 +75,7 @@ builder.Services.AddScoped<AuthenticationStateProvider>(sp => (AuthService)sp.Ge
 
 builder.Services.AddScoped<UserApiClient>();
 builder.Services.AddScoped<PlaceApiClient>();
+builder.Services.AddScoped<ProductApiClient>();
 
 var app = builder.Build();
 

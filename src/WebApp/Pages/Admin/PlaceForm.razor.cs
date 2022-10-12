@@ -22,7 +22,7 @@ namespace Bridge.WebApp.Pages.Admin
         /// <summary>
         /// 장소 아이디
         /// </summary>
-        [Parameter] public long PlaceId { get; set; }
+        [Parameter] public long PlaceId { get; set; } 
 
         [Inject] public PlaceApiClient PlaceApiClient { get; set; } = null!;
 

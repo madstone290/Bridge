@@ -47,11 +47,11 @@
             <MudTh>연락처</MudTh>
             <MudTh>위경도</MudTh>
             <MudTh>동북향</MudTh>
-            <MudTh>영업시간</MudTh>
+            <MudTh>기능</MudTh>
         </HeaderContent>
 
         <RowTemplate>
-             <MudTd DataLabel="유형">
+            <MudTd DataLabel="유형">
                 <MudHighlighter Text="@context.TypeString" HighlightedText="@_searchString" />
             </MudTd>
             <MudTd DataLabel="이름">
@@ -73,7 +73,14 @@
                 <MudHighlighter Text="@context.EastingNorthingString" HighlightedText="@_searchString" />
             </MudTd>
             <MudTd>
-                <MudButton Variant="Variant.Filled" OnClick="@(()=> ToggleShowOpeningTime_Click(context))">영업시간 보기</MudButton>
+                <MudMenu Label="기능"
+                         Variant="Variant.Filled"
+                         EndIcon="@Icons.Filled.KeyboardArrowDown"
+                         IconColor="Color.Secondary">
+                    <MudMenuItem @onclick="@(() => EditPlace_Click(context))">수정</MudMenuItem>
+                    <MudMenuItem @onclick="@(() => ToggleShowOpeningTime_Click(context))">영업시간 보기</MudMenuItem>
+                    <MudMenuItem @onclick="@(() => ManageProduct_Click(context))">제품 관리</MudMenuItem>
+                </MudMenu>
             </MudTd>
         </RowTemplate>
 

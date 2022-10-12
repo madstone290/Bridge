@@ -1,5 +1,16 @@
+@attribute [Route(PageRoutes.Admin.PlaceUpdate)]
 @attribute [Authorize(Policy = Bridge.Shared.Constants.PolicyConstants.AdminOrProvider)]
 
+<PlaceForm FormMode="FormMode.Update" />
+
 @code {
+    [Parameter]
+    public long PlaceId { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        Console.WriteLine("PlaceId:" + PlaceId);
+        return base.OnInitializedAsync();
+    }
 
 }

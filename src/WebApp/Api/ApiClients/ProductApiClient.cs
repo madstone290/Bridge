@@ -17,7 +17,7 @@ namespace Bridge.WebApp.Api.ApiClients
         /// </summary>
         /// <param name="id">장소 아이디</param>
         /// <returns>장소</returns>
-        public async Task<ApiResult<ProductReadModel?>> GetPlaceById(long id)
+        public async Task<ApiResult<ProductReadModel?>> GetProductById(long id)
         {
             return await SendAsync<ProductReadModel?>(HttpMethod.Get, ApiRoutes.Products.Get.AddRouteParam("{id}", id));
         }
@@ -27,7 +27,7 @@ namespace Bridge.WebApp.Api.ApiClients
         /// </summary>
         /// <param name="placeId">장소 아이디</param>
         /// <returns></returns>
-        public async Task<ApiResult<List<ProductReadModel>>> GetPlaceList(long placeId)
+        public async Task<ApiResult<List<ProductReadModel>>> GetProductList(long placeId)
         {
             return await SendAsync<List<ProductReadModel>>(HttpMethod.Get, ApiRoutes.Products.GetList
                 .AddQueryParam("placeId", placeId));
@@ -38,7 +38,7 @@ namespace Bridge.WebApp.Api.ApiClients
         /// </summary>
         /// <param name="command">제품</param>
         /// <returns></returns>
-        public async Task<ApiResult<long>> CreatePlace(CreateProductCommand command)
+        public async Task<ApiResult<long>> CreateProduct(CreateProductCommand command)
         {
             return await SendAsync<long>(HttpMethod.Post, ApiRoutes.Products.Create, command);
         }
@@ -48,7 +48,7 @@ namespace Bridge.WebApp.Api.ApiClients
         /// </summary>
         /// <param name="command">제품</param>
         /// <returns></returns>
-        public async Task<ApiResult<Void>> UpdatePlace(UpdateProductCommand command)
+        public async Task<ApiResult<Void>> UpdateProduct(UpdateProductCommand command)
         {
             return await SendAsync<Void>(HttpMethod.Put, ApiRoutes.Products.Update.AddRouteParam("id", command.ProductId), command);
         }

@@ -1,4 +1,5 @@
 using Bridge.Domain.Places.Entities;
+using Bridge.Shared.Extensions;
 using Bridge.WebApp.Api.ApiClients;
 using Bridge.WebApp.Extensions;
 using Bridge.WebApp.Models;
@@ -62,5 +63,17 @@ namespace Bridge.WebApp.Pages.Admin
         {
             place.ShowOpeningTimes = !place.ShowOpeningTimes;
         }
+
+        private void EditPlace_Click(PlaceListModel place)
+        {
+            NavManager.NavigateTo(PageRoutes.Admin.PlaceUpdate.AddRouteParam("{PlaceId:long}", place.Id));
+        }
+
+        private void ManageProduct_Click(PlaceListModel place)
+        {
+            NavManager.NavigateTo(PageRoutes.Admin.PlaceProductList.AddRouteParam("{PlaceId:long}", place.Id));
+        }
+        
+
     }
 }
