@@ -70,13 +70,4 @@ namespace Bridge.WebApp.Api
 
     }
 
-    /// <summary>
-    /// 응답데이터가 없을 때 사용하는 결과 객체
-    /// </summary>
-    public class ApiResult : ApiResult<Void>
-    {
-        protected ApiResult(bool success, Void data, string? error = null, ApiError? apiError = null) : base(success, data, error, apiError)
-        {
-        }
-    }
 }
