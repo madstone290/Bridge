@@ -1,5 +1,5 @@
 using Bridge.Application.Places.Commands;
-using Bridge.WebApp.Api.ApiClients;
+using Bridge.WebApp.Api.ApiClients.Admin;
 using Bridge.WebApp.Pages.Admin.Models;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
@@ -26,7 +26,7 @@ namespace Bridge.WebApp.Pages.Admin.Components
         public long PlaceId { get; set; } 
 
         [Inject] 
-        public PlaceApiClient PlaceApiClient { get; set; } = null!;
+        public AdminPlaceApiClient PlaceApiClient { get; set; } = null!;
 
         protected override async Task OnInitializedAsync()
         {

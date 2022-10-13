@@ -4,14 +4,14 @@ using Bridge.Shared;
 using Bridge.Shared.Extensions;
 using Bridge.WebApp.Services.Identity;
 
-namespace Bridge.WebApp.Api.ApiClients
+namespace Bridge.WebApp.Api.ApiClients.Admin
 {
-    public class ProductApiClient : JwtApiClient
+    public class AdminProductApiClient : JwtApiClient
     {
-        public ProductApiClient(HttpClient httpClient, IAuthService authService) : base(httpClient, authService)
+        public AdminProductApiClient(HttpClient httpClient, IAuthService authService) : base(httpClient, authService)
         {
         }
-        
+
         /// <summary>
         /// 아이디로 제품 조회
         /// </summary>
@@ -19,7 +19,7 @@ namespace Bridge.WebApp.Api.ApiClients
         /// <returns>장소</returns>
         public async Task<ApiResult<ProductReadModel?>> GetProductById(long id)
         {
-            return await SendAsync<ProductReadModel?>(HttpMethod.Get, ApiRoutes.Products.Get.AddRouteParam("{id}", id));
+            return await SendAsync<ProductReadModel?>(HttpMethod.Get, ApiRoutes.Admin.Products.Get.AddRouteParam("{id}", id));
         }
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace Bridge.WebApp.Api.ApiClients
         /// <returns></returns>
         public async Task<ApiResult<List<ProductReadModel>>> GetProductList(long placeId)
         {
-            return await SendAsync<List<ProductReadModel>>(HttpMethod.Get, ApiRoutes.Products.GetList
+            return await SendAsync<List<ProductReadModel>>(HttpMethod.Get, ApiRoutes.Admin.Products.GetList
                 .AddQueryParam("placeId", placeId));
         }
 
@@ -40,7 +40,7 @@ namespace Bridge.WebApp.Api.ApiClients
         /// <returns></returns>
         public async Task<ApiResult<long>> CreateProduct(CreateProductCommand command)
         {
-            return await SendAsync<long>(HttpMethod.Post, ApiRoutes.Products.Create, command);
+            return await SendAsync<long>(HttpMethod.Post, ApiRoutes.Admin.Products.Create, command);
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace Bridge.WebApp.Api.ApiClients
         /// <returns></returns>
         public async Task<ApiResult<Void>> UpdateProduct(UpdateProductCommand command)
         {
-            return await SendAsync<Void>(HttpMethod.Put, ApiRoutes.Products.Update.AddRouteParam("id", command.ProductId), command);
+            return await SendAsync<Void>(HttpMethod.Put, ApiRoutes.Admin.Products.Update.AddRouteParam("id", command.ProductId), command);
         }
 
     }

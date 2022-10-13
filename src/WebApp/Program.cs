@@ -2,6 +2,7 @@ using Blazored.LocalStorage;
 using Bridge.Infrastructure.Extensions;
 using Bridge.Shared.Constants;
 using Bridge.WebApp.Api.ApiClients;
+using Bridge.WebApp.Api.ApiClients.Admin;
 using Bridge.WebApp.Api.ApiClients.Identity;
 using Bridge.WebApp.Services;
 using Bridge.WebApp.Services.Identity;
@@ -75,8 +76,9 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<AuthenticationStateProvider>(sp => (AuthService)sp.GetRequiredService<IAuthService>());
 
 builder.Services.AddScoped<UserApiClient>();
+builder.Services.AddScoped<AdminPlaceApiClient>();
+builder.Services.AddScoped<AdminProductApiClient>();
 builder.Services.AddScoped<PlaceApiClient>();
-builder.Services.AddScoped<ProductApiClient>();
 
 var app = builder.Build();
 

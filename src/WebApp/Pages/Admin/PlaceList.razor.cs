@@ -1,6 +1,6 @@
 using Bridge.Domain.Places.Entities;
 using Bridge.Shared.Extensions;
-using Bridge.WebApp.Api.ApiClients;
+using Bridge.WebApp.Api.ApiClients.Admin;
 using Bridge.WebApp.Models;
 using Microsoft.AspNetCore.Components;
 
@@ -24,7 +24,7 @@ namespace Bridge.WebApp.Pages.Admin
         private string _searchString = string.Empty;
 
         [Inject]
-        public PlaceApiClient PlaceApiClient { get; set; } = null!;
+        public AdminPlaceApiClient PlaceApiClient { get; set; } = null!;
 
         /// <summary>
         /// 입력된 검색어로 장소를 검색한다.
