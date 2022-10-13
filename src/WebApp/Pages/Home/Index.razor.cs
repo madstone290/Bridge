@@ -1,6 +1,5 @@
 using Bridge.Application.Places.Queries;
 using Bridge.WebApp.Api.ApiClients;
-using Bridge.WebApp.Extensions;
 using Bridge.WebApp.Models;
 using Bridge.WebApp.Pages.Home.Components;
 using Bridge.WebApp.Services.Maps;
@@ -96,7 +95,7 @@ namespace Bridge.WebApp.Pages.Home
             };
             var result = await PlaceApiClient.SearchPlaces(query);
 
-            if (!Snackbar.CheckSuccess(result))
+            if (!ValidationService.Validate(result))
                 return;
 
             _placeList.Clear();

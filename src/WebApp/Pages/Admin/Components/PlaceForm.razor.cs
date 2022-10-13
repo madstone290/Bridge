@@ -1,6 +1,5 @@
 using Bridge.Application.Places.Commands;
 using Bridge.WebApp.Api.ApiClients;
-using Bridge.WebApp.Extensions;
 using Bridge.WebApp.Pages.Admin.Models;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
@@ -33,20 +32,11 @@ namespace Bridge.WebApp.Pages.Admin.Components
         {
             if(FormMode == FormMode.Update)
             {
-                var placeResponse = await PlaceApiClient.GetPlaceById(PlaceId);
-                if (!placeResponse.Success)
-                {
-                    Snackbar.Add(placeResponse.Error, Severity.Error);
+                var result = await PlaceApiClient.GetPlaceById(PlaceId);
+                if (!ValidationService.Validate(result))
                     return;
-                }
-
-                var placeDto = placeResponse.Data;
-                if (placeDto == null)
-                {
-                    Snackbar.Add("데이터가 없습니다", Severity.Error);
-                    return;
-                }
-
+                
+                var placeDto = result.Data!;
                 _place.Id = placeDto.Id;
                 _place.Type = placeDto.Type;
                 _place.Name = placeDto.Name;
@@ -100,7 +90,7 @@ namespace Bridge.WebApp.Pages.Admin.Components
                     };
                     var result = await PlaceApiClient.CreatePlace(command);
 
-                    if (Snackbar.CheckSuccess(result))
+                    if (ValidationService.Validate(result))
                         NavManager.NavigateTo(PageRoutes.Admin.PlaceList);
                 }
                 else
@@ -129,7 +119,7 @@ namespace Bridge.WebApp.Pages.Admin.Components
                     };
                     var result = await PlaceApiClient.UpdatePlace(command);
 
-                    if (Snackbar.CheckSuccess(result))
+                    if (ValidationService.Validate(result))
                         NavManager.NavigateTo(PageRoutes.Admin.PlaceList);
                 }
 

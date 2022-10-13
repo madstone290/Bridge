@@ -1,7 +1,6 @@
 using Bridge.Application.Places.ReadModels;
 using Bridge.Shared.Extensions;
 using Bridge.WebApp.Api.ApiClients;
-using Bridge.WebApp.Extensions;
 using Bridge.WebApp.Pages.Admin.Models;
 using Microsoft.AspNetCore.Components;
 
@@ -64,23 +63,17 @@ namespace Bridge.WebApp.Pages.Admin
 
             await Task.WhenAll(placeTask, productTask);
 
-            var placeResonse = placeTask.Result;
-            var productResponse = productTask.Result;
-            
-            if (!Snackbar.CheckSuccess(placeResonse, productResponse))
+            var placeResult = placeTask.Result;
+            var productResult = productTask.Result;
+
+            if (!ValidationService.Validate(placeTask.Result) || !ValidationService.Validate(productResult))
                 return;
 
-            var placeDto = placeResonse.Data;
-            var productListDto = productResponse.Data;
-            if (placeDto == null || productListDto == null)
-            {
-                Snackbar.Add("데이터가 없습니다", MudBlazor.Severity.Warning);
-                return;
-            }
-
+            var placeDto = placeResult.Data!;
             _place.Name = placeDto.Name;
             _place.Address = placeDto.Address;
 
+            var productListDto = productResult.Data!;
             _products.Clear();
             _products.AddRange(productListDto.Select(x => ProductModel.Create(x)));
         }

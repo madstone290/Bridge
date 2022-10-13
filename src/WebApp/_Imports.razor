@@ -9,9 +9,11 @@
 @using Bridge.WebApp
 @using Bridge.WebApp.Shared
 @using Bridge.WebApp.Components
+@using Bridge.WebApp.Services
 @using MudBlazor;
 
 @attribute [Authorize]
 @inject NavigationManager NavManager;
 @inject ISnackbar Snackbar;
+@inject IApiResultValidationService ValidationService;
 @inject IDialogService DialogService;

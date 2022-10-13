@@ -1,7 +1,6 @@
 using Bridge.Domain.Places.Entities;
 using Bridge.Shared.Extensions;
 using Bridge.WebApp.Api.ApiClients;
-using Bridge.WebApp.Extensions;
 using Bridge.WebApp.Models;
 using Microsoft.AspNetCore.Components;
 
@@ -51,12 +50,13 @@ namespace Bridge.WebApp.Pages.Admin
             if (!_selectedPlaceType.HasValue)
                 return;
 
-            var places = await PlaceApiClient.GetPlaceList(_selectedPlaceType.Value);
-            if (!Snackbar.CheckSuccess(places))
+            var result = await PlaceApiClient.GetPlaceList(_selectedPlaceType.Value);
+            if (!ValidationService.Validate(result))
                 return;
 
+            var placeList = result.Data!;
             _places.Clear();
-            _places.AddRange(places.Data!.Select(x => PlaceListModel.ToPlaceModel(x)));
+            _places.AddRange(placeList.Select(x => PlaceListModel.ToPlaceModel(x)));
         }
 
         private void ToggleShowOpeningTime_Click(PlaceListModel place)

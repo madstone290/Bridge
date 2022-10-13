@@ -1,7 +1,6 @@
 using Bridge.Application.Products.Commands;
 using Bridge.Shared.Extensions;
 using Bridge.WebApp.Api.ApiClients;
-using Bridge.WebApp.Extensions;
 using Bridge.WebApp.Pages.Admin.Models;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
@@ -45,7 +44,7 @@ namespace Bridge.WebApp.Pages.Admin.Components
             else if(FormMode == FormMode.Update)
             {
                 var productResponse = await ProductApiClient.GetProductById(ProductId);
-                if (!Snackbar.CheckSuccess(productResponse))
+                if (!ValidationService.Validate(productResponse))
                     return;
 
                 var productDto = productResponse.Data!;
@@ -84,7 +83,7 @@ namespace Bridge.WebApp.Pages.Admin.Components
                     };
                     var result = await ProductApiClient.CreateProduct(command);
 
-                    if (Snackbar.CheckSuccess(result))
+                    if (ValidationService.Validate(result))
                         NavManager.NavigateTo(PageRoutes.Admin.PlaceProductList.AddRouteParam("PlaceId", PlaceId));
                 }
                 else
@@ -98,7 +97,7 @@ namespace Bridge.WebApp.Pages.Admin.Components
                     };
                     var result = await ProductApiClient.UpdateProduct(command);
 
-                    if (Snackbar.CheckSuccess(result))
+                    if (ValidationService.Validate(result))
                         NavManager.NavigateTo(PageRoutes.Admin.PlaceProductList.AddRouteParam("PlaceId", PlaceId));
                 }
 
