@@ -28,8 +28,13 @@
                     </MudItem>
                     <MudItem xs="12">
                         <AdvTextField @bind-Value="_place.BaseAddress"
-                                      Label="주소"
+                                      Label="기본주소"
                                       Validation="@(_validator.PropertyValidation(x=> x.BaseAddress))" />
+                    </MudItem>
+                     <MudItem xs="12">
+                        <AdvTextField @bind-Value="_place.DetailAddress"
+                                      Label="상세주소"
+                                      Validation="@(_validator.PropertyValidation(x=> x.DetailAddress))" />
                     </MudItem>
                     <MudItem xs="12">
                         <AdvTextField @bind-Value="_place.ContactNumber"
