@@ -12,7 +12,8 @@ namespace Bridge.WebApp.Models
             {
                 Id = x.Id,
                 Name = x.Name,
-                Address = x.Address.BaseAddress,
+                BaseAddress = x.Address.BaseAddress,
+                DetailAddress = x.Address.DetailAddress,
                 Latitude = x.Location.Latitude,
                 Longitude = x.Location.Longitude,
                 Distance = x.Distance,
@@ -56,7 +57,17 @@ namespace Bridge.WebApp.Models
         /// <summary>
         /// 주소
         /// </summary>
-        public string Address { get; set; } = string.Empty;
+        public string Address => BaseAddress + " " + DetailAddress;
+
+        /// <summary>
+        /// 기본주소
+        /// </summary>
+        public string BaseAddress { get; set; } = string.Empty;
+
+        /// <summary>
+        /// 상세주소
+        /// </summary>
+        public string DetailAddress { get; set; } = string.Empty;
 
         /// <summary>
         /// 거리
