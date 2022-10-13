@@ -37,6 +37,13 @@ namespace Bridge.WebApp.Api
         public static ApiResult<TData> BadRequestResult(ApiError errorContent) => new(false, default, errorContent.Message, errorContent);
 
         /// <summary>
+        /// 400에러
+        /// </summary>
+        /// <param name="error">에러 메시지</param>
+        /// <returns></returns>
+        public static ApiResult<TData> BadRequestResult(string error) => new(false, default, error);
+
+        /// <summary>
         /// 401권한없음 
         /// </summary>
         /// <returns></returns>
