@@ -16,7 +16,7 @@ namespace Bridge.Infrastructure.Services
             _coordinateService = coordinateService;
         }
 
-        public async Task<Tuple<Address, Location>> CreateAddressLocationAsync(string baseAddress, string details)
+        public async Task<Tuple<Address, Location>> CreateAddressLocationAsync(string baseAddress, string detailAddress)
         {
             var responseBody = await _geoCodeApi.GetAddressInfo(baseAddress);
             if (responseBody.Status != NaverMaps.Data.GeoCodeResponseBody.StatusOk)
@@ -28,7 +28,7 @@ namespace Bridge.Infrastructure.Services
             var addressInfo = responseBody.Address;
             var address = Address.Create(addressInfo.RoadAddress,
                                   addressInfo.JibunAddress,
-                                  details,
+                                  detailAddress,
                                   addressInfo.SIDO,
                                   addressInfo.SIGUGUN,
                                   addressInfo.DONGMYUN,

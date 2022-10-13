@@ -5,7 +5,7 @@ namespace Bridge.IntegrationTests.Config
 {
     public class TestAddressLocationService : IAddressLocationService
     {
-        public Task<Tuple<Address, Location>> CreateAddressLocationAsync(string baseAddress, string details)
+        public Task<Tuple<Address, Location>> CreateAddressLocationAsync(string baseAddress, string detailAddress)
         {
             var utmIndex = baseAddress.IndexOf("utm:");
             var easting = 100000d;
@@ -19,7 +19,7 @@ namespace Bridge.IntegrationTests.Config
             }
            
 
-            var address = Address.Create(baseAddress, baseAddress, details, "", "", "", "", "");
+            var address = Address.Create(baseAddress, baseAddress, detailAddress, "", "", "", "", "");
             var location = Location.Create(32.0000, 127.0000, easting, northing);
 
             return Task.FromResult(new Tuple<Address, Location>(address, location));

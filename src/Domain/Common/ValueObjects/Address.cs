@@ -10,13 +10,13 @@ namespace Bridge.Domain.Common.ValueObjects
 
         public static Address Empty => new();
 
-        public static Address Create(string roadAddress, string jibunAddress, string details, string siDo, string siGuGun, string eupMyeonDong, string roadName, string postalCode)
+        public static Address Create(string roadAddress, string jibunAddress, string detailAddress, string siDo, string siGuGun, string eupMyeonDong, string roadName, string postalCode)
         {
             return new Address()
             {
                 RoadAddress = roadAddress,
                 JibunAddress = jibunAddress,
-                Details = details,
+                DetailAddress = detailAddress,
                 SiDo = siDo,
                 SiGuGun = siGuGun,
                 EupMyeonDong = eupMyeonDong,
@@ -38,7 +38,7 @@ namespace Bridge.Domain.Common.ValueObjects
         /// <summary>
         /// 상세주소
         /// </summary>
-        public string Details { get; set; } = string.Empty;
+        public string DetailAddress { get; set; } = string.Empty;
 
         /// <summary>
         /// 시/도
@@ -69,7 +69,7 @@ namespace Bridge.Domain.Common.ValueObjects
         {
             yield return RoadAddress;
             yield return JibunAddress;
-            yield return Details;
+            yield return DetailAddress;
         }
 
     }

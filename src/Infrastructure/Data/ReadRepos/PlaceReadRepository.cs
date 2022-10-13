@@ -21,7 +21,7 @@ namespace Bridge.Infrastructure.Data.ReadRepos
             Address = new AddressDto()
             {
                 BaseAddress = x.Address.RoadAddress,
-                DetailAddress = x.Address.Details
+                DetailAddress = x.Address.DetailAddress
             },
             Location = new PlaceLocationDto()
             {
@@ -64,7 +64,7 @@ namespace Bridge.Infrastructure.Data.ReadRepos
                     Address = new AddressDto()
                     {
                         BaseAddress = x.Address.RoadAddress,
-                        DetailAddress = x.Address.Details
+                        DetailAddress = x.Address.DetailAddress
                     },
                     Location = new PlaceLocationDto()
                     {
