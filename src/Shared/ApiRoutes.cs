@@ -13,6 +13,28 @@ namespace Bridge.Shared
     /// </summary>
     public static class ApiRoutes
     {
+        public static class Admin
+        {
+            public static class Products
+            {
+                public const string Get = "/api/Admin/Products/{id}";
+                public const string GetList = "/api/Admin/Products";
+                public const string Create = "/api/Admin/Products";
+                public const string Update = "/api/Admin/Products/{id}";
+            }
+
+            public static class Places
+            {
+                public const string Get = "/api/Admin/Places/{id}";
+                public const string GetList = "/api/Admin/Places";
+                public const string Search = "/api/Admin/Places/Search";
+                public const string Create = "/api/Admin/Places";
+                public const string Update = "/api/Admin/Places/{id}";
+                public const string AddOpeningTime = "/api/Admin/Places/{id}/OpeningTimes";
+                public const string UpdateCategories = "/api/Admin/Places/{id}/Categories";
+            }
+        }
+
         public static class Users
         {
             public const string Register = "/api/Users/Register";
