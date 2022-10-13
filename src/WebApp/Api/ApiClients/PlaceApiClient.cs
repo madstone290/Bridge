@@ -55,6 +55,15 @@ namespace Bridge.WebApp.Api.ApiClients
             return await SendAsync<long>(HttpMethod.Post, ApiRoutes.Places.Create, command);
         }
 
+        /// <summary>
+        /// 장소를 수정한다
+        /// </summary>
+        /// <param name="command">장소</param>
+        /// <returns></returns>
+        public async Task<ApiResult<Void>> UpdatePlace(UpdatePlaceCommand command)
+        {
+            return await SendAsync<Void>(HttpMethod.Put, ApiRoutes.Places.Update.AddRouteParam("id", command.Id), command);
+        }
 
     }
 }
