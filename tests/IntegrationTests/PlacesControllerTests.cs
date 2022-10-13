@@ -23,98 +23,15 @@ namespace Bridge.IntegrationTests
             _apiClient = apiTestFactory.ApiClient;
         }
 
-        public static AddressDto AddressDto(string? roadAddress = null, string? details = null)
+        public static AddressDto AddressDto(string? roadAddress = null, string? detailAddress = null)
         {
             return new()
             {
                 BaseAddress = roadAddress ?? "대구시 수성구 청수로 25길 118-10",
-                DetailAddress = details ?? "아테네 1440호"
+                DetailAddress = detailAddress ?? "아테네 1440호"
             };
         }
-
-        [Fact]
-        public async Task Create_Place_Return_Ok_With_Id()
-        {
-            // Arrange
-            var command = new CreatePlaceCommand()
-            {
-                Name = Guid.NewGuid().ToString(),
-                Address = AddressDto(),
-                Categories = new List<PlaceCategory>()
-                {
-                    PlaceCategory.Restaurant,
-                    PlaceCategory.Cafeteria,
-                    PlaceCategory.Pharmacy
-                }
-            };
-
-            // Act
-            var request = new HttpRequestMessage(HttpMethod.Post, ApiRoutes.Places.Create)
-            {
-                Content = JsonContent.Create(command)
-            };
-            var response = await _client.SendAsAdminAsync(request);
-
-            // Assert
-            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-            var id = await response.Content.ReadFromJsonAsync<long>();
-            id.Should().BeGreaterThan(0);
-        }
-
-        [Fact]
-        public async Task Consumer_Cannot_Create_Place()
-        {
-            // Arrange
-            var command = new CreatePlaceCommand()
-            {
-                Name = Guid.NewGuid().ToString(),
-                Address = AddressDto(),
-                Categories = new List<PlaceCategory>()
-                {
-                    PlaceCategory.Restaurant,
-                    PlaceCategory.Cafeteria,
-                    PlaceCategory.Pharmacy
-                }
-            };
-
-            // Act
-            var request = new HttpRequestMessage(HttpMethod.Post, ApiRoutes.Places.Create)
-            {
-                Content = JsonContent.Create(command)
-            };
-            var response = await _client.SendAsConsumerAsync(request);
-
-            // Assert
-            response.StatusCode.Should().Be(System.Net.HttpStatusCode.Forbidden);
-        }
-
-        [Fact]
-        public async Task NoAuthentication_Cannot_Create_Place()
-        {
-            // Arrange
-            var command = new CreatePlaceCommand()
-            {
-                Name = Guid.NewGuid().ToString(),
-                Address = AddressDto(),
-                Categories = new List<PlaceCategory>()
-                {
-                    PlaceCategory.Restaurant,
-                    PlaceCategory.Cafeteria,
-                    PlaceCategory.Pharmacy
-                }
-            };
-
-            // Act
-            var request = new HttpRequestMessage(HttpMethod.Post, ApiRoutes.Places.Create)
-            {
-                Content = JsonContent.Create(command)
-            };
-            var response = await _client.SendAsync(request);
-
-            // Assert
-            response.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
-        }
-
+      
         [Fact]
         public async Task Get_Place_Return_Ok_With_Content()
         {
@@ -153,22 +70,17 @@ namespace Bridge.IntegrationTests
                     }
                 }
             };
-            var createRequest = new HttpRequestMessage(HttpMethod.Post, ApiRoutes.Places.Create)
-            {
-                Content = JsonContent.Create(command)
-            };
-            var createResponse = await _client.SendAsAdminAsync(createRequest);
+            var placeId = await _apiClient.CreatePlaceAsync(command);
 
             // Act
-            var id = await createResponse.Content.ReadFromJsonAsync<long>();
-            var request = new HttpRequestMessage(HttpMethod.Get, ApiRoutes.Places.Get.Replace("{id}", $"{id}"));
+            var request = new HttpRequestMessage(HttpMethod.Get, ApiRoutes.Places.Get.Replace("{id}", $"{placeId}"));
             var response = await _client.SendAsAdminAsync(request);
 
             // Assert
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
             var place = await response.Content.ReadFromJsonAsync<PlaceReadModel>() ?? default!;
             place.Should().NotBeNull();
-            place.Id.Should().Be(id);
+            place.Id.Should().Be(placeId);
             place.Name.Should().Be(command.Name);
             place.ContactNumber.Should().Be(command.ContactNumber);
             place.Address.BaseAddress.Should().NotBeEmpty();
@@ -181,126 +93,6 @@ namespace Bridge.IntegrationTests
             place.OpeningTimes.Should().ContainEquivalentOf(command.OpeningTimes[1]);
             place.OpeningTimes.Should().ContainEquivalentOf(command.OpeningTimes[2]);
 
-        }
-
-        [Theory]
-        [InlineData(DayOfWeek.Sunday, true, false, null, null, null, null)]
-        [InlineData(DayOfWeek.Monday, false, true, null, null, null, null)]
-        [InlineData(DayOfWeek.Tuesday, false, false, 6, 18, null, null)]
-        [InlineData(DayOfWeek.Wednesday, false, false, 6, 18, 15, 16)]
-        public async Task Add_OpeningTime_Return_Ok(DayOfWeek day, bool dayoff, bool twentyFourHours, double? openTime, double? closeTime,
-            double? breakStartTime, double? breakEndTime)
-        {
-            // Arrange
-            var placeId = await _apiClient.CreatePlaceAsync();
-            var command = new AddOpeningTimeCommand()
-            {
-                PlaceId = placeId,
-                OpeningTime = new OpeningTimeDto()
-                {
-                    Day = day,
-                    Dayoff = dayoff,
-                    TwentyFourHours = twentyFourHours,
-                    OpenTime = openTime.HasValue ? TimeSpan.FromHours(openTime.Value) : null,
-                    CloseTime = closeTime.HasValue ? TimeSpan.FromHours(closeTime.Value) : null,
-                    BreakStartTime = breakStartTime.HasValue ? TimeSpan.FromHours(breakStartTime.Value) : null,
-                    BreakEndTime = breakEndTime.HasValue ? TimeSpan.FromHours(breakEndTime.Value) : null,
-                }
-            };
-
-            // Act
-            var addRequest = new HttpRequestMessage(HttpMethod.Post, ApiRoutes.Places.AddOpeningTime.Replace("{id}", $"{placeId}"))
-            {
-                Content = JsonContent.Create(command)
-            };
-            var addResponse = await _client.SendAsAdminAsync(addRequest);
-
-            var getRequest = new HttpRequestMessage(HttpMethod.Get, ApiRoutes.Places.Get.Replace("{id}", $"{placeId}"));
-            var getResponse = await _client.SendAsAdminAsync(getRequest);
-
-            // Assert
-            addResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-            var place = await getResponse.Content.ReadFromJsonAsync<PlaceReadModel>() ?? null!;
-            place.OpeningTimes.Should().ContainEquivalentOf(command.OpeningTime);
-        }
-
-        [Fact]
-        public async Task Update_Categories_Return_Ok()
-        {
-            // Arrange
-            var placeId = await _apiClient.CreatePlaceAsync();
-            var command = new UpdatePlaceCategoryCommand()
-            {
-                PlaceId = placeId,
-                Categories = new List<PlaceCategory>() { PlaceCategory.Restaurant, PlaceCategory.Cafeteria, PlaceCategory.PetHospital }
-            };
-
-            // Act
-            var addRequest = new HttpRequestMessage(HttpMethod.Post, ApiRoutes.Places.UpdateCategories.Replace("{id}", $"{placeId}"))
-            {
-                Content = JsonContent.Create(command)
-            };
-            var addResponse = await _client.SendAsAdminAsync(addRequest);
-
-            var getRequest = new HttpRequestMessage(HttpMethod.Get, ApiRoutes.Places.Get.Replace("{id}", $"{placeId}"));
-            var getResponse = await _client.SendAsAdminAsync(getRequest);
-
-            // Assert
-            addResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-            var place = await getResponse.Content.ReadFromJsonAsync<PlaceReadModel>() ?? null!;
-            place.Categories.Should().Contain(command.Categories);
-        }
-
-        [Fact]
-        public async Task Get_Places_By_PlaceType_Return_Ok_With_Content()
-        {
-            // Arrange
-            var command1 = new CreatePlaceCommand()
-            {
-                Name = Guid.NewGuid().ToString(),
-                Type = PlaceType.Cafeteria,
-                Address = AddressDto()
-            };
-            var command2 = new CreatePlaceCommand()
-            {
-                Name = Guid.NewGuid().ToString(),
-                Type = PlaceType.Cafeteria,
-                Address = AddressDto()
-            };
-            var command3 = new CreatePlaceCommand()
-            {
-                Name = Guid.NewGuid().ToString(),
-                Type = PlaceType.Restaurant,
-                Address = AddressDto()
-            };
-            var command4 = new CreatePlaceCommand()
-            {
-                Name = "다라바",
-                Type = PlaceType.Restaurant,
-                Address = AddressDto()
-            };
-            await _apiClient.CreatePlaceAsync(command1);
-            await _apiClient.CreatePlaceAsync(command2);
-            await _apiClient.CreatePlaceAsync(command3);
-            await _apiClient.CreatePlaceAsync(command4);
-            var placeType = PlaceType.Cafeteria;
-
-            // Act
-            var request = new HttpRequestMessage(HttpMethod.Get, ApiRoutes.Places.GetList.AddQueryParam("placeType", placeType.ToString()));
-            var response = await _client.SendAsAdminAsync(request);
-
-            // Assert
-            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-            var places = await response.Content.ReadFromJsonAsync<List<PlaceReadModel>>() ?? default!;
-            places.Should().Contain(x => x.Name == command1.Name);
-            places.Should().Contain(x => x.Name == command2.Name);
-            places.Should().NotContain(x => x.Name == command3.Name);
-            places.Should().NotContain(x => x.Name == command4.Name);
-
-            foreach (var place in places)
-            {
-                place.Type.Should().Be(placeType);
-            }
         }
 
         [Fact]
@@ -361,62 +153,7 @@ namespace Bridge.IntegrationTests
             }
         }
 
-        [Theory]
-        [InlineData("킴 미용실", "대구광역시 수성구 황금동 887-4", "3층", "053-442-2345", "Restaurant", "Cafeteria", false, false, "12:00", "20:00", null, null)]
-        [InlineData("다이소 황금점", "대구광역시 수성구 청수로 81", "다이소", "053-411-2345", "Restaurant", "PetStore", true, false, null, null, null, null)]
-        public async Task Update_Place_Return_Ok(string name, string baseAddress, string detailAddress,
-            string contactNumber, string category1, string category2, bool dayoff, bool twentyFourHours, string openTime,
-            string closeTime, string? breakStartTime, string? breakEndTime)
-        {
-            // Arrange
-            var placeId = await _apiClient.CreatePlaceAsync();
-            var command = new UpdatePlaceCommand()
-            {
-                Id = placeId,
-                Name = name,
-                Address = new AddressDto()
-                {
-                    BaseAddress = baseAddress,
-                    DetailAddress = detailAddress
-                },
-                ContactNumber = contactNumber,
-                Categories = new List<PlaceCategory>() { Enum.Parse<PlaceCategory>(category1), Enum.Parse<PlaceCategory>(category2) },
-                OpeningTimes = new List<OpeningTimeDto>()
-                {
-                    new OpeningTimeDto(){
-                        Day = DayOfWeek.Monday,
-                        Dayoff = dayoff,
-                        TwentyFourHours = twentyFourHours,
-                        OpenTime = openTime == null ? null :  TimeSpan.Parse(openTime),
-                        CloseTime =  closeTime == null ? null : TimeSpan.Parse(closeTime),
-                        BreakStartTime = breakStartTime == null ? null : TimeSpan.Parse(breakStartTime),
-                        BreakEndTime = breakEndTime == null ? null :TimeSpan.Parse(breakEndTime)
-                    }
-                }
-            };
-
-            // Act
-            var updateRequest = new HttpRequestMessage(HttpMethod.Put, ApiRoutes.Places.Update.Replace("{id}", $"{placeId}"))
-            {
-                Content = JsonContent.Create(command)
-            };
-            var updateResponse = await _client.SendAsAdminAsync(updateRequest);
-
-            var getRequest = new HttpRequestMessage(HttpMethod.Get, ApiRoutes.Places.Get.Replace("{id}", $"{placeId}"));
-            var getResponse = await _client.SendAsAdminAsync(getRequest);
-
-            // Assert
-            updateResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-            var place = await getResponse.Content.ReadFromJsonAsync<PlaceReadModel>() ?? null!;
-            place.Categories.Should().Contain(command.Categories);
-            
-            place.Name.Should().Be(command.Name);
-            place.Address.BaseAddress.Should().NotBeEmpty();
-            place.Address.DetailAddress.Should().Be(command.Address.DetailAddress);
-            place.ContactNumber.Should().Be(command.ContactNumber);
-            place.Categories.Should().BeEquivalentTo(command.Categories);
-            place.OpeningTimes.Should().ContainEquivalentOf(command.OpeningTimes.First());
-        }
+      
     }
 }
 
