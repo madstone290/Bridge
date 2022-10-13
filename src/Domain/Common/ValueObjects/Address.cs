@@ -69,6 +69,7 @@ namespace Bridge.Domain.Common.ValueObjects
         {
             yield return RoadAddress;
             yield return JibunAddress;
+            yield return Details;
         }
 
     }
