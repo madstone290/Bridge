@@ -6,11 +6,11 @@ using System.Net.Http.Json;
 
 namespace Bridge.IntegrationTests.Config.ApiClients
 {
-    public class ProductApiClient
+    public class AdminProductApiClient
     {
         public TestClient Client { get; }
 
-        public ProductApiClient(TestClient client)
+        public AdminProductApiClient(TestClient client)
         {
             Client = client;
         }
@@ -23,7 +23,7 @@ namespace Bridge.IntegrationTests.Config.ApiClients
         /// <returns></returns>
         public async Task<long> CreateProductAsync(CreateProductCommand command)
         {
-            var request = new HttpRequestMessage(HttpMethod.Post, ApiRoutes.Products.Create)
+            var request = new HttpRequestMessage(HttpMethod.Post, ApiRoutes.Admin.Products.Create)
             {
                 Content = JsonContent.Create(command)
             };
@@ -33,7 +33,7 @@ namespace Bridge.IntegrationTests.Config.ApiClients
 
         public async Task<ProductReadModel?> GetProductAsync(GetProductByIdQuery query)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, ApiRoutes.Products.Get.Replace("{id}", $"{query.Id}"));
+            var request = new HttpRequestMessage(HttpMethod.Get, ApiRoutes.Admin.Products.Get.Replace("{id}", $"{query.Id}"));
             var response = await Client.SendAsAdminAsync(request);
             return await response.Content.ReadFromJsonAsync<ProductReadModel>();
         }

@@ -99,8 +99,8 @@ namespace Bridge.IntegrationTests.Config
 
             testClient = new TestClient(httpClient);
 
-            var placeApiClient = new PlaceApiClient(testClient);
-            var productApiClient = new ProductApiClient(testClient);
+            var placeApiClient = new AdminPlaceApiClient(testClient);
+            var productApiClient = new AdminProductApiClient(testClient);
             apiClient = new ApiClient(placeApiClient, productApiClient);
 
          

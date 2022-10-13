@@ -14,10 +14,10 @@ namespace Bridge.IntegrationTests.Config
     /// </summary>
     public class ApiClient
     {
-        public PlaceApiClient PlaceApiClient { get; }
-        public ProductApiClient ProductApiClient { get; }
+        public AdminPlaceApiClient PlaceApiClient { get; }
+        public AdminProductApiClient ProductApiClient { get; }
 
-        public ApiClient(PlaceApiClient placeApiClient, ProductApiClient productApiClient)
+        public ApiClient(AdminPlaceApiClient placeApiClient, AdminProductApiClient productApiClient)
         {
             PlaceApiClient = placeApiClient;
             ProductApiClient = productApiClient;

@@ -4,18 +4,18 @@ using System.Net.Http.Json;
 
 namespace Bridge.IntegrationTests.Config.ApiClients
 {
-    public class PlaceApiClient
+    public class AdminPlaceApiClient
     {
         public TestClient Client { get; }
 
-        public PlaceApiClient(TestClient client)
+        public AdminPlaceApiClient(TestClient client)
         {
             Client = client;
         }
 
         public async Task<long> CreatePlaceAsync(CreatePlaceCommand command)
         {
-            var request = new HttpRequestMessage(HttpMethod.Post, ApiRoutes.Places.Create)
+            var request = new HttpRequestMessage(HttpMethod.Post, ApiRoutes.Admin.Places.Create)
             {
                 Content = JsonContent.Create(command)
             };

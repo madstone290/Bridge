@@ -32,16 +32,6 @@ namespace Bridge.Api.Controllers
             return Ok(place);
         }
 
-        [HttpGet]
-        [Route(ApiRoutes.Places.GetList)]
-        [ProducesResponseType(typeof(List<PlaceReadModel>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetPlaces([FromQuery] PlaceType placeType)
-        {
-            var query = new GetPlacesByPlaceTypeQuery() { PlaceType = placeType };
-            var places = await _mediator.Send(query);
-            return Ok(places);
-        }
-
         [HttpPost]
         [Route(ApiRoutes.Places.Search)]
         [ProducesResponseType(typeof(List<PlaceReadModel>), StatusCodes.Status200OK)]
@@ -50,50 +40,5 @@ namespace Bridge.Api.Controllers
             var places = await _mediator.Send(query);
             return Ok(places);
         }
-
-        [Authorize(Policy = PolicyConstants.AdminOrProvider)]
-        [HttpPost]
-        [Route(ApiRoutes.Places.Create)]
-        [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
-        public async Task<IActionResult> CreatePlace([FromBody] CreatePlaceCommand command)
-        {
-            var placeId = await _mediator.Send(command);
-            return Ok(placeId);
-        }
-
-        [Authorize(Policy = PolicyConstants.Admin)]
-        [HttpPut]
-        [Route(ApiRoutes.Places.Update)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> UpdatePlace([FromRoute] long id, [FromBody] UpdatePlaceCommand command)
-        {
-            command.Id = id;
-            await _mediator.Send(command);
-            return Ok();
-        }
-
-        [Authorize(Policy = PolicyConstants.AdminOrProvider)]
-        [HttpPost]
-        [Route(ApiRoutes.Places.AddOpeningTime)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> AddOpeningTime([FromRoute] long id, [FromBody] AddOpeningTimeCommand command)
-        {
-            command.PlaceId = id;
-            await _mediator.Send(command);
-            return Ok();
-        }
-
-        [Authorize(Policy = PolicyConstants.AdminOrProvider)]
-        [HttpPost]
-        [Route(ApiRoutes.Places.UpdateCategories)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> AddCategory([FromRoute] long id, [FromBody] UpdatePlaceCategoryCommand command)
-        {
-            command.PlaceId = id;
-            await _mediator.Send(command);
-            return Ok();
-        }
-
-
     }
 }
