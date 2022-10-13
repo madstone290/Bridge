@@ -2,10 +2,12 @@ using Bridge.Api.ActionFilters;
 using Bridge.Application;
 using Bridge.Infrastructure;
 using Bridge.Infrastructure.Identity.Services;
+using Bridge.Shared.ApiContract;
 using Bridge.Shared.Constants;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -29,6 +31,14 @@ builder.Services.AddControllers(options =>
     {
         noContentFormatter.TreatNullValueAsNoContent = false;
     }
+}).ConfigureApiBehaviorOptions(options =>
+{
+    options.InvalidModelStateResponseFactory = actionContext =>
+    {
+        var errorMessages = actionContext.ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage);
+        var error = new ApiError(string.Concat(errorMessages));
+        return new BadRequestObjectResult(error);
+    };
 });
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

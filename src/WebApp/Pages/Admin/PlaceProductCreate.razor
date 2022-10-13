@@ -1,8 +1,8 @@
 @using Bridge.WebApp.Pages.Admin.Components
-@attribute [Route(PageRoutes.Admin.PlaceUpdate)]
+@attribute [Route(PageRoutes.Admin.PlaceProductCreate)]
 @attribute [Authorize(Policy = Bridge.Shared.Constants.PolicyConstants.Admin)]
 
-<PlaceForm FormMode="FormMode.Update" PlaceId="PlaceId" />
+<ProductForm FormMode="FormMode.Create" PlaceId="PlaceId" />
 
 @code {
     [Parameter]

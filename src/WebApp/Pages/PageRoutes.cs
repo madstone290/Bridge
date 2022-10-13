@@ -16,9 +16,10 @@ namespace Bridge.WebApp.Pages
         {
             public const string Home = "/Admin";
             public const string PlaceList = "/Admin/Places";
-            public const string PlaceCreate = "/Admin/Place";
-            public const string PlaceUpdate = "/Admin/Places/{PlaceId:long}";
+            public const string PlaceCreate = "/Admin/Places/Create";
+            public const string PlaceUpdate = "/Admin/Places/{PlaceId:long}/Update";
             public const string PlaceProductList = "/Admin/Places/{PlaceId:long}/Products";
+            public const string PlaceProductCreate= "/Admin/Places/{PlaceId:long}/Products/Create";
         }
     }
 }

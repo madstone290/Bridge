@@ -14,5 +14,10 @@ namespace Bridge.Application.Places.Dtos
         /// 상세주소
         /// </summary>
         public string Details { get; set; } = string.Empty;
+
+        public override string ToString()
+        {
+            return string.Join(" ", BaseAddress, Details);
+        }
     }
 }

@@ -5,7 +5,7 @@ using Bridge.WebApp.Pages.Admin.Models;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
-namespace Bridge.WebApp.Pages.Admin
+namespace Bridge.WebApp.Pages.Admin.Components
 {
     public partial class PlaceForm
     {

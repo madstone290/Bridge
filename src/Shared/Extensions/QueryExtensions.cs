@@ -40,7 +40,8 @@ namespace Bridge.Shared.Extensions
         /// <returns></returns>
         public static string AddRouteParam(this string uri, string name, object value)
         {
-            var regex = new Regex($"{{{name}:?.*}}", RegexOptions.IgnoreCase);
+            var nameWithoutBracket = name.Replace("{", string.Empty).Replace("}", string.Empty);
+            var regex = new Regex($"{{{nameWithoutBracket}:?.*}}", RegexOptions.IgnoreCase);
             return regex.Replace(uri, value.ToString()!);
         }
 

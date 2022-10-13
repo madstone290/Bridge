@@ -1,7 +1,7 @@
 @using Bridge.Domain.Places.Entities
 @using Bridge.WebApp.Models
 @attribute [Route(PageRoutes.Admin.PlaceList)]
-@attribute [Authorize(Policy = Bridge.Shared.Constants.PolicyConstants.AdminOrProvider)]
+@attribute [Authorize(Policy = Bridge.Shared.Constants.PolicyConstants.Admin)]
 
 <div class="page">
     <MudToolBar>

@@ -1,5 +1,6 @@
+@using Bridge.WebApp.Pages.Admin.Components
 @attribute [Route(PageRoutes.Admin.PlaceCreate)]
-@attribute [Authorize(Policy = Bridge.Shared.Constants.PolicyConstants.AdminOrProvider)]
+@attribute [Authorize(Policy = Bridge.Shared.Constants.PolicyConstants.Admin)]
 
 <PlaceForm  FormMode="FormMode.Create" />
 @code {

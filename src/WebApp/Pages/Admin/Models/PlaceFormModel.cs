@@ -1,4 +1,3 @@
-﻿using Bridge.Application.Places.Dtos;
 using Bridge.Domain.Places.Entities;
 using FluentValidation;
 

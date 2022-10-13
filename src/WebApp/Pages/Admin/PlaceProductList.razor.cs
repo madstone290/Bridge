@@ -1,3 +1,5 @@
+using Bridge.Application.Places.ReadModels;
+using Bridge.Shared.Extensions;
 using Bridge.WebApp.Api.ApiClients;
 using Bridge.WebApp.Extensions;
 using Bridge.WebApp.Pages.Admin.Models;
@@ -12,6 +14,8 @@ namespace Bridge.WebApp.Pages.Admin
         /// </summary>
         private readonly List<ProductModel> _products = new();
 
+        private readonly PlaceReadModel _place = new();
+
         /// <summary>
         /// 검색어
         /// </summary>
@@ -21,8 +25,10 @@ namespace Bridge.WebApp.Pages.Admin
         /// 장소 아이디
         /// </summary>
         [Parameter]
-        [SupplyParameterFromQuery]
         public long PlaceId { get; set; }
+
+        [Inject]
+        public PlaceApiClient PlaceApiClient { get; set; } = null!;
 
         [Inject]
         public ProductApiClient ProductApiClient { get; set; } = null!;
@@ -48,17 +54,35 @@ namespace Bridge.WebApp.Pages.Admin
 
         private void Create_Click()
         {
-            //NavManager.NavigateTo(PageRoutes.Admin.ProductCreate);
+            NavManager.NavigateTo(PageRoutes.Admin.PlaceProductCreate.AddRouteParam("PlaceId", PlaceId));
         }
 
         private async Task Load_ClickAsync()
         {
-            var response = await ProductApiClient.GetProductList(PlaceId);
-            if (!Snackbar.CheckSuccess(response))
+            var placeTask = PlaceApiClient.GetPlaceById(PlaceId);
+            var productTask = ProductApiClient.GetProductList(PlaceId);
+
+            await Task.WhenAll(placeTask, productTask);
+
+            var placeResonse = placeTask.Result;
+            var productResponse = productTask.Result;
+            
+            if (!Snackbar.CheckSuccess(placeResonse, productResponse))
                 return;
 
+            var placeDto = placeResonse.Data;
+            var productListDto = productResponse.Data;
+            if (placeDto == null || productListDto == null)
+            {
+                Snackbar.Add("데이터가 없습니다", MudBlazor.Severity.Warning);
+                return;
+            }
+
+            _place.Name = placeDto.Name;
+            _place.Address = placeDto.Address;
+
             _products.Clear();
-            _products.AddRange(response.Data!.Select(x => ProductModel.Create(x)));
+            _products.AddRange(productListDto.Select(x => ProductModel.Create(x)));
         }
 
     }

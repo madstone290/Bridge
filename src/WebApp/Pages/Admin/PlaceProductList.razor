@@ -5,6 +5,19 @@
 @attribute [Authorize(Policy = Bridge.Shared.Constants.PolicyConstants.Admin)]
 
 <div class="page">
+    <MudGrid Spacing="1">
+        <MudItem xs="6" sm="3">
+            <AdvTextField Value="_place.Name"
+                          ReadOnly="true"
+                          Label="장소명" />
+        </MudItem>
+        <MudItem xs="6" sm="3">
+            <AdvTextField Value="_place.Address.ToString()"
+                          ReadOnly="true"
+                          Label="주소" />
+        </MudItem>
+    </MudGrid>
+
     <MudToolBar>
         <MudButton Variant="Variant.Filled"
                    StartIcon="@Icons.Material.Filled.Refresh"
@@ -27,7 +40,7 @@
 
     <MudTable T="ProductModel"
               Items="_products"
-              Filter="Search" >
+              Filter="Search">
         <HeaderContent>
             <MudTh>타입</MudTh>
             <MudTh>제품명</MudTh>
