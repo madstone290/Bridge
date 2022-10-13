@@ -27,9 +27,9 @@
                                       Label="장소명" />
                     </MudItem>
                     <MudItem xs="12">
-                        <AdvTextField @bind-Value="_place.Address"
+                        <AdvTextField @bind-Value="_place.BaseAddress"
                                       Label="주소"
-                                      Validation="@(_validator.PropertyValidation(x=> x.Address))" />
+                                      Validation="@(_validator.PropertyValidation(x=> x.BaseAddress))" />
                     </MudItem>
                     <MudItem xs="12">
                         <AdvTextField @bind-Value="_place.ContactNumber"

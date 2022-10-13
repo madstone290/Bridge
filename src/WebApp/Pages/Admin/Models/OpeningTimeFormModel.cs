@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+using Bridge.Application.Places.Dtos;
+using FluentValidation;
 using System.ComponentModel;
 
 namespace Bridge.WebApp.Pages.Admin.Models
@@ -25,7 +26,19 @@ namespace Bridge.WebApp.Pages.Admin.Models
             { DayOfWeek.Sunday, "일요일" },
         };
 
-
+        public static OpeningTimeFormModel Create(OpeningTimeDto x)
+        {
+            return new OpeningTimeFormModel()
+            {
+                Day = x.Day,
+                Dayoff = x.Dayoff,
+                OpenTime = x.OpenTime,
+                CloseTime = x.CloseTime,
+                TwentyFourHours = x.TwentyFourHours,
+                BreakStartTime = x.BreakStartTime,
+                BreakEndTime = x.BreakEndTime
+            };
+        }
 
 
         /// <summary>

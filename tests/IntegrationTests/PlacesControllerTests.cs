@@ -28,7 +28,7 @@ namespace Bridge.IntegrationTests
             return new()
             {
                 BaseAddress = roadAddress ?? "대구시 수성구 청수로 25길 118-10",
-                Details = details ?? "아테네 1440호"
+                DetailAddress = details ?? "아테네 1440호"
             };
         }
 

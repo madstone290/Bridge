@@ -13,11 +13,11 @@ namespace Bridge.Application.Places.Dtos
         /// <summary>
         /// 상세주소
         /// </summary>
-        public string Details { get; set; } = string.Empty;
+        public string DetailAddress { get; set; } = string.Empty;
 
         public override string ToString()
         {
-            return string.Join(" ", BaseAddress, Details);
+            return string.Join(" ", BaseAddress, DetailAddress);
         }
     }
 }

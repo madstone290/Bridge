@@ -17,14 +17,48 @@ namespace Bridge.WebApp.Pages.Admin.Components
         /// <summary>
         /// 폼 모드
         /// </summary>
-        [Parameter] public FormMode FormMode { get; set; }
+        [Parameter] 
+        public FormMode FormMode { get; set; }
 
         /// <summary>
         /// 장소 아이디
         /// </summary>
-        [Parameter] public long PlaceId { get; set; } 
+        [Parameter] 
+        public long PlaceId { get; set; } 
 
-        [Inject] public PlaceApiClient PlaceApiClient { get; set; } = null!;
+        [Inject] 
+        public PlaceApiClient PlaceApiClient { get; set; } = null!;
+
+        protected override async Task OnInitializedAsync()
+        {
+            if(FormMode == FormMode.Update)
+            {
+                var placeResponse = await PlaceApiClient.GetPlaceById(PlaceId);
+                if (!placeResponse.Success)
+                {
+                    Snackbar.Add(placeResponse.Error, Severity.Error);
+                    return;
+                }
+
+                var placeDto = placeResponse.Data;
+                if (placeDto == null)
+                {
+                    Snackbar.Add("데이터가 없습니다", Severity.Error);
+                    return;
+                }
+
+                _place.Id = placeDto.Id;
+                _place.Type = placeDto.Type;
+                _place.Name = placeDto.Name;
+                _place.BaseAddress = placeDto.Address.BaseAddress;
+                _place.DetailAddress = placeDto.Address.DetailAddress;
+                _place.Categories = placeDto.Categories;
+                _place.ContactNumber = placeDto.ContactNumber;
+                _place.OpeningTimes = placeDto.OpeningTimes.Select(x => OpeningTimeFormModel.Create(x));
+            }
+        }
+
+
 
         void Cancel_Click()
         {
@@ -40,7 +74,6 @@ namespace Bridge.WebApp.Pages.Admin.Components
 
             if (_isFormValid)
             {
-
                 if (FormMode == FormMode.Create)
                 {
                     var command = new CreatePlaceCommand()
@@ -49,8 +82,8 @@ namespace Bridge.WebApp.Pages.Admin.Components
                         Name = _place.Name,
                         Address = new Application.Places.Dtos.AddressDto()
                         {
-                            BaseAddress = _place.Address,
-                            Details = _place.Address,
+                            BaseAddress = _place.BaseAddress,
+                            DetailAddress = _place.DetailAddress,
                         },
                         Categories = _place.Categories.ToList(),
                         ContactNumber = _place.ContactNumber,
@@ -72,11 +105,7 @@ namespace Bridge.WebApp.Pages.Admin.Components
                 }
                 else
                 {
-                    // 수정
-
-                    // 성공 -> Home 이동
-
-                    // 실패 -> 메시지 출력
+                   
                 }
 
             }
