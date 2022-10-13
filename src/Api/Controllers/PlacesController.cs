@@ -61,6 +61,17 @@ namespace Bridge.Api.Controllers
             return Ok(placeId);
         }
 
+        [Authorize(Policy = PolicyConstants.Admin)]
+        [HttpPut]
+        [Route(ApiRoutes.Places.Update)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> UpdatePlace([FromRoute] long id, [FromBody] UpdatePlaceCommand command)
+        {
+            command.Id = id;
+            await _mediator.Send(command);
+            return Ok();
+        }
+
         [Authorize(Policy = PolicyConstants.AdminOrProvider)]
         [HttpPost]
         [Route(ApiRoutes.Places.AddOpeningTime)]

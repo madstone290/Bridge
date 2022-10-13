@@ -54,7 +54,7 @@ namespace Bridge.IntegrationTests
                 Content = JsonContent.Create(command)
             };
             var response = await _client.SendAsAdminAsync(request);
-            
+
             // Assert
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
             var id = await response.Content.ReadFromJsonAsync<long>();
@@ -186,7 +186,7 @@ namespace Bridge.IntegrationTests
         [Theory]
         [InlineData(DayOfWeek.Sunday, true, false, null, null, null, null)]
         [InlineData(DayOfWeek.Monday, false, true, null, null, null, null)]
-        [InlineData(DayOfWeek.Tuesday, false, false, 6, 18, null , null)]
+        [InlineData(DayOfWeek.Tuesday, false, false, 6, 18, null, null)]
         [InlineData(DayOfWeek.Wednesday, false, false, 6, 18, 15, 16)]
         public async Task Add_OpeningTime_Return_Ok(DayOfWeek day, bool dayoff, bool twentyFourHours, double? openTime, double? closeTime,
             double? breakStartTime, double? breakEndTime)
@@ -202,9 +202,9 @@ namespace Bridge.IntegrationTests
                     Dayoff = dayoff,
                     TwentyFourHours = twentyFourHours,
                     OpenTime = openTime.HasValue ? TimeSpan.FromHours(openTime.Value) : null,
-                    CloseTime = closeTime.HasValue ? TimeSpan.FromHours(closeTime.Value): null,
-                    BreakStartTime = breakStartTime.HasValue ? TimeSpan.FromHours(breakStartTime.Value): null,
-                    BreakEndTime = breakEndTime.HasValue ? TimeSpan.FromHours(breakEndTime.Value): null,
+                    CloseTime = closeTime.HasValue ? TimeSpan.FromHours(closeTime.Value) : null,
+                    BreakStartTime = breakStartTime.HasValue ? TimeSpan.FromHours(breakStartTime.Value) : null,
+                    BreakEndTime = breakEndTime.HasValue ? TimeSpan.FromHours(breakEndTime.Value) : null,
                 }
             };
 
@@ -223,7 +223,7 @@ namespace Bridge.IntegrationTests
             var place = await getResponse.Content.ReadFromJsonAsync<PlaceReadModel>() ?? null!;
             place.OpeningTimes.Should().ContainEquivalentOf(command.OpeningTime);
         }
-     
+
         [Fact]
         public async Task Update_Categories_Return_Ok()
         {
@@ -359,6 +359,63 @@ namespace Bridge.IntegrationTests
             {
                 place.Name.Should().Contain(searchQuery.SearchText);
             }
+        }
+
+        [Theory]
+        [InlineData("킴 미용실", "대구광역시 수성구 황금동 887-4", "3층", "053-442-2345", "Restaurant", "Cafeteria", false, false, "12:00", "20:00", null, null)]
+        [InlineData("다이소 황금점", "대구광역시 수성구 청수로 81", "다이소", "053-411-2345", "Restaurant", "PetStore", true, false, null, null, null, null)]
+        public async Task Update_Place_Return_Ok(string name, string baseAddress, string detailAddress,
+            string contactNumber, string category1, string category2, bool dayoff, bool twentyFourHours, string openTime,
+            string closeTime, string? breakStartTime, string? breakEndTime)
+        {
+            // Arrange
+            var placeId = await _apiClient.CreatePlaceAsync();
+            var command = new UpdatePlaceCommand()
+            {
+                Id = placeId,
+                Name = name,
+                Address = new AddressDto()
+                {
+                    BaseAddress = baseAddress,
+                    DetailAddress = detailAddress
+                },
+                ContactNumber = contactNumber,
+                Categories = new List<PlaceCategory>() { Enum.Parse<PlaceCategory>(category1), Enum.Parse<PlaceCategory>(category2) },
+                OpeningTimes = new List<OpeningTimeDto>()
+                {
+                    new OpeningTimeDto(){
+                        Day = DayOfWeek.Monday,
+                        Dayoff = dayoff,
+                        TwentyFourHours = twentyFourHours,
+                        OpenTime = openTime == null ? null :  TimeSpan.Parse(openTime),
+                        CloseTime =  closeTime == null ? null : TimeSpan.Parse(closeTime),
+                        BreakStartTime = breakStartTime == null ? null : TimeSpan.Parse(breakStartTime),
+                        BreakEndTime = breakEndTime == null ? null :TimeSpan.Parse(breakEndTime)
+                    }
+                }
+            };
+
+            // Act
+            var updateRequest = new HttpRequestMessage(HttpMethod.Put, ApiRoutes.Places.Update.Replace("{id}", $"{placeId}"))
+            {
+                Content = JsonContent.Create(command)
+            };
+            var updateResponse = await _client.SendAsAdminAsync(updateRequest);
+
+            var getRequest = new HttpRequestMessage(HttpMethod.Get, ApiRoutes.Places.Get.Replace("{id}", $"{placeId}"));
+            var getResponse = await _client.SendAsAdminAsync(getRequest);
+
+            // Assert
+            updateResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+            var place = await getResponse.Content.ReadFromJsonAsync<PlaceReadModel>() ?? null!;
+            place.Categories.Should().Contain(command.Categories);
+            
+            place.Name.Should().Be(command.Name);
+            place.Address.BaseAddress.Should().NotBeEmpty();
+            place.Address.DetailAddress.Should().Be(command.Address.DetailAddress);
+            place.ContactNumber.Should().Be(command.ContactNumber);
+            place.Categories.Should().BeEquivalentTo(command.Categories);
+            place.OpeningTimes.Should().ContainEquivalentOf(command.OpeningTimes.First());
         }
     }
 }
