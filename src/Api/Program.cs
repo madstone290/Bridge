@@ -67,10 +67,15 @@ builder.Services.AddAuthorization(options =>
         .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
         .Build();
 
+    options.AddPolicy(PolicyConstants.Admin, policyBuilder =>
+    {
+        policyBuilder.RequireClaim(ClaimTypeConstants.UserType, ClaimConstants.Admin);
+        policyBuilder.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
+    });
+
     options.AddPolicy(PolicyConstants.AdminOrProvider, policyBuilder =>
     {
         policyBuilder.RequireClaim(ClaimTypeConstants.UserType, ClaimConstants.Admin, ClaimConstants.Provider);
-        var dd = policyBuilder.AuthenticationSchemes;
         policyBuilder.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
     });
 });
