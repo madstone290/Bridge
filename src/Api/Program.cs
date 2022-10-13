@@ -1,4 +1,5 @@
 using Bridge.Api.ActionFilters;
+using Bridge.Api.Middlewares;
 using Bridge.Application;
 using Bridge.Infrastructure;
 using Bridge.Infrastructure.Identity.Services;
@@ -7,6 +8,7 @@ using Bridge.Shared.Constants;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.IdentityModel.Tokens;
@@ -118,6 +120,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 
