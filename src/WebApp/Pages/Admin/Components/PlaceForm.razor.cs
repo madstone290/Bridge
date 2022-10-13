@@ -105,7 +105,32 @@ namespace Bridge.WebApp.Pages.Admin.Components
                 }
                 else
                 {
-                   
+                    var command = new UpdatePlaceCommand()
+                    {
+                        Id = _place.Id,
+                        Name = _place.Name,
+                        Address = new Application.Places.Dtos.AddressDto()
+                        {
+                            BaseAddress = _place.BaseAddress,
+                            DetailAddress = _place.DetailAddress,
+                        },
+                        Categories = _place.Categories.ToList(),
+                        ContactNumber = _place.ContactNumber,
+                        OpeningTimes = _place.OpeningTimes.Select(t => new Application.Places.Dtos.OpeningTimeDto()
+                        {
+                            Day = t.Day,
+                            Dayoff = t.Dayoff,
+                            TwentyFourHours = t.TwentyFourHours,
+                            BreakEndTime = t.BreakEndTime,
+                            BreakStartTime = t.BreakStartTime,
+                            OpenTime = t.OpenTime,
+                            CloseTime = t.CloseTime,
+                        }).ToList(),
+                    };
+                    var result = await PlaceApiClient.UpdatePlace(command);
+
+                    if (Snackbar.CheckSuccess(result))
+                        NavManager.NavigateTo(PageRoutes.Admin.PlaceList);
                 }
 
             }
