@@ -56,7 +56,7 @@ namespace Bridge.WebApp.Api
                 // 액세스 토큰이 만료된 경우 재발급 후 1회 재시도
                 if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                 {
-                    var refreshResult = await _authService.RefreshAsync();
+                    var refreshResult = await _authService.RefreshAsync(authState.RefreshToken);
                     if (!refreshResult.Success)
                         return ApiResult<TData>.AuthenticationErrorResult(refreshResult.Error);
                     authState = await _authService.GetAuthStateAsync();

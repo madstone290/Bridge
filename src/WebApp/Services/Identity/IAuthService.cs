@@ -30,7 +30,7 @@ namespace Bridge.WebApp.Services.Identity
         /// 리프레시토큰을 이용해 상태를 갱신한다.
         /// </summary>
         /// <returns></returns>
-        Task<AuthResult> RefreshAsync();
+        Task<AuthResult> RefreshAsync(string refreshToken);
 
         /// <summary>
         /// 인증상태 조회
@@ -119,6 +119,7 @@ namespace Bridge.WebApp.Services.Identity
 
     public class AuthService : AuthenticationStateProvider, IAuthService
     {
+        private readonly SemaphoreSlim _semaphore = new(1, 1);
         private readonly UserApiClient _userApiClient;
         private readonly ICookieService _cookieService;
 
@@ -173,9 +174,21 @@ namespace Bridge.WebApp.Services.Identity
             return new AuthResult() { Success = true };
         }
 
-        public async Task<AuthResult> RefreshAsync()
+        public async Task<AuthResult> RefreshAsync(string refreshToken)
         {
+            /*
+             * 여러개의 비동기 요청으로 토큰갱신이 동시에 발생할 수 있다.
+             * 현재 리프레시 토큰과 갱신요청에 주어진 리프레시 토큰을 비교해서 값이 다른 경우 다른 스레드에서 갱신이 완료되었다고 판단한다.
+             * */
+            await _semaphore.WaitAsync();
+
             var authState = await GetAuthStateAsync();
+            if (authState.RefreshToken != refreshToken) // 다른 스레드에 의해 토큰이 갱신된 경우
+            {
+                _semaphore.Release();
+                return new AuthResult() { Success = true };
+            }
+
             var apiResult = await _userApiClient.RefreshAsync(new RefreshDto()
             {
                 Email = authState.Email,
@@ -194,6 +207,7 @@ namespace Bridge.WebApp.Services.Identity
             var principal = GetPrincipalFromAuthState(authState);
             NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(principal)));
 
+            _semaphore.Release();
             return new AuthResult() { Success = true };
         }
 
