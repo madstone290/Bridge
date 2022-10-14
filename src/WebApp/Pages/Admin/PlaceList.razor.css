@@ -1,9 +1,4 @@
-﻿.page {
-    margin-top: 100px;
-}
-
-::deep .mud-input-control > .mud-input-control-input-container > div.mud-input.mud-input-text {
-    margin-top: 0px;
+.page {
 }
 
 ::deep .mud-toolbar > * {

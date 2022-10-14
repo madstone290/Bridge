@@ -7,6 +7,7 @@
     <MudToolBar>
         <div class="place-type-select">
             <AdvSelect T="PlaceType?"
+                       Label="장소 타입"
                        @bind-Value="_selectedPlaceType">
                 @{
                     foreach (PlaceType? type in Enum.GetValues<PlaceType>())
@@ -15,6 +16,13 @@
                     }
                 }
             </AdvSelect>
+        </div>
+
+        <div class="search-field">
+            <AdvTextField T="string"
+                          Label="검색어"
+                          @bind-Text="_searchString">
+            </AdvTextField>
         </div>
 
         <MudButton Variant="Variant.Filled"
@@ -27,13 +35,6 @@
                    IconColor="Color.Surface"
                    OnClick="Create_Click"
                    StartIcon="@Icons.Material.Filled.Add">추가</MudButton>
-
-        <div class="search-field">
-            <MudTextField T="string"
-                          @bind-Text="_searchString"
-                          Placeholder="검색">
-            </MudTextField>
-        </div>
     </MudToolBar>
 
     <MudTable T="PlaceListModel"
