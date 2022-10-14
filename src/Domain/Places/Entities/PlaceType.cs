@@ -1,4 +1,4 @@
-﻿
+
 namespace Bridge.Domain.Places.Entities
 {
     /// <summary>
@@ -6,6 +6,11 @@ namespace Bridge.Domain.Places.Entities
     /// </summary>
     public enum PlaceType
     {
+        /// <summary>
+        /// 기타
+        /// </summary>
+        Other,
+
         /// <summary>
         /// 약국
         /// </summary>
