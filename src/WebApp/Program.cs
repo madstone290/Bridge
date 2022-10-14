@@ -56,8 +56,11 @@ builder.Services.AddSingleton<HttpClient>((sp) =>
     var apiAddress = builder.Environment.IsProduction()
         ? new Uri(builder.Configuration["ApiUrls:Production"])
         : new Uri(builder.Configuration["ApiUrls:Development"]);
-
-    return new HttpClient()
+    HttpClientHandler clientHandler = new HttpClientHandler
+    {
+        AllowAutoRedirect = true
+    };
+    return new HttpClient(clientHandler)
     {
         BaseAddress = apiAddress
     };

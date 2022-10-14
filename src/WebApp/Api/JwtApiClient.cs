@@ -46,6 +46,15 @@ namespace Bridge.WebApp.Api
 
                 var response = await _httpClient.SendAsync(request);
 
+                if(response.StatusCode == System.Net.HttpStatusCode.Found || response.StatusCode == System.Net.HttpStatusCode.TemporaryRedirect)
+                {
+                    request = await request.CloneAsync();
+                    request.RequestUri = response.Headers.Location;
+                    authState = await _authService.GetAuthStateAsync();
+                    request.SetBearerToken(authState.AccessToken);
+                    response = await _httpClient.SendAsync(request);
+                }
+
                 // 액세스 토큰이 만료된 경우 재발급 후 1회 재시도
                 if (authState.IsAuthenticated && response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                 {
@@ -53,11 +62,11 @@ namespace Bridge.WebApp.Api
                     if (!refreshResult.Success)
                         return ApiResult<TData>.AuthenticationErrorResult(refreshResult.Error);
 
-                    var requestClone = await request.CloneAsync();
+                    request = await request.CloneAsync();
                     authState = await _authService.GetAuthStateAsync();
-                    requestClone.SetBearerToken(authState.AccessToken);
+                    request.SetBearerToken(authState.AccessToken);
 
-                    response = await _httpClient.SendAsync(requestClone);
+                    response = await _httpClient.SendAsync(request);
                 }
 
                 return await BuildResultAsync<TData>(response);
