@@ -11,6 +11,7 @@ namespace Bridge.WebApp.Models
             return new PlaceListModel()
             {
                 Id = x.Id,
+                Type = x.Type,
                 Name = x.Name,
                 BaseAddress = x.Address.BaseAddress,
                 DetailAddress = x.Address.DetailAddress,

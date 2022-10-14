@@ -14,9 +14,9 @@ namespace Bridge.WebApp.Pages.Admin
         private readonly List<PlaceListModel> _places = new();
 
         /// <summary>
-        /// 셀렉트 인풋에서 선택한 장소유형
+        ///  검색할 장소 타입
         /// </summary>
-        private PlaceType? _selectedPlaceType;
+        private PlaceType? _placeType = PlaceType.Other;
 
         /// <summary>
         /// 검색어
@@ -26,6 +26,18 @@ namespace Bridge.WebApp.Pages.Admin
         [Inject]
         public AdminPlaceApiClient PlaceApiClient { get; set; } = null!;
 
+        [Parameter]
+        [SupplyParameterFromQuery(Name ="PlaceType")]
+        public string? PlaceTypeText { get; set; }
+
+        protected override async Task OnParametersSetAsync()
+        {
+            if (Enum.TryParse<PlaceType>(PlaceTypeText, true, out var placeType))
+                _placeType = placeType;
+
+            await Load_ClickAsync();
+        }
+        
         /// <summary>
         /// 입력된 검색어로 장소를 검색한다.
         /// </summary>
@@ -47,10 +59,10 @@ namespace Bridge.WebApp.Pages.Admin
 
         private async Task Load_ClickAsync()
         {
-            if (!_selectedPlaceType.HasValue)
+            if (!_placeType.HasValue)
                 return;
 
-            var result = await PlaceApiClient.GetPlaceList(_selectedPlaceType.Value);
+            var result = await PlaceApiClient.GetPlaceList(_placeType.Value);
             if (!ValidationService.Validate(result))
                 return;
 

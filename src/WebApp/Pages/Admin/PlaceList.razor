@@ -8,7 +8,7 @@
         <div class="place-type-select">
             <AdvSelect T="PlaceType?"
                        Label="장소 타입"
-                       @bind-Value="_selectedPlaceType">
+                       @bind-Value="_placeType">
                 @{
                     foreach (PlaceType? type in Enum.GetValues<PlaceType>())
                     {
