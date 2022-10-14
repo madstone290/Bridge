@@ -35,6 +35,11 @@ namespace Bridge.WebApp.Pages.Admin.Components
         [Inject] 
         public AdminProductApiClient ProductApiClient { get; set; } = null!;
 
+        /// <summary>
+        /// 제품리스트 Uri
+        /// </summary>
+        public string PlaceProductListUri => PageRoutes.Admin.PlaceProductList.AddRouteParam("PlaceId", PlaceId);
+
         protected override async Task OnInitializedAsync()
         {
             if(FormMode == FormMode.Create)
@@ -59,7 +64,7 @@ namespace Bridge.WebApp.Pages.Admin.Components
 
         void Cancel_Click()
         {
-            NavManager.NavigateTo(PageRoutes.Admin.PlaceProductList);
+            NavManager.NavigateTo(PlaceProductListUri);
         }
 
         async Task Save_Click()
@@ -84,7 +89,7 @@ namespace Bridge.WebApp.Pages.Admin.Components
                     var result = await ProductApiClient.CreateProduct(command);
 
                     if (ValidationService.Validate(result))
-                        NavManager.NavigateTo(PageRoutes.Admin.PlaceProductList.AddRouteParam("PlaceId", PlaceId));
+                        NavManager.NavigateTo(PlaceProductListUri);
                 }
                 else
                 {
@@ -98,7 +103,7 @@ namespace Bridge.WebApp.Pages.Admin.Components
                     var result = await ProductApiClient.UpdateProduct(command);
 
                     if (ValidationService.Validate(result))
-                        NavManager.NavigateTo(PageRoutes.Admin.PlaceProductList.AddRouteParam("PlaceId", PlaceId));
+                        NavManager.NavigateTo(PlaceProductListUri);
                 }
 
             }
