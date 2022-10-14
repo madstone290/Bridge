@@ -1,0 +1,7 @@
+.main-layout {
+
+}
+
+::deep .toolbar{
+    background-color: #eeeeee;
+}
