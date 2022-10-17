@@ -130,7 +130,7 @@
                     <MudTh>제품명</MudTh>
                     <MudTh>가격</MudTh>
                     <MudTh>카테고리</MudTh>
-                    <MudTh>기능</MudTh>
+                    <MudTh>메뉴</MudTh>
                 </HeaderContent>
 
                 <RowTemplate>
@@ -147,7 +147,8 @@
                         <MudHighlighter Text="@context.CategoriesString" HighlightedText="@_searchString" />
                     </MudTd>
                     <MudTd>
-                        <MudMenu Label="기능"
+                        <MudMenu Label="메뉴"
+                                 EndIcon="@Icons.Filled.KeyboardArrowDown"
                                  Variant="Variant.Outlined">
                             <MudMenuItem @onclick="@(() => UpdateProduct_Click(context))">수정</MudMenuItem>
                         </MudMenu>
