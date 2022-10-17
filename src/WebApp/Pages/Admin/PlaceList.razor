@@ -1,5 +1,5 @@
 @using Bridge.Domain.Places.Entities
-@using Bridge.WebApp.Models
+@using Bridge.WebApp.Pages.Admin.Models
 @attribute [Route(PageRoutes.Admin.PlaceList)]
 @attribute [Authorize(Policy = Bridge.Shared.Constants.PolicyConstants.Admin)]
 
@@ -37,7 +37,7 @@
                    StartIcon="@Icons.Material.Filled.Add">추가</MudButton>
     </MudToolBar>
 
-    <MudTable T="PlaceListModel"
+    <MudTable T="PlaceModel"
               Items="_places"
               Filter="Search">
         <HeaderContent>
@@ -91,7 +91,7 @@
                 <MudTr>
                     <td colspan="4">
                         <MudList>
-                            @foreach (var time in context.OpeningTimes)
+                            @foreach (var time in context.OpeningTimesFromMonday)
                             {
                                 <MudListItem>@time.ToSingleLineString()</MudListItem>
                             }

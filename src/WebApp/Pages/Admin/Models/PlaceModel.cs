@@ -1,14 +1,13 @@
-using Bridge.Application.Places.Dtos;
 using Bridge.Application.Places.ReadModels;
 using Bridge.Domain.Places.Entities;
 
-namespace Bridge.WebApp.Models
+namespace Bridge.WebApp.Pages.Admin.Models
 {
-    public class PlaceListModel
+    public class PlaceModel
     {
-        public static PlaceListModel ToPlaceModel(PlaceReadModel x)
+        public static PlaceModel ToPlaceModel(PlaceReadModel x)
         {
-            return new PlaceListModel()
+            return new PlaceModel()
             {
                 Id = x.Id,
                 Type = x.Type,
@@ -22,9 +21,9 @@ namespace Bridge.WebApp.Models
                 Northing = x.Location.Northing,
                 Categories = x.Categories.ToList(),
                 ContactNumber = x.ContactNumber,
-                OpeningTimes = x.OpeningTimes.Select(t => new OpeningTimeListModel()
+                OpeningTimes = x.OpeningTimes.Select(t => new OpeningTimeModel()
                 {
-                    Day  = t.Day,
+                    Day = t.Day,
                     Dayoff = t.Dayoff,
                     TwentyFourHours = t.TwentyFourHours,
                     OpenTime = t.OpenTime,
@@ -128,7 +127,23 @@ namespace Bridge.WebApp.Models
         /// <summary>
         /// 영업시간
         /// </summary>
-        public List<OpeningTimeListModel> OpeningTimes { get; set; } = new();
+        public List<OpeningTimeModel> OpeningTimes { get; set; } = new();
+
+        public IEnumerable<OpeningTimeModel> OpeningTimesFromMonday
+        {
+            get
+            {
+                var openingTimes = new List<OpeningTimeModel>();
+                openingTimes.Add(OpeningTimes.First(x => x.Day == DayOfWeek.Monday));
+                openingTimes.Add(OpeningTimes.First(x => x.Day == DayOfWeek.Tuesday));
+                openingTimes.Add(OpeningTimes.First(x => x.Day == DayOfWeek.Wednesday));
+                openingTimes.Add(OpeningTimes.First(x => x.Day == DayOfWeek.Thursday));
+                openingTimes.Add(OpeningTimes.First(x => x.Day == DayOfWeek.Friday));
+                openingTimes.Add(OpeningTimes.First(x => x.Day == DayOfWeek.Saturday));
+                openingTimes.Add(OpeningTimes.First(x => x.Day == DayOfWeek.Sunday));
+                return openingTimes;
+            }
+        }
 
         /// <summary>
         /// 영업시간 보여주기 여부

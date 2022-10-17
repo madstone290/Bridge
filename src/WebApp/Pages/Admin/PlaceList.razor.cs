@@ -1,7 +1,7 @@
 using Bridge.Domain.Places.Entities;
 using Bridge.Shared.Extensions;
 using Bridge.WebApp.Api.ApiClients.Admin;
-using Bridge.WebApp.Models;
+using Bridge.WebApp.Pages.Admin.Models;
 using Microsoft.AspNetCore.Components;
 
 namespace Bridge.WebApp.Pages.Admin
@@ -11,7 +11,7 @@ namespace Bridge.WebApp.Pages.Admin
         /// <summary>
         /// 장소 목록
         /// </summary>
-        private readonly List<PlaceListModel> _places = new();
+        private readonly List<PlaceModel> _places = new();
 
         /// <summary>
         ///  검색할 장소 타입
@@ -43,7 +43,7 @@ namespace Bridge.WebApp.Pages.Admin
         /// </summary>
         /// <param name="place"></param>
         /// <returns></returns>
-        private bool Search(PlaceListModel place)
+        private bool Search(PlaceModel place)
         {
             if (string.IsNullOrWhiteSpace(_searchString))
                 return true;
@@ -68,21 +68,21 @@ namespace Bridge.WebApp.Pages.Admin
 
             var placeList = result.Data!;
             _places.Clear();
-            _places.AddRange(placeList.Select(x => PlaceListModel.ToPlaceModel(x)));
+            _places.AddRange(placeList.Select(x => PlaceModel.ToPlaceModel(x)));
         }
 
-        private void ToggleShowOpeningTime_Click(PlaceListModel place)
+        private void ToggleShowOpeningTime_Click(PlaceModel place)
         {
             place.ShowOpeningTimes = !place.ShowOpeningTimes;
         }
 
-        private void EditPlace_Click(PlaceListModel place)
+        private void EditPlace_Click(PlaceModel place)
         {
             var uri = PageRoutes.Admin.PlaceUpdate.AddRouteParam("PlaceId", place.Id);
             NavManager.NavigateTo(uri);
         }
 
-        private void ManageProduct_Click(PlaceListModel place)
+        private void ManageProduct_Click(PlaceModel place)
         {
             NavManager.NavigateTo(PageRoutes.Admin.PlaceProductList.AddRouteParam("PlaceId", place.Id));
         }

@@ -1,8 +1,7 @@
-﻿namespace Bridge.WebApp.Models
+namespace Bridge.WebApp.Pages.Admin.Models
 {
-    public class OpeningTimeListModel
+    public class OpeningTimeModel
     {
-
         private static readonly Dictionary<DayOfWeek, string> _dayStrings = new()
         {
             { DayOfWeek.Monday, "월요일" },
@@ -47,7 +46,7 @@
         /// 폐점 시간
         /// </summary>
         public TimeSpan? CloseTime { get; set; }
-        
+
         public string CloseTimeString => CloseTime.HasValue
             ? $"{CloseTime:hh\\:mm}"
             : "??";
