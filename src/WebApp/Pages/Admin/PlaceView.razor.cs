@@ -1,6 +1,8 @@
 using Bridge.WebApp.Api.ApiClients.Admin;
+using Bridge.WebApp.Pages.Admin.Components;
 using Bridge.WebApp.Pages.Admin.Models;
 using Microsoft.AspNetCore.Components;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using MudBlazor;
 
 namespace Bridge.WebApp.Pages.Admin
@@ -51,14 +53,23 @@ namespace Bridge.WebApp.Pages.Admin
         [Inject]
         public AdminPlaceApiClient PlaceApiClient { get; set; } = null!;
 
+        [Inject]
+        public AdminProductApiClient ProductApiClient { get; set; } = null!;
 
         protected override async Task OnInitializedAsync()
         {
-            var result = await PlaceApiClient.GetPlaceById(PlaceId);
-            if (!ValidationService.Validate(result))
+            var placeTask = PlaceApiClient.GetPlaceById(PlaceId);
+            var productTask = ProductApiClient.GetProductList(PlaceId);
+
+            await Task.WhenAll(placeTask, productTask);
+
+            var placeResult = placeTask.Result;
+            var productResult = productTask.Result;
+
+            if (!ValidationService.Validate(placeResult) || !ValidationService.Validate(productResult))
                 return;
 
-            var placeDto = result.Data!;
+            var placeDto = placeResult.Data!;
 
             _place.Id = placeDto.Id;
             _place.Type = placeDto.Type;
@@ -70,7 +81,12 @@ namespace Bridge.WebApp.Pages.Admin
             _place.OpeningTimes = placeDto.OpeningTimes.Select(x => OpeningTimeFormModel.Create(x));
 
             PlaceFormModel.Copy(_place, _placeBackup);
+
+            var productsDto = productResult.Data!;
+            _products.AddRange(productsDto.OrderByDescending(x => x.Id).Select(x => ProductModel.Create(x)));
         }
+
+    
 
         private void EditBaseInfo_Click()
         {
@@ -150,5 +166,55 @@ namespace Bridge.WebApp.Pages.Admin
             _openingTimeReadOnly = true;
             StateHasChanged();
         }
+
+        private async void ProductCreate_Click()
+        {
+            var parameters = new DialogParameters();
+            parameters.Add(nameof(ProductModalForm.PlaceId), _place.Id);
+
+            var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
+            var dialog = DialogService.Show<ProductModalForm>(string.Empty, parameters, options);
+            var result = await dialog.Result;
+
+            if (!result.Cancelled)
+            {
+                var productResult = await ProductApiClient.GetProductList(PlaceId);
+                if (!ValidationService.Validate(productResult))
+                    return;
+
+                var productsDto = productResult.Data!;
+                _products.Clear();
+                _products.AddRange(productsDto.OrderByDescending(x=> x.Id).Select(x => ProductModel.Create(x)));
+                StateHasChanged();
+            }
+        }
+
+        private async void UpdateProduct_Click(ProductModel product)
+        {
+            var parameters = new DialogParameters();
+            parameters.Add(nameof(ProductModalForm.FormMode), FormMode.Update);
+            parameters.Add(nameof(ProductModalForm.ProductId), product.Id);
+
+            var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
+            var dialog = DialogService.Show<ProductModalForm>(string.Empty, parameters, options);
+            var result = await dialog.Result;
+
+            if (!result.Cancelled)
+            {
+                var productResult = await ProductApiClient.GetProductById(product.Id);
+                if (!ValidationService.Validate(productResult))
+                    return;
+
+                var productDto = productResult.Data!;
+                var oldProduct = _products.First(x => x.Id == product.Id);
+                oldProduct.Name = productDto.Name;
+                oldProduct.Type = productDto.Type;
+                oldProduct.Price = productDto.Price;
+                oldProduct.Categories = productDto.Categories;
+
+                StateHasChanged();
+            }
+        }
+
     }
 }

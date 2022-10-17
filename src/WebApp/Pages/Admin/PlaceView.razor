@@ -110,7 +110,7 @@
             <div class="toolbar">
                 <MudText Typo="Typo.h5">제품</MudText>
                 <MudSpacer />
-                <MudButton Class="button" Variant="Variant.Outlined">추가</MudButton>
+                <MudButton Class="button" Variant="Variant.Outlined" OnClick="ProductCreate_Click">추가</MudButton>
             </div>
             <MudDivider Class="divider" />
             <MudToolBar>
@@ -130,6 +130,7 @@
                     <MudTh>제품명</MudTh>
                     <MudTh>가격</MudTh>
                     <MudTh>카테고리</MudTh>
+                    <MudTh>기능</MudTh>
                 </HeaderContent>
 
                 <RowTemplate>
@@ -144,6 +145,12 @@
                     </MudTd>
                     <MudTd DataLabel="카테고리">
                         <MudHighlighter Text="@context.CategoriesString" HighlightedText="@_searchString" />
+                    </MudTd>
+                    <MudTd>
+                        <MudMenu Label="기능"
+                                 Variant="Variant.Outlined">
+                            <MudMenuItem @onclick="@(() => UpdateProduct_Click(context))">수정</MudMenuItem>
+                        </MudMenu>
                     </MudTd>
                 </RowTemplate>
 
