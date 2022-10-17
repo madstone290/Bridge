@@ -1,4 +1,4 @@
-﻿@typeparam T
+@typeparam T
 @inherits MudTextField<T>
 
 @{
@@ -6,6 +6,13 @@
 }
 
 @code {
+
+    /// <summary>
+    /// 라벨 축소상태 설정
+    /// </summary>
+    [Parameter]
+    public bool ShirinkLabel { get; set; }
+
     protected override Task OnInitializedAsync()
     {
         if (string.IsNullOrWhiteSpace(Label))
@@ -13,6 +20,15 @@
             Class += " adv-no-label";
         }
 
+        if (ShirinkLabel)
+        {
+            Class += " adv-shrink-label";
+        }
+
         return base.OnInitializedAsync();
     }
+
+   
+
+    
 }

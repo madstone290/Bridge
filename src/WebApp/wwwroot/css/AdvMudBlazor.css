@@ -8,3 +8,8 @@
 .adv-no-label .mud-input-control > .mud-input-control-input-container > div.mud-input.mud-input-text {
     margin-top: 0px;
 }
+
+/* 라벨을 항상 축소상태로 한다*/
+.adv-shrink-label .mud-input-label-inputcontrol {
+    transform: translate(0,1.5px) scale(.75);
+}

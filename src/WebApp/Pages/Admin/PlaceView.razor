@@ -41,22 +41,27 @@
                     <MudItem xs="12">
                         <AdvTextField @bind-Value="_place.Name"
                                       Validation="@(_validator.PropertyValidation(x=> x.Name))"
-                                      Label="장소명" ReadOnly="_baseInfoReadOnly" />
+                                      Label="장소명"
+                                      ShirinkLabel="true"
+                                      ReadOnly="_baseInfoReadOnly" />
                     </MudItem>
                     <MudItem xs="12">
                         <AdvTextField @bind-Value="_place.BaseAddress"
                                       Label="기본주소" ReadOnly="_baseInfoReadOnly"
+                                      ShirinkLabel="true"
                                       Validation="@(_validator.PropertyValidation(x=> x.BaseAddress))" />
                     </MudItem>
                     <MudItem xs="12">
                         <AdvTextField @bind-Value="_place.DetailAddress"
                                       Label="상세주소" ReadOnly="_baseInfoReadOnly"
+                                      ShirinkLabel="true"
                                       Validation="@(_validator.PropertyValidation(x=> x.DetailAddress))" />
                     </MudItem>
                     <MudItem xs="12">
                         <AdvTextField @bind-Value="_place.ContactNumber"
                                       Validation="@(_validator.PropertyValidation(x=> x.ContactNumber))"
                                       Label="연락처"
+                                      ShirinkLabel="true"
                                       ReadOnly="_baseInfoReadOnly" />
                     </MudItem>
                     <MudItem xs="12">
@@ -65,6 +70,7 @@
                                    MultiSelection="true"
                                    Label="카테고리"
                                    ReadOnly="_baseInfoReadOnly"
+                                   ShirinkLabel="true"
                                    Validation="@(_validator.PropertyValidation(x=> x.Categories))">
                             @foreach (var category in Enum.GetValues<PlaceCategory>())
                             {
