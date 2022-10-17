@@ -16,6 +16,8 @@ namespace Bridge.Infrastructure.Data.ReadRepos
         public override Expression<Func<Place, PlaceReadModel>> SelectExpression { get; } = x => new PlaceReadModel()
         {
             Id = x.Id,
+            Status = x.Status,
+            CreationDateTime = x.CreationDateTime,
             Type = x.Type,
             Name = x.Name,
             Address = new AddressDto()
@@ -59,6 +61,8 @@ namespace Bridge.Infrastructure.Data.ReadRepos
                 {
                     Distance = Math.Sqrt(Math.Pow(Math.Abs(easting - x.Location.Easting), 2) + Math.Pow(Math.Abs(northing - x.Location.Northing), 2)),
                     Id = x.Id,
+                    Status = x.Status,
+                    CreationDateTime = x.CreationDateTime,
                     Type = x.Type,
                     Name = x.Name,
                     Address = new AddressDto()

@@ -1,4 +1,4 @@
-﻿using Bridge.Domain.Places.Entities;
+using Bridge.Domain.Places.Entities;
 using Bridge.Domain.Products.Entities;
 using Bridge.Shared.Json;
 using Microsoft.EntityFrameworkCore;
@@ -15,15 +15,18 @@ namespace Bridge.Infrastructure.Data.Config
             // Id
             builder.HasKey(x => x.Id);
 
+            // ProductType
+            builder.Property(x => x.Type)
+                .HasConversion<string>();
+
+            builder.Property(x => x.Status)
+                .HasConversion<string>();
+
             // Place
             builder.HasOne(x => x.Place)
                 .WithMany()
                 .HasForeignKey(x => x.PlaceId)
                 .OnDelete(DeleteBehavior.Restrict);
-
-            // ProductType
-            builder.Property(x => x.Type)
-                .HasConversion<string>();
 
             // Price
             builder.Property(x => x.Price)

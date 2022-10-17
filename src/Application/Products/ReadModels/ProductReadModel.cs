@@ -1,3 +1,4 @@
+using Bridge.Domain.Places.Entities;
 using Bridge.Domain.Products.Entities;
 
 namespace Bridge.Application.Products.ReadModels
@@ -13,6 +14,16 @@ namespace Bridge.Application.Products.ReadModels
         /// 제품유형
         /// </summary>
         public ProductType Type { get; set; }
+
+        /// <summary>
+        /// 상태
+        /// </summary>
+        public ProductStatus Status { get; set; }
+
+        /// <summary>
+        /// 생성일시
+        /// </summary>
+        public DateTime CreationDateTime { get; set; }
 
         /// <summary>
         /// 제품명

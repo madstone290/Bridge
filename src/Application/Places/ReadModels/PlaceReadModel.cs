@@ -18,6 +18,16 @@ namespace Bridge.Application.Places.ReadModels
         public PlaceType Type { get; set; }
 
         /// <summary>
+        /// 상태
+        /// </summary>
+        public PlaceStatus Status { get; set; }
+
+        /// <summary>
+        /// 생성일시
+        /// </summary>
+        public DateTime CreationDateTime { get; set; }
+
+        /// <summary>
         /// 장소명
         /// </summary>
         public string Name { get; set; } = string.Empty;

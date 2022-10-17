@@ -23,6 +23,8 @@ namespace Bridge.Domain.Products.Entities
         private Product() { }
         private Product(string name, Place place)
         {
+            Status = ProductStatus.Used;
+            CreationDateTime = DateTime.UtcNow;
             SetName(name);
             PlaceId = place.Id;
         }
@@ -36,6 +38,16 @@ namespace Bridge.Domain.Products.Entities
         /// 제품 유형
         /// </summary>
         public ProductType Type { get; private set; }
+
+        /// <summary>
+        /// 상태
+        /// </summary>
+        public ProductStatus Status { get; private set; }
+
+        /// <summary>
+        /// 생성일시
+        /// </summary>
+        public DateTime CreationDateTime { get; private set; }
 
         /// <summary>
         /// 제품명
@@ -137,6 +149,13 @@ namespace Bridge.Domain.Products.Entities
         {
             _categories = new HashSet<ProductCategory>(categories);
         }
-
+        
+        /// <summary>
+        /// 폐기상태로 변경한다
+        /// </summary>
+        public void Discard()
+        {
+            Status = ProductStatus.Discarded;
+        }
     }
 }

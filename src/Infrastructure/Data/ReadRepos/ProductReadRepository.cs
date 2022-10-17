@@ -15,6 +15,8 @@ namespace Bridge.Infrastructure.Data.ReadRepos
         {
             Id = x.Id,
             Type = x.Type,
+            Status = x.Status,
+            CreationDateTime = x.CreationDateTime,
             Name = x.Name,
             PlaceId = x.PlaceId,
             Price = x.Price,
