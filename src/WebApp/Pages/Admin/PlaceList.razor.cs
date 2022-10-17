@@ -68,7 +68,7 @@ namespace Bridge.WebApp.Pages.Admin
 
             var placeList = result.Data!;
             _places.Clear();
-            _places.AddRange(placeList.Select(x => PlaceModel.ToPlaceModel(x)));
+            _places.AddRange(placeList.OrderByDescending(x=> x.CreationDateTime).Select(x => PlaceModel.ToPlaceModel(x)));
         }
 
         private void ToggleShowOpeningTime_Click(PlaceModel place)

@@ -75,7 +75,7 @@ namespace Bridge.WebApp.Pages.Admin
 
             var productListDto = productResult.Data!;
             _products.Clear();
-            _products.AddRange(productListDto.Select(x => ProductModel.Create(x)));
+            _products.AddRange(productListDto.OrderByDescending(x=> x.CreationDateTime).Select(x => ProductModel.Create(x)));
         }
 
     }

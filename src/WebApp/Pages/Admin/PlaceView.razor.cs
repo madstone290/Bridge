@@ -72,7 +72,7 @@ namespace Bridge.WebApp.Pages.Admin
             PlaceFormModel.Copy(_place, _placeBackup);
 
             var productsDto = productResult.Data!;
-            _products.AddRange(productsDto.OrderByDescending(x => x.Id).Select(x => ProductModel.Create(x)));
+            _products.AddRange(productsDto.OrderByDescending(x => x.CreationDateTime).Select(x => ProductModel.Create(x)));
         }
 
         private void EditBaseInfo_Click()
@@ -96,7 +96,7 @@ namespace Bridge.WebApp.Pages.Admin
                 },
                 Name = _place.Name,
                 Categories = _place.Categories,
-                ContactNumber  =_place.ContactNumber,
+                ContactNumber  = _place.ContactNumber,
             });
 
             if (!ValidationService.Validate(result))
@@ -179,7 +179,7 @@ namespace Bridge.WebApp.Pages.Admin
 
                 var productsDto = productResult.Data!;
                 _products.Clear();
-                _products.AddRange(productsDto.OrderByDescending(x=> x.Id).Select(x => ProductModel.Create(x)));
+                _products.AddRange(productsDto.OrderByDescending(x=> x.CreationDateTime).Select(x => ProductModel.Create(x)));
                 StateHasChanged();
             }
         }
