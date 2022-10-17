@@ -1,0 +1,159 @@
+@using Bridge.Domain.Places.Entities
+@using Bridge.Domain.Products.Entities
+@using Bridge.WebApp.Pages.Admin.Models
+
+@attribute [Route(PageRoutes.Admin.PlaceView)]
+<div class="page">
+    <MudContainer>
+        <div class="container">
+            <div class="toolbar">
+                <MudText Typo="Typo.h5">기본 정보</MudText>
+                <MudSpacer />
+                @if (_baseInfoReadOnly)
+                {
+                    <MudButton Class="button" Variant="Variant.Outlined" OnClick="EditBaseInfo_Click">수정</MudButton>
+                }
+                else
+                {
+                    <MudButton Class="button" Variant="Variant.Outlined" OnClick="CancelBaseInfo_Click">취소</MudButton>
+                    <MudButton Class="button" Variant="Variant.Outlined" OnClick="SaveBaseInfo_Click">저장</MudButton>
+                }
+            </div>
+            <MudDivider Class="divider" />
+            <MudForm @ref="_baseInfoForm"
+                     @bind-IsValid="_baseInfoFormValid"
+                     Model="_place"
+                     ValidationDelay="0">
+                <MudGrid Spacing="1">
+                    <MudItem xs="12">
+                        <AdvSelect @bind-Value="_place.Type"
+                                   T="PlaceType"
+                                   Validation="@(_validator.PropertyValidation(x=> x.Type))"
+                                   Label="타입"
+                                   ReadOnly="_baseInfoReadOnly">
+                            @{
+                                foreach (var placeType in Enum.GetValues<PlaceType>())
+                                {
+                                    <MudSelectItem Value="@placeType"></MudSelectItem>
+                                }
+                            }
+                        </AdvSelect>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <AdvTextField @bind-Value="_place.Name"
+                                      Validation="@(_validator.PropertyValidation(x=> x.Name))"
+                                      Label="장소명" ReadOnly="_baseInfoReadOnly" />
+                    </MudItem>
+                    <MudItem xs="12">
+                        <AdvTextField @bind-Value="_place.BaseAddress"
+                                      Label="기본주소" ReadOnly="_baseInfoReadOnly"
+                                      Validation="@(_validator.PropertyValidation(x=> x.BaseAddress))" />
+                    </MudItem>
+                    <MudItem xs="12">
+                        <AdvTextField @bind-Value="_place.DetailAddress"
+                                      Label="상세주소" ReadOnly="_baseInfoReadOnly"
+                                      Validation="@(_validator.PropertyValidation(x=> x.DetailAddress))" />
+                    </MudItem>
+                    <MudItem xs="12">
+                        <AdvTextField @bind-Value="_place.ContactNumber"
+                                      Validation="@(_validator.PropertyValidation(x=> x.ContactNumber))"
+                                      Label="연락처"
+                                      ReadOnly="_baseInfoReadOnly" />
+                    </MudItem>
+                    <MudItem xs="12">
+                        <AdvSelect @bind-SelectedValues="_place.Categories"
+                                   T="PlaceCategory"
+                                   MultiSelection="true"
+                                   Label="카테고리"
+                                   ReadOnly="_baseInfoReadOnly"
+                                   Validation="@(_validator.PropertyValidation(x=> x.Categories))">
+                            @foreach (var category in Enum.GetValues<PlaceCategory>())
+                            {
+                                <MudSelectItem Value="category"></MudSelectItem>
+                            }
+                        </AdvSelect>
+                    </MudItem>
+                </MudGrid>
+            </MudForm>
+        </div>
+        <div class="container">
+            <div class="toolbar">
+                <MudText Typo="Typo.h5">영업시간</MudText>
+                <MudSpacer />
+                @if (_openingTimeReadOnly)
+                {
+                    <MudButton Class="button" Variant="Variant.Outlined" OnClick="EditOpeningTime_Click">수정</MudButton>
+                }
+                else
+                {
+                    <MudButton Class="button" Variant="Variant.Outlined" OnClick="CancelOpeningTime_Click">취소</MudButton>
+                    <MudButton Class="button" Variant="Variant.Outlined" OnClick="SaveOpeningTime_Click">저장</MudButton>
+                }
+            </div>
+            <MudDivider Class="divider" />
+            <MudForm @ref="_openingTimeForm"
+                     @bind-IsValid="_openingTimeFormValid"
+                     Model="_place"
+                     ValidationDelay="0">
+                <MudGrid Spacing="1">
+                    <MudItem xs="12">
+                        @foreach (var openingTime in _place.OpeningTimes)
+                        {
+                            <Bridge.WebApp.Pages.Admin.Components.OpeningTimeListItem OpeningTime="openingTime" ReadOnly="_openingTimeReadOnly" />
+                        }
+                    </MudItem>
+                </MudGrid>
+            </MudForm>
+        </div>
+
+        <div class="container">
+            <div class="toolbar">
+                <MudText Typo="Typo.h5">제품</MudText>
+                <MudSpacer />
+                <MudButton Class="button" Variant="Variant.Outlined">추가</MudButton>
+            </div>
+            <MudDivider Class="divider" />
+            <MudToolBar>
+                <div class="search-field">
+                    <AdvTextField T="string"
+                                  @bind-Value="_searchString"
+                                  Placeholder="검색어 입력">
+                    </AdvTextField>
+                </div>
+                <MudButton Class="button" Variant="Variant.Outlined">검색</MudButton>
+            </MudToolBar>
+
+            <MudTable T="ProductModel"
+                      Items="_products">
+                <HeaderContent>
+                    <MudTh>타입</MudTh>
+                    <MudTh>제품명</MudTh>
+                    <MudTh>가격</MudTh>
+                    <MudTh>카테고리</MudTh>
+                </HeaderContent>
+
+                <RowTemplate>
+                    <MudTd DataLabel="타입">
+                        <MudHighlighter Text="@context.TypeString" HighlightedText="@_searchString" />
+                    </MudTd>
+                    <MudTd DataLabel="제품명">
+                        <MudHighlighter Text="@context.Name" HighlightedText="@_searchString" />
+                    </MudTd>
+                    <MudTd DataLabel="가격">
+                        <MudHighlighter Text="@context.PriceString" HighlightedText="@_searchString" />
+                    </MudTd>
+                    <MudTd DataLabel="카테고리">
+                        <MudHighlighter Text="@context.CategoriesString" HighlightedText="@_searchString" />
+                    </MudTd>
+                </RowTemplate>
+
+                <FooterContent>
+                    <MudTFootRow>
+                        <MudTd colSpan="100">총 @(_products.Count)개의 행</MudTd>
+                    </MudTFootRow>
+                </FooterContent>
+            </MudTable>
+        </div>
+    </MudContainer>
+</div>
+

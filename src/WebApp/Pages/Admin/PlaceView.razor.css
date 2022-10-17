@@ -1,0 +1,28 @@
+::deep .container {
+    margin: 12px 0px 12px 0px;
+}
+
+::deep .toolbar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding:4px;
+}
+
+::deep .opening-time-list-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+    ::deep .opening-time-list-item > * {
+        margin: 0px 4px 0px 4px;
+    }
+
+::deep .divider {
+    margin: 0px 0px 12px 0px;
+}
+
+::deep .button {
+    margin-left:4px;
+}

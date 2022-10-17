@@ -20,7 +20,7 @@ namespace Bridge.WebApp.Pages.Admin.Models
             }
         }
 
-        private List<OpeningTimeFormModel> _openingTimes = new()
+        private readonly List<OpeningTimeFormModel> _openingTimes = new()
         {
             new OpeningTimeFormModel(DayOfWeek.Monday),
             new OpeningTimeFormModel(DayOfWeek.Tuesday),
@@ -32,6 +32,32 @@ namespace Bridge.WebApp.Pages.Admin.Models
         };
 
         private List<PlaceCategory> _categories = new();
+
+        /// <summary>
+        /// 속성 복사를 한다
+        /// </summary>
+        /// <param name="source">원본 객체</param>
+        /// <param name="target">대상 객체</param>
+        public static void Copy(PlaceFormModel source, PlaceFormModel target)
+        {
+            target.Id = source.Id;
+            target.Type = source.Type;
+            target.Name = source.Name;
+            target.BaseAddress = source.BaseAddress;
+            target.DetailAddress = source.DetailAddress;
+            target.Categories = source.Categories;
+            target.ContactNumber = source.ContactNumber;
+            target.OpeningTimes = source.OpeningTimes.Select(x => new OpeningTimeFormModel(x.Day)
+            {
+                Day = x.Day,
+                Dayoff = x.Dayoff,
+                OpenTime = x.OpenTime,
+                CloseTime = x.CloseTime,
+                TwentyFourHours = x.TwentyFourHours,
+                BreakStartTime = x.BreakStartTime,
+                BreakEndTime = x.BreakEndTime,
+            });
+        }
 
         /// <summary>
         /// 아이디
@@ -76,10 +102,37 @@ namespace Bridge.WebApp.Pages.Admin.Models
         /// 영업시간
         /// </summary>
         public IEnumerable<OpeningTimeFormModel> OpeningTimes
-        { 
+        {
             get => _openingTimes;
-            set => _openingTimes = value.ToList();
+            set
+            {
+                foreach(var openingTime in _openingTimes.ToArray())
+                {
+                    var entry = value.FirstOrDefault(x => x.Day == openingTime.Day);
+                    if(entry!= null)
+                    {
+                        _openingTimes.Remove(_openingTimes.First(x => x.Day == openingTime.Day));
+                        _openingTimes.Add(entry);
+                    }
+                }
+            }
         }
 
+        /// <summary>
+        /// 영업시간(월요일부터)
+        /// </summary>
+        public IEnumerable<OpeningTimeFormModel> OpeningTimesFromMonday
+        {
+            get
+            {
+                yield return _openingTimes.First(x => x.Day == DayOfWeek.Monday);
+                yield return _openingTimes.First(x => x.Day == DayOfWeek.Tuesday);
+                yield return _openingTimes.First(x => x.Day == DayOfWeek.Wednesday);
+                yield return _openingTimes.First(x => x.Day == DayOfWeek.Thursday);
+                yield return _openingTimes.First(x => x.Day == DayOfWeek.Friday);
+                yield return _openingTimes.First(x => x.Day == DayOfWeek.Saturday);
+                yield return _openingTimes.First(x => x.Day == DayOfWeek.Sunday);
+            }
+        }
     }
 }

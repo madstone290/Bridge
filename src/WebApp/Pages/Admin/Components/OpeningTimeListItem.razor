@@ -1,4 +1,4 @@
-﻿@using Bridge.WebApp.Pages.Admin.Models
+@using Bridge.WebApp.Pages.Admin.Models
 
 <div>
     <MudForm Model="OpeningTime">
@@ -10,36 +10,42 @@
             <div style="width:100px;">
                 <AdvTimePicker @bind-Time="OpeningTime.OpenTime"
                                Editable="true"
-                               Disabled="@(OpeningTime.Dayoff || OpeningTime.TwentyFourHours)" />
+                               ReadOnly="ReadOnly"
+                               Disabled="@(OpeningTime.Dayoff || OpeningTime.TwentyFourHours || ReadOnly)" />
             </div>
             <MudText>~</MudText>
             <div style="width:100px;">
                 <AdvTimePicker @bind-Time="OpeningTime.CloseTime"
                                Editable="true"
-                               Disabled="@(OpeningTime.Dayoff || OpeningTime.TwentyFourHours)" />
+                               ReadOnly="ReadOnly"
+                               Disabled="@(OpeningTime.Dayoff || OpeningTime.TwentyFourHours || ReadOnly)" />
             </div>
 
             <MudText>휴식 시간</MudText>
             <div style="width:100px;">
                 <AdvTimePicker @bind-Time="OpeningTime.BreakStartTime"
                                Editable="true"
-                                  Disabled="@(OpeningTime.Dayoff)"/>
+                               ReadOnly="ReadOnly"
+                               Disabled="@(OpeningTime.Dayoff || ReadOnly)" />
             </div>
             <MudText>~</MudText>
             <div style="width:100px;">
                 <AdvTimePicker @bind-Time="OpeningTime.BreakEndTime"
-                               Editable="true" 
-                               Disabled="@(OpeningTime.Dayoff)" />
+                               Editable="true"
+                               ReadOnly="ReadOnly"
+                               Disabled="@(OpeningTime.Dayoff || ReadOnly)" />
             </div>
 
             <MudSwitch @bind-Checked="OpeningTime.Dayoff"
                        T="bool"
                        Label="휴무일"
-                       Color="Color.Info" />
+                       Color="Color.Info"
+                       ReadOnly="ReadOnly" />
             <MudSwitch @bind-Checked="OpeningTime.TwentyFourHours"
                        T="bool"
                        Label="24시간"
-                       Color="Color.Success" />
+                       Color="Color.Success"
+                       ReadOnly="ReadOnly" />
         </div>
     </MudForm>
 </div>
@@ -47,4 +53,7 @@
 @code {
     [Parameter]
     public OpeningTimeFormModel OpeningTime { get; set; } = null!;
+
+    [Parameter]
+    public bool ReadOnly { get; set; }
 }

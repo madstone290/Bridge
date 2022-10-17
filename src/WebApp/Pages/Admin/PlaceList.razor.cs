@@ -78,7 +78,7 @@ namespace Bridge.WebApp.Pages.Admin
 
         private void EditPlace_Click(PlaceModel place)
         {
-            var uri = PageRoutes.Admin.PlaceUpdate.AddRouteParam("PlaceId", place.Id);
+            var uri = PageRoutes.Admin.PlaceView.AddRouteParam("PlaceId", place.Id);
             NavManager.NavigateTo(uri);
         }
 
