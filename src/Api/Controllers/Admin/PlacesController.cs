@@ -1,3 +1,4 @@
+using Bridge.Application.Common;
 using Bridge.Application.Places.Commands;
 using Bridge.Application.Places.Queries;
 using Bridge.Application.Places.ReadModels;
@@ -36,10 +37,10 @@ namespace Bridge.Api.Controllers.Admin
 
         [HttpGet]
         [Route(ApiRoutes.Admin.Places.GetList)]
-        [ProducesResponseType(typeof(List<PlaceReadModel>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetPlaces([FromQuery] PlaceType placeType)
+        [ProducesResponseType(typeof(PaginatedList<PlaceReadModel>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetPlaces([FromQuery] PlaceType? placeType)
         {
-            var query = new GetPlacesByPlaceTypeQuery() { PlaceType = placeType };
+            var query = new GetPlacesPaginationQuery() { PlaceType = placeType };
             var places = await _mediator.Send(query);
             return Ok(places);
         }

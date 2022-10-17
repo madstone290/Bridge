@@ -1,3 +1,4 @@
+using Bridge.Application.Common;
 using Bridge.Application.Places.Commands;
 using Bridge.Application.Places.Dtos;
 using Bridge.Application.Places.Queries;
@@ -337,7 +338,8 @@ namespace Bridge.IntegrationTests.Admin
 
             // Assert
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-            var places = await response.Content.ReadFromJsonAsync<List<PlaceReadModel>>() ?? default!;
+            var paginatedPlaces = await response.Content.ReadFromJsonAsync<PaginatedList<PlaceReadModel>>() ?? default!;
+            var places = paginatedPlaces.List;
             places.Should().Contain(x => x.Name == command1.Name);
             places.Should().Contain(x => x.Name == command2.Name);
             places.Should().NotContain(x => x.Name == command3.Name);

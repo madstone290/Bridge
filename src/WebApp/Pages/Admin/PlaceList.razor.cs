@@ -16,7 +16,7 @@ namespace Bridge.WebApp.Pages.Admin
         /// <summary>
         ///  검색할 장소 타입
         /// </summary>
-        private PlaceType? _placeType = PlaceType.Other;
+        private PlaceType? _placeType;
 
         /// <summary>
         /// 검색어
@@ -26,18 +26,11 @@ namespace Bridge.WebApp.Pages.Admin
         [Inject]
         public AdminPlaceApiClient PlaceApiClient { get; set; } = null!;
 
-        [Parameter]
-        [SupplyParameterFromQuery(Name ="PlaceType")]
-        public string? PlaceTypeText { get; set; }
-
-        protected override async Task OnParametersSetAsync()
+        protected override async Task OnInitializedAsync()
         {
-            if (Enum.TryParse<PlaceType>(PlaceTypeText, true, out var placeType))
-                _placeType = placeType;
-
             await Load_ClickAsync();
         }
-        
+
         /// <summary>
         /// 입력된 검색어로 장소를 검색한다.
         /// </summary>
@@ -59,16 +52,15 @@ namespace Bridge.WebApp.Pages.Admin
 
         private async Task Load_ClickAsync()
         {
-            if (!_placeType.HasValue)
-                return;
-
-            var result = await PlaceApiClient.GetPlaceList(_placeType.Value);
+            var result = await PlaceApiClient.GetPlaceList(_placeType);
             if (!ValidationService.Validate(result))
                 return;
 
             var placeList = result.Data!;
             _places.Clear();
-            _places.AddRange(placeList.OrderByDescending(x=> x.CreationDateTime).Select(x => PlaceModel.ToPlaceModel(x)));
+            _places.AddRange(placeList.List.OrderByDescending(x=> x.CreationDateTime)
+                .ThenByDescending(x=> x.Id)
+                .Select(x => PlaceModel.ToPlaceModel(x)));
         }
 
         private void ToggleShowOpeningTime_Click(PlaceModel place)

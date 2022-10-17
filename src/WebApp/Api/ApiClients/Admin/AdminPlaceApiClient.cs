@@ -1,3 +1,4 @@
+using Bridge.Application.Common;
 using Bridge.Application.Places.Commands;
 using Bridge.Application.Places.Queries;
 using Bridge.Application.Places.ReadModels;
@@ -29,10 +30,12 @@ namespace Bridge.WebApp.Api.ApiClients.Admin
         /// </summary>
         /// <param name="placeType">조회할 장소의 유형</param>
         /// <returns></returns>
-        public async Task<ApiResult<List<PlaceReadModel>>> GetPlaceList(PlaceType placeType)
+        public async Task<ApiResult<PaginatedList<PlaceReadModel>>> GetPlaceList(PlaceType? placeType, int pageNumber = 1, int pageSize = 50)
         {
-            return await SendAsync<List<PlaceReadModel>>(HttpMethod.Get, ApiRoutes.Admin.Places.GetList
-                .AddQueryParam("placeType", placeType));
+            return await SendAsync<PaginatedList<PlaceReadModel>>(HttpMethod.Get, ApiRoutes.Admin.Places.GetList
+                .AddQueryParam("placeType", placeType)
+                .AddQueryParam("pageNumber", pageNumber)
+                .AddQueryParam("pageSize", pageSize));
         }
 
         /// <summary>

@@ -1,3 +1,4 @@
+using Bridge.Application.Common;
 using Bridge.Application.Places.Dtos;
 using Bridge.Application.Places.ReadModels;
 using Bridge.Application.Places.Repos;
@@ -46,6 +47,15 @@ namespace Bridge.Infrastructure.Data.ReadRepos
                 BreakStartTime = t.BreakStartTime
             }).ToList()
         };
+
+        public async Task<PaginatedList<PlaceReadModel>> GetPaginatedPlacesAsync(PlaceType? placeType = null, int pageNumber = 1, int pageSize = 100)
+        {
+            return await Set
+                .Where(x => placeType == null || x.Type == placeType.Value)
+                .Select(SelectExpression)
+                .OrderByDescending(x=> x.CreationDateTime)
+                .PaginateAsync(pageNumber, pageSize);
+        }
 
         public async Task<List<PlaceReadModel>> SearchPlacesAsync(string searchText, double easting, double northing, int maxCount = 200, int? maxDistance = null)
         {

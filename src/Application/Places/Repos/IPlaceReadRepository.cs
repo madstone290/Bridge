@@ -16,5 +16,14 @@ namespace Bridge.Application.Places.Repos
         /// <param name="maxDistance">최대 검색거리</param>
         /// <returns></returns>
         Task<List<PlaceReadModel>> SearchPlacesAsync(string searchText, double easting, double northing, int maxCount = 1000, int? maxDistance = null);
+
+        /// <summary>
+        /// 페이지
+        /// </summary>
+        /// <param name="placeType"></param>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+        Task<PaginatedList<PlaceReadModel>> GetPaginatedPlacesAsync(PlaceType? placeType = null, int pageNumber = 1, int pageSize = 100);
     }
 }

@@ -17,7 +17,7 @@ namespace Bridge.Shared.Extensions
         /// <param name="name"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static string AddQueryParam(this string uri, string name, object value)
+        public static string AddQueryParam(this string uri, string name, object? value)
         {
             bool hasQuery = uri.Contains('?');
 
