@@ -136,6 +136,14 @@ namespace Bridge.Domain.Places.Entities
         }
 
         /// <summary>
+        /// 휴무일 제거
+        /// </summary>
+        internal void ClearDayoff()
+        {
+            Dayoff = false;
+        }
+
+        /// <summary>
         /// 24시간 영업설정
         /// </summary>
         internal void SetTwentyFourHours()
@@ -144,6 +152,14 @@ namespace Bridge.Domain.Places.Entities
             Dayoff = false;
             OpenTime = null;
             CloseTime = null;
+        }
+
+        /// <summary>
+        /// 24시간 영업 취소
+        /// </summary>
+        internal void ClearTwentyFourHours()
+        {
+            TwentyFourHours = false;
         }
     }
 }

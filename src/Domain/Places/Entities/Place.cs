@@ -172,21 +172,38 @@ namespace Bridge.Domain.Places.Entities
         /// 휴무일을 설정한다.
         /// </summary>
         /// <param name="day"></param>
-        public void SetDayoff(DayOfWeek day) 
+        public void SetDayoff(DayOfWeek day, bool dayoff) 
         {
             var openingTime = GetOrCreateOpeningTime(day);
-            openingTime.SetDayoff();
+            if (dayoff)
+                openingTime.SetDayoff();
+            else
+                openingTime.ClearDayoff();
         }
 
         /// <summary>
         /// 24시간 영업시간을 설정한다.
         /// </summary>
         /// <param name="day"></param>
-        public void SetTwentyFourHours(DayOfWeek day)
+        public void SetTwentyFourHours(DayOfWeek day, bool twentyFourHours)
         {
             var openingTime = GetOrCreateOpeningTime(day);
-            openingTime.SetTwentyFourHours();
+            if (twentyFourHours)
+                openingTime.SetTwentyFourHours();
+            else
+                openingTime.ClearTwentyFourHours();
         }
+
+        /// <summary>
+        /// 24시간 영업시간을 제거한다.
+        /// </summary>
+        /// <param name="day"></param>
+        public void ClearTwentyFourHours(DayOfWeek day)
+        {
+            var openingTime = GetOrCreateOpeningTime(day);
+            openingTime.ClearTwentyFourHours();
+        }
+
 
         /// <summary>
         /// 개점, 폐점 시간을 설정한다.

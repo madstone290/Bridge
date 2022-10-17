@@ -75,11 +75,8 @@ namespace Bridge.Application.Places.Commands
                 if (openingTimeDto.BreakStartTime.HasValue && openingTimeDto.BreakEndTime.HasValue)
                     place.SetBreakTime(openingTimeDto.Day, openingTimeDto.BreakStartTime.Value, openingTimeDto.BreakEndTime.Value);
 
-                if (openingTimeDto.Dayoff)
-                    place.SetDayoff(openingTimeDto.Day);
-
-                if (openingTimeDto.TwentyFourHours)
-                    place.SetTwentyFourHours(openingTimeDto.Day);
+                place.SetDayoff(openingTimeDto.Day, openingTimeDto.Dayoff);
+                place.SetTwentyFourHours(openingTimeDto.Day, openingTimeDto.TwentyFourHours);
             }
 
             await _placeRepository.AddAsync(place);
