@@ -48,7 +48,8 @@
             <MudTh>연락처</MudTh>
             <MudTh>위경도</MudTh>
             <MudTh>동북향</MudTh>
-            <MudTh>기능</MudTh>
+            <MudTh>영업시간</MudTh>
+            <MudTh>메뉴</MudTh>
         </HeaderContent>
 
         <RowTemplate>
@@ -73,13 +74,14 @@
             <MudTd DataLabel="동북향">
                 <MudHighlighter Text="@context.EastingNorthingString" HighlightedText="@_searchString" />
             </MudTd>
+            <MudTd DataLabel="영업시간">
+                <MudButton Variant="Variant.Outlined" @onclick="@(() => ToggleShowOpeningTime_Click(context))">@(context.ShowOpeningTimes ? "닫기" : "열기")</MudButton>
+            </MudTd>
             <MudTd>
-                <MudMenu Label="기능"
-                         Variant="Variant.Filled"
-                         EndIcon="@Icons.Filled.KeyboardArrowDown"
-                         IconColor="Color.Secondary">
-                    <MudMenuItem @onclick="@(() => EditPlace_Click(context))">수정</MudMenuItem>
-                    <MudMenuItem @onclick="@(() => ToggleShowOpeningTime_Click(context))">영업시간 보기</MudMenuItem>
+                <MudMenu Label="메뉴"
+                         Variant="Variant.Outlined"
+                         EndIcon="@Icons.Filled.KeyboardArrowDown">
+                    <MudMenuItem @onclick="@(() => EditPlace_Click(context))">장소 관리</MudMenuItem>
                     <MudMenuItem @onclick="@(() => ManageProduct_Click(context))">제품 관리</MudMenuItem>
                 </MudMenu>
             </MudTd>
