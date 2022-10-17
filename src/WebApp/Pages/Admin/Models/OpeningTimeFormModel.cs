@@ -68,7 +68,6 @@ namespace Bridge.WebApp.Pages.Admin.Models
                 {
                     OpenTime = null;
                     CloseTime = null;
-
                     TwentyFourHours = false;
                 }
             }
@@ -92,12 +91,10 @@ namespace Bridge.WebApp.Pages.Admin.Models
 
                 if (value)
                 {
-                    OpenTime = new TimeSpan(0, 0, 0);
-                    CloseTime = new TimeSpan(23, 59, 0);
-
+                    OpenTime = null;
+                    CloseTime = null;
                     Dayoff = false;
                 }
-                
             }
         }
 
