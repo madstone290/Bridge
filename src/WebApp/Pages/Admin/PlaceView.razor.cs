@@ -86,8 +86,6 @@ namespace Bridge.WebApp.Pages.Admin
             _products.AddRange(productsDto.OrderByDescending(x => x.Id).Select(x => ProductModel.Create(x)));
         }
 
-    
-
         private void EditBaseInfo_Click()
         {
             _baseInfoReadOnly = false;
