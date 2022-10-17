@@ -65,5 +65,26 @@ namespace Bridge.WebApp.Api.ApiClients.Admin
             return await SendAsync<Void>(HttpMethod.Put, ApiRoutes.Admin.Places.Update.AddRouteParam("id", command.Id), command);
         }
 
+        /// <summary>
+        /// 장소 기초정보를 수정한다
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        public async Task<ApiResult<Void>> UpdatePlaceBaseInfo(UpdatePlaceBaseInfoCommand command)
+        {
+            return await SendAsync<Void>(HttpMethod.Put, ApiRoutes.Admin.Places.UpdateBaseInfo.AddRouteParam("id", command.Id), command);
+        }
+
+        /// <summary>
+        /// 장소 영업시간을 수정한다
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        public async Task<ApiResult<Void>> UpdatePlaceOpeningTimes(UpdatePlaceOpeningTimesCommand command)
+        {
+            return await SendAsync<Void>(HttpMethod.Put, ApiRoutes.Admin.Places.UpdateOpeningTimes.AddRouteParam("id", command.Id), command);
+        }
+
+
     }
 }
