@@ -2,7 +2,6 @@ using Bridge.WebApp.Api.ApiClients.Admin;
 using Bridge.WebApp.Pages.Admin.Components;
 using Bridge.WebApp.Pages.Admin.Models;
 using Microsoft.AspNetCore.Components;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using MudBlazor;
 
 namespace Bridge.WebApp.Pages.Admin
@@ -10,11 +9,6 @@ namespace Bridge.WebApp.Pages.Admin
     public partial class PlaceView
     {
         private MudForm? _baseInfoForm;
-        
-        /// <summary>
-        /// 기본정보 유효성 상태
-        /// </summary>
-        private bool _baseInfoFormValid;
 
         /// <summary>
         /// 기본정보 읽기전용 상태
@@ -22,11 +16,6 @@ namespace Bridge.WebApp.Pages.Admin
         private bool _baseInfoReadOnly = true;
 
         private MudForm? _openingTimeForm;
-
-        /// <summary>
-        /// 영업시간 유효성 상태
-        /// </summary>
-        private bool _openingTimeFormValid;
 
         /// <summary>
         /// 영업시간 읽기전용 상태
@@ -93,6 +82,10 @@ namespace Bridge.WebApp.Pages.Admin
 
         private async void SaveBaseInfo_Click()
         {
+            await _baseInfoForm!.Validate();
+            if (!_baseInfoForm.IsValid)
+                return;
+
             var result = await PlaceApiClient.UpdatePlaceBaseInfo(new Application.Places.Commands.UpdatePlaceBaseInfoCommand()
             {
                 Id = _place.Id,
@@ -132,6 +125,10 @@ namespace Bridge.WebApp.Pages.Admin
 
         private async void SaveOpeningTime_Click()
         {
+            await _openingTimeForm!.Validate();
+            if (!_openingTimeForm.IsValid)
+                return;
+
             var result = await PlaceApiClient.UpdatePlaceOpeningTimes(new Application.Places.Commands.UpdatePlaceOpeningTimesCommand()
             {
                 Id = _place.Id,
