@@ -72,12 +72,23 @@ namespace Bridge.Api.Controllers.Admin
             return Ok();
         }
 
-        [HttpPost]
-        [Route(ApiRoutes.Admin.Places.AddOpeningTime)]
+        [HttpPut]
+        [Route(ApiRoutes.Admin.Places.UpdateBaseInfo)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> AddOpeningTime([FromRoute] long id, [FromBody] AddOpeningTimeCommand command)
+        public async Task<IActionResult> UpdatePlaceBaseInfo([FromRoute] long id, [FromBody] UpdatePlaceBaseInfoCommand command)
         {
-            command.PlaceId = id;
+            command.Id = id;
+            await _mediator.Send(command);
+            return Ok();
+        }
+
+
+        [HttpPut]
+        [Route(ApiRoutes.Admin.Places.UpdateOpeningTimes)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> UpdatePlaceOpeningTimes([FromRoute] long id, [FromBody] UpdatePlaceOpeningTimesCommand command)
+        {
+            command.Id = id;
             await _mediator.Send(command);
             return Ok();
         }

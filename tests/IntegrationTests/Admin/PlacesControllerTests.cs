@@ -183,34 +183,79 @@ namespace Bridge.IntegrationTests.Admin
             place.OpeningTimes.Should().ContainEquivalentOf(command.OpeningTimes[2]);
 
         }
+        [Theory]
+        [InlineData("슈퍼마켓", "대구광역시 남구 대명동 1796-17", "1층", "Cafeteria", "Pharmacy", "053-444-5552")]
+        [InlineData("화장실", "대구광역시 남구 대명동 1819-31", "1층", "Hospital", "Pharmacy", "053-333-5552")]
+        public async Task Update_BaseInfo_Return_Ok(string name, string baseAddress, string detailAddress, string category1, string category2, string contactNumber)
+        {
+            // Arrange
+            var placeId = await _apiClient.CreatePlaceAsync();
+            var command = new UpdatePlaceBaseInfoCommand()
+            {
+                Id = placeId,
+                Name = name,
+                Address = new AddressDto() 
+                { 
+                    BaseAddress = baseAddress,
+                    DetailAddress = detailAddress
+                },
+                Categories = new List<PlaceCategory>()
+                {
+                    Enum.Parse<PlaceCategory>(category1, true),
+                    Enum.Parse<PlaceCategory>(category2, true),
+                },
+                ContactNumber = contactNumber,
+            };
+
+            // Act
+            var addRequest = new HttpRequestMessage(HttpMethod.Put, ApiRoutes.Admin.Places.UpdateBaseInfo.Replace("{id}", $"{placeId}"))
+            {
+                Content = JsonContent.Create(command)
+            };
+            var addResponse = await _client.SendAsAdminAsync(addRequest);
+
+            var getRequest = new HttpRequestMessage(HttpMethod.Get, ApiRoutes.Admin.Places.Get.Replace("{id}", $"{placeId}"));
+            var getResponse = await _client.SendAsAdminAsync(getRequest);
+
+            // Assert
+            addResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+            var place = await getResponse.Content.ReadFromJsonAsync<PlaceReadModel>() ?? null!;
+            place.Name.Should().Be(name);
+            place.Address.DetailAddress.Should().Be(command.Address.DetailAddress);
+            place.Categories.Should().BeEquivalentTo(command.Categories);
+            place.ContactNumber.Should().Be(command.ContactNumber);
+        }
 
         [Theory]
         [InlineData(DayOfWeek.Sunday, true, false, null, null, null, null)]
         [InlineData(DayOfWeek.Monday, false, true, null, null, null, null)]
         [InlineData(DayOfWeek.Tuesday, false, false, 6, 18, null, null)]
         [InlineData(DayOfWeek.Wednesday, false, false, 6, 18, 15, 16)]
-        public async Task Add_OpeningTime_Return_Ok(DayOfWeek day, bool dayoff, bool twentyFourHours, double? openTime, double? closeTime,
+        public async Task Update_OpeningTimes_Return_Ok(DayOfWeek day, bool dayoff, bool twentyFourHours, double? openTime, double? closeTime,
             double? breakStartTime, double? breakEndTime)
         {
             // Arrange
             var placeId = await _apiClient.CreatePlaceAsync();
-            var command = new AddOpeningTimeCommand()
+            var command = new UpdatePlaceOpeningTimesCommand()
             {
-                PlaceId = placeId,
-                OpeningTime = new OpeningTimeDto()
+                Id = placeId,
+                OpeningTimes = new List<OpeningTimeDto>()
                 {
-                    Day = day,
-                    Dayoff = dayoff,
-                    TwentyFourHours = twentyFourHours,
-                    OpenTime = openTime.HasValue ? TimeSpan.FromHours(openTime.Value) : null,
-                    CloseTime = closeTime.HasValue ? TimeSpan.FromHours(closeTime.Value) : null,
-                    BreakStartTime = breakStartTime.HasValue ? TimeSpan.FromHours(breakStartTime.Value) : null,
-                    BreakEndTime = breakEndTime.HasValue ? TimeSpan.FromHours(breakEndTime.Value) : null,
+                     new OpeningTimeDto()
+                    {
+                        Day = day,
+                        Dayoff = dayoff,
+                        TwentyFourHours = twentyFourHours,
+                        OpenTime = openTime.HasValue ? TimeSpan.FromHours(openTime.Value) : null,
+                        CloseTime = closeTime.HasValue ? TimeSpan.FromHours(closeTime.Value) : null,
+                        BreakStartTime = breakStartTime.HasValue ? TimeSpan.FromHours(breakStartTime.Value) : null,
+                        BreakEndTime = breakEndTime.HasValue ? TimeSpan.FromHours(breakEndTime.Value) : null,
+                    }
                 }
             };
 
             // Act
-            var addRequest = new HttpRequestMessage(HttpMethod.Post,ApiRoutes.Admin.Places.AddOpeningTime.Replace("{id}", $"{placeId}"))
+            var addRequest = new HttpRequestMessage(HttpMethod.Put, ApiRoutes.Admin.Places.UpdateOpeningTimes.Replace("{id}", $"{placeId}"))
             {
                 Content = JsonContent.Create(command)
             };
@@ -222,7 +267,7 @@ namespace Bridge.IntegrationTests.Admin
             // Assert
             addResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
             var place = await getResponse.Content.ReadFromJsonAsync<PlaceReadModel>() ?? null!;
-            place.OpeningTimes.Should().ContainEquivalentOf(command.OpeningTime);
+            place.OpeningTimes.Should().ContainEquivalentOf(command.OpeningTimes.First());
         }
 
         [Fact]

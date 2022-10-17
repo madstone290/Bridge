@@ -30,7 +30,8 @@ namespace Bridge.Shared
                 public const string Search = "/api/Admin/Places/Search";
                 public const string Create = "/api/Admin/Places";
                 public const string Update = "/api/Admin/Places/{id}";
-                public const string AddOpeningTime = "/api/Admin/Places/{id}/OpeningTimes";
+                public const string UpdateBaseInfo = "/api/Admin/Places/{id}/BaseInfo";
+                public const string UpdateOpeningTimes = "/api/Admin/Places/{id}/OpeningTimes";
                 public const string UpdateCategories = "/api/Admin/Places/{id}/Categories";
             }
         }
