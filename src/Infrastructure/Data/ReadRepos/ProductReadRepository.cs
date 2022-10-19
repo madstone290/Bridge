@@ -27,11 +27,12 @@ namespace Bridge.Infrastructure.Data.ReadRepos
         public async Task<PaginatedList<ProductReadModel>> GetPaginatedProductsAsync(long placeId, int pageNumber = 1, int pageSize = 50)
         {
             return await Set
-                   .Where(x => x.PlaceId == placeId)
-                   .Select(SelectExpression)
-                   .OrderByDescending(x => x.CreationDateTime)
-                   .ThenByDescending(x => x.Id)
-                   .PaginateAsync(pageNumber, pageSize);
+                .Where(x=> x.Status == Domain.Places.Entities.ProductStatus.Used)
+                .Where(x => x.PlaceId == placeId)
+                .Select(SelectExpression)
+                .OrderByDescending(x => x.CreationDateTime)
+                .ThenByDescending(x => x.Id)
+                .PaginateAsync(pageNumber, pageSize);
         }
     }
 
