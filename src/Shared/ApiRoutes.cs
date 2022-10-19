@@ -27,7 +27,7 @@ namespace Bridge.Shared
             public static class Places
             {
                 public const string Get = "/api/Admin/Places/{id}";
-                public const string GetList = "/api/Admin/Places";
+                public const string GetPaginatedList = "/api/Admin/Places";
                 public const string Search = "/api/Admin/Places/Search";
                 public const string Create = "/api/Admin/Places";
                 public const string Update = "/api/Admin/Places/{id}";

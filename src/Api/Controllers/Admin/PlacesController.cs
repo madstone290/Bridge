@@ -36,7 +36,7 @@ namespace Bridge.Api.Controllers.Admin
         }
 
         [HttpGet]
-        [Route(ApiRoutes.Admin.Places.GetList)]
+        [Route(ApiRoutes.Admin.Places.GetPaginatedList)]
         [ProducesResponseType(typeof(PaginatedList<PlaceReadModel>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetPlaces([FromQuery] PlaceType? placeType, [FromQuery] int? pageNumber, [FromQuery] int? pageSize)
         {

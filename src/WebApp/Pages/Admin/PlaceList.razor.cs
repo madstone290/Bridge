@@ -54,7 +54,7 @@ namespace Bridge.WebApp.Pages.Admin
 
         private async Task Load_ClickAsync()
         {
-            var result = await PlaceApiClient.GetPlaceList(_placeType, _pageNumber, _rowsPerPage);
+            var result = await PlaceApiClient.GetPaginatedPlaceList(_placeType, _pageNumber, _rowsPerPage);
             if (!ValidationService.Validate(result))
                 return;
 

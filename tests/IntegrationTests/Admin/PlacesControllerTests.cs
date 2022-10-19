@@ -333,7 +333,7 @@ namespace Bridge.IntegrationTests.Admin
             var placeType = PlaceType.Cafeteria;
 
             // Act
-            var request = new HttpRequestMessage(HttpMethod.Get,ApiRoutes.Admin.Places.GetList.AddQueryParam("placeType", placeType.ToString()));
+            var request = new HttpRequestMessage(HttpMethod.Get,ApiRoutes.Admin.Places.GetPaginatedList.AddQueryParam("placeType", placeType.ToString()));
             var response = await _client.SendAsAdminAsync(request);
 
             // Assert
