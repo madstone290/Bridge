@@ -128,6 +128,7 @@
             </MudToolBar>
 
             <MudTable T="ProductModel"
+                      RowsPerPage="_rowsPerPage"
                       Items="_products">
                 <HeaderContent>
                     <MudTh>타입</MudTh>
@@ -159,11 +160,11 @@
                     </MudTd>
                 </RowTemplate>
 
-                <FooterContent>
-                    <MudTFootRow>
-                        <MudTd colSpan="100">총 @(_products.Count)개의 행</MudTd>
-                    </MudTFootRow>
-                </FooterContent>
+                <PagerContent>
+                    <TablePagination TotalCount="_totalCount" PageCount="_pageCount"
+                                     PageNumber="_pageNumber" PageNumberChanged="PageNumberChanged"
+                                     RowsPerPage="_rowsPerPage" RowsPerPageChanged="RowsPerPageChanged" />
+                </PagerContent>
             </MudTable>
         </div>
     </MudContainer>

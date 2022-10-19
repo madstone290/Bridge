@@ -33,6 +33,11 @@ namespace Bridge.WebApp.Pages.Admin
         /// </summary>
         private string _searchString = string.Empty;
 
+        private int _totalCount;
+        private int _pageCount;
+        private int _pageNumber = 1;
+        private int _rowsPerPage = 10;
+
         /// <summary>
         /// 장소 아이디
         /// </summary>
@@ -173,14 +178,7 @@ namespace Bridge.WebApp.Pages.Admin
 
             if (!result.Cancelled)
             {
-                var productResult = await ProductApiClient.GetProductList(PlaceId);
-                if (!ValidationService.Validate(productResult))
-                    return;
-
-                var productsDto = productResult.Data!;
-                _products.Clear();
-                _products.AddRange(productsDto.OrderByDescending(x=> x.CreationDateTime).Select(x => ProductModel.Create(x)));
-                StateHasChanged();
+                await LoadProductsAsync();
             }
         }
 
@@ -209,6 +207,33 @@ namespace Bridge.WebApp.Pages.Admin
 
                 StateHasChanged();
             }
+        }
+
+
+        private async void PageNumberChanged(int pageNumber)
+        {
+            _pageNumber = pageNumber;
+            await LoadProductsAsync();
+            StateHasChanged();
+        }
+
+        private async void RowsPerPageChanged(int rowsPerPage)
+        {
+            _rowsPerPage = rowsPerPage;
+            await LoadProductsAsync();
+            StateHasChanged();
+        }
+
+        private async Task LoadProductsAsync()
+        {
+            var productResult = await ProductApiClient.GetProductList(PlaceId);
+            if (!ValidationService.Validate(productResult))
+                return;
+
+            var productsDto = productResult.Data!;
+            _products.Clear();
+            _products.AddRange(productsDto.OrderByDescending(x => x.CreationDateTime).Select(x => ProductModel.Create(x)));
+            StateHasChanged();
         }
 
     }
