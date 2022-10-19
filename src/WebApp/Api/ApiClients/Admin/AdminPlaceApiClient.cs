@@ -88,6 +88,16 @@ namespace Bridge.WebApp.Api.ApiClients.Admin
             return await SendAsync<Void>(HttpMethod.Put, ApiRoutes.Admin.Places.UpdateOpeningTimes.AddRouteParam("id", command.Id), command);
         }
 
+        /// <summary>
+        /// 장소를 폐업한다
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        public async Task<ApiResult<Void>> ClosePlace(long id)
+        {
+            return await SendAsync<Void>(HttpMethod.Put, ApiRoutes.Admin.Places.Close.AddRouteParam("id", id));
+        }
+
 
     }
 }

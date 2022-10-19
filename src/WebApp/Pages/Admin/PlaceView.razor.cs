@@ -1,6 +1,7 @@
 using Bridge.WebApp.Api.ApiClients.Admin;
 using Bridge.WebApp.Pages.Admin.Components;
 using Bridge.WebApp.Pages.Admin.Models;
+using Bridge.WebApp.Shared;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
@@ -182,7 +183,6 @@ namespace Bridge.WebApp.Pages.Admin
                 oldProduct.Type = productDto.Type;
                 oldProduct.Price = productDto.Price;
                 oldProduct.Categories = productDto.Categories;
-
                 StateHasChanged();
             }
         }
@@ -192,14 +192,12 @@ namespace Bridge.WebApp.Pages.Admin
         {
             _pageNumber = pageNumber;
             await LoadProductsAsync();
-            StateHasChanged();
         }
 
         private async void RowsPerPageChanged(int rowsPerPage)
         {
             _rowsPerPage = rowsPerPage;
             await LoadProductsAsync();
-            StateHasChanged();
         }
 
         private async Task LoadPlaceAsync()
@@ -241,6 +239,26 @@ namespace Bridge.WebApp.Pages.Admin
             _products.Clear();
             _products.AddRange(productsDto.List.Select(x => ProductModel.Create(x)));
             StateHasChanged();
+        }
+
+        private async void DiscardProduct_Click(ProductModel product)
+        {
+            var parameters = new DialogParameters
+            {
+                { nameof(ConfirmationDialog.Message), $"'{product.Name}' 을(를) 폐기하시겠습니까?"},
+            };
+
+            var options = new DialogOptions { MaxWidth = MaxWidth.Small };
+            var dialog = DialogService.Show<ConfirmationDialog>(string.Empty, parameters, options);
+            var dialogResult = await dialog.Result;
+            if (!dialogResult.Cancelled)
+            {
+                var apiResult = await ProductApiClient.DiscardProduct(product.Id);
+                if (ValidationService.Validate(apiResult))
+                {
+                    await LoadProductsAsync();
+                }
+            }
         }
 
     }

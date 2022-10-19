@@ -69,5 +69,16 @@ namespace Bridge.WebApp.Api.ApiClients.Admin
             return await SendAsync<Void>(HttpMethod.Put, ApiRoutes.Admin.Products.Update.AddRouteParam("id", command.Id), command);
         }
 
+
+        /// <summary>
+        /// 제품을 폐기한다
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        public async Task<ApiResult<Void>> DiscardProduct(long id)
+        {
+            return await SendAsync<Void>(HttpMethod.Put, ApiRoutes.Admin.Products.Discard.AddRouteParam("id", id));
+        }
+
     }
 }

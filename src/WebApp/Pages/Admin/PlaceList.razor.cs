@@ -3,6 +3,7 @@ using Bridge.Shared.Extensions;
 using Bridge.WebApp.Api.ApiClients.Admin;
 using Bridge.WebApp.Pages.Admin.Components;
 using Bridge.WebApp.Pages.Admin.Models;
+using Bridge.WebApp.Shared;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
@@ -66,6 +67,7 @@ namespace Bridge.WebApp.Pages.Admin
 
             _places.Clear();
             _places.AddRange(placeList.List.Select(x => PlaceModel.ToPlaceModel(x)));
+            StateHasChanged();
         }
 
         private async void Create_Click()
@@ -75,13 +77,12 @@ namespace Bridge.WebApp.Pages.Admin
                 { nameof(PlaceModalForm.FormMode), FormMode.Create }
             };
 
-            var options = new DialogOptions { MaxWidth = MaxWidth.Large};
+            var options = new DialogOptions { MaxWidth = MaxWidth.Large };
             var dialog = DialogService.Show<PlaceModalForm>(string.Empty, parameters, options);
             var dialogResult = await dialog.Result;
             if (!dialogResult.Cancelled)
             {
                 await Load_ClickAsync();
-                StateHasChanged();
             }
         }
 
@@ -101,7 +102,7 @@ namespace Bridge.WebApp.Pages.Admin
             var options = new DialogOptions { MaxWidth = MaxWidth.Large };
             var dialog = DialogService.Show<PlaceModalForm>(string.Empty, parameters, options);
             var dialogResult = await dialog.Result;
-            if(!dialogResult.Cancelled)
+            if (!dialogResult.Cancelled)
             {
                 var placeId = (long)dialogResult.Data;
                 var placeResult = await PlaceApiClient.GetPlaceById(placeId);
@@ -130,19 +131,37 @@ namespace Bridge.WebApp.Pages.Admin
         {
             NavManager.NavigateTo(PageRoutes.Admin.PlaceProductList.AddRouteParam("PlaceId", place.Id));
         }
-        
+
+        private async void ClosePlace_Click(PlaceModel place)
+        {
+            var parameters = new DialogParameters
+            {
+                { nameof(ConfirmationDialog.Message), $"'{place.Name}' 을(를) 폐업하시겠습니까?"},
+            };
+
+            var options = new DialogOptions { MaxWidth = MaxWidth.Small };
+            var dialog = DialogService.Show<ConfirmationDialog>(string.Empty, parameters, options);
+            var dialogResult = await dialog.Result;
+            if (!dialogResult.Cancelled)
+            {
+                var apiResult = await PlaceApiClient.ClosePlace(place.Id);
+                if(ValidationService.Validate(apiResult))
+                {
+                    await Load_ClickAsync();
+                }
+            }
+        }
+
         private async void PageNumberChanged(int pageNumber)
         {
             _pageNumber = pageNumber;
             await Load_ClickAsync();
-            StateHasChanged();
         }
 
         private async void RowsPerPageChanged(int rowsPerPage)
         {
             _rowsPerPage = rowsPerPage;
             await Load_ClickAsync();
-            StateHasChanged();
         }
     }
 }
