@@ -1,3 +1,4 @@
+using Bridge.Application.Common;
 using Bridge.Application.Products.Commands;
 using Bridge.Application.Products.Queries;
 using Bridge.Application.Products.ReadModels;
@@ -28,6 +29,21 @@ namespace Bridge.Api.Controllers.Admin
             var query = new GetProductByIdQuery()
             {
                 Id = id
+            };
+            var place = await _mediator.Send(query);
+            return Ok(place);
+        }
+
+        [HttpGet]
+        [Route(ApiRoutes.Admin.Products.GetPaginatedList)]
+        [ProducesResponseType(typeof(PaginatedList<ProductReadModel>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetProducts([FromQuery] long placeId, [FromQuery] int? pageNumber, [FromQuery] int? pageSize)
+        {
+            var query = new GetProductsPaginationQuery()
+            {
+                PlaceId = placeId,
+                PageNumber = pageNumber,
+                PageSize = pageSize
             };
             var place = await _mediator.Send(query);
             return Ok(place);

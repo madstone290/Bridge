@@ -1,3 +1,4 @@
+using Bridge.Application.Common;
 using Bridge.Application.Products.Commands;
 using Bridge.Application.Products.ReadModels;
 using Bridge.Shared;
@@ -31,6 +32,21 @@ namespace Bridge.WebApp.Api.ApiClients.Admin
         {
             return await SendAsync<List<ProductReadModel>>(HttpMethod.Get, ApiRoutes.Admin.Products.GetList
                 .AddQueryParam("placeId", placeId));
+        }
+
+        /// <summary>
+        /// 장소에 포함된 제품 목록을 조회한다.
+        /// </summary>
+        /// <param name="placeId"></param>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+        public async Task<ApiResult<PaginatedList<ProductReadModel>>> GetPaginatedProductList(long placeId, int pageNumber, int pageSize)
+        {
+            return await SendAsync<PaginatedList<ProductReadModel>>(HttpMethod.Get, ApiRoutes.Admin.Products.GetPaginatedList
+                .AddQueryParam("placeId", placeId)
+                .AddQueryParam("pageNumber", pageNumber)
+                .AddQueryParam("pageSize", pageSize));
         }
 
         /// <summary>

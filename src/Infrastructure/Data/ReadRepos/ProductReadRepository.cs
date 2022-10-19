@@ -1,3 +1,4 @@
+using Bridge.Application.Common;
 using Bridge.Application.Products.ReadModels;
 using Bridge.Application.Products.Repos;
 using Bridge.Domain.Products.Entities;
@@ -22,6 +23,16 @@ namespace Bridge.Infrastructure.Data.ReadRepos
             Price = x.Price,
             Categories = x.Categories.ToList(),
         };
+
+        public async Task<PaginatedList<ProductReadModel>> GetPaginatedProductsAsync(long placeId, int pageNumber = 1, int pageSize = 50)
+        {
+            return await Set
+                   .Where(x => x.PlaceId == placeId)
+                   .Select(SelectExpression)
+                   .OrderByDescending(x => x.CreationDateTime)
+                   .ThenByDescending(x => x.Id)
+                   .PaginateAsync(pageNumber, pageSize);
+        }
     }
 
 }

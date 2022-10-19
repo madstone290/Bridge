@@ -52,32 +52,10 @@ namespace Bridge.WebApp.Pages.Admin
 
         protected override async Task OnInitializedAsync()
         {
-            var placeTask = PlaceApiClient.GetPlaceById(PlaceId);
-            var productTask = ProductApiClient.GetProductList(PlaceId);
+            var placeTask = LoadPlaceAsync();
+            var productTask = LoadProductsAsync();
 
             await Task.WhenAll(placeTask, productTask);
-
-            var placeResult = placeTask.Result;
-            var productResult = productTask.Result;
-
-            if (!ValidationService.Validate(placeResult) || !ValidationService.Validate(productResult))
-                return;
-
-            var placeDto = placeResult.Data!;
-
-            _place.Id = placeDto.Id;
-            _place.Type = placeDto.Type;
-            _place.Name = placeDto.Name;
-            _place.BaseAddress = placeDto.Address.BaseAddress;
-            _place.DetailAddress = placeDto.Address.DetailAddress;
-            _place.Categories = placeDto.Categories;
-            _place.ContactNumber = placeDto.ContactNumber;
-            _place.OpeningTimes = placeDto.OpeningTimes.Select(x => OpeningTimeFormModel.Create(x));
-
-            PlaceFormModel.Copy(_place, _placeBackup);
-
-            var productsDto = productResult.Data!;
-            _products.AddRange(productsDto.OrderByDescending(x => x.CreationDateTime).Select(x => ProductModel.Create(x)));
         }
 
         private void EditBaseInfo_Click()
@@ -224,15 +202,44 @@ namespace Bridge.WebApp.Pages.Admin
             StateHasChanged();
         }
 
+        private async Task LoadPlaceAsync()
+        {
+            var placeTask = PlaceApiClient.GetPlaceById(PlaceId);
+
+            await Task.WhenAll(placeTask);
+
+            var placeResult = placeTask.Result;
+
+            if (!ValidationService.Validate(placeResult))
+                return;
+
+            var placeDto = placeResult.Data!;
+
+            _place.Id = placeDto.Id;
+            _place.Type = placeDto.Type;
+            _place.Name = placeDto.Name;
+            _place.BaseAddress = placeDto.Address.BaseAddress;
+            _place.DetailAddress = placeDto.Address.DetailAddress;
+            _place.Categories = placeDto.Categories;
+            _place.ContactNumber = placeDto.ContactNumber;
+            _place.OpeningTimes = placeDto.OpeningTimes.Select(x => OpeningTimeFormModel.Create(x));
+
+            PlaceFormModel.Copy(_place, _placeBackup);
+        }
+
         private async Task LoadProductsAsync()
         {
-            var productResult = await ProductApiClient.GetProductList(PlaceId);
+            var productResult = await ProductApiClient.GetPaginatedProductList(PlaceId, _pageNumber, _rowsPerPage);
             if (!ValidationService.Validate(productResult))
                 return;
 
             var productsDto = productResult.Data!;
+
+            _totalCount = productsDto.TotalCount;
+            _pageCount = productsDto.TotalPages;
+
             _products.Clear();
-            _products.AddRange(productsDto.OrderByDescending(x => x.CreationDateTime).Select(x => ProductModel.Create(x)));
+            _products.AddRange(productsDto.List.Select(x => ProductModel.Create(x)));
             StateHasChanged();
         }
 

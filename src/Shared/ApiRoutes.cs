@@ -19,6 +19,7 @@ namespace Bridge.Shared
             {
                 public const string Get = "/api/Admin/Products/{id}";
                 public const string GetList = "/api/Admin/Products";
+                public const string GetPaginatedList = "/api/Admin/Products/Paginated";
                 public const string Create = "/api/Admin/Products";
                 public const string Update = "/api/Admin/Products/{id}";
             }
