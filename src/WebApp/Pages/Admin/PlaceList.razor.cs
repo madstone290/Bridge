@@ -77,7 +77,12 @@ namespace Bridge.WebApp.Pages.Admin
 
             var options = new DialogOptions { MaxWidth = MaxWidth.Large};
             var dialog = DialogService.Show<PlaceModalForm>(string.Empty, parameters, options);
-            await dialog.Result;
+            var dialogResult = await dialog.Result;
+            if (!dialogResult.Cancelled)
+            {
+                await Load_ClickAsync();
+                StateHasChanged();
+            }
         }
 
         private void ToggleShowOpeningTime_Click(PlaceModel place)
@@ -95,7 +100,24 @@ namespace Bridge.WebApp.Pages.Admin
 
             var options = new DialogOptions { MaxWidth = MaxWidth.Large };
             var dialog = DialogService.Show<PlaceModalForm>(string.Empty, parameters, options);
-            await dialog.Result;
+            var dialogResult = await dialog.Result;
+            if(!dialogResult.Cancelled)
+            {
+                var placeId = (long)dialogResult.Data;
+                var placeResult = await PlaceApiClient.GetPlaceById(placeId);
+                if (!ValidationService.Validate(placeResult))
+                    return;
+
+                var placeDto = placeResult.Data!;
+                place.Type = placeDto.Type;
+                place.Name = placeDto.Name;
+                place.BaseAddress = placeDto.Address.BaseAddress;
+                place.DetailAddress = placeDto.Address.DetailAddress;
+                place.Categories = placeDto.Categories;
+                place.ContactNumber = placeDto.ContactNumber;
+                place.OpeningTimes = placeDto.OpeningTimes.Select(x => OpeningTimeModel.Create(x));
+                StateHasChanged();
+            }
         }
 
         private void ManagePlace_Click(PlaceModel place)

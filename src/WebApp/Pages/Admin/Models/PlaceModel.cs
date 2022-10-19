@@ -112,7 +112,7 @@ namespace Bridge.WebApp.Pages.Admin.Models
         /// <summary>
         /// 장소 카테고리
         /// </summary>
-        public List<PlaceCategory> Categories { get; set; } = new();
+        public IEnumerable<PlaceCategory> Categories { get; set; } = Enumerable.Empty<PlaceCategory>();
 
         /// <summary>
         /// 카테고리 문자열
@@ -127,7 +127,7 @@ namespace Bridge.WebApp.Pages.Admin.Models
         /// <summary>
         /// 영업시간
         /// </summary>
-        public List<OpeningTimeModel> OpeningTimes { get; set; } = new();
+        public IEnumerable<OpeningTimeModel> OpeningTimes { get; set; } = Enumerable.Empty<OpeningTimeModel>();
 
         public IEnumerable<OpeningTimeModel> OpeningTimesFromMonday
         {

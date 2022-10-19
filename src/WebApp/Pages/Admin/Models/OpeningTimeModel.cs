@@ -1,3 +1,5 @@
+using Bridge.Application.Places.Dtos;
+
 namespace Bridge.WebApp.Pages.Admin.Models
 {
     public class OpeningTimeModel
@@ -12,6 +14,20 @@ namespace Bridge.WebApp.Pages.Admin.Models
             { DayOfWeek.Saturday, "토요일" },
             { DayOfWeek.Sunday, "일요일" },
         };
+
+        public static OpeningTimeModel Create(OpeningTimeDto t)
+        {
+            return new OpeningTimeModel()
+            {
+                Day = t.Day,
+                Dayoff = t.Dayoff,
+                TwentyFourHours = t.TwentyFourHours,
+                OpenTime = t.OpenTime,
+                CloseTime = t.CloseTime,
+                BreakStartTime = t.BreakStartTime,
+                BreakEndTime = t.BreakEndTime
+            };
+        }
 
         /// <summary>
         /// 영업요일

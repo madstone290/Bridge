@@ -92,7 +92,7 @@ namespace Bridge.WebApp.Pages.Admin.Components
                     var result = await PlaceApiClient.CreatePlace(command);
 
                     if (ValidationService.Validate(result))
-                        MudDialog.Close();
+                        MudDialog.Close(result.Data);
                 }
                 else
                 {
@@ -121,7 +121,7 @@ namespace Bridge.WebApp.Pages.Admin.Components
                     var result = await PlaceApiClient.UpdatePlace(command);
 
                     if (ValidationService.Validate(result))
-                        MudDialog.Close();
+                        MudDialog.Close(_place.Id);
                 }
 
             }
