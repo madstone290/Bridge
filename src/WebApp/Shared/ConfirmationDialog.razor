@@ -1,0 +1,36 @@
+<MudDialog>
+    <TitleContent>
+        <MudIcon Icon="@Icons.Material.Filled.Warning" />
+    </TitleContent>
+    <DialogContent>
+        <MudText>@Message</MudText>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Variant="Variant.Outlined" OnClick="No_Click">@No</MudButton>
+        <MudButton Color="Color.Primary" Variant="Variant.Outlined" OnClick="Yes_Click">@Yes</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] 
+    MudDialogInstance MudDialog { get; set; } = null!;
+
+    [Parameter]
+    public string? Message { get; set; }
+
+    [Parameter]
+    public string Yes { get; set; } = "예";
+    
+    [Parameter]
+    public string No { get; set; } = "아니오";
+
+    void Yes_Click()
+    {
+        MudDialog.Close();
+    }
+    
+    void No_Click() 
+    {
+        MudDialog.Cancel();
+    }
+}
