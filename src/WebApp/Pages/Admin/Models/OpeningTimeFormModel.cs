@@ -40,6 +40,19 @@ namespace Bridge.WebApp.Pages.Admin.Models
             };
         }
 
+        public static OpeningTimeFormModel Create(OpeningTimeModel x)
+        {
+            return new OpeningTimeFormModel()
+            {
+                Day = x.Day,
+                Dayoff = x.Dayoff,
+                OpenTime = x.OpenTime,
+                CloseTime = x.CloseTime,
+                TwentyFourHours = x.TwentyFourHours,
+                BreakStartTime = x.BreakStartTime,
+                BreakEndTime = x.BreakEndTime
+            };
+        }
 
         /// <summary>
         /// 영업요일

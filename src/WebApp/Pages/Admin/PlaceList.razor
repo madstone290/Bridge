@@ -95,12 +95,10 @@
             {
                 <MudTr>
                     <td colspan="4">
-                        <MudList>
-                            @foreach (var time in context.OpeningTimesFromMonday)
-                            {
-                                <MudListItem>@time.ToSingleLineString()</MudListItem>
-                            }
-                        </MudList>
+                        @foreach (var openingTime in context.OpeningTimesFromMonday)
+                        {
+                            <Bridge.WebApp.Pages.Admin.Components.OpeningTimeListItem OpeningTime="@(OpeningTimeFormModel.Create(openingTime))" ReadOnly="true" />
+                        }
                     </td>
                 </MudTr>
             }
