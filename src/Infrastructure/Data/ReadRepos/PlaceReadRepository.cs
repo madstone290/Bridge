@@ -54,6 +54,7 @@ namespace Bridge.Infrastructure.Data.ReadRepos
                 .Where(x => placeType == null || x.Type == placeType.Value)
                 .Select(SelectExpression)
                 .OrderByDescending(x=> x.CreationDateTime)
+                .ThenByDescending(x=> x.Id)
                 .PaginateAsync(pageNumber, pageSize);
         }
 

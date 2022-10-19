@@ -1,0 +1,41 @@
+<div style="display: flex; flex-direction:row; justify-content:center; align-items:center;">
+    <MudPagination Count="PageCount"
+                   Selected="PageNumber"
+                   MiddleCount="10"
+                   BoundaryCount="0"
+                   SelectedChanged="PageNumberChanged" />
+    <div style="margin-left:50px; width:100px;">
+        <AdvSelect Style="margin-top:0px; text-align: right;"
+                   Value="RowsPerPage"
+                   ValueChanged="RowsPerPageChanged"
+                   DisableUnderLine="true" T="int">
+            @foreach (var pageSize in PageSizes)
+            {
+                <MudSelectItem Value="pageSize" Style="text-align: right">@(pageSize)개</MudSelectItem>
+            }
+        </AdvSelect>
+    </div>
+    <MudText style="margin-left:10px;">전체 @(TotalCount)개</MudText>
+</div>
+@code {
+    [Parameter]
+    public int PageCount { get; set; }
+
+    [Parameter]
+    public int PageNumber { get; set; }
+
+    [Parameter]
+    public int RowsPerPage { get; set; }
+
+    [Parameter]
+    public int TotalCount { get; set; }
+
+    [Parameter]
+    public int[] PageSizes { get; set; } = new int[] { 10, 20, 30, 50 };
+
+    [Parameter]
+    public EventCallback<int> PageNumberChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<int> RowsPerPageChanged { get; set; }
+}

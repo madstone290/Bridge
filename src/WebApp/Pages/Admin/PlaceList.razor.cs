@@ -23,6 +23,11 @@ namespace Bridge.WebApp.Pages.Admin
         /// </summary>
         private string _searchString = string.Empty;
 
+        private int _totalCount;
+        private int _pageCount;
+        private int _pageNumber = 1;
+        private int _rowsPerPage = 10;
+
         [Inject]
         public AdminPlaceApiClient PlaceApiClient { get; set; } = null!;
 
@@ -52,15 +57,18 @@ namespace Bridge.WebApp.Pages.Admin
 
         private async Task Load_ClickAsync()
         {
-            var result = await PlaceApiClient.GetPlaceList(_placeType);
+            var result = await PlaceApiClient.GetPlaceList(_placeType, _pageNumber, _rowsPerPage);
             if (!ValidationService.Validate(result))
                 return;
 
             var placeList = result.Data!;
+
+            _totalCount = placeList.TotalCount;
+            _pageNumber = placeList.PageNumber;
+            _pageCount = placeList.TotalPages;
+
             _places.Clear();
-            _places.AddRange(placeList.List.OrderByDescending(x=> x.CreationDateTime)
-                .ThenByDescending(x=> x.Id)
-                .Select(x => PlaceModel.ToPlaceModel(x)));
+            _places.AddRange(placeList.List.Select(x => PlaceModel.ToPlaceModel(x)));
         }
 
         private void ToggleShowOpeningTime_Click(PlaceModel place)
@@ -79,6 +87,18 @@ namespace Bridge.WebApp.Pages.Admin
             NavManager.NavigateTo(PageRoutes.Admin.PlaceProductList.AddRouteParam("PlaceId", place.Id));
         }
         
+        private async void PageNumberChanged(int pageNumber)
+        {
+            _pageNumber = pageNumber;
+            await Load_ClickAsync();
+            StateHasChanged();
+        }
 
+        private async void RowsPerPageChanged(int rowsPerPage)
+        {
+            _rowsPerPage = rowsPerPage;
+            await Load_ClickAsync();
+            StateHasChanged();
+        }
     }
 }

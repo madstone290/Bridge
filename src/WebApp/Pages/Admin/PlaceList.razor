@@ -39,6 +39,8 @@
 
     <MudTable T="PlaceModel"
               Items="_places"
+              RowsPerPage="_rowsPerPage"
+              Dense="true"
               Filter="Search">
         <HeaderContent>
             <MudTh>유형</MudTh>
@@ -76,18 +78,18 @@
             </MudTd>
             <MudTd DataLabel="영업시간">
                 <MudButton Variant="Variant.Outlined" @onclick="@(() => ToggleShowOpeningTime_Click(context))">@(context.ShowOpeningTimes ? "닫기" : "열기")</MudButton>
-            </MudTd>
-            <MudTd>
-                <MudMenu Label="메뉴"
+                </MudTd>
+                <MudTd>
+                    <MudMenu Label="메뉴"
                          Variant="Variant.Outlined"
                          EndIcon="@Icons.Filled.KeyboardArrowDown">
-                    <MudMenuItem @onclick="@(() => EditPlace_Click(context))">장소 관리</MudMenuItem>
-                    <MudMenuItem @onclick="@(() => ManageProduct_Click(context))">제품 관리</MudMenuItem>
-                </MudMenu>
-            </MudTd>
-        </RowTemplate>
+                        <MudMenuItem @onclick="@(() => EditPlace_Click(context))">장소 관리</MudMenuItem>
+                        <MudMenuItem @onclick="@(() => ManageProduct_Click(context))">제품 관리</MudMenuItem>
+                    </MudMenu>
+                </MudTd>
+            </RowTemplate>
 
-        <ChildRowContent>
+            <ChildRowContent>
             @if (context.ShowOpeningTimes)
             {
                 <MudTr>
@@ -103,11 +105,12 @@
             }
         </ChildRowContent>
 
-        <FooterContent>
-            <MudTFootRow>
-                <MudTd colSpan="100">총 @(_places.Count)개의 행</MudTd>
-            </MudTFootRow>
-        </FooterContent>
+        <PagerContent>
+            <TablePagination TotalCount="_totalCount" PageCount="_pageCount" 
+                             PageNumber="_pageNumber" PageNumberChanged="PageNumberChanged"
+                             RowsPerPage="_rowsPerPage" RowsPerPageChanged="RowsPerPageChanged" />
+        </PagerContent>
+
     </MudTable>
 </div>
 
