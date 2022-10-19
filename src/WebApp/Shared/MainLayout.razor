@@ -5,7 +5,7 @@
 
 <MudThemeProvider />
 <MudSnackbarProvider />
-<MudDialogProvider />
+<MudDialogProvider CloseButton="true" DisableBackdropClick="true" NoHeader="false" CloseOnEscapeKey="true" />
 <div class="main-layout">
     <MudLayout>
         @if (_isAdmin)

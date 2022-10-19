@@ -1,0 +1,89 @@
+@using Bridge.Domain.Places.Entities
+<MudDialog>
+    <DialogContent>
+        <div Style="max-height:750px; padding:10px; overflow-y: scroll">
+            <MudForm @ref="_form"
+                     Model="_place"
+                     ValidationDelay="0">
+                <div class="container">
+                    <MudText Typo="Typo.h5">기본 정보</MudText>
+                    <MudSpacer />
+                    <MudDivider Class="divider" />
+
+                    <MudGrid Spacing="1">
+                        <MudItem xs="12">
+                            <AdvSelect @bind-Value="_place.Type"
+                                       T="PlaceType"
+                                       Validation="@(_validator.PropertyValidation(x=> x.Type))"
+                                       Label="타입">
+                                @{
+                                    foreach (var placeType in Enum.GetValues<PlaceType>())
+                                    {
+                                                        <MudSelectItem Value="@placeType"></MudSelectItem>
+                                    }
+                                }
+                            </AdvSelect>
+                        </MudItem>
+                        <MudItem xs="12">
+                            <AdvTextField @bind-Value="_place.Name"
+                                          Validation="@(_validator.PropertyValidation(x=> x.Name))"
+                                          Label="장소명" />
+                        </MudItem>
+                        <MudItem xs="12">
+                            <AdvTextField @bind-Value="_place.BaseAddress"
+                                          Label="기본주소"
+                                          Validation="@(_validator.PropertyValidation(x=> x.BaseAddress))" />
+                        </MudItem>
+                        <MudItem xs="12">
+                            <AdvTextField @bind-Value="_place.DetailAddress"
+                                          Label="상세주소"
+                                          Validation="@(_validator.PropertyValidation(x=> x.DetailAddress))" />
+                        </MudItem>
+                        <MudItem xs="12">
+                            <AdvTextField @bind-Value="_place.ContactNumber"
+                                          Validation="@(_validator.PropertyValidation(x=> x.ContactNumber))"
+                                          Label="연락처" />
+                        </MudItem>
+                        <MudItem xs="12">
+                            <AdvSelect @bind-SelectedValues="_place.Categories"
+                                       T="PlaceCategory"
+                                       MultiSelection="true"
+                                       Label="카테고리"
+                                       Validation="@(_validator.PropertyValidation(x=> x.Categories))">
+                                @foreach (var category in Enum.GetValues<PlaceCategory>())
+                                {
+                                    <MudSelectItem Value="category"></MudSelectItem>
+                                }
+                            </AdvSelect>
+                        </MudItem>
+                    </MudGrid>
+                </div>
+                <div style="margin-top:30px;">
+                    <MudText Typo="Typo.h5">영업시간</MudText>
+                    <MudSpacer />
+                    <MudDivider Class="divider" />
+                    <MudGrid Spacing="1">
+                        <MudItem xs="12">
+                            @foreach (var openingTime in _place.OpeningTimes)
+                            {
+                                <Bridge.WebApp.Pages.Admin.Components.OpeningTimeListItem OpeningTime="openingTime" />
+                            }
+                        </MudItem>
+                    </MudGrid>
+                </div>
+            </MudForm>
+        </div>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Error"
+                   OnClick="Cancel_Click">
+            취소
+        </MudButton>
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   OnClick="Save_Click">
+            저장
+        </MudButton>
+    </DialogActions>
+</MudDialog>

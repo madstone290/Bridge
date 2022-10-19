@@ -1,8 +1,10 @@
 using Bridge.Domain.Places.Entities;
 using Bridge.Shared.Extensions;
 using Bridge.WebApp.Api.ApiClients.Admin;
+using Bridge.WebApp.Pages.Admin.Components;
 using Bridge.WebApp.Pages.Admin.Models;
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 
 namespace Bridge.WebApp.Pages.Admin
 {
@@ -50,11 +52,6 @@ namespace Bridge.WebApp.Pages.Admin
                 place.CategoriesString.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true;
         }
 
-        private void Create_Click()
-        {
-            NavManager.NavigateTo(PageRoutes.Admin.PlaceCreate);
-        }
-
         private async Task Load_ClickAsync()
         {
             var result = await PlaceApiClient.GetPlaceList(_placeType, _pageNumber, _rowsPerPage);
@@ -71,12 +68,37 @@ namespace Bridge.WebApp.Pages.Admin
             _places.AddRange(placeList.List.Select(x => PlaceModel.ToPlaceModel(x)));
         }
 
+        private async void Create_Click()
+        {
+            var parameters = new DialogParameters
+            {
+                { nameof(PlaceModalForm.FormMode), FormMode.Create }
+            };
+
+            var options = new DialogOptions { MaxWidth = MaxWidth.Large};
+            var dialog = DialogService.Show<PlaceModalForm>(string.Empty, parameters, options);
+            await dialog.Result;
+        }
+
         private void ToggleShowOpeningTime_Click(PlaceModel place)
         {
             place.ShowOpeningTimes = !place.ShowOpeningTimes;
         }
 
-        private void EditPlace_Click(PlaceModel place)
+        private async void EditPlace_Click(PlaceModel place)
+        {
+            var parameters = new DialogParameters
+            {
+                { nameof(PlaceModalForm.FormMode), FormMode.Update },
+                { nameof(PlaceModalForm.PlaceId), place.Id }
+            };
+
+            var options = new DialogOptions { MaxWidth = MaxWidth.Large };
+            var dialog = DialogService.Show<PlaceModalForm>(string.Empty, parameters, options);
+            await dialog.Result;
+        }
+
+        private void ManagePlace_Click(PlaceModel place)
         {
             var uri = PageRoutes.Admin.PlaceView.AddRouteParam("PlaceId", place.Id);
             NavManager.NavigateTo(uri);

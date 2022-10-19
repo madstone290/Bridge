@@ -6,36 +6,39 @@ using MudBlazor;
 
 namespace Bridge.WebApp.Pages.Admin.Components
 {
-    public partial class PlaceForm
+    public partial class PlaceModalForm
     {
         private MudForm? _form;
-        private bool _isFormValid;
         private readonly PlaceFormModel _place = new();
         private readonly PlaceFormModel.Validator _validator = new();
 
-        /// <summary>
-        /// 폼 모드
-        /// </summary>
-        [Parameter] 
-        public FormMode FormMode { get; set; }
+        [CascadingParameter]
+        public MudDialogInstance MudDialog { get; set; } = null!;
 
         /// <summary>
         /// 장소 아이디
         /// </summary>
-        [Parameter] 
-        public long PlaceId { get; set; } 
+        [Parameter]
+        public long PlaceId { get; set; }
 
-        [Inject] 
+        /// <summary>
+        /// 폼 모드
+        /// </summary>
+        [Parameter]
+        public FormMode FormMode { get; set; }
+
+
+        [Inject]
         public AdminPlaceApiClient PlaceApiClient { get; set; } = null!;
 
         protected override async Task OnInitializedAsync()
         {
-            if(FormMode == FormMode.Update)
+            if (FormMode == FormMode.Update)
             {
                 var result = await PlaceApiClient.GetPlaceById(PlaceId);
                 if (!ValidationService.Validate(result))
                     return;
-                
+
                 var placeDto = result.Data!;
                 _place.Id = placeDto.Id;
                 _place.Type = placeDto.Type;
@@ -48,21 +51,19 @@ namespace Bridge.WebApp.Pages.Admin.Components
             }
         }
 
-
-
-        void Cancel_Click()
+        private void Cancel_Click()
         {
-            NavManager.NavigateTo(PageRoutes.Admin.PlaceList);
+            MudDialog.Cancel();
         }
 
-        async Task Save_Click()
+        private async void Save_Click()
         {
             if (_form == null)
                 return;
 
             await _form.Validate();
 
-            if (_isFormValid)
+            if (_form.IsValid)
             {
                 if (FormMode == FormMode.Create)
                 {
@@ -85,13 +86,13 @@ namespace Bridge.WebApp.Pages.Admin.Components
                             BreakEndTime = t.BreakEndTime,
                             BreakStartTime = t.BreakStartTime,
                             OpenTime = t.OpenTime,
-                            CloseTime = t.CloseTime, 
+                            CloseTime = t.CloseTime,
                         }).ToList(),
                     };
                     var result = await PlaceApiClient.CreatePlace(command);
 
                     if (ValidationService.Validate(result))
-                        NavManager.NavigateTo(PageRoutes.Admin.PlaceList);
+                        MudDialog.Close();
                 }
                 else
                 {
@@ -120,11 +121,10 @@ namespace Bridge.WebApp.Pages.Admin.Components
                     var result = await PlaceApiClient.UpdatePlace(command);
 
                     if (ValidationService.Validate(result))
-                        NavManager.NavigateTo(PageRoutes.Admin.PlaceList);
+                        MudDialog.Close();
                 }
 
             }
         }
     }
 }
-
