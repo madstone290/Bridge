@@ -22,6 +22,7 @@ namespace Bridge.Shared
                 public const string GetPaginatedList = "/api/Admin/Products/Paginated";
                 public const string Create = "/api/Admin/Products";
                 public const string Update = "/api/Admin/Products/{id}";
+                public const string Discard = "/api/Admin/Products/{id}/Discard";
             }
 
             public static class Places
@@ -34,6 +35,7 @@ namespace Bridge.Shared
                 public const string UpdateBaseInfo = "/api/Admin/Places/{id}/BaseInfo";
                 public const string UpdateOpeningTimes = "/api/Admin/Places/{id}/OpeningTimes";
                 public const string UpdateCategories = "/api/Admin/Places/{id}/Categories";
+                public const string Close = "/api/Admin/Places/{id}/Close";
             }
         }
 

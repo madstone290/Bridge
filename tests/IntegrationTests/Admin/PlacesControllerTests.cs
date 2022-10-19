@@ -283,7 +283,7 @@ namespace Bridge.IntegrationTests.Admin
             };
 
             // Act
-            var addRequest = new HttpRequestMessage(HttpMethod.Post,ApiRoutes.Admin.Places.UpdateCategories.Replace("{id}", $"{placeId}"))
+            var addRequest = new HttpRequestMessage(HttpMethod.Put, ApiRoutes.Admin.Places.UpdateCategories.Replace("{id}", $"{placeId}"))
             {
                 Content = JsonContent.Create(command)
             };

@@ -102,7 +102,7 @@ namespace Bridge.IntegrationTests.Admin
             var productId = await _apiClient.CreateProductAsync();
             var command = new UpdateProductCommand()
             {
-                ProductId = productId,
+                Id = productId,
                 Name = Guid.NewGuid().ToString(),
                 Price = 45M,
                 Categories = new List<ProductCategory>() { ProductCategory.VeganFood, ProductCategory.VeganBeverage, ProductCategory.Beverage }

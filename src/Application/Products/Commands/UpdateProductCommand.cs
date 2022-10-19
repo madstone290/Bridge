@@ -1,4 +1,4 @@
-﻿using Bridge.Application.Common;
+using Bridge.Application.Common;
 using Bridge.Application.Common.Exceptions.EntityNotFoundExceptions;
 using Bridge.Domain.Products.Entities;
 using Bridge.Domain.Products.Repos;
@@ -11,7 +11,7 @@ namespace Bridge.Application.Products.Commands
         /// <summary>
         /// 제품 아이디
         /// </summary>
-        public long ProductId { get; set; }
+        public long Id { get; set; }
 
         /// <summary>
         /// 제품명
@@ -42,7 +42,7 @@ namespace Bridge.Application.Products.Commands
 
         public override async Task<Unit> HandleCommand(UpdateProductCommand command, CancellationToken cancellationToken)
         {
-            var product = await _productRepository.FindByIdAsync(command.ProductId) ?? throw new ProductNotFoundException(new { command.ProductId });
+            var product = await _productRepository.FindByIdAsync(command.Id) ?? throw new ProductNotFoundException(new { command.Id });
 
             product.SetName(command.Name);
             product.SetPrice(command.Price);

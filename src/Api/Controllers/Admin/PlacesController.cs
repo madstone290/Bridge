@@ -99,16 +99,25 @@ namespace Bridge.Api.Controllers.Admin
             return Ok();
         }
 
-        [HttpPost]
+        [HttpPut]
         [Route(ApiRoutes.Admin.Places.UpdateCategories)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> AddCategory([FromRoute] long id, [FromBody] UpdatePlaceCategoryCommand command)
+        public async Task<IActionResult> UpdateCategories([FromRoute] long id, [FromBody] UpdatePlaceCategoryCommand command)
         {
             command.PlaceId = id;
             await _mediator.Send(command);
             return Ok();
         }
 
+        [HttpPut]
+        [Route(ApiRoutes.Admin.Places.Close)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> ClosePlace([FromRoute] long id)
+        {
+            var command = new ClosePlaceCommand() { Id = id };
+            await _mediator.Send(command);
+            return Ok();
+        }
 
     }
 }

@@ -66,7 +66,7 @@ namespace Bridge.WebApp.Api.ApiClients.Admin
         /// <returns></returns>
         public async Task<ApiResult<Void>> UpdateProduct(UpdateProductCommand command)
         {
-            return await SendAsync<Void>(HttpMethod.Put, ApiRoutes.Admin.Products.Update.AddRouteParam("id", command.ProductId), command);
+            return await SendAsync<Void>(HttpMethod.Put, ApiRoutes.Admin.Products.Update.AddRouteParam("id", command.Id), command);
         }
 
     }

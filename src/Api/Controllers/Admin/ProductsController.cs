@@ -76,11 +76,20 @@ namespace Bridge.Api.Controllers.Admin
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> UpdateProduct([FromRoute] long id, [FromBody] UpdateProductCommand command)
         {
-            command.ProductId = id;
+            command.Id = id;
             await _mediator.Send(command);
             return Ok();
         }
 
+        [HttpPut]
+        [Route(ApiRoutes.Admin.Products.Discard)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> Discard([FromRoute] long id)
+        {
+            var command = new DiscardProductCommand() { Id = id };
+            await _mediator.Send(command);
+            return Ok();
+        }
 
 
     }

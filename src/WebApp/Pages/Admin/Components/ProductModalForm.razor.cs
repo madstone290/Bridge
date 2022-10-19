@@ -100,7 +100,7 @@ namespace Bridge.WebApp.Pages.Admin.Components
                 {
                     var command = new UpdateProductCommand()
                     {
-                        ProductId = _product.Id,
+                        Id = _product.Id,
                         Name = _product.Name,
                         Price = _product.Price,
                         Categories = _product.Categories.ToList(),
