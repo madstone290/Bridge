@@ -35,7 +35,7 @@ namespace Bridge.WebApp.Api
 
             if (!AddJwtToken)
             {
-                var response = await _httpClient.SendAsync(request);
+                var response = await HttpClient.SendAsync(request);
                 return await BuildResultAsync<TData>(response);
             }
             else
@@ -43,14 +43,14 @@ namespace Bridge.WebApp.Api
                 var authState = await _authService.GetAuthStateAsync();
 
                 request.SetBearerToken(authState.AccessToken);
-                var response = await _httpClient.SendAsync(request);
+                var response = await HttpClient.SendAsync(request);
 
                 if(response.StatusCode == System.Net.HttpStatusCode.Found || response.StatusCode == System.Net.HttpStatusCode.TemporaryRedirect)
                 {
                     request = await request.CloneAsync();
                     request.RequestUri = response.Headers.Location;
                     request.SetBearerToken(authState.AccessToken);
-                    response = await _httpClient.SendAsync(request);
+                    response = await HttpClient.SendAsync(request);
                 }
 
                 // 액세스 토큰이 만료된 경우 재발급 후 1회 재시도
@@ -63,7 +63,7 @@ namespace Bridge.WebApp.Api
 
                     request = await request.CloneAsync();
                     request.SetBearerToken(authState.AccessToken);
-                    response = await _httpClient.SendAsync(request);
+                    response = await HttpClient.SendAsync(request);
                 }
 
                 return await BuildResultAsync<TData>(response);

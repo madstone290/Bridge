@@ -95,6 +95,11 @@ namespace Bridge.Domain.Places.Entities
         public string? ContactNumber { get; private set; }
 
         /// <summary>
+        /// 이미지 경로
+        /// </summary>
+        public string? ImagePath { get; set; }
+
+        /// <summary>
         /// 영업시간
         /// </summary>
         public IEnumerable<OpeningTime> OpeningTimes => _openingTimes;

@@ -3,6 +3,7 @@ using Bridge.WebApp.Pages.Admin.Components;
 using Bridge.WebApp.Pages.Admin.Models;
 using Bridge.WebApp.Shared;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
 
 namespace Bridge.WebApp.Pages.Admin
@@ -22,7 +23,6 @@ namespace Bridge.WebApp.Pages.Admin
         /// 영업시간 읽기전용 상태
         /// </summary>
         private bool _openingTimeReadOnly = true;
-
 
         private readonly PlaceFormModel _place = new();
         private readonly PlaceFormModel _placeBackup = new();
@@ -81,6 +81,9 @@ namespace Bridge.WebApp.Pages.Admin
                 Name = _place.Name,
                 Categories = _place.Categories,
                 ContactNumber  = _place.ContactNumber,
+                ImageChanged = _place.ImageChanged,
+                ImageName = _place.ImageName,
+                ImageData = _place.ImageData,
             });
 
             if (!ValidationService.Validate(result))
@@ -222,6 +225,9 @@ namespace Bridge.WebApp.Pages.Admin
             _place.ContactNumber = placeDto.ContactNumber;
             _place.OpeningTimes = placeDto.OpeningTimes.Select(x => OpeningTimeFormModel.Create(x));
 
+            if (placeDto.ImagePath != null)
+                _place.ImageUrl = new Uri(PlaceApiClient.HttpClient.BaseAddress!, placeDto.ImagePath).ToString();
+
             PlaceFormModel.Copy(_place, _placeBackup);
         }
 
@@ -259,6 +265,30 @@ namespace Bridge.WebApp.Pages.Admin
                     await LoadProductsAsync();
                 }
             }
+        }
+
+        private async void UploadFiles(InputFileChangeEventArgs e)
+        {
+            var file = e.File;
+            var sizeLimit = 50000;
+            if (sizeLimit < file.Size)
+            {
+                Snackbar.Add("50Kb가 넘는 이미지는 사용할 수 없습니다");
+                return;
+            }
+
+            var format = file.ContentType;
+            var buffer = new byte[file.Size];
+            using var stream = file.OpenReadStream(file.Size);
+            await stream.ReadAsync(buffer);
+
+            var base64 = Convert.ToBase64String(buffer);
+            _place.ImageUrl = $"data:{format};base64,{base64}";
+            _place.ImageData = buffer;
+            _place.ImageName = file.Name;
+            _place.ImageChanged = true;
+
+            StateHasChanged();
         }
 
     }

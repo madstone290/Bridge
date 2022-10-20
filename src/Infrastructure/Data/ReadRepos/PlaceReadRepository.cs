@@ -36,6 +36,7 @@ namespace Bridge.Infrastructure.Data.ReadRepos
             },
             Categories = x.Categories.ToList(),
             ContactNumber = x.ContactNumber,
+            ImagePath = x.ImagePath,
             OpeningTimes = x.OpeningTimes.Select(t => new OpeningTimeDto()
             {
                 Day = t.Day,
@@ -93,6 +94,7 @@ namespace Bridge.Infrastructure.Data.ReadRepos
                     },
                     Categories = x.Categories.ToList(),
                     ContactNumber = x.ContactNumber,
+                    ImagePath = x.ImagePath,
                     OpeningTimes = x.OpeningTimes.Select(t => new OpeningTimeDto()
                     {
                         Day = t.Day,

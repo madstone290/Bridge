@@ -16,23 +16,31 @@ namespace Bridge.Infrastructure.Services
             this._hostEnvironment = hostEnvironment;
         }
 
-        private static string GetNextFilePath(string filePath)
+        private static string GetNextFilePath(string rootPath, string filePath)
         {
             var directory = Path.GetDirectoryName(filePath)!;
             var baseName = Path.GetFileNameWithoutExtension(filePath);
             var extension = Path.GetExtension(filePath);
-            
+
             int patternNumber = 1;
             var pattern = string.Format("({0})", patternNumber);
             var nextFilePath = Path.Combine(directory, baseName + pattern + extension);
 
-            while (File.Exists(nextFilePath))
+            while (File.Exists(Path.Combine(rootPath, nextFilePath)))
             {
                 patternNumber++;
                 pattern = string.Format("({0})", patternNumber);
                 nextFilePath = Path.Combine(directory, baseName + pattern + extension);
             }
             return nextFilePath;
+        }
+
+        public void DeleteFile(string filePath)
+        {
+            var rootPath = _hostEnvironment.ContentRootPath;
+            var fullPath = Path.Combine(rootPath, filePath);
+            if (File.Exists(fullPath))
+                File.Delete(fullPath);
         }
 
         public string? UploadFile(string directoryName, string fileName, byte[] data)
@@ -42,15 +50,17 @@ namespace Bridge.Infrastructure.Services
 
             var rootPath = _hostEnvironment.ContentRootPath;
             var baseDirectory = "Files";
+            var filePath = Path.Combine(baseDirectory, directoryName, fileName);
+            var fullPath = Path.Combine(rootPath, filePath);
 
-            var directoryPath = Path.Combine(rootPath, baseDirectory, directoryName);
-            if (!Directory.Exists(directoryPath))
-                Directory.CreateDirectory(directoryPath);
+            var directoryFullName = Path.GetDirectoryName(fullPath)!;
+            if (!Directory.Exists(directoryFullName))
+                Directory.CreateDirectory(directoryFullName);
 
-            var fullPath = Path.Combine(directoryPath, fileName);
             if (File.Exists(fullPath))
             {
-                fullPath = GetNextFilePath(fullPath);
+                filePath = GetNextFilePath(rootPath, filePath);
+                fullPath = Path.Combine(rootPath, filePath);
             }
             using (var outputStream = new FileStream(fullPath, FileMode.Create))
             {
@@ -60,7 +70,7 @@ namespace Bridge.Infrastructure.Services
                 }
             }
 
-            return Path.Combine(baseDirectory, directoryName, Path.GetFileName(fullPath));
+            return filePath;
         }
 
         

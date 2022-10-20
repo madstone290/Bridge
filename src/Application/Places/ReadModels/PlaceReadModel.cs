@@ -53,6 +53,11 @@ namespace Bridge.Application.Places.ReadModels
         public string? ContactNumber { get; set; }
 
         /// <summary>
+        /// 이미지 경로
+        /// </summary>
+        public string? ImagePath { get; set; }
+
+        /// <summary>
         /// 영업시간
         /// </summary>
         public List<OpeningTimeDto> OpeningTimes { get; set; } = new();

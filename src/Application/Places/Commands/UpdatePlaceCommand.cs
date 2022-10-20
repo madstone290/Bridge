@@ -39,6 +39,21 @@ namespace Bridge.Application.Places.Commands
         public string? ContactNumber { get; set; }
 
         /// <summary>
+        /// 이미지 변경 여부
+        /// </summary>
+        public bool ImageChanged { get; set; }
+
+        /// <summary>
+        /// 이미지 이름
+        /// </summary>
+        public string? ImageName { get; set; }
+
+        /// <summary>
+        /// 이미지 데이터
+        /// </summary>
+        public byte[]? ImageData { get; set; }
+
+        /// <summary>
         /// 영업시간
         /// </summary>
         public IEnumerable<OpeningTimeDto> OpeningTimes { get; set; } = Enumerable.Empty<OpeningTimeDto>();
@@ -47,14 +62,17 @@ namespace Bridge.Application.Places.Commands
     public class UpdatePlaceCommandHandler : CommandHandler<UpdatePlaceCommand, Unit>
     {
         private readonly IAddressLocationService _addressLocationService;
+        private readonly IFileUploadService _fileUploadService;
         private readonly IPlaceRepository _placeRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public UpdatePlaceCommandHandler(IAddressLocationService addressMapService,
+                                         IFileUploadService fileUploadService,
                                          IPlaceRepository placeRepository,
                                          IUnitOfWork unitOfWork)
         {
             _addressLocationService = addressMapService;
+            _fileUploadService = fileUploadService;
             _placeRepository = placeRepository;
             _unitOfWork = unitOfWork;
         }
@@ -78,6 +96,14 @@ namespace Bridge.Application.Places.Commands
 
                 place.SetDayoff(openingTimeDto.Day, openingTimeDto.Dayoff);
                 place.SetTwentyFourHours(openingTimeDto.Day, openingTimeDto.TwentyFourHours);
+            }
+
+            if (command.ImageChanged)
+            {
+                if (place.ImagePath != null)
+                    _fileUploadService.DeleteFile(place.ImagePath);
+                if (command.ImageName != null && command.ImageData != null)
+                    place.ImagePath = _fileUploadService.UploadFile("PlaceImages", command.ImageName, command.ImageData);
             }
 
             await _unitOfWork.CommitAsync();

@@ -8,11 +8,11 @@ namespace Bridge.WebApp.Api
     /// </summary>
     public abstract class ApiClient
     {
-        protected readonly HttpClient _httpClient;
+        public readonly HttpClient HttpClient;
 
         protected ApiClient(HttpClient httpClient)
         {
-            _httpClient = httpClient;
+            HttpClient = httpClient;
         }
 
 
@@ -88,7 +88,7 @@ namespace Bridge.WebApp.Api
             if (content != null)
                 request.Content = JsonContent.Create(content);
 
-            var response = await _httpClient.SendAsync(request);
+            var response = await HttpClient.SendAsync(request);
 
             return await BuildResultAsync<TData>(response);
         }

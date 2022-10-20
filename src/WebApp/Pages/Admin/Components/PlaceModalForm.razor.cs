@@ -13,8 +13,6 @@ namespace Bridge.WebApp.Pages.Admin.Components
         private readonly PlaceFormModel _place = new();
         private readonly PlaceFormModel.Validator _validator = new();
 
-        private string? _imgSrc;
-
         [CascadingParameter]
         public MudDialogInstance MudDialog { get; set; } = null!;
 
@@ -51,6 +49,10 @@ namespace Bridge.WebApp.Pages.Admin.Components
                 _place.Categories = placeDto.Categories;
                 _place.ContactNumber = placeDto.ContactNumber;
                 _place.OpeningTimes = placeDto.OpeningTimes.Select(x => OpeningTimeFormModel.Create(x));
+
+                if (placeDto.ImagePath != null)
+                    _place.ImageUrl = new Uri(PlaceApiClient.HttpClient.BaseAddress!, placeDto.ImagePath).ToString();
+
             }
         }
 
@@ -81,6 +83,8 @@ namespace Bridge.WebApp.Pages.Admin.Components
                         },
                         Categories = _place.Categories.ToList(),
                         ContactNumber = _place.ContactNumber,
+                        ImageName = _place.ImageName,
+                        ImageData = _place.ImageData,
                         OpeningTimes = _place.OpeningTimes.Select(t => new Application.Places.Dtos.OpeningTimeDto()
                         {
                             Day = t.Day,
@@ -110,6 +114,9 @@ namespace Bridge.WebApp.Pages.Admin.Components
                         },
                         Categories = _place.Categories.ToList(),
                         ContactNumber = _place.ContactNumber,
+                        ImageChanged = _place.ImageChanged,
+                        ImageName = _place.ImageName,
+                        ImageData = _place.ImageData,
                         OpeningTimes = _place.OpeningTimes.Select(t => new Application.Places.Dtos.OpeningTimeDto()
                         {
                             Day = t.Day,
@@ -146,8 +153,12 @@ namespace Bridge.WebApp.Pages.Admin.Components
             await stream.ReadAsync(buffer);
 
             var base64 = Convert.ToBase64String(buffer);
-            _imgSrc = $"data:{format};base64,{base64}";
+            _place.ImageUrl = $"data:{format};base64,{base64}";
+            _place.ImageData = buffer;
+            _place.ImageName = file.Name;
+            _place.ImageChanged = true;
             StateHasChanged();
+
         }
     }
 }

@@ -121,10 +121,13 @@ namespace Bridge.IntegrationTests.Admin
         public async Task Get_Place_Return_Ok_With_Content()
         {
             // Arrange
+            var fileData = File.ReadAllBytes("C:\\_Home\\Sources\\VisualStudio\\managed\\Bridge\\tests\\UnitTests\\TestData\\tous1.png");
             var command = new CreatePlaceCommand()
             {
                 Name = Guid.NewGuid().ToString(),
                 Address = AddressDto(),
+                ImageName = "tous1.png",
+                ImageData = fileData,
                 Categories = new List<PlaceCategory>()
                 {
                     PlaceCategory.Restaurant,
@@ -182,7 +185,7 @@ namespace Bridge.IntegrationTests.Admin
             place.OpeningTimes.Should().ContainEquivalentOf(command.OpeningTimes[0]);
             place.OpeningTimes.Should().ContainEquivalentOf(command.OpeningTimes[1]);
             place.OpeningTimes.Should().ContainEquivalentOf(command.OpeningTimes[2]);
-
+            place.ImagePath.Should().NotBeNullOrWhiteSpace();
         }
         [Theory]
         [InlineData("슈퍼마켓", "대구광역시 남구 대명동 1796-17", "1층", "Cafeteria", "Pharmacy", "053-444-5552")]

@@ -1,7 +1,6 @@
 using Bridge.Application.Common;
 using Bridge.Application.Common.Services;
 using Bridge.Application.Places.Dtos;
-using Bridge.Domain.Common.ValueObjects;
 using Bridge.Domain.Places.Entities;
 using Bridge.Domain.Places.Repos;
 
@@ -38,6 +37,16 @@ namespace Bridge.Application.Places.Commands
         public string? ContactNumber { get; set; }
 
         /// <summary>
+        /// 이미지 이름
+        /// </summary>
+        public string? ImageName { get; set; }
+
+        /// <summary>
+        /// 이미지 데이터
+        /// </summary>
+        public byte[]? ImageData { get; set; }
+
+        /// <summary>
         /// 영업시간
         /// </summary>
         public List<OpeningTimeDto> OpeningTimes { get; set; } = new();
@@ -46,14 +55,17 @@ namespace Bridge.Application.Places.Commands
     public class CreatePlaceCommandHandler : CommandHandler<CreatePlaceCommand, long>
     {
         private readonly IAddressLocationService _addressLocationService;
+        private readonly IFileUploadService _fileUploadService;
         private readonly IPlaceRepository _placeRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public CreatePlaceCommandHandler(IAddressLocationService addressMapService,
+                                         IFileUploadService fileUploadService,
                                          IPlaceRepository placeRepository,
                                          IUnitOfWork unitOfWork)
         {
             _addressLocationService = addressMapService;
+            _fileUploadService = fileUploadService;
             _placeRepository = placeRepository;
             _unitOfWork = unitOfWork;
         }
@@ -77,6 +89,11 @@ namespace Bridge.Application.Places.Commands
 
                 place.SetDayoff(openingTimeDto.Day, openingTimeDto.Dayoff);
                 place.SetTwentyFourHours(openingTimeDto.Day, openingTimeDto.TwentyFourHours);
+            }
+
+            if(command.ImageName != null && command.ImageData != null)
+            {
+                place.ImagePath = _fileUploadService.UploadFile("PlaceImages", command.ImageName, command.ImageData);
             }
 
             await _placeRepository.AddAsync(place);

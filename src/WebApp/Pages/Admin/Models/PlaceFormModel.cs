@@ -45,6 +45,10 @@ namespace Bridge.WebApp.Pages.Admin.Models
             target.Name = source.Name;
             target.BaseAddress = source.BaseAddress;
             target.DetailAddress = source.DetailAddress;
+            target.ImageChanged = source.ImageChanged;
+            target.ImageName = source.ImageName;
+            target.ImageData = source.ImageData;
+            target.ImageUrl = source.ImageUrl;
             target.Categories = source.Categories;
             target.ContactNumber = source.ContactNumber;
             target.OpeningTimes = source.OpeningTimes.Select(x => new OpeningTimeFormModel(x.Day)
@@ -97,6 +101,27 @@ namespace Bridge.WebApp.Pages.Admin.Models
         /// 연락처
         /// </summary>
         public string? ContactNumber { get; set; }
+
+        /// <summary>
+        /// 이미지 변경 여부
+        /// </summary>
+        public bool ImageChanged { get; set; }
+
+        /// <summary>
+        /// 이미지 이름
+        /// </summary>
+        public string? ImageName { get; set; }
+
+        /// <summary>
+        /// 이미지 데이터
+        /// </summary>
+        public byte[]? ImageData { get; set; }
+
+        /// <summary>
+        /// 이미지 Url
+        /// </summary>
+        public string? ImageUrl { get; set; }
+
 
         /// <summary>
         /// 영업시간
