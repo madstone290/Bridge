@@ -8,9 +8,20 @@
                 <div class="container">
                     <MudText Typo="Typo.h5">기본 정보</MudText>
                     <MudSpacer />
-                    <MudDivider Class="divider" />
-
+                    <MudDivider Style="margin-bottom:4px;"/>
                     <MudGrid Spacing="1">
+                        <MudItem xs="12">
+                            <MudImage Src="@_imgSrc" Width="200" Height="200" />
+                        </MudItem>
+                        <MudItem xs="12">
+                            <MudButton HtmlTag="label"
+                                       Variant="Variant.Outlined"
+                                       Color="Color.Primary"
+                                       FullWidth="true"
+                                       StartIcon="@Icons.Filled.CloudUpload"
+                                       for="fileInput">이미지</MudButton>
+                            <InputFile id="fileInput" hidden OnChange="UploadFiles" accept=".jpg, .png" />
+                        </MudItem>
                         <MudItem xs="12">
                             <AdvSelect @bind-Value="_place.Type"
                                        T="PlaceType"
@@ -19,7 +30,7 @@
                                 @{
                                     foreach (var placeType in Enum.GetValues<PlaceType>())
                                     {
-                                                        <MudSelectItem Value="@placeType"></MudSelectItem>
+                                                            <MudSelectItem Value="@placeType"></MudSelectItem>
                                     }
                                 }
                             </AdvSelect>
@@ -61,7 +72,7 @@
                 <div style="margin-top:30px;">
                     <MudText Typo="Typo.h5">영업시간</MudText>
                     <MudSpacer />
-                    <MudDivider Class="divider" />
+                    <MudDivider Style="margin-bottom:4px;" />
                     <MudGrid Spacing="1">
                         <MudItem xs="12">
                             @foreach (var openingTime in _place.OpeningTimes)

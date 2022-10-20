@@ -2,6 +2,7 @@ using Bridge.Application.Places.Commands;
 using Bridge.WebApp.Api.ApiClients.Admin;
 using Bridge.WebApp.Pages.Admin.Models;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
 
 namespace Bridge.WebApp.Pages.Admin.Components
@@ -11,6 +12,8 @@ namespace Bridge.WebApp.Pages.Admin.Components
         private MudForm? _form;
         private readonly PlaceFormModel _place = new();
         private readonly PlaceFormModel.Validator _validator = new();
+
+        private string? _imgSrc;
 
         [CascadingParameter]
         public MudDialogInstance MudDialog { get; set; } = null!;
@@ -125,6 +128,26 @@ namespace Bridge.WebApp.Pages.Admin.Components
                 }
 
             }
+        }
+        
+        private async void UploadFiles(InputFileChangeEventArgs e)
+        {
+            var file = e.File;
+            var sizeLimit = 50000;
+            if(sizeLimit < file.Size)
+            {
+                Snackbar.Add("50Kb가 넘는 이미지는 사용할 수 없습니다");
+                return;
+            }    
+
+            var format = file.ContentType;
+            var buffer = new byte[file.Size];
+            using var stream = file.OpenReadStream(file.Size);
+            await stream.ReadAsync(buffer);
+
+            var base64 = Convert.ToBase64String(buffer);
+            _imgSrc = $"data:{format};base64,{base64}";
+            StateHasChanged();
         }
     }
 }

@@ -7,6 +7,18 @@
                  ValidationDelay="0">
             <MudGrid Spacing="1">
                 <MudItem xs="12">
+                    <MudImage Src="@_imgSrc" Width="200" Height="200" ObjectPosition="ObjectPosition.Center" />
+                </MudItem>
+                <MudItem xs="12">
+                    <MudButton HtmlTag="label"
+                               Variant="Variant.Outlined"
+                               Color="Color.Primary"
+                               FullWidth="true"
+                               StartIcon="@Icons.Filled.CloudUpload"
+                               for="fileInput">이미지</MudButton>
+                    <InputFile id="fileInput" hidden OnChange="UploadFiles" accept=".jpg, .png" />
+                </MudItem>
+                <MudItem xs="12">
                     <AdvSelect @bind-Value="_product.Type"
                                T="ProductType"
                                Validation="@(_validator.PropertyValidation(x=> x.Type))"
