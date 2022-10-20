@@ -56,6 +56,7 @@ namespace Bridge.Infrastructure
             services.AddScoped<IAdminUserService, AdminUserService>();
 
             // infra services
+            services.AddScoped<IFileUploadService, InternalFileUploadService>();
             services.AddScoped<IAddressLocationService, AddressLocationService>();
             services.AddScoped<IMailService, MailService>();
             services.AddScoped<IAdminUserService, AdminUserService>();
