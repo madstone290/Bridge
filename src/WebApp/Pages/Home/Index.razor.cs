@@ -100,7 +100,15 @@ namespace Bridge.WebApp.Pages.Home
 
             _placeList.Clear();
             _placeList.AddRange(result.Data!
-                .Select(x => PlaceListModel.ToPlaceModel(x))
+                .Select(x => 
+                {
+                    var place = PlaceListModel.ToPlaceModel(x);
+                    if (x.ImagePath != null)
+                        place.ImageUrl = new Uri(PlaceApiClient.HttpClient.BaseAddress!, x.ImagePath).ToString();
+                    else
+                        place.ImageUrl = PlaceListModel.NoPictureUrl;
+                    return place;
+                })
                 .OrderBy(x => x.Distance));
 
             _searched = true;
