@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
@@ -14,6 +14,8 @@ namespace Bridge.Domain.Common
         Task<T?> FindByIdAsync(long id);
 
         Task AddAsync(T entity);
+
+        Task AddRangeAsync(IEnumerable<T> entities);
 
         void Remove(T entity);
 

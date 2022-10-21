@@ -1,4 +1,4 @@
-﻿using Bridge.Domain.Common;
+using Bridge.Domain.Common;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bridge.Infrastructure.Data
@@ -14,6 +14,11 @@ namespace Bridge.Infrastructure.Data
         public async Task AddAsync(T entity)
         {
             await Set.AddAsync(entity);  
+        }
+
+        public async Task AddRangeAsync(IEnumerable<T> entities)
+        {
+            await Set.AddRangeAsync(entities);
         }
 
         public void Remove(T entity)
