@@ -25,11 +25,21 @@ namespace Bridge.WebApp.Api.ApiClients.Admin
         /// <summary>
         /// 화장실을 생성한다
         /// </summary>
-        /// <param name="command">장소</param>
+        /// <param name="command">화장실</param>
         /// <returns></returns>
         public async Task<ApiResult<long>> CreateRestroom(CreateRestroomCommand command)
         {
             return await SendAsync<long>(HttpMethod.Post, ApiRoutes.Admin.Restrooms.Create, command);
+        }
+
+        /// <summary>
+        /// 화장실을 일괄 생성한다
+        /// </summary>
+        /// <param name="command">화장실 목록</param>
+        /// <returns></returns>
+        public async Task<ApiResult<Void>> CreateRestroomBatch(CreateRestroomBatchCommand command)
+        {
+            return await SendAsync<Void>(HttpMethod.Post, ApiRoutes.Admin.Restrooms.CreateBatch, command);
         }
 
         /// <summary>
