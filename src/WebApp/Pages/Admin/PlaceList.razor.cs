@@ -86,6 +86,24 @@ namespace Bridge.WebApp.Pages.Admin
             }
         }
 
+
+        private async void CreateRestroom_Click()
+        {
+            var parameters = new DialogParameters
+            {
+                { nameof(RestroomModalForm.FormMode), FormMode.Create }
+            };
+
+            var options = new DialogOptions { MaxWidth = MaxWidth.Large };
+            var dialog = DialogService.Show<RestroomModalForm>(string.Empty, parameters, options);
+            var dialogResult = await dialog.Result;
+            if (!dialogResult.Cancelled)
+            {
+                await Load_ClickAsync();
+            }
+        }
+        
+
         private void ToggleShowOpeningTime_Click(PlaceModel place)
         {
             place.ShowOpeningTimes = !place.ShowOpeningTimes;
@@ -93,6 +111,12 @@ namespace Bridge.WebApp.Pages.Admin
 
         private async void EditPlace_Click(PlaceModel place)
         {
+            if (place.Type == PlaceType.Restroom)
+            {
+                ShowRestroomModal(place);
+                return;
+            }
+            
             var parameters = new DialogParameters
             {
                 { nameof(PlaceModalForm.FormMode), FormMode.Update },
@@ -101,6 +125,36 @@ namespace Bridge.WebApp.Pages.Admin
 
             var options = new DialogOptions { MaxWidth = MaxWidth.Large };
             var dialog = DialogService.Show<PlaceModalForm>(string.Empty, parameters, options);
+            var dialogResult = await dialog.Result;
+            if (!dialogResult.Cancelled)
+            {
+                var placeId = (long)dialogResult.Data;
+                var placeResult = await PlaceApiClient.GetPlaceById(placeId);
+                if (!ValidationService.Validate(placeResult))
+                    return;
+
+                var placeDto = placeResult.Data!;
+                place.Type = placeDto.Type;
+                place.Name = placeDto.Name;
+                place.BaseAddress = placeDto.Address.BaseAddress;
+                place.DetailAddress = placeDto.Address.DetailAddress;
+                place.Categories = placeDto.Categories;
+                place.ContactNumber = placeDto.ContactNumber;
+                place.OpeningTimes = placeDto.OpeningTimes.Select(x => OpeningTimeModel.Create(x));
+                StateHasChanged();
+            }
+        }
+
+        private async void ShowRestroomModal(PlaceModel place)
+        {
+            var parameters = new DialogParameters
+            {
+                { nameof(RestroomModalForm.FormMode), FormMode.Update },
+                { nameof(RestroomModalForm.PlaceId), place.Id }
+            };
+
+            var options = new DialogOptions { MaxWidth = MaxWidth.Large };
+            var dialog = DialogService.Show<RestroomModalForm>(string.Empty, parameters, options);
             var dialogResult = await dialog.Result;
             if (!dialogResult.Cancelled)
             {

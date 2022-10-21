@@ -81,6 +81,7 @@ builder.Services.AddScoped<AuthenticationStateProvider>(sp => (AuthService)sp.Ge
 builder.Services.AddScoped<UserApiClient>();
 builder.Services.AddScoped<AdminPlaceApiClient>();
 builder.Services.AddScoped<AdminProductApiClient>();
+builder.Services.AddScoped<AdminRestroomApiClient>();
 builder.Services.AddScoped<PlaceApiClient>();
 
 var app = builder.Build();

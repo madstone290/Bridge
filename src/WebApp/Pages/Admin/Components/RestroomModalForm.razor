@@ -1,0 +1,106 @@
+@using Bridge.Domain.Places.Entities
+@using Bridge.Domain.Places.Entities.Places
+<MudDialog>
+    <DialogContent>
+        <div Style="max-height:750px; padding:10px; overflow-y: scroll">
+            <MudForm @ref="_form"
+                     Model="_model"
+                     ValidationDelay="0">
+                <div class="container">
+                    <MudText Typo="Typo.h5">기본 정보</MudText>
+                    <MudSpacer />
+                    <MudDivider Style="margin-bottom:4px;" />
+                    <MudGrid Spacing="1">
+                        <MudItem xs="12">
+                            <AdvTextField @bind-Value="_model.Name"
+                                          Validation="@(_validator.PropertyValidation(x=> x.Name))"
+                                          Label="장소명" />
+                        </MudItem>
+                        <MudItem xs="12">
+                            <AdvTextField @bind-Value="_model.BaseAddress"
+                                          Label="기본주소"
+                                          Validation="@(_validator.PropertyValidation(x=> x.BaseAddress))" />
+                        </MudItem>
+                        <MudItem xs="12">
+                            <AdvTextField @bind-Value="_model.DetailAddress"
+                                          Label="상세주소"
+                                          Validation="@(_validator.PropertyValidation(x=> x.DetailAddress))" />
+                        </MudItem>
+                        <MudItem xs="4">
+                            <AdvCheckBox @bind-Checked="_model.IsUnisex" Label="남녀공용" />
+                        </MudItem>
+                        <MudItem xs="4">
+                            <AdvCheckBox @bind-Checked="_model.HasDiaperTable" Label="기저귀 테이블" />
+                        </MudItem>
+                        <MudItem xs="4">
+                            <AdvSelect @bind-Value="_model.DiaperTableLocation"
+                                       T="DiaperTableLocation?"
+                                       ToStringFunc="DiaperTableLocationText"
+                                       Label="테이블 위치">
+                                @{
+                                    <MudSelectItem T="DiaperTableLocation?" Value="null">@DiaperTableLocationText(null)</MudSelectItem>
+                                    foreach (var location in Enum.GetValues<DiaperTableLocation>())
+                                    {
+                                        <MudSelectItem T="DiaperTableLocation?" Value="location">@DiaperTableLocationText(location)</MudSelectItem>
+                                    }
+                                }
+                            </AdvSelect>
+                        </MudItem>
+                         <MudItem xs="4">
+                            <MudNumericField @bind-Value="_model.MaleToilet" Label="남자 대변기" />
+                        </MudItem>
+                         <MudItem xs="4">
+                            <MudNumericField @bind-Value="_model.MaleDisabledToilet" Label="남자 장애인 대변기" />
+                        </MudItem>
+                        <MudItem xs="4">
+                            <MudNumericField @bind-Value="_model.MaleKidToilet" Label="남자 아이 대변기" />
+                        </MudItem>
+                        <MudItem xs="4">
+                            <MudNumericField @bind-Value="_model.MaleUrinal" Label="남자 소변기" />
+                        </MudItem>
+                        <MudItem xs="4">
+                            <MudNumericField @bind-Value="_model.MaleDisabledUrinal" Label="남자 장애인 소변기" />
+                        </MudItem>
+                        <MudItem xs="4">
+                            <MudNumericField @bind-Value="_model.MaleKidUrinal" Label="남자 아이 소변기" />
+                        </MudItem>
+                        <MudItem xs="4">
+                            <MudNumericField @bind-Value="_model.FemaleToilet" Label="여자 대변기" />
+                        </MudItem>
+                        <MudItem xs="4">
+                            <MudNumericField @bind-Value="_model.FemaleDisabledToilet" Label="여자 장애인 대변기" />
+                        </MudItem>
+                        <MudItem xs="4">
+                            <MudNumericField @bind-Value="_model.FemaleKidToilet" Label="여자 아이 대변기" />
+                        </MudItem>
+                    </MudGrid>
+                </div>
+                <div style="margin-top:30px;">
+                    <MudText Typo="Typo.h5">영업시간</MudText>
+                    <MudSpacer />
+                    <MudDivider Style="margin-bottom:4px;" />
+                    <MudGrid Spacing="1">
+                        <MudItem xs="12">
+                            @foreach (var openingTime in _model.OpeningTimes)
+                            {
+                                <Bridge.WebApp.Pages.Admin.Components.OpeningTimeListItem OpeningTime="openingTime" />
+                            }
+                        </MudItem>
+                    </MudGrid>
+                </div>
+            </MudForm>
+        </div>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Error"
+                   OnClick="Cancel_Click">
+            취소
+        </MudButton>
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   OnClick="Save_Click">
+            저장
+        </MudButton>
+    </DialogActions>
+</MudDialog>

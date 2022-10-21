@@ -11,6 +11,13 @@ namespace Bridge.WebApp.Services
         /// <summary>
         /// api 처리결과가 성공적이어야 한다
         /// </summary>
+        /// <param name="apiResult"></param>
+        /// <returns></returns>
+        bool Validate(IApiResult apiResult);
+
+        /// <summary>
+        /// api 처리결과가 성공적이어야 한다
+        /// </summary>
         /// <param name="result"></param>
         /// <param name="allowNullData">데이터 널 허용여부</param>
         /// <returns></returns>
@@ -46,6 +53,16 @@ namespace Bridge.WebApp.Services
                 return false;
             }
 
+            return true;
+        }
+
+        public bool Validate(IApiResult result)
+        {
+            if (!result.Success)
+            {
+                _snackbar.Add(result.Error, Severity.Error);
+                return false;
+            }
             return true;
         }
     }
