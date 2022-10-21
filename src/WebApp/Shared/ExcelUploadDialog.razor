@@ -1,0 +1,74 @@
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.Add" />
+            엑셀 업로드
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudForm ValidationDelay="0">
+            <MudGrid>
+                <MudItem xs="12">
+                    <MudButton HtmlTag="label"
+                               Variant="Variant.Filled"
+                               Color="Color.Primary"
+                               Size="Size.Large"
+                               FullWidth="true"
+                               StartIcon="@Icons.Filled.CloudUpload"
+                               for="fileInput">파일 선택</MudButton>
+                    <InputFile id="fileInput" hidden OnChange="UploadFiles" accept=".xlsx" />
+                </MudItem>
+                <MudItem xs="12">
+                    @if (_file != null)
+                    {
+                        <MudAlert ShowCloseIcon="true" CloseIconClicked="(() => _file = null)">@_file?.Name</MudAlert>
+                    }
+                    else
+                    {
+                        <MudAlert Severity="Severity.Info">파일을 선택하세요</MudAlert>
+                    }
+                </MudItem>
+            </MudGrid>
+        </MudForm>
+    </DialogContent>
+
+    <DialogActions>
+        <MudButton DisableElevation
+                   Variant="Variant.Filled"
+                   Color="Color.Secondary"
+                   OnClick="@Cancel_Click">취소</MudButton>
+        <MudButton DisableElevation
+                   Disabled="@(_file == null)"
+                   OnClick="@Upload_ClickAsync"
+                   Variant="Variant.Filled" Color="Color.Primary">업로드</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    private IBrowserFile? _file;
+
+    [CascadingParameter]
+    public MudDialogInstance Dialog { get; private set; } = null!;
+
+    private void UploadFiles(InputFileChangeEventArgs e)
+    {
+        _file = e.File;
+    }
+
+    private void Cancel_Click()
+    {
+        Dialog.Cancel();
+    }
+
+    private async Task Upload_ClickAsync()
+    {
+        if (_file != null)
+        {
+            var buffer = new byte[_file.Size];
+            await _file.OpenReadStream(_file.Size).ReadAsync(buffer);
+
+            Dialog.Close(buffer);
+        }
+    }
+}

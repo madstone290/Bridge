@@ -67,6 +67,8 @@ builder.Services.AddSingleton<HttpClient>((sp) =>
 });
 
 builder.Services.AddBlazoredLocalStorage();
+builder.Services.AddScoped<IFileService, FileService>();
+builder.Services.AddScoped<IExcelService, ExcelService>();
 builder.Services.AddScoped<IApiResultValidationService, SnackbarApiResultValidationService>();
 builder.Services.AddScoped<NaverReverseGeocodeApi>();
 builder.Services.AddScoped<IReverseGeocodeService, NaverReverseGeocodeService>();
