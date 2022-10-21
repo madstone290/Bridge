@@ -38,6 +38,13 @@ namespace Bridge.Shared
                 public const string UpdateCategories = "/api/Admin/Places/{id}/Categories";
                 public const string Close = "/api/Admin/Places/{id}/Close";
             }
+
+            public static class Restrooms
+            {
+                public const string Get = "/api/Admin/Restrooms/{id}";
+                public const string Create = "/api/Admin/Restrooms";
+                public const string Update = "/api/Admin/Restrooms/{id}";
+            }
         }
 
         public static class Users

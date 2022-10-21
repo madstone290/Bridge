@@ -69,6 +69,7 @@ namespace Bridge.Infrastructure
             
             services.AddScoped<IPlaceReadRepository, PlaceReadRepository>();
             services.AddScoped<IProductReadRepository, ProductReadRepository>();
+            services.AddScoped<IRestroomReadRepository, RestroomReadRepository>();
         }
 
     }

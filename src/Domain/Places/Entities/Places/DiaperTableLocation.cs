@@ -6,11 +6,6 @@ namespace Bridge.Domain.Places.Entities.Places
     public enum DiaperTableLocation
     {
         /// <summary>
-        /// 없음
-        /// </summary>
-        None,
-
-        /// <summary>
         /// 남자화장실
         /// </summary>
         MaleToilet,
