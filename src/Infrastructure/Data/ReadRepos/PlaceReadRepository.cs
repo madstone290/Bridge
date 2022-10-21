@@ -18,7 +18,8 @@ namespace Bridge.Infrastructure.Data.ReadRepos
         {
             Id = x.Id,
             Status = x.Status,
-            CreationDateTime = x.CreationDateTime,
+            CreationDateTimeUtc = x.CreationDateTimeUtc,
+            LastUpdateDateTimeUtc = x.LastUpdateDateTimeUtc,
             Type = x.Type,
             Name = x.Name,
             Address = new AddressDto()
@@ -55,7 +56,7 @@ namespace Bridge.Infrastructure.Data.ReadRepos
                 .Where(x=> x.Status == PlaceStatus.Open)
                 .Where(x => placeType == null || x.Type == placeType.Value)
                 .Select(SelectExpression)
-                .OrderByDescending(x=> x.CreationDateTime)
+                .OrderByDescending(x=> x.CreationDateTimeUtc)
                 .ThenByDescending(x=> x.Id)
                 .PaginateAsync(pageNumber, pageSize);
         }
@@ -76,7 +77,8 @@ namespace Bridge.Infrastructure.Data.ReadRepos
                     Distance = Math.Sqrt(Math.Pow(Math.Abs(easting - x.Location.Easting), 2) + Math.Pow(Math.Abs(northing - x.Location.Northing), 2)),
                     Id = x.Id,
                     Status = x.Status,
-                    CreationDateTime = x.CreationDateTime,
+                    CreationDateTimeUtc = x.CreationDateTimeUtc,
+                    LastUpdateDateTimeUtc = x.LastUpdateDateTimeUtc,
                     Type = x.Type,
                     Name = x.Name,
                     Address = new AddressDto()

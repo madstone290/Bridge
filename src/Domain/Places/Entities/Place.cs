@@ -29,7 +29,7 @@ namespace Bridge.Domain.Places.Entities
         protected Place(PlaceType type, string name, Address address, Location location)
         {
             Status = PlaceStatus.Open;
-            CreationDateTime = DateTime.UtcNow;
+            CreationDateTimeUtc = DateTime.UtcNow;
             Type = type;
             SetName(name);
             SetAddressLocation(address, location);
@@ -67,7 +67,7 @@ namespace Bridge.Domain.Places.Entities
         /// <summary>
         /// 생성일시
         /// </summary>
-        public DateTime CreationDateTime { get; private set; }
+        public DateTime CreationDateTimeUtc { get; private set; }
 
         /// <summary>
         /// 장소명
@@ -98,6 +98,11 @@ namespace Bridge.Domain.Places.Entities
         /// 이미지 경로
         /// </summary>
         public string? ImagePath { get; set; }
+
+        /// <summary>
+        /// 최근 업데이트 일시
+        /// </summary>
+        public DateTime? LastUpdateDateTimeUtc { get; private set; }
 
         /// <summary>
         /// 영업시간
@@ -262,6 +267,11 @@ namespace Bridge.Domain.Places.Entities
         public void CloseDown()
         {
             Status = PlaceStatus.Closed;
+        }
+
+        public void SetLastUpdate(DateTime? localDateTime)
+        {
+            LastUpdateDateTimeUtc = localDateTime?.ToUniversalTime();
         }
 
     }

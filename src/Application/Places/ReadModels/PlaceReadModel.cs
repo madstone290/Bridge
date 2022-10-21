@@ -25,7 +25,17 @@ namespace Bridge.Application.Places.ReadModels
         /// <summary>
         /// 생성일시
         /// </summary>
-        public DateTime CreationDateTime { get; set; }
+        public DateTime CreationDateTimeUtc { get; set; }
+
+        /// <summary>
+        /// 최근 업데이트 일시
+        /// </summary>
+        public DateTime? LastUpdateDateTimeUtc { get; set; }
+
+        /// <summary>
+        /// 생성일시
+        /// </summary>
+        public DateTime CreationDateTimeLocal => CreationDateTimeUtc.ToLocalTime();
 
         /// <summary>
         /// 장소명
