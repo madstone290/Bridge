@@ -85,17 +85,17 @@ namespace Bridge.IntegrationTests.Config
             var httpClient = webApplicationFactory.CreateClient();
             
             // 시드 생성
-            foreach (var user in Seeds.TestUsers)
-            {
-                var response = httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Post, ApiRoutes.Users.Register)
-                {
-                    Content = JsonContent.Create(new RegisterDto()
-                    {
-                        Email = user.Email,
-                        Password = user.Password
-                    })
-                }).GetAwaiter().GetResult();
-            }
+            //foreach (var user in Seeds.TestUsers)
+            //{
+            //    var response = httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Post, ApiRoutes.Users.Register)
+            //    {
+            //        Content = JsonContent.Create(new RegisterDto()
+            //        {
+            //            Email = user.Email,
+            //            Password = user.Password
+            //        })
+            //    }).GetAwaiter().GetResult();
+            //}
 
             testClient = new TestClient(httpClient);
 

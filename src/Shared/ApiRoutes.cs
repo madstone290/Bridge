@@ -43,6 +43,7 @@ namespace Bridge.Shared
             {
                 public const string Get = "/api/Admin/Restrooms/{id}";
                 public const string Create = "/api/Admin/Restrooms";
+                public const string CreateBatch = "/api/Admin/Restrooms/Batch/Create";
                 public const string Update = "/api/Admin/Restrooms/{id}";
             }
         }

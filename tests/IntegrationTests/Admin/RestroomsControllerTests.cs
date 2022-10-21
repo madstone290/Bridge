@@ -5,16 +5,19 @@ using Bridge.IntegrationTests.Config;
 using Bridge.Shared;
 using FluentAssertions;
 using System.Net.Http.Json;
+using Xunit.Abstractions;
 
 namespace Bridge.IntegrationTests.Admin
 {
     public class RestroomsControllerTests : IClassFixture<ApiTestFactory>
     {
         private readonly TestClient _client;
+        private readonly ITestOutputHelper _testOutputHelper;
 
-        public RestroomsControllerTests(ApiTestFactory apiTestFactory)
+        public RestroomsControllerTests(ApiTestFactory apiTestFactory, ITestOutputHelper testOutputHelper)
         {
             _client = apiTestFactory.Client;
+            _testOutputHelper = testOutputHelper;
         }
 
         public static AddressDto AddressDto(string? roadAddress = null, string? details = null)
@@ -227,6 +230,34 @@ namespace Bridge.IntegrationTests.Admin
             restroom.FemaleToilet.Should().Be(updateCommand.FemaleToilet);
             restroom.FemaleDisabledToilet.Should().Be(updateCommand.FemaleDisabledToilet);
             restroom.FemaleKidToilet.Should().Be(updateCommand.FemaleKidToilet);
+        }
+
+        [Fact]
+        public async Task Create_Restroom_Batch_Return_Ok_With_Id()
+        {
+            // Arrange
+            var batchCommand = new CreateRestroomBatchCommand();
+            var subcommandList = new List<CreateRestroomCommand>();
+            for (int i = 0; i < 100; i++)
+            {
+                var subcommand = new CreateRestroomCommand()
+                {
+                    LastUpdateDateTimeLocal = DateTime.Today,
+                    Name = i.ToString(),
+                    Address = AddressDto(),
+                    IsUnisex = false,
+                    HasDiaperTable = false
+                };
+                subcommandList.Add(subcommand);
+            }
+            batchCommand.Commands = subcommandList;
+
+            // Act
+            var request = new HttpRequestMessage(HttpMethod.Post, ApiRoutes.Admin.Restrooms.CreateBatch) { Content = JsonContent.Create(batchCommand) };
+            var response = await _client.SendAsAdminAsync(request);
+
+            // Assert
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
 
     }

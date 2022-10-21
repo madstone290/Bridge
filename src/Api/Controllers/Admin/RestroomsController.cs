@@ -39,6 +39,15 @@ namespace Bridge.Api.Controllers.Admin
             return Ok(placeId);
         }
 
+        [HttpPost]
+        [Route(ApiRoutes.Admin.Restrooms.CreateBatch)]
+        [ProducesResponseType( StatusCodes.Status200OK)]
+        public async Task<IActionResult> CreateRestroom([FromBody] CreateRestroomBatchCommand command)
+        {
+            await _mediator.Send(command);
+            return Ok();
+        }
+
         [HttpPut]
         [Route(ApiRoutes.Admin.Restrooms.Update)]
         [ProducesResponseType(StatusCodes.Status200OK)]

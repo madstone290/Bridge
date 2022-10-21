@@ -19,6 +19,11 @@ namespace Bridge.Application.Places.Commands
         public AddressDto Address { get; set; } = AddressDto.Empty;
 
         /// <summary>
+        /// 최근 업데이트 일시
+        /// </summary>
+        public DateTime? LastUpdateDateTimeLocal { get; set; }
+
+        /// <summary>
         /// 남녀공용여부
         /// </summary>
         public bool IsUnisex { get; set; }
@@ -76,6 +81,7 @@ namespace Bridge.Application.Places.Commands
         {
             var addressLocation = await _addressLocationService.CreateAddressLocationAsync(command.Address.BaseAddress, command.Address.DetailAddress);
             var restroom = new Restroom(command.Name, addressLocation.Item1, addressLocation.Item2);
+            restroom.SetLastUpdate(command.LastUpdateDateTimeLocal);
             restroom.UpdateRestroom(command.IsUnisex, command.HasDiaperTable, command.DiaperTableLocation,
                                  command.MaleToilet, command.MaleUrinal, command.MaleDisabledToilet,
                                  command.MaleDisabledUrinal, command.MaleKidToilet, command.MaleKidUrinal,
