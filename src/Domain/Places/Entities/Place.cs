@@ -25,8 +25,8 @@ namespace Bridge.Domain.Places.Entities
         /// </summary>
         private ISet<PlaceCategory> _categories = new HashSet<PlaceCategory>();
 
-        private Place() { }
-        private Place(PlaceType type, string name, Address address, Location location)
+        protected Place() { }
+        protected Place(PlaceType type, string name, Address address, Location location)
         {
             Status = PlaceStatus.Open;
             CreationDateTime = DateTime.UtcNow;
