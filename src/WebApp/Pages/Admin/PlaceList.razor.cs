@@ -129,7 +129,7 @@ namespace Bridge.WebApp.Pages.Admin
             foreach (var error in Model.BatchErrors)
             {
                 Snackbar.Add(error);
-                Console.Write(error);
+                Console.WriteLine(error);
             }
         }
 
