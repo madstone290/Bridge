@@ -76,8 +76,11 @@ namespace Bridge.Application.Places.Commands
 
             await Task.WhenAll(taskList);
 
-            await _placeRepository.AddRangeAsync(restroomList);
-            await _unitOfWork.CommitAsync();
+            if(!errors.Any())
+            {
+                await _placeRepository.AddRangeAsync(restroomList);
+                await _unitOfWork.CommitAsync();
+            }
             return errors;
         }
     }

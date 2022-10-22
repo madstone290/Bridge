@@ -1,6 +1,6 @@
-﻿namespace Bridge.Application.Places.Dtos
+namespace Bridge.Application.Places.Dtos
 {
-    public class OpeningTimeDto
+    public record OpeningTimeDto
     {
         /// <summary>
         /// 영업요일
