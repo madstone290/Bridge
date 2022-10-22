@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Bridge.Domain.Places.Entities.Places
 {
     /// <summary>
@@ -8,11 +10,13 @@ namespace Bridge.Domain.Places.Entities.Places
         /// <summary>
         /// 남자화장실
         /// </summary>
+        [Display(Name = "남자화장실")]
         MaleToilet,
 
         /// <summary>
         /// 여자화장실
         /// </summary>
+        [Display(Name = "여자화장실")]
         FemaleToilet
     }
 }
