@@ -2,7 +2,9 @@ using Bridge.Domain.Places.Entities;
 using Bridge.Shared.Extensions;
 using Bridge.WebApp.Api.ApiClients.Admin;
 using Bridge.WebApp.Pages.Admin.Components;
+using Bridge.WebApp.Pages.Admin.DataModels;
 using Bridge.WebApp.Pages.Admin.Models;
+using Bridge.WebApp.Services;
 using Bridge.WebApp.Shared;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
@@ -32,7 +34,13 @@ namespace Bridge.WebApp.Pages.Admin
         private int _rowsPerPage = 10;
 
         [Inject]
+        public PlaceListModel Model { get; set; } = null!;
+
+        [Inject]
         public AdminPlaceApiClient PlaceApiClient { get; set; } = null!;
+        
+        [Inject]
+        public IExcelService ExcelService { get; set; } = null!;
 
         protected override async Task OnInitializedAsync()
         {
@@ -86,7 +94,6 @@ namespace Bridge.WebApp.Pages.Admin
             }
         }
 
-
         private async void CreateRestroom_Click()
         {
             var parameters = new DialogParameters
@@ -103,6 +110,28 @@ namespace Bridge.WebApp.Pages.Admin
             }
         }
         
+        private async void RestroomExcelDownload_Click()
+        {
+            await Model.DownloadExcel();
+        }
+
+        private async void RestroomExcelUpload_Click()
+        {
+            await Model.UploadExcel();
+
+            if (!Model.UploadSuccessful)
+            {
+                Snackbar.Add(Model.UploadError);
+                return;
+            }
+
+            Snackbar.Add($"{Model.BatchFailCount}/{Model.BatchTotalCount} 실패");
+            foreach (var error in Model.BatchErrors)
+            {
+                Snackbar.Add(error);
+                Console.Write(error);
+            }
+        }
 
         private void ToggleShowOpeningTime_Click(PlaceModel place)
         {

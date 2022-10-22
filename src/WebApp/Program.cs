@@ -4,6 +4,7 @@ using Bridge.Shared.Constants;
 using Bridge.WebApp.Api.ApiClients;
 using Bridge.WebApp.Api.ApiClients.Admin;
 using Bridge.WebApp.Api.ApiClients.Identity;
+using Bridge.WebApp.Pages.Admin.Models;
 using Bridge.WebApp.Services;
 using Bridge.WebApp.Services.Identity;
 using Bridge.WebApp.Services.Maps;
@@ -85,6 +86,8 @@ builder.Services.AddScoped<AdminPlaceApiClient>();
 builder.Services.AddScoped<AdminProductApiClient>();
 builder.Services.AddScoped<AdminRestroomApiClient>();
 builder.Services.AddScoped<PlaceApiClient>();
+
+builder.Services.AddScoped<PlaceListModel>();
 
 var app = builder.Build();
 

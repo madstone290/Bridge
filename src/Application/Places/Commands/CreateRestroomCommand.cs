@@ -6,7 +6,7 @@ using Bridge.Domain.Places.Repos;
 
 namespace Bridge.Application.Places.Commands
 {
-    public class CreateRestroomCommand : ICommand<long>
+    public record CreateRestroomCommand : ICommand<long>
     {
         /// <summary>
         /// 화장실명

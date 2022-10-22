@@ -26,21 +26,21 @@
                 </AdvTextField>
             </div>
 
-            <MudButton Variant="Variant.Filled"
+            <MudButton Variant="Variant.Outlined"
                        StartIcon="@Icons.Material.Filled.Refresh"
-                       IconColor="Color.Surface"
-                       OnClick="Load_ClickAsync"
-                       Color="Color.Secondary">조회</MudButton>
-            <MudButton Variant="Variant.Filled"
-                       Color="Color.Primary"
-                       IconColor="Color.Surface"
+                       OnClick="Load_ClickAsync">조회</MudButton>
+            <MudButton Variant="Variant.Outlined"
                        OnClick="Create_Click"
                        StartIcon="@Icons.Material.Filled.Add">추가</MudButton>
-            <MudButton Variant="Variant.Filled"
-                       Color="Color.Primary"
-                       IconColor="Color.Surface"
+            <MudButton Variant="Variant.Outlined"
                        OnClick="CreateRestroom_Click"
                        StartIcon="@Icons.Material.Filled.Add">화장실 추가</MudButton>
+            <MudButton Variant="Variant.Outlined"
+                       OnClick="RestroomExcelDownload_Click"
+                       StartIcon="@Icons.Material.Filled.Add">화장실 엑셀 다운로드</MudButton>
+            <MudButton Variant="Variant.Outlined"
+                       OnClick="RestroomExcelUpload_Click"
+                       StartIcon="@Icons.Material.Filled.Add">화장실 엑셀 업로드</MudButton>
         </MudToolBar>
 
         <MudTable T="PlaceModel"

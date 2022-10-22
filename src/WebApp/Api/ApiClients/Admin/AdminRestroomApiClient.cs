@@ -37,9 +37,9 @@ namespace Bridge.WebApp.Api.ApiClients.Admin
         /// </summary>
         /// <param name="command">화장실 목록</param>
         /// <returns></returns>
-        public async Task<ApiResult<Void>> CreateRestroomBatch(CreateRestroomBatchCommand command)
+        public async Task<ApiResult<List<string>>> CreateRestroomBatch(CreateRestroomBatchCommand command)
         {
-            return await SendAsync<Void>(HttpMethod.Post, ApiRoutes.Admin.Restrooms.CreateBatch, command);
+            return await SendAsync<List<string>>(HttpMethod.Post, ApiRoutes.Admin.Restrooms.CreateBatch, command);
         }
 
         /// <summary>

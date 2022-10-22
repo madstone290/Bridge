@@ -2,6 +2,7 @@ using ClosedXML.Excel;
 using MudBlazor;
 using System.Reflection;
 using Bridge.WebApp.Shared;
+using Bridge.Shared;
 
 namespace Bridge.WebApp.Services
 {
@@ -129,8 +130,10 @@ namespace Bridge.WebApp.Services
                     try
                     {
                         var property = columnNumberProperties[columnNumber];
-                        var properValue = Convert.ChangeType(dataRow.Cell(columnNumber).Value, property.PropertyType);
-                        property.SetValue(instance, properValue);
+                        var cellValue = dataRow.Cell(columnNumber).Value;
+                        var propertyValue = ObjectConverter.Execute(cellValue, property.PropertyType);
+                        
+                        property.SetValue(instance, propertyValue);
                     }
                     catch { } // Failed to change value type 
                 }

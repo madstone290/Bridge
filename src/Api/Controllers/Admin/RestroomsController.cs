@@ -44,8 +44,8 @@ namespace Bridge.Api.Controllers.Admin
         [ProducesResponseType( StatusCodes.Status200OK)]
         public async Task<IActionResult> CreateRestroom([FromBody] CreateRestroomBatchCommand command)
         {
-            await _mediator.Send(command);
-            return Ok();
+            var result = await _mediator.Send(command);
+            return Ok(result);
         }
 
         [HttpPut]
