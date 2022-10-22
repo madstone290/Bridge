@@ -131,7 +131,7 @@ namespace Bridge.WebApp.Services
                     {
                         var property = columnNumberProperties[columnNumber];
                         var cellValue = dataRow.Cell(columnNumber).Value;
-                        var propertyValue = ObjectConverter.Execute(cellValue, property.PropertyType);
+                        var propertyValue = ObjectConverter.Default.Execute(property.PropertyType, cellValue);
                         
                         property.SetValue(instance, propertyValue);
                     }

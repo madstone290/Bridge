@@ -8,17 +8,7 @@ namespace Bridge.Shared
     /// </summary>
     public class ObjectConverter
     {
-        private static readonly Dictionary<Type, Func<object?, object?>> typeSpecificConverters = new()
-        {
-            {   typeof(bool), new Func<object?, object?>((value) =>
-                {
-                    var valueText = value?.ToString()?.ToLower();
-                    if(valueText == "y" || valueText == "true" || valueText == "1")
-                        return true;
-                    return false;
-                })
-            }
-        };
+        public static ObjectConverter Default { get; } = new();
 
         /// <summary>
         /// 열거형으로 변환
@@ -29,15 +19,8 @@ namespace Bridge.Shared
         /// <returns>변환 성공여부</returns>
         private static bool TryConvertToEnum(Type type, object value, out object enumValue)
         {
-            // int를 이용한 캐스팅
-            if (Enum.IsDefined(type, value))
-            {
-                enumValue = value;
-                return true;
-            }
-            
-            // 문자열 변환
-            if (Enum.TryParse(type, Convert.ToString(value), true, out object? result))
+            // int 및 문자열 변환
+            if (Enum.IsDefined(type, value) && Enum.TryParse(type, Convert.ToString(value), true, out object? result))
             {
                 enumValue = result!;
                 return true;
@@ -62,11 +45,29 @@ namespace Bridge.Shared
             return false;
         }
 
-        public static object? Execute(object? value, Type type)
+        public Dictionary<Type, Func<object?, object?>> CustomConverters { get; } = new()
+        {
+            {   typeof(bool), new Func<object?, object?>((value) =>
+                {
+                    var valueText = value?.ToString()?.ToLower();
+                    if(valueText == "y" || valueText == "true" || valueText == "1")
+                        return true;
+                    return false;
+                })
+            }
+        };
+
+        /// <summary>
+        /// 주어진 Type으로 값을 변환한다.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public object? Execute(Type type, object? value)
         {
             // 1. 커스텀 변환기
-            if (typeSpecificConverters.ContainsKey(type))
-                return typeSpecificConverters[type].Invoke(value);
+            if (CustomConverters.ContainsKey(type))
+                return CustomConverters[type].Invoke(value);
 
             // 2. 입력이 null인 경우 default값 반환
             if (value == null)
@@ -79,14 +80,22 @@ namespace Bridge.Shared
             if (underlyingType.IsEnum)
             {
                 // 변환이 성공한 경우 변환된 값 반환. 실패한 경우 기본값 반환.
-                if(TryConvertToEnum(underlyingType, value, out var enumValue))
-                    return enumValue;
-                else
-                    return Activator.CreateInstance(type);
+                if (!TryConvertToEnum(underlyingType, value, out var enumValue))
+                    enumValue = Activator.CreateInstance(type);
+                return enumValue;
             }
 
             // 4. 그 외 변환
-            return Convert.ChangeType(value, underlyingType);
+            object? convertedValue;
+            try
+            { 
+                convertedValue = Convert.ChangeType(value, underlyingType);
+            }
+            catch 
+            { 
+                convertedValue = underlyingType.IsValueType ? Activator.CreateInstance(type) : null; 
+            }
+            return convertedValue;
         }
     }
 }
