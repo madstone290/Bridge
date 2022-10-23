@@ -78,6 +78,6 @@ namespace Bridge.WebApp.Pages.Admin.DataModels
         public TimeSpan? CloseTime { get; set; }
 
         [Display(Name = "최근 업데이트 일시")]
-        public DateTime LastUpdateDateTime { get; set; }
+        public DateTime? LastUpdateDateTime { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using MudBlazor;
 using System.Reflection;
 using Bridge.WebApp.Shared;
 using Bridge.Shared;
+using DocumentFormat.OpenXml.Office2021.MipLabelMetaData;
 
 namespace Bridge.WebApp.Services
 {
@@ -25,7 +26,7 @@ namespace Bridge.WebApp.Services
         /// <typeparam name="T">인스턴스 타입</typeparam>
         /// <param name="list">인스턴스 리스트</param>
         /// <returns></returns>
-         Stream WriteTable<T>(IEnumerable<T> list, ExcelOptions? options = null);
+        Stream WriteTable<T>(IEnumerable<T> list, ExcelOptions? options = null);
 
         /// <summary>
         /// 엑셀파일을 업로드한다.
@@ -45,7 +46,7 @@ namespace Bridge.WebApp.Services
     /// 엑셀 옵션
     /// </summary>
     /// <param name="Columns"></param>
-    public class ExcelOptions 
+    public class ExcelOptions
     {
         /// <summary>
         /// 엑셀 컬럼
@@ -78,6 +79,40 @@ namespace Bridge.WebApp.Services
         {
             _dialogService = dialogService;
             _fileService = fileService;
+        }
+
+        /// <summary>
+        /// .net 타입에 대응하는 XLDataTyp을 반환한다.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        private static XLDataType GetXLDataType(Type type)
+        {
+            if (type == typeof(TimeSpan?) || type == typeof(TimeSpan))
+            {
+                return XLDataType.TimeSpan;
+            }
+            else if (type == typeof(DateTime?) || type == typeof(DateTime))
+            {
+                return XLDataType.DateTime;
+            }
+            else if (type == typeof(bool?) || type == typeof(bool))
+            {
+                return XLDataType.Boolean;
+            }
+            else if (type == typeof(int?) || type == typeof(int) ||
+                type == typeof(long?) || type == typeof(long) ||
+                type == typeof(double?) || type == typeof(double) ||
+                type == typeof(float?) || type == typeof(float) ||
+                type == typeof(decimal?) || type == typeof(decimal) ||
+                type == typeof(short?) || type == typeof(short))
+            {
+                return XLDataType.Number;
+            }
+            else
+            {
+                return XLDataType.Text;
+            }
         }
 
         public IEnumerable<T> ReadTable<T>(Stream stream, ExcelOptions? options = null)
@@ -113,25 +148,31 @@ namespace Bridge.WebApp.Services
                 if (property == null)
                     continue;
 
+                // 컬럼번호에 해당하는 속성을 추가한다
                 columnNumberProperties.Add(columnNumber, property);
+
+                // .Net타입에 맞는 XLDataType을 설정한다
+                XLDataType dataType = GetXLDataType(property.PropertyType);
+                worksheet.Range(2, columnNumber, sheetRows.Count(), columnNumber).DataType = dataType;
             }
 
             // read data rows
-            foreach(var dataRow in sheetRows.Skip(1))
+            foreach (var dataRow in sheetRows.Skip(1))
             {
                 var instance = (T)Activator.CreateInstance(typeof(T))!;
-                foreach(var column in sheetColumns)
+                foreach (var column in sheetColumns)
                 {
                     var columnNumber = column.ColumnNumber();
                     if (!columnNumberProperties.ContainsKey(columnNumber))
                         continue;
-                    
                     try
                     {
                         var property = columnNumberProperties[columnNumber];
-                        var cellValue = dataRow.Cell(columnNumber).Value;
+                        var cell = dataRow.Cell(columnNumber);
+                        var cellValue = cell.Value;
+
                         var propertyValue = ObjectConverter.Default.Execute(property.PropertyType, cellValue);
-                        
+
                         property.SetValue(instance, propertyValue);
                     }
                     catch { } // Failed to change value type 
@@ -157,11 +198,12 @@ namespace Bridge.WebApp.Services
             foreach (var optionsColumn in optionsColumns)
             {
                 worksheet.Cell(rowNumber, columnNumber).Value = optionsColumn.Caption;
-                
+
                 var property = properties.FirstOrDefault(x => string.Equals(x.Name, optionsColumn.Name, StringComparison.OrdinalIgnoreCase));
                 if (property != null)
+                {
                     columnNumberProperties.Add(columnNumber, property);
-
+                }
                 columnNumber++;
             }
             rowNumber++;
@@ -177,7 +219,7 @@ namespace Bridge.WebApp.Services
                         var property = columnNumberProperties[columnNumber];
                         var cell = worksheet.Cell(rowNumber, columnNumber);
                         var value = property.GetValue(instance);
-                        
+
                         cell.SetValue(value);
                     }
                     columnNumber++;

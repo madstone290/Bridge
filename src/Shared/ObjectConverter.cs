@@ -1,5 +1,5 @@
-using System.ComponentModel.DataAnnotations;
-using System.Reflection;
+
+using Bridge.Shared.Converters;
 
 namespace Bridge.Shared
 {
@@ -8,43 +8,10 @@ namespace Bridge.Shared
     /// </summary>
     public class ObjectConverter
     {
+        private readonly EnumConverter _enumConverter = new();
+
         public static ObjectConverter Default { get; } = new();
-
-        /// <summary>
-        /// 열거형으로 변환
-        /// </summary>
-        /// <param name="type"></param>
-        /// <param name="value"></param>
-        /// <param name="enumValue"></param>
-        /// <returns>변환 성공여부</returns>
-        private static bool TryConvertToEnum(Type type, object value, out object enumValue)
-        {
-            // int 및 문자열 변환
-            if (Enum.IsDefined(type, value) && Enum.TryParse(type, Convert.ToString(value), true, out object? result))
-            {
-                enumValue = result!;
-                return true;
-            }
-
-            // DisplayAttrite의 Name속성 이용
-            foreach (var field in type.GetFields())
-            {
-                var displayAttr = field.GetCustomAttribute<DisplayAttribute>();
-                if (displayAttr != null)
-                {
-                    if (string.Equals(displayAttr.Name, Convert.ToString(value), StringComparison.OrdinalIgnoreCase))
-                    {
-                        enumValue = field.GetValue(null)!;
-                        return true;
-                    }
-                }
-            }
-
-            // 변환할 수 없음
-            enumValue = new();
-            return false;
-        }
-
+        
         public Dictionary<Type, Func<object?, object?>> CustomConverters { get; } = new()
         {
             {   typeof(bool), new Func<object?, object?>((value) =>
@@ -65,6 +32,9 @@ namespace Bridge.Shared
         /// <returns></returns>
         public object? Execute(Type type, object? value)
         {
+            if (value?.GetType() == type)
+                return value;
+
             // 1. 커스텀 변환기
             if (CustomConverters.ContainsKey(type))
                 return CustomConverters[type].Invoke(value);
@@ -80,7 +50,7 @@ namespace Bridge.Shared
             if (underlyingType.IsEnum)
             {
                 // 변환이 성공한 경우 변환된 값 반환. 실패한 경우 기본값 반환.
-                if (!TryConvertToEnum(underlyingType, value, out var enumValue))
+                if (!_enumConverter.TryConvert(underlyingType, value, out var enumValue))
                     enumValue = Activator.CreateInstance(type);
                 return enumValue;
             }
