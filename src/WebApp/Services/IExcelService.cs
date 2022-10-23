@@ -15,9 +15,9 @@ namespace Bridge.WebApp.Services
         /// 엑셀 테이블을 읽고 T타입 인스턴스로 변환한다.
         /// </summary>
         /// <typeparam name="T">인스턴스 타입</typeparam>
-        /// <param name="buffer">엑셀 데이터</param>
+        /// <param name="stream">엑셀 데이터</param>
         /// <returns></returns>
-        IEnumerable<T> ReadTable<T>(byte[] buffer, ExcelOptions? options = null);
+        IEnumerable<T> ReadTable<T>(Stream stream, ExcelOptions? options = null);
 
         /// <summary>
         /// 엑셀 테이블을 생성한다.
@@ -25,7 +25,7 @@ namespace Bridge.WebApp.Services
         /// <typeparam name="T">인스턴스 타입</typeparam>
         /// <param name="list">인스턴스 리스트</param>
         /// <returns></returns>
-        byte[] WriteTable<T>(IEnumerable<T> list, ExcelOptions? options = null);
+         Stream WriteTable<T>(IEnumerable<T> list, ExcelOptions? options = null);
 
         /// <summary>
         /// 엑셀파일을 업로드한다.
@@ -80,10 +80,9 @@ namespace Bridge.WebApp.Services
             _fileService = fileService;
         }
 
-        public IEnumerable<T> ReadTable<T>(byte[] buffer, ExcelOptions? options = null)
+        public IEnumerable<T> ReadTable<T>(Stream stream, ExcelOptions? options = null)
         {
             var list = new List<T>();
-            using var stream = new MemoryStream(buffer);
             var workBook = new XLWorkbook(stream);
             var worksheet = workBook.Worksheet(1);
 
@@ -143,7 +142,7 @@ namespace Bridge.WebApp.Services
             return list;
         }
 
-        public byte[] WriteTable<T>(IEnumerable<T> list, ExcelOptions? options = null)
+        public Stream WriteTable<T>(IEnumerable<T> list, ExcelOptions? options = null)
         {
             var wbook = new XLWorkbook();
             var worksheet = wbook.AddWorksheet();
@@ -185,10 +184,10 @@ namespace Bridge.WebApp.Services
                 }
                 rowNumber++;
             }
-            using var stream = new MemoryStream();
+            var stream = new MemoryStream();
             wbook.SaveAs(stream);
 
-            return stream.ToArray();
+            return stream;
         }
 
         public async Task<IEnumerable<T>> UploadAsync<T>(ExcelOptions? options = null)
@@ -207,9 +206,8 @@ namespace Bridge.WebApp.Services
 
             if (!result.Cancelled)
             {
-                byte[] buffer = (byte[])result.Data;
-
-                return ReadTable<T>(buffer, options);
+                using var stream = (Stream)result.Data;
+                return ReadTable<T>(stream, options);
             }
             else
             {
@@ -219,9 +217,7 @@ namespace Bridge.WebApp.Services
 
         public async Task DownloadAsync<T>(string fileName, IEnumerable<T> list, ExcelOptions? options = null)
         {
-            var buffer = WriteTable(list, options);
-            var stream = new MemoryStream(buffer);
-
+            using var stream = WriteTable(list, options);
             await _fileService.DownloadFileAsync(fileName, stream);
         }
     }

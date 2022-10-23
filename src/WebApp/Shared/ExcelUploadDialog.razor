@@ -65,10 +65,12 @@
     {
         if (_file != null)
         {
-            var buffer = new byte[_file.Size];
-            await _file.OpenReadStream(_file.Size).ReadAsync(buffer);
+            var originalStream = _file.OpenReadStream();
 
-            Dialog.Close(buffer);
+            var workStream = new MemoryStream();
+            await originalStream.CopyToAsync(workStream);
+
+            Dialog.Close(workStream);
         }
     }
 }
