@@ -46,6 +46,14 @@
 </MudDialog>
 
 @code {
+
+    /// <summary>
+    /// 파일 최대 크기. 1Mb
+    /// </summary>
+    private const int MaxFileSize = 1024000;
+
+    private const string MaxFileError = "1 Mb이상의 파일은 사용할 수 없습니다";
+
     private IBrowserFile? _file;
 
     [CascadingParameter]
@@ -53,7 +61,13 @@
 
     private void UploadFiles(InputFileChangeEventArgs e)
     {
+        if(MaxFileSize < e.File.Size)
+        {
+            Snackbar.Add(MaxFileError, Severity.Warning);
+            return;
+        }
         _file = e.File;
+
     }
 
     private void Cancel_Click()
@@ -63,14 +77,14 @@
 
     private async Task Upload_ClickAsync()
     {
-        if (_file != null)
-        {
-            var originalStream = _file.OpenReadStream();
+        if (_file == null)
+            return;
 
-            var workStream = new MemoryStream();
-            await originalStream.CopyToAsync(workStream);
+        var originalStream = _file.OpenReadStream(maxAllowedSize: MaxFileSize);
 
-            Dialog.Close(workStream);
-        }
+        var workStream = new MemoryStream();
+        await originalStream.CopyToAsync(workStream);
+
+        Dialog.Close(workStream);
     }
 }
