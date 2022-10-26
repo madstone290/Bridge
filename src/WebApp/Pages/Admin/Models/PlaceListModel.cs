@@ -41,6 +41,7 @@ namespace Bridge.WebApp.Pages.Admin.Models
             var restrooms = await _excelService.UploadAsync<RestroomExcelDataModel>(ExcelOptions);
             if (!restrooms.Any())
                 return;
+
             var command = new Application.Places.Commands.CreateRestroomBatchCommand()
             {
                 Commands = restrooms.Select(x => new Application.Places.Commands.CreateRestroomCommand()

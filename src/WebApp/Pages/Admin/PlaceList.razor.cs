@@ -125,12 +125,17 @@ namespace Bridge.WebApp.Pages.Admin
                 return;
             }
 
-            Snackbar.Add($"{Model.BatchFailCount}/{Model.BatchTotalCount} 실패");
-            foreach (var error in Model.BatchErrors)
+            var parameters = new DialogParameters
             {
-                Snackbar.Add(error);
-                Console.WriteLine(error);
-            }
+                { nameof(BatchResultDialog.Total), Model.BatchTotalCount },
+                { nameof(BatchResultDialog.Success), Model.BatchTotalCount - Model.BatchFailCount },
+                { nameof(BatchResultDialog.Fail), Model.BatchFailCount },
+                { nameof(BatchResultDialog.Errors), Model.BatchErrors },
+            };
+
+            var options = new DialogOptions { MaxWidth = MaxWidth.Large };
+            var dialog = DialogService.Show<BatchResultDialog>(string.Empty, parameters, options);
+            await dialog.Result;
         }
 
         private void ToggleShowOpeningTime_Click(PlaceModel place)

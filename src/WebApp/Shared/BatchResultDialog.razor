@@ -1,0 +1,43 @@
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            배치 실행 결과
+        </MudText>
+    </TitleContent>
+    <DialogContent> 
+        <MudContainer Style="height:600px; overflow-y:scroll;" MaxWidth="MaxWidth.Large">
+            <MudText>@($"전체: {Total}, 성공: {Success}, 실패: {Fail}")</MudText>
+                <MudList Clickable="false">
+                @foreach (var error in Errors)
+                {
+                    <MudListItem Text="@error" />
+                }
+            </MudList>
+        </MudContainer>
+    </DialogContent>
+    <DialogActions>
+        <MudButton DisableElevation
+                   OnClick="@Ok_Click"
+                   Variant="Variant.Filled" Color="Color.Primary">확인</MudButton>
+    </DialogActions>
+</MudDialog>
+@code {
+
+    [CascadingParameter]
+    public MudDialogInstance MudDialog { get; set; } = null!;
+    [Parameter]
+    public int Total { get; set; }
+    [Parameter]
+    public int Success { get; set; }
+    [Parameter]
+    public int Fail{ get; set; }
+    [Parameter]
+    public IEnumerable<string> Errors { get; set; } = Enumerable.Empty<string>();
+
+    private void Ok_Click()
+    {
+        MudDialog.Close();
+    }
+
+}
