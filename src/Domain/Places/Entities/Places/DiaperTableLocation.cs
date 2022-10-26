@@ -7,6 +7,9 @@ namespace Bridge.Domain.Places.Entities.Places
     /// </summary>
     public enum DiaperTableLocation
     {
+        [Display(Name = "없음")]
+        None,
+
         /// <summary>
         /// 남자화장실
         /// </summary>
@@ -17,6 +20,11 @@ namespace Bridge.Domain.Places.Entities.Places
         /// 여자화장실
         /// </summary>
         [Display(Name = "여자화장실")]
-        FemaleToilet
+        FemaleToilet,
+
+        /// <summary>
+        /// 모두 다 있음
+        /// </summary>
+        Both
     }
 }
