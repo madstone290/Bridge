@@ -21,8 +21,8 @@ namespace Bridge.WebApp.Pages.Admin.Models
 
         private ExcelOptions ExcelOptions { get; } = new ()
         {
-            Columns = typeof(RestroomExcelDataModel).GetProperties()
-            .Select(x => new ExcelOptions.Column(x.Name, x.GetCustomAttribute<DisplayAttribute>()?.Name ?? x.Name))
+            Columns = typeof(DaeguRestroomExcelDataModel).GetProperties()
+                .Select(x => new ExcelOptions.Column(x.Name, x.GetCustomAttribute<DisplayAttribute>()?.Name ?? x.Name))
         };
 
         public PlaceListModel(IExcelService excelService, AdminRestroomApiClient restroomApiClient)
@@ -33,14 +33,17 @@ namespace Bridge.WebApp.Pages.Admin.Models
 
         public async Task DownloadExcel()
         {
-            await _excelService.DownloadAsync<RestroomExcelDataModel>("화장실 폼.xlsx", new List<RestroomExcelDataModel>(), ExcelOptions);
+            await _excelService.DownloadAsync<DaeguRestroomExcelDataModel>("화장실 폼.xlsx", new List<DaeguRestroomExcelDataModel>(), ExcelOptions);
         }
 
         public async Task UploadExcel()
         {
-            var restrooms = await _excelService.UploadAsync<RestroomExcelDataModel>(ExcelOptions);
+            var restrooms = await _excelService.UploadAsync<DaeguRestroomExcelDataModel>(ExcelOptions);
             if (!restrooms.Any())
                 return;
+            
+            foreach(var restroom in restrooms)
+                restroom.ReadFromText();
 
             var command = new Application.Places.Commands.CreateRestroomBatchCommand()
             {
@@ -53,7 +56,6 @@ namespace Bridge.WebApp.Pages.Admin.Models
                         DetailAddress = x.DetailAddress
                     },
                     IsUnisex = x.IsUnisex,
-                    HasDiaperTable = x.HasDiaperTable,
                     DiaperTableLocation = x.DiaperTableLocation,
                     MaleToilet = x.MaleToilet,
                     MaleUrinal = x.MaleUrinal,
