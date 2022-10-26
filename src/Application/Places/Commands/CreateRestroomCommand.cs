@@ -29,11 +29,6 @@ namespace Bridge.Application.Places.Commands
         public bool IsUnisex { get; set; }
 
         /// <summary>
-        /// 기저귀 교환대 여부
-        /// </summary>
-        public bool HasDiaperTable { get; set; }
-
-        /// <summary>
         /// 기저귀 교환대 위치
         /// </summary>
         public DiaperTableLocation? DiaperTableLocation { get; set; }
@@ -82,7 +77,7 @@ namespace Bridge.Application.Places.Commands
             var addressLocation = await _addressLocationService.CreateAddressLocationAsync(command.Address.BaseAddress, command.Address.DetailAddress);
             var restroom = new Restroom(command.Name, addressLocation.Item1, addressLocation.Item2);
             restroom.SetLastUpdate(command.LastUpdateDateTimeLocal);
-            restroom.UpdateRestroom(command.IsUnisex, command.HasDiaperTable, command.DiaperTableLocation,
+            restroom.UpdateRestroom(command.IsUnisex, command.DiaperTableLocation,
                                  command.MaleToilet, command.MaleUrinal, command.MaleDisabledToilet,
                                  command.MaleDisabledUrinal, command.MaleKidToilet, command.MaleKidUrinal,
                                  command.FemaleToilet, command.FemaleDisabledToilet, command.FemaleKidToilet);

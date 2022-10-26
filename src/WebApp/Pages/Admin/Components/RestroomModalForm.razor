@@ -30,9 +30,6 @@
                             <AdvCheckBox @bind-Checked="_model.IsUnisex" Label="남녀공용" />
                         </MudItem>
                         <MudItem xs="4">
-                            <AdvCheckBox @bind-Checked="_model.HasDiaperTable" Label="기저귀 테이블" />
-                        </MudItem>
-                        <MudItem xs="4">
                             <AdvSelect @bind-Value="_model.DiaperTableLocation"
                                        T="DiaperTableLocation?"
                                        ToStringFunc="DiaperTableLocationText"

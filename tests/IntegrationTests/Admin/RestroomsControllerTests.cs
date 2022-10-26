@@ -38,7 +38,6 @@ namespace Bridge.IntegrationTests.Admin
                 Name = Guid.NewGuid().ToString(),
                 Address = AddressDto(),
                 IsUnisex = false,
-                HasDiaperTable = false
             };
 
             // Act
@@ -87,7 +86,6 @@ namespace Bridge.IntegrationTests.Admin
                     }
                 },
                 IsUnisex = false,
-                HasDiaperTable = true,
                 DiaperTableLocation = Domain.Places.Entities.Places.DiaperTableLocation.FemaleToilet,
                 MaleToilet = 2,
                 MaleUrinal = 3,
@@ -125,7 +123,6 @@ namespace Bridge.IntegrationTests.Admin
             restroom.OpeningTimes.Should().ContainEquivalentOf(command.OpeningTimes[1]);
             restroom.OpeningTimes.Should().ContainEquivalentOf(command.OpeningTimes[2]);
             restroom.IsUnisex.Should().Be(command.IsUnisex);
-            restroom.HasDiaperTable.Should().Be(command.HasDiaperTable);
             restroom.DiaperTableLocation.Should().Be(command.DiaperTableLocation);
             restroom.MaleToilet.Should().Be(command.MaleToilet);
             restroom.MaleUrinal.Should().Be(command.MaleUrinal);
@@ -148,7 +145,6 @@ namespace Bridge.IntegrationTests.Admin
                 Name = "화장실 생성",
                 Address = AddressDto(),
                 IsUnisex = false,
-                HasDiaperTable = false
             };
             var createRequest = new HttpRequestMessage(HttpMethod.Post, ApiRoutes.Admin.Restrooms.Create) { Content = JsonContent.Create(createCommand) };
             var createResponse = await _client.SendAsAdminAsync(createRequest);
@@ -183,7 +179,6 @@ namespace Bridge.IntegrationTests.Admin
                     }
                 },
                 IsUnisex = false,
-                HasDiaperTable = true,
                 DiaperTableLocation = Domain.Places.Entities.Places.DiaperTableLocation.FemaleToilet,
                 MaleToilet = 2,
                 MaleUrinal = 3,
@@ -219,7 +214,6 @@ namespace Bridge.IntegrationTests.Admin
             restroom.OpeningTimes.Should().ContainEquivalentOf(updateCommand.OpeningTimes[1]);
             restroom.OpeningTimes.Should().ContainEquivalentOf(updateCommand.OpeningTimes[2]);
             restroom.IsUnisex.Should().Be(updateCommand.IsUnisex);
-            restroom.HasDiaperTable.Should().Be(updateCommand.HasDiaperTable);
             restroom.DiaperTableLocation.Should().Be(updateCommand.DiaperTableLocation);
             restroom.MaleToilet.Should().Be(updateCommand.MaleToilet);
             restroom.MaleUrinal.Should().Be(updateCommand.MaleUrinal);
@@ -246,7 +240,6 @@ namespace Bridge.IntegrationTests.Admin
                     Name = i.ToString(),
                     Address = AddressDto(),
                     IsUnisex = false,
-                    HasDiaperTable = false
                 };
                 subcommandList.Add(subcommand);
             }

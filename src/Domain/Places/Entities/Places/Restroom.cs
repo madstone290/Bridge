@@ -19,11 +19,6 @@ namespace Bridge.Domain.Places.Entities.Places
         public bool IsUnisex { get; private set; }
 
         /// <summary>
-        /// 기저귀 교환대 여부
-        /// </summary>
-        public bool HasDiaperTable { get; private set; }
-
-        /// <summary>
         /// 기저귀 교환대 위치
         /// </summary>
         public DiaperTableLocation? DiaperTableLocation { get; private set; }
@@ -56,7 +51,6 @@ namespace Bridge.Domain.Places.Entities.Places
         /// 화장실 정보를 일괄 업데이트한다
         /// </summary>
         /// <param name="isUnisex"></param>
-        /// <param name="hasDiaperTable"></param>
         /// <param name="diaperTableLocation"></param>
         /// <param name="maleToilet"></param>
         /// <param name="maleUrinal"></param>
@@ -67,7 +61,7 @@ namespace Bridge.Domain.Places.Entities.Places
         /// <param name="femaleToilet"></param>
         /// <param name="femaleDisabledToilet"></param>
         /// <param name="femaleKidToilet"></param>
-        public void UpdateRestroom(bool isUnisex, bool hasDiaperTable, DiaperTableLocation? diaperTableLocation, int? maleToilet, int? maleUrinal, int? maleDisabledToilet, 
+        public void UpdateRestroom(bool isUnisex, DiaperTableLocation? diaperTableLocation, int? maleToilet, int? maleUrinal, int? maleDisabledToilet, 
             int? maleDisabledUrinal, int? maleKidToilet, int? maleKidUrinal, int? femaleToilet, int? femaleDisabledToilet, int? femaleKidToilet)
         {
             ThrowIfNegative(maleToilet);
@@ -81,7 +75,6 @@ namespace Bridge.Domain.Places.Entities.Places
             ThrowIfNegative(femaleKidToilet);
 
             IsUnisex = isUnisex;
-            HasDiaperTable = hasDiaperTable;
             DiaperTableLocation = diaperTableLocation;
             MaleToilet = maleToilet;
             MaleUrinal = maleUrinal;

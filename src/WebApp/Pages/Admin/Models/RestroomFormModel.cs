@@ -46,11 +46,6 @@ namespace Bridge.WebApp.Pages.Admin.Models
         public bool IsUnisex { get; set; }
 
         /// <summary>
-        /// 기저귀 교환대 여부
-        /// </summary>
-        public bool HasDiaperTable { get; set; }
-
-        /// <summary>
         /// 기저귀 교환대 위치
         /// </summary>
         public DiaperTableLocation? DiaperTableLocation { get; set; }
@@ -122,7 +117,6 @@ namespace Bridge.WebApp.Pages.Admin.Models
             BaseAddress = restroomDto.Address.BaseAddress;
             DetailAddress = restroomDto.Address.DetailAddress;
             IsUnisex = restroomDto.IsUnisex;
-            HasDiaperTable = restroomDto.HasDiaperTable;
             DiaperTableLocation = restroomDto.DiaperTableLocation;
             MaleToilet = restroomDto.MaleToilet;
             MaleUrinal = restroomDto.MaleUrinal;
@@ -149,7 +143,6 @@ namespace Bridge.WebApp.Pages.Admin.Models
                     DetailAddress = DetailAddress,
                 },
                 IsUnisex = IsUnisex,
-                HasDiaperTable = HasDiaperTable,
                 DiaperTableLocation = DiaperTableLocation,
                 MaleToilet = MaleToilet,
                 MaleUrinal = MaleUrinal,
@@ -189,7 +182,6 @@ namespace Bridge.WebApp.Pages.Admin.Models
                     DetailAddress = DetailAddress,
                 },
                 IsUnisex = IsUnisex,
-                HasDiaperTable = HasDiaperTable,
                 DiaperTableLocation = DiaperTableLocation,
                 MaleToilet = MaleToilet,
                 MaleUrinal = MaleUrinal,

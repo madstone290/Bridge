@@ -47,7 +47,7 @@ namespace Bridge.Application.Places.Commands
                             var addressLocation = t.Result;
                             var restroom = new Restroom(command.Name, addressLocation.Item1, addressLocation.Item2);
                             restroom.SetLastUpdate(command.LastUpdateDateTimeLocal);
-                            restroom.UpdateRestroom(command.IsUnisex, command.HasDiaperTable, command.DiaperTableLocation,
+                            restroom.UpdateRestroom(command.IsUnisex, command.DiaperTableLocation,
                                                  command.MaleToilet, command.MaleUrinal, command.MaleDisabledToilet,
                                                  command.MaleDisabledUrinal, command.MaleKidToilet, command.MaleKidUrinal,
                                                  command.FemaleToilet, command.FemaleDisabledToilet, command.FemaleKidToilet);

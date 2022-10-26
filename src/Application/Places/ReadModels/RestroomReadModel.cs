@@ -59,11 +59,6 @@ namespace Bridge.Application.Places.ReadModels
         public bool IsUnisex { get; set; }
 
         /// <summary>
-        /// 기저귀 교환대 여부
-        /// </summary>
-        public bool HasDiaperTable { get; set; }
-
-        /// <summary>
         /// 기저귀 교환대 위치
         /// </summary>
         public DiaperTableLocation? DiaperTableLocation { get; set; }

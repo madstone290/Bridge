@@ -43,7 +43,6 @@ namespace Bridge.Infrastructure.Data.ReadRepos
                 BreakStartTime = t.BreakStartTime
             }).ToList(),
             IsUnisex = x.IsUnisex,
-            HasDiaperTable = x.HasDiaperTable,
             DiaperTableLocation = x.DiaperTableLocation,
             MaleToilet = x.MaleToilet,
             MaleUrinal = x.MaleUrinal,
