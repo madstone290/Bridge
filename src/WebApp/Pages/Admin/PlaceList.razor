@@ -9,8 +9,10 @@
             <div class="place-type-select">
                 <AdvSelect T="PlaceType?"
                            Label="장소 타입"
-                           @bind-Value="_placeType">
+                           @bind-Value="_placeType"
+                           ToStringFunc="GetPlaceTypeDisplayText">
                     @{
+                        <MudSelectItem Value="(PlaceType?)null" />
                         foreach (PlaceType? type in Enum.GetValues<PlaceType>())
                         {
                             <MudSelectItem Value="@type"></MudSelectItem>
@@ -22,7 +24,8 @@
             <div class="search-field">
                 <AdvTextField T="string"
                               Label="검색어"
-                              @bind-Text="_searchString">
+                              @bind-Text="_searchText"
+                              OnKeyUp="SeachText_KeyUp">
                 </AdvTextField>
             </div>
 
@@ -47,8 +50,7 @@
                   Items="_places"
                   RowsPerPage="_rowsPerPage"
                   Hover="true"
-                  Dense="true"
-                  Filter="Search">
+                  Dense="true">
             <HeaderContent>
                 <MudTh>유형</MudTh>
                 <MudTh>이름</MudTh>
@@ -63,25 +65,25 @@
 
             <RowTemplate>
                 <MudTd DataLabel="유형">
-                    <MudHighlighter Text="@context.TypeString" HighlightedText="@_searchString" />
+                    <MudHighlighter Text="@context.TypeString" HighlightedText="@_searchText" />
                 </MudTd>
                 <MudTd DataLabel="이름">
-                    <MudHighlighter Text="@context.Name" HighlightedText="@_searchString" />
+                    <MudHighlighter Text="@context.Name" HighlightedText="@_searchText" />
                 </MudTd>
                 <MudTd DataLabel="카테고리">
-                    <MudHighlighter Text="@context.CategoriesString" HighlightedText="@_searchString" />
+                    <MudHighlighter Text="@context.CategoriesString" HighlightedText="@_searchText" />
                 </MudTd>
                 <MudTd DataLabel="주소">
-                    <MudHighlighter Text="@context.Address" HighlightedText="@_searchString" />
+                    <MudHighlighter Text="@context.Address" HighlightedText="@_searchText" />
                 </MudTd>
                 <MudTd DataLabel="연락처">
-                    <MudHighlighter Text="@context.ContactNumber" HighlightedText="@_searchString" />
+                    <MudHighlighter Text="@context.ContactNumber" HighlightedText="@_searchText" />
                 </MudTd>
                 <MudTd DataLabel="위경도">
-                    <MudHighlighter Text="@context.LatitudeLongitudeString" HighlightedText="@_searchString" />
+                    <MudHighlighter Text="@context.LatitudeLongitudeString" HighlightedText="@_searchText" />
                 </MudTd>
                 <MudTd DataLabel="동북향">
-                    <MudHighlighter Text="@context.EastingNorthingString" HighlightedText="@_searchString" />
+                    <MudHighlighter Text="@context.EastingNorthingString" HighlightedText="@_searchText" />
                 </MudTd>
                 <MudTd DataLabel="영업시간">
                     <MudButton Variant="Variant.Outlined" @onclick="@(() => ToggleShowOpeningTime_Click(context))">@(context.ShowOpeningTimes ? "닫기" : "열기")</MudButton>

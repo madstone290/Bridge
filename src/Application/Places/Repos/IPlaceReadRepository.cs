@@ -17,13 +17,15 @@ namespace Bridge.Application.Places.Repos
         /// <returns></returns>
         Task<List<PlaceReadModel>> SearchPlacesAsync(string searchText, double easting, double northing, int maxCount = 1000, int? maxDistance = null);
 
+        
         /// <summary>
-        /// 페이지
+        /// 장소 페이지를 조회한다
         /// </summary>
-        /// <param name="placeType"></param>
-        /// <param name="pageNumber"></param>
-        /// <param name="pageSize"></param>
+        /// <param name="placeName">검색할 장소명</param>
+        /// <param name="placeType">검색할 장소유형</param>
+        /// <param name="pageNumber">페이지 번호</param>
+        /// <param name="pageSize">페이지 크기</param>
         /// <returns></returns>
-        Task<PaginatedList<PlaceReadModel>> GetPaginatedPlacesAsync(PlaceType? placeType = null, int pageNumber = 1, int pageSize = 100);
+        Task<PaginatedList<PlaceReadModel>> GetPaginatedPlacesAsync(string? placeName, PlaceType? placeType = null, int pageNumber = 1, int pageSize = 100);
     }
 }

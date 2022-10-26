@@ -29,7 +29,7 @@ namespace Bridge.Shared
             {
                 public const string Get = "/api/Admin/Places/{id}";
                 public const string GetImage = "/api/Admin/Places/{id}/Image";
-                public const string GetPaginatedList = "/api/Admin/Places";
+                public const string GetPaginatedList = "/api/Admin/Places/Paginated";
                 public const string Search = "/api/Admin/Places/Search";
                 public const string Create = "/api/Admin/Places";
                 public const string Update = "/api/Admin/Places/{id}";

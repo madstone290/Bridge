@@ -50,11 +50,12 @@ namespace Bridge.Infrastructure.Data.ReadRepos
             }).ToList()
         };
 
-        public async Task<PaginatedList<PlaceReadModel>> GetPaginatedPlacesAsync(PlaceType? placeType = null, int pageNumber = 1, int pageSize = 100)
+        public async Task<PaginatedList<PlaceReadModel>> GetPaginatedPlacesAsync(string? placeName, PlaceType? placeType = null, int pageNumber = 1, int pageSize = 100)
         {
             return await Set
                 .Where(x=> x.Status == PlaceStatus.Open)
                 .Where(x => placeType == null || x.Type == placeType.Value)
+                .Where(x => placeName == null || x.Name.Contains(placeName))
                 .Select(SelectExpression)
                 .OrderByDescending(x=> x.CreationDateTimeUtc)
                 .ThenByDescending(x=> x.Id)

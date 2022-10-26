@@ -28,11 +28,11 @@ namespace Bridge.WebApp.Api.ApiClients.Admin
         /// <summary>
         /// 장소 목록을 조회한다.
         /// </summary>
-        /// <param name="placeType">조회할 장소의 유형</param>
         /// <returns></returns>
-        public async Task<ApiResult<PaginatedList<PlaceReadModel>>> GetPaginatedPlaceList(PlaceType? placeType, int pageNumber = 1, int pageSize = 50)
+        public async Task<ApiResult<PaginatedList<PlaceReadModel>>> GetPaginatedPlaceList(string? searchText, PlaceType? placeType, int pageNumber = 1, int pageSize = 50)
         {
             return await SendAsync<PaginatedList<PlaceReadModel>>(HttpMethod.Get, ApiRoutes.Admin.Places.GetPaginatedList
+                .AddQueryParam("searchText", searchText)
                 .AddQueryParam("placeType", placeType)
                 .AddQueryParam("pageNumber", pageNumber)
                 .AddQueryParam("pageSize", pageSize));

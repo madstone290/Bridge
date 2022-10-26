@@ -2,17 +2,28 @@ using Bridge.Domain.Places.Entities;
 using Bridge.Shared.Extensions;
 using Bridge.WebApp.Api.ApiClients.Admin;
 using Bridge.WebApp.Pages.Admin.Components;
-using Bridge.WebApp.Pages.Admin.DataModels;
 using Bridge.WebApp.Pages.Admin.Models;
 using Bridge.WebApp.Services;
 using Bridge.WebApp.Shared;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
 
 namespace Bridge.WebApp.Pages.Admin
 {
     public partial class PlaceList
     {
+        private const string SelectAll = "전체";
+        private readonly Dictionary<PlaceType, string> _placeTypeDiplayTexts = new()
+        {
+            { PlaceType.Other, "기타" },
+            { PlaceType.Pharmacy, "약국" },
+            { PlaceType.Hospital, "병원" },
+            { PlaceType.Cafeteria, "카페" },
+            { PlaceType.Restaurant, "식당" },
+            { PlaceType.Restroom, "공중화장실" },
+        };
+
         /// <summary>
         /// 장소 목록
         /// </summary>
@@ -26,7 +37,7 @@ namespace Bridge.WebApp.Pages.Admin
         /// <summary>
         /// 검색어
         /// </summary>
-        private string _searchString = string.Empty;
+        private string _searchText = string.Empty;
 
         private int _totalCount;
         private int _pageCount;
@@ -42,28 +53,30 @@ namespace Bridge.WebApp.Pages.Admin
         [Inject]
         public IExcelService ExcelService { get; set; } = null!;
 
-        protected override async Task OnInitializedAsync()
+        protected override void OnInitialized()
         {
-            await Load_ClickAsync();
+            Load_ClickAsync();
         }
 
-        /// <summary>
-        /// 입력된 검색어로 장소를 검색한다.
-        /// </summary>
-        /// <param name="place"></param>
-        /// <returns></returns>
-        private bool Search(PlaceModel place)
+        private string GetPlaceTypeDisplayText(PlaceType? placeType)
         {
-            if (string.IsNullOrWhiteSpace(_searchString))
-                return true;
-            return place.Name.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true ||
-                place.Address.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true ||
-                place.CategoriesString.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true;
+            if (placeType.HasValue)
+                return _placeTypeDiplayTexts[placeType.Value];
+            else
+                return SelectAll;
         }
 
-        private async Task Load_ClickAsync()
+        private void SeachText_KeyUp(KeyboardEventArgs e)
         {
-            var result = await PlaceApiClient.GetPaginatedPlaceList(_placeType, _pageNumber, _rowsPerPage);
+            if(e.Key == "Enter")
+            {
+                Load_ClickAsync();
+            }
+        }
+
+        private async void Load_ClickAsync()
+        {
+            var result = await PlaceApiClient.GetPaginatedPlaceList(_searchText, _placeType, _pageNumber, _rowsPerPage);
             if (!ValidationService.Validate(result))
                 return;
 
@@ -90,7 +103,7 @@ namespace Bridge.WebApp.Pages.Admin
             var dialogResult = await dialog.Result;
             if (!dialogResult.Cancelled)
             {
-                await Load_ClickAsync();
+                Load_ClickAsync();
             }
         }
 
@@ -106,7 +119,7 @@ namespace Bridge.WebApp.Pages.Admin
             var dialogResult = await dialog.Result;
             if (!dialogResult.Cancelled)
             {
-                await Load_ClickAsync();
+                Load_ClickAsync();
             }
         }
         
@@ -235,21 +248,21 @@ namespace Bridge.WebApp.Pages.Admin
                 var apiResult = await PlaceApiClient.ClosePlace(place.Id);
                 if(ValidationService.Validate(apiResult))
                 {
-                    await Load_ClickAsync();
+                    Load_ClickAsync();
                 }
             }
         }
 
-        private async void PageNumberChanged(int pageNumber)
+        private void PageNumberChanged(int pageNumber)
         {
             _pageNumber = pageNumber;
-            await Load_ClickAsync();
+            Load_ClickAsync();
         }
 
-        private async void RowsPerPageChanged(int rowsPerPage)
+        private void RowsPerPageChanged(int rowsPerPage)
         {
             _rowsPerPage = rowsPerPage;
-            await Load_ClickAsync();
+            Load_ClickAsync();
         }
     }
 }

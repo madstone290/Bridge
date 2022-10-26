@@ -38,10 +38,11 @@ namespace Bridge.Api.Controllers.Admin
         [HttpGet]
         [Route(ApiRoutes.Admin.Places.GetPaginatedList)]
         [ProducesResponseType(typeof(PaginatedList<PlaceReadModel>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetPlaces([FromQuery] PlaceType? placeType, [FromQuery] int? pageNumber, [FromQuery] int? pageSize)
+        public async Task<IActionResult> GetPlaces([FromQuery] PlaceType? placeType, [FromQuery] string? searchText, [FromQuery] int? pageNumber, [FromQuery] int? pageSize)
         {
             var query = new GetPlacesPaginationQuery()
             {
+                SearchText = searchText,
                 PlaceType = placeType,
                 PageNumber = pageNumber,
                 PageSize = pageSize
