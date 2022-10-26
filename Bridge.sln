@@ -33,8 +33,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{C6629776-A
 		docs\BusinessRules.md = docs\BusinessRules.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExpandedXml", "src\ExpandedXml\ExpandedXml.csproj", "{759F0F54-3739-4CBA-B3DD-7908C0468E03}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,10 +71,6 @@ Global
 		{654C521F-85BD-466B-A8BD-232E668FCD16}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{654C521F-85BD-466B-A8BD-232E668FCD16}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{654C521F-85BD-466B-A8BD-232E668FCD16}.Release|Any CPU.Build.0 = Release|Any CPU
-		{759F0F54-3739-4CBA-B3DD-7908C0468E03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{759F0F54-3739-4CBA-B3DD-7908C0468E03}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{759F0F54-3739-4CBA-B3DD-7908C0468E03}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{759F0F54-3739-4CBA-B3DD-7908C0468E03}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -90,7 +84,6 @@ Global
 		{20B13B98-4AA7-42DC-98CA-AF85EBEFB08A} = {95E51B82-AE72-4586-9DDB-A39F059EE4DF}
 		{7B54E74B-6E7A-4F16-A47B-DBED15C23911} = {CFFFDDF0-148B-486B-A61D-FE5684AD7A71}
 		{654C521F-85BD-466B-A8BD-232E668FCD16} = {95E51B82-AE72-4586-9DDB-A39F059EE4DF}
-		{759F0F54-3739-4CBA-B3DD-7908C0468E03} = {CFFFDDF0-148B-486B-A61D-FE5684AD7A71}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E528D5CD-0AF2-4291-A86D-F30CAD121C3F}

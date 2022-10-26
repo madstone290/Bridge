@@ -81,10 +81,10 @@
             return;
 
         var originalStream = _file.OpenReadStream(maxAllowedSize: MaxFileSize);
+        
+        using var memoryStream = new MemoryStream();
+        await originalStream.CopyToAsync(memoryStream);
 
-        var workStream = new MemoryStream();
-        await originalStream.CopyToAsync(workStream);
-
-        Dialog.Close(workStream);
+        Dialog.Close(memoryStream.ToArray());
     }
 }
