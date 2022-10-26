@@ -31,14 +31,16 @@ namespace Bridge.Application.Places.Commands
             var errors = new List<string>();
             var restroomList = new List<Restroom>();
             var taskList = new List<Task>();
+            int number = 1;
             foreach(var command in batchCommand.Commands)
             {
+                var taskNumber = number++;
                 var task = _addressLocationService.CreateAddressLocationAsync(command.Address.BaseAddress, command.Address.DetailAddress)
                     .ContinueWith(t =>
                     {
                         if (t.Exception != null)
                         {
-                            errors.Add($"실패: {command}");
+                            errors.Add($"{taskNumber} 실패: {command}");
                             return;
                         }
 
@@ -67,7 +69,7 @@ namespace Bridge.Application.Places.Commands
                         }
                         catch
                         {
-                            errors.Add($"실패: {command}");
+                            errors.Add($"{taskNumber} 실패: {command}");
                         }
                     });
 

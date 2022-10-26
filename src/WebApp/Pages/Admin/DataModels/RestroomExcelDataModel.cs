@@ -122,7 +122,7 @@ namespace Bridge.WebApp.Pages.Admin.DataModels
                         break;
 
                     default:
-                        var regex = new Regex("([0-9]{1,2}):([0-9]{0,2})~([0-9]{1,2}):([0-9]{0,2})");
+                        var regex = new Regex("^([0-9]{1,2}):([0-9]{0,2})~([0-9]{1,2}):([0-9]{0,2})");
                         var match = regex.Match(trimmedOpeningTimeText);
                         if (match.Success)
                         {

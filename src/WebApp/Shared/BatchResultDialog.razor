@@ -6,7 +6,7 @@
         </MudText>
     </TitleContent>
     <DialogContent> 
-        <MudContainer Style="height:600px; overflow-y:scroll;" MaxWidth="MaxWidth.Large">
+        <MudContainer Style="max-height:600px; overflow-y:scroll;" MaxWidth="MaxWidth.Large">
             <MudText>@($"전체: {Total}, 성공: {Success}, 실패: {Fail}")</MudText>
                 <MudList Clickable="false">
                 @foreach (var error in Errors)
