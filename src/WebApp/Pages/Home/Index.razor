@@ -4,7 +4,7 @@
 <PageTitle>플차</PageTitle>
 
 <div class="page">
-    <MudContainer Class="search-container" MaxWidth="MaxWidth.Medium">
+    <MudContainer Class="search-container" MaxWidth="MaxWidth.Large">
         <div class="address-line">
             <MudButton Style="flex: 1 1 auto;"
                        Color="Color.Info"
@@ -15,51 +15,58 @@
                            Icon="@Icons.Material.Filled.Settings" />
         </div>
 
-        <div class="search-line">
-            <MudTextField @ref="_searchField"
-                          Placeholder="검색어를 입력하세요"
-                          T="string"
-                          @bind-Value="_searchText"
-                          Adornment="Adornment.Start"
-                          AdornmentIcon="@Icons.Material.Filled.Search"
-                          Variant="Variant.Outlined"
-                          OnKeyUp="AutoComplete_OnKeyUpAsync" />
+        <div style="display:flex; flex-direction:row;">
+            <div style="min-width:600px; max-width:600px;">
+                <div class="search-line">
+                    <MudTextField @ref="_searchField"
+                                  Placeholder="검색어를 입력하세요"
+                                  T="string"
+                                  @bind-Value="_searchText"
+                                  Adornment="Adornment.Start"
+                                  AdornmentIcon="@Icons.Material.Filled.Search"
+                                  Variant="Variant.Outlined"
+                                  OnKeyUp="AutoComplete_OnKeyUpAsync" />
+                </div>
+
+                @if (_searched && !_placeList.Any())
+                {
+                    <div style="padding:10px;">
+                        <MudText>검색결과가 없습니다</MudText>
+                    </div>
+                }
+                else
+                {
+                    <MudList Clickable="true" Style="overflow-y:scroll; height:600px;">
+                        @foreach (var place in _placeList)
+                        {
+                            <MudListItem Class="list-item">
+                                <div class="flex-row">
+                                    <div>
+                                        <div class="flex-row">
+                                            <MudText Class="right-margin text-nowrap">@place.Name</MudText>
+                                            <MudText Class="right-margin text-nowrap" Style="max-width:500px;">@place.CategoriesString</MudText>
+                                        </div>
+                                        <div class="flex-row">
+                                            <MudText Class="right-margin text-nowrap">@place.DistanceString</MudText>
+                                            <MudText Class="right-margin text-nowrap">@place.ContactNumber</MudText>
+                                        </div>
+                                    </div>
+                                    <MudSpacer />
+
+                                    @if (place.ImageUrl != null)
+                                    {
+                                        <MudImage ObjectFit="ObjectFit.Contain" Src="@place.ImageUrl" Width="70" Height="70" />
+                                    }
+                                </div>
+
+                            </MudListItem>
+                        }
+                    </MudList>
+                }
+            </div>
+            <div id="@MapId" style="width:100%; height:600px; margin:4px;">
+            </div>
         </div>
 
-        @if (_searched && !_placeList.Any())
-        {
-            <div style="padding:10px;">
-                <MudText>검색결과가 없습니다</MudText>
-            </div>
-        }
-        else
-        {
-            <MudList Clickable="true">
-                @foreach (var place in _placeList)
-                {
-                    <MudListItem Class="list-item">
-                        <div class="flex-row">
-                            <div>
-                                <div class="flex-row">
-                                    <MudText Class="right-margin">@place.Name</MudText>
-                                    <MudText Class="right-margin">@place.CategoriesString</MudText>
-                                </div>
-                                <div class="flex-row">
-                                    <MudText Class="right-margin">@place.DistanceString</MudText>
-                                    <MudText Class="right-margin">@place.ContactNumber</MudText>
-                                </div>
-                            </div>
-                            <MudSpacer />
-
-                            @if (place.ImageUrl != null)
-                            {
-                                <MudImage ObjectFit="ObjectFit.Contain" Src="@place.ImageUrl" Width="70" Height="70" />
-                            }
-                        </div>
-
-                    </MudListItem>
-                }
-            </MudList>
-        }
     </MudContainer>
 </div>

@@ -11,6 +11,7 @@ namespace Bridge.WebApp.Pages.Home
 {
     public partial class Index
     {
+        private const string MapId = "map";
 
         private MudTextField<string>? _searchField;
 
@@ -63,6 +64,9 @@ namespace Bridge.WebApp.Pages.Home
         [Inject]
         public IReverseGeocodeService ReverseGeocodeService { get; set; } = null!;
 
+        [Inject]
+        public IDynamicMapService MapService { get; set; } = null!;
+
         protected override async Task OnInitializedAsync()
         {
             var geoResult =  await GeoService.GetLocationAsync();
@@ -71,8 +75,17 @@ namespace Bridge.WebApp.Pages.Home
                 var point = geoResult.Data!;
                 _centerLocation = new LatLon(point.Latitude, point.Longitude);
 
+                var mapOptions = new NaverMapService.MapOptions()
+                {
+                    MapId = MapId,
+                    CenterX = _centerLocation?.Longitude,
+                    CenterY = _centerLocation?.Latitude
+                };
+                _ = MapService.InitAsync(mapOptions);
+
                 var addressResult = await ReverseGeocodeService.GetAddressAsync(point.Latitude, point.Longitude);
                 _centerAddress = addressResult.Data;
+
             }
             else
             {

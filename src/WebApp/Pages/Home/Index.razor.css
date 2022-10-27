@@ -32,6 +32,8 @@
     margin-bottom: 1px;
     padding-top: 0px;
     padding-bottom: 0px;
+    padding-left: 4px;
+    padding-right: 4px;
 }
 
 ::deep .flex-row {
@@ -43,3 +45,10 @@
 ::deep .right-margin {
     margin-right: 20px;
 }
+
+::deep .text-nowrap {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
