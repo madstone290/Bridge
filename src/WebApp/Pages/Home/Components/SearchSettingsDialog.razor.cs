@@ -9,12 +9,6 @@ namespace Bridge.WebApp.Pages.Home.Components
         private MudDialogInstance MudDialog { get; set; } = null!;
 
         [Parameter]
-        public double Easting { get; set; }
-
-        [Parameter]
-        public double Northing { get; set; }
-
-        [Parameter]
         public double Distance { get; set; }
 
         private void Cancel_Click()
@@ -26,8 +20,6 @@ namespace Bridge.WebApp.Pages.Home.Components
         {
             MudDialog.Close(new 
             {
-                Easting,
-                Northing,
                 Distance
             });
         }

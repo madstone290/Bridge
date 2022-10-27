@@ -31,16 +31,6 @@ namespace Bridge.WebApp.Pages.Home
         private bool _searched;
 
         /// <summary>
-        /// 현위치 동향
-        /// </summary>
-        private double _easting = 5000;
-
-        /// <summary>
-        /// 현위치 북향
-        /// </summary>
-        private double _northing = 5000;
-
-        /// <summary>
         /// 검색 거리(m)
         /// </summary>
         private double _searchDistance = 5000;
@@ -139,8 +129,6 @@ namespace Bridge.WebApp.Pages.Home
         private async Task Settings_ClickAsync()
         {
             var parameters = new DialogParameters();
-            parameters.Add(nameof(SearchSettingsDialog.Easting), _easting);
-            parameters.Add(nameof(SearchSettingsDialog.Northing), _northing);
             parameters.Add(nameof(SearchSettingsDialog.Distance), _searchDistance);
 
             var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
@@ -150,8 +138,6 @@ namespace Bridge.WebApp.Pages.Home
             if (!result.Cancelled)
             {
                 var resultData = (dynamic)result.Data;
-                _easting = resultData.Easting;
-                _northing = resultData.Northing;
                 _searchDistance = resultData.Distance;
             }
         }
