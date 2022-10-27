@@ -65,9 +65,19 @@ namespace Bridge.WebApp.Pages.Home
 
         protected override async Task OnInitializedAsync()
         {
-            GeoService.SuccessCallback = new EventCallback<GeoPoint>(this, ShowLocationAsync);
-            GeoService.ErrorCallback = new EventCallback<GeoError>(this, ShowError);
-            await GeoService.GetLocationAsync();
+            var geoResult =  await GeoService.GetLocationAsync();
+            if (geoResult.Success)
+            {
+                var point = geoResult.Data!;
+                _centerLocation = new LatLon(point.Latitude, point.Longitude);
+
+                var addressResult = await ReverseGeocodeService.GetAddressAsync(point.Latitude, point.Longitude);
+                _centerAddress = addressResult.Data;
+            }
+            else
+            {
+                Snackbar.Add(geoResult.Error, Severity.Error);
+            }
         }
 
         public async Task AutoComplete_OnKeyUpAsync(KeyboardEventArgs args)
@@ -131,18 +141,6 @@ namespace Bridge.WebApp.Pages.Home
                 _northing = resultData.Northing;
                 _searchDistance = resultData.Distance;
             }
-        }
-
-        private async Task ShowLocationAsync(GeoPoint point)
-        {
-            _centerLocation = new LatLon(point.Latitude, point.Longitude);
-            var result = await ReverseGeocodeService.GetAddressAsync(point.Latitude, point.Longitude);
-            _centerAddress = result.Data;
-        }
-
-        private void ShowError(GeoError error)
-        {
-            Console.WriteLine(error.Message);
         }
 
         private async Task SelectLocation_ClickAsync()

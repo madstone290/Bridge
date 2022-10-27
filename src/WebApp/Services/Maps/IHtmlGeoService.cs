@@ -1,3 +1,4 @@
+using Bridge.Shared;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
@@ -9,20 +10,34 @@ namespace Bridge.WebApp.Services.Maps
     public interface IHtmlGeoService
     {
         /// <summary>
-        /// 위치 조회 성공시 호출할 콜백
-        /// </summary>
-        EventCallback<GeoPoint> SuccessCallback { get; set; }
-
-        /// <summary>
-        /// 위치 조회 에러 발생시 호출할 콜백
-        /// </summary>
-        EventCallback<GeoError> ErrorCallback { get; set; }
-
-        /// <summary>
-        /// 현재 위치를 확인한다. 확인 후 이벤트 콜백이 실행된다. 위치 확인이 불가능한 경우 null이 전달된다.
+        /// 현재 위치를 확인한다. 
         /// </summary>
         /// <returns></returns>
-        Task GetLocationAsync();
+        Task<HtmlGeoResult> GetLocationAsync();
+    }
+
+    public class HtmlGeoResult : Result<GeoPoint>
+    {
+        public HtmlGeoResult(GeoPoint point)
+        {
+            Data = point;
+            Success = true;
+        }
+
+        public HtmlGeoResult(GeoError geoError)
+        {
+            GeoError = geoError;
+            Error = geoError.FriendlyMessage;
+            Success = false;
+        }
+
+        public HtmlGeoResult(string error)
+        {
+            Error = error;
+            Success = false;
+        }
+
+        public GeoError? GeoError { get; }
     }
 
     /// <summary>
@@ -36,8 +51,8 @@ namespace Bridge.WebApp.Services.Maps
             Longitude = longitude;
         }
 
-        public double Latitude { get; init; }
-        public double Longitude { get; init; }
+        public double Latitude { get; }
+        public double Longitude { get; }
     }
 
     /// <summary>
@@ -49,10 +64,18 @@ namespace Bridge.WebApp.Services.Maps
         {
             Code = code;
             Message = message;
+            FriendlyMessage = code switch
+            {
+                1 => "위치 권한이 없습니다",
+                2 => "내부 오류로 위치를 확인할 수 없습니다",
+                3 => "위치 확인 중 타임아웃이 발생하였습니다",
+                _ => "알수없는 응답코드입니다"
+            };
         }
 
-        public int Code { get; init; }
-        public string Message { get; init; }
+        public int Code { get; }
+        public string Message { get; }
+        public string FriendlyMessage { get; }
     }
 
     public class HtmlGeoService : IHtmlGeoService
@@ -66,16 +89,17 @@ namespace Bridge.WebApp.Services.Maps
         private DotNetObjectReference<HtmlGeoService>? _objRef;
         private IJSObjectReference? _module;
 
-        public EventCallback<GeoPoint> SuccessCallback { get; set; }
+        private TaskCompletionSource? _taskCompletionSource;
 
-        public EventCallback<GeoError> ErrorCallback { get; set; }
+        private GeoPoint? _geoPoint;
+        private GeoError? _geoError;
 
         public HtmlGeoService(IJSRuntime jsRuntime)
         {
             _jsRuntime = jsRuntime;
         }
 
-        public async Task GetLocationAsync()
+        public async Task<HtmlGeoResult> GetLocationAsync()
         {
             if (_module == null)
             {
@@ -84,7 +108,20 @@ namespace Bridge.WebApp.Services.Maps
 
                 await _module.InvokeVoidAsync(SetDotNetRefId, _objRef);
             }
+
+            _geoPoint = null;
+            _geoError = null;
+            _taskCompletionSource = new TaskCompletionSource();
+
             await _module.InvokeVoidAsync(GetLocationId);
+            await _taskCompletionSource.Task;
+
+            if (_geoPoint != null)
+                return new HtmlGeoResult(_geoPoint);
+            else if (_geoError != null)
+                return new HtmlGeoResult(_geoError);
+            else
+                return new HtmlGeoResult("Geolocation Api 호출 중 타임아웃이 발생하였습니다");
         }
 
         /// <summary>
@@ -95,9 +132,8 @@ namespace Bridge.WebApp.Services.Maps
         [JSInvokable]
         public void OnSuccess(double latitude, double longitude)
         {
-            if (!SuccessCallback.HasDelegate)
-                return;
-            SuccessCallback.InvokeAsync(new GeoPoint(latitude, longitude));
+            _geoPoint = new GeoPoint(latitude, longitude);
+            _taskCompletionSource?.TrySetResult();
         }
 
         /// <summary>
@@ -108,9 +144,8 @@ namespace Bridge.WebApp.Services.Maps
         [JSInvokable]
         public void OnError(int code, string message)
         {
-            if (!ErrorCallback.HasDelegate)
-                return;
-            ErrorCallback.InvokeAsync(new GeoError(code, message));
+            _geoError = new GeoError(code, message);
+            _taskCompletionSource?.TrySetResult();
         }
 
 
