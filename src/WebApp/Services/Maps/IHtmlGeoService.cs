@@ -83,6 +83,7 @@ namespace Bridge.WebApp.Services.Maps
         private const string JsFile = "/js/geo.js";
         private const string SetDotNetRefId = "setDotNetRef";
         private const string GetLocationId = "getLocation";
+        private const int RequestTimeout = 2000;
 
         private readonly IJSRuntime _jsRuntime;
 
@@ -113,8 +114,10 @@ namespace Bridge.WebApp.Services.Maps
             _geoError = null;
             _taskCompletionSource = new TaskCompletionSource();
 
+            var timeout = Task.Delay(RequestTimeout);
             await _module.InvokeVoidAsync(GetLocationId);
-            await _taskCompletionSource.Task;
+
+            await Task.WhenAny(_taskCompletionSource.Task, timeout);
 
             if (_geoPoint != null)
                 return new HtmlGeoResult(_geoPoint);
