@@ -8,6 +8,8 @@ namespace Bridge.WebApp.Pages.Home.Components
     {
         private const string MapId = "map";
 
+        private readonly string _mapSessionId = Guid.NewGuid().ToString();
+
         [CascadingParameter]
         public MudDialogInstance MudDialog { get; set; } = null!;
 
@@ -28,9 +30,7 @@ namespace Bridge.WebApp.Pages.Home.Components
 
         protected override async Task OnInitializedAsync()
         {
-
-            MapService.LocationChanged = new(this, OnLocationChanged);
-
+            MapService.SetLocationChangedCallback(_mapSessionId, new(this, OnLocationChanged));
             var mapOptions = new NaverMapService.MapOptions()
             {
                 MapId = MapId,
@@ -38,7 +38,7 @@ namespace Bridge.WebApp.Pages.Home.Components
                 CenterY = Latitude
             };
 
-            await MapService.InitAsync(mapOptions);
+            await MapService.InitAsync(_mapSessionId, mapOptions);
         }
         
 
@@ -77,7 +77,7 @@ namespace Bridge.WebApp.Pages.Home.Components
 
         async ValueTask IAsyncDisposable.DisposeAsync()
         {
-            await MapService.CloseAsync();
+            await MapService.CloseAsync(_mapSessionId);
         }
     }
 }

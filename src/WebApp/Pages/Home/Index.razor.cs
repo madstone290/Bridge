@@ -9,9 +9,10 @@ using MudBlazor;
 
 namespace Bridge.WebApp.Pages.Home
 {
-    public partial class Index
+    public partial class Index : IAsyncDisposable
     {
         private const string MapId = "map";
+        private readonly string _mapSessionId = Guid.NewGuid().ToString();
 
         private MudTextField<string>? _searchField;
 
@@ -64,24 +65,38 @@ namespace Bridge.WebApp.Pages.Home
             {
                 var point = geoResult.Data!;
                 _centerLocation = new LatLon(point.Latitude, point.Longitude);
-
-                var mapOptions = new NaverMapService.MapOptions()
-                {
-                    MapId = MapId,
-                    CenterX = _centerLocation?.Longitude,
-                    CenterY = _centerLocation?.Latitude
-                };
-                _ = MapService.InitAsync(mapOptions);
-
-                var addressResult = await ReverseGeocodeService.GetAddressAsync(point.Latitude, point.Longitude);
-                _centerAddress = addressResult.Data;
-
             }
             else
             {
                 Snackbar.Add(geoResult.Error, Severity.Error);
             }
+
+            var mapOptions = new NaverMapService.MapOptions()
+            {
+                MapId = MapId,
+                CenterX = _centerLocation?.Longitude,
+                CenterY = _centerLocation?.Latitude
+            };
+            MapService.SetLocationChangedCallback(_mapSessionId, new EventCallback<MapPoint>(this, OnLocationChanged));
+            _ = MapService.InitAsync(_mapSessionId, mapOptions);
+
+            if(_centerLocation != null)
+            {
+                var addressResult = await ReverseGeocodeService.GetAddressAsync(_centerLocation.Latitude, _centerLocation.Longitude);
+                _centerAddress = addressResult.Data;
+            }
         }
+
+        private async void OnLocationChanged(MapPoint point)
+        {
+            _centerLocation = new LatLon(point.Y, point.X);
+
+            var addressResult = await ReverseGeocodeService.GetAddressAsync(_centerLocation.Latitude, _centerLocation.Longitude);
+            _centerAddress = addressResult.Data;
+
+            StateHasChanged();
+        }
+
 
         public async Task AutoComplete_OnKeyUpAsync(KeyboardEventArgs args)
         {
@@ -165,5 +180,9 @@ namespace Bridge.WebApp.Pages.Home
             }
         }
 
+        async ValueTask IAsyncDisposable.DisposeAsync()
+        {
+            await MapService.CloseAsync(_mapSessionId);
+        }
     }
 }

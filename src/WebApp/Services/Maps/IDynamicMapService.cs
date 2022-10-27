@@ -9,27 +9,33 @@ namespace Bridge.WebApp.Services.Maps
     public interface IDynamicMapService : IAsyncDisposable
     {
         /// <summary>
-        /// 위치 변경 콜백
+        /// 지도 중심위치가 변경될 경우 호출할 콜백을 등록한다.
         /// </summary>
-        public EventCallback<MapPoint> LocationChanged { get; set; }
+        /// <param name="sessionId">세션 아이디. 서비스에서 맵 식별을 위해 사용한다.</param>
+        /// <param name="callback">이벤트 콜백</param>
+        void SetLocationChangedCallback(string sessionId, EventCallback<MapPoint> callback);
 
         /// <summary>
         /// 맵을 초기화한다
         /// </summary>
+        /// <param name="sessionId">세션 아이디. 서비스에서 맵 식별을 위해 사용한다.</param>
+        /// <param name="mapOptions">맵 옵션</param>
         /// <returns></returns>
-        Task InitAsync(IMapOptions mapOptions);
+        Task InitAsync(string sessionId, IMapOptions mapOptions);
 
         /// <summary>
         /// 맵을 닫는다
         /// </summary>
+        /// <param name="sessionId">세션 아이디. 서비스에서 맵 식별을 위해 사용한다.</param>
         /// <returns></returns>
-        Task CloseAsync();
+        Task CloseAsync(string sessionId);
 
         /// <summary>
         /// 사용자가 선택한 위치를 가져온다
         /// </summary>
+        /// <param name="sessionId">세션 아이디. 서비스에서 맵 식별을 위해 사용한다.</param>
         /// <returns>사용자가 선택한 위치</returns>
-        Task<MapPoint> GetSelectedLocationAsync();
+        Task<MapPoint> GetSelectedLocationAsync(string sessionId);
     }
 
     /// <summary>
@@ -69,15 +75,14 @@ namespace Bridge.WebApp.Services.Maps
             public double? CenterY { get; init; }
         }
 
-
         private const string JsFile = "/js/naver_map.js";
         private const string InitId = "init";
         private const string CloseId = "close";
         private const string GetMarkerLocationId = "getMarkerLocation";
 
-
         private readonly IJSRuntime _jsRuntime;
         private readonly DotNetObjectReference<NaverMapService> _dotNetRef;
+        private readonly Dictionary<string, EventCallback<MapPoint>> _locationChangedCallbacks = new();
 
         private IJSObjectReference? _module;
 
@@ -88,35 +93,40 @@ namespace Bridge.WebApp.Services.Maps
             _dotNetRef = DotNetObjectReference.Create(this);
         }
 
-        public EventCallback<MapPoint> LocationChanged { get; set; }
-
-        [JSInvokable]
-        public void OnLocationChanged(double x, double y)
+        public void SetLocationChangedCallback(string sessionId, EventCallback<MapPoint> callback)
         {
-            if (LocationChanged.HasDelegate)
-                LocationChanged.InvokeAsync(new MapPoint() { X = x, Y = y });
+            _locationChangedCallbacks[sessionId] = callback;
         }
 
-        public async Task InitAsync(IMapOptions mapOptions)
+        [JSInvokable]
+        public void OnLocationChanged(string sessionId, double x, double y)
+        {
+            if (_locationChangedCallbacks.TryGetValue(sessionId, out var callback))
+                callback.InvokeAsync(new MapPoint() { X = x, Y = y });
+        }
+
+        public async Task InitAsync(string sessionId, IMapOptions mapOptions)
         {
             _module = await _jsRuntime.InvokeAsync<IJSObjectReference>("import", JsFile);
 
             var naverMapOptions = (MapOptions)mapOptions;
-            await _module.InvokeVoidAsync(InitId, _dotNetRef, naverMapOptions.MapId, naverMapOptions.CenterX, naverMapOptions.CenterY);
+            await _module.InvokeVoidAsync(InitId, sessionId, _dotNetRef, naverMapOptions.MapId, naverMapOptions.CenterX, naverMapOptions.CenterY);
         }
 
-        public async Task<MapPoint> GetSelectedLocationAsync()
+        public async Task<MapPoint> GetSelectedLocationAsync(string sessionId)
         {
             if (_module == null)
                 return new MapPoint();
-            return await _module.InvokeAsync<MapPoint>(GetMarkerLocationId);
+            return await _module.InvokeAsync<MapPoint>(GetMarkerLocationId, sessionId);
         }
 
-        public async Task CloseAsync()
+        public async Task CloseAsync(string sessionId)
         {
+            _locationChangedCallbacks.Remove(sessionId);
+
             if (_module == null)
                 return;
-            await _module.InvokeVoidAsync(CloseId);
+            await _module.InvokeVoidAsync(CloseId, sessionId);
         }
 
         public async ValueTask DisposeAsync()
@@ -126,9 +136,7 @@ namespace Bridge.WebApp.Services.Maps
             if (_module == null)
                 return;
             await _module.DisposeAsync();
-
         }
-
 
     }
 }
