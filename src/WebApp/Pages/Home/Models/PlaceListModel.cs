@@ -1,4 +1,3 @@
-using Bridge.Application.Places.Dtos;
 using Bridge.Application.Places.ReadModels;
 using Bridge.Domain.Places.Entities;
 
@@ -6,8 +5,6 @@ namespace Bridge.WebApp.Pages.Home.Models
 {
     public class PlaceListModel
     {
-        public const string NoPictureUrl = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAMTSURBVEhL1ZbNK/RRFMe/M14aKcrKS5MRCysWyhaN1NiItSkmLKxs/BNKoRRCpsZrBksRSdhgSknyuvOS18JMXs9zz3Hn/afnyfNYPJ+a7v2de2bOued87/2NiRT4Qcx6/DH+SYDX11d8VYhvl8jv92N6ehqPj49ISEiQICkpKaisrERubq720gE+Pj5weHgIHv+E5+dnLC0tobW1VTI/OTlBWloarFYrxsfHUVBQgNLSUvGVEg0ODuL6+hpPT0+//XDGHo8HbW1tkhCPZrMZR0dH6OnpQV1dHXZ3d/Hw8CABOANSCzyEeH9/17N4jo+PaWVlhXZ2dmh1dZW2trZobm5O1lTZqK+vj9SP08jIiNiimszZdXV1YWhoCAMDA4Yl29zcRElJiYzsz+Xi0szOzkoPkpOTkZqaKnYmKsDMzIzUtbm5GVVVVVheXtYrYdTupKk8OhwO3N/f4+XlBTabTYKopLXnJ1EBeJHrySQlJckXYykqKsLe3h6ysrJwcXGB6upq3NzciIo4SCAQkHkIrlOwB8qROjs7aWxsjLq7u+nt7U3skaiykSqjrLEP94Br39HRQQcHB+Lj9Xrp/Pxc5oZNjvzhy8tLPQujJE39/f0SbHt7m1TPaH19XZ7X1taovb1de8Y0OQjXmJmYmBBdswQjYZ1zaZRiRJKFhYVQicgzk5OTI6PAUWJ3wCiV0OLiYqgk6gzolTAs1bu7Ozo7OyPVbG0l8Q9iuIPb21v4fD459iaTCS0tLaHsgszPz+Pq6grDw8PIzMxEenq6XokmLgBrn8+By+XSFoi+a2pqMDk5Kc8LCwuwWCyw2+2ora2FEoXYjYgLwNeA0+lEYmKitnySn58v9w1fB0oEKC8vF3teXh6ys7OxsbEhz7FEBVBKkJuQt2wEH6yGhgZpcCQVFRVQVwhUL7QlTCgAH5r9/X2UlZVpizG8CyPq6+sxNTUVdzglAB/70dFRNDY2ivE7sBiamprQ29urLZ/I+8DtdsudkpGRoc3f5/T0FMXFxSIKJvRG48bp6V/BO4kUyP/+rwL4BcbojOt/lg/uAAAAAElFTkSuQmCC";
-
         public static PlaceListModel ToPlaceModel(PlaceReadModel x)
         {
             return new PlaceListModel()

@@ -105,8 +105,6 @@ namespace Bridge.WebApp.Pages.Home
                     var place = PlaceListModel.ToPlaceModel(x);
                     if (x.ImagePath != null)
                         place.ImageUrl = new Uri(PlaceApiClient.HttpClient.BaseAddress!, x.ImagePath).ToString();
-                    else
-                        place.ImageUrl = PlaceListModel.NoPictureUrl;
                     return place;
                 })
                 .OrderBy(x => x.Distance));

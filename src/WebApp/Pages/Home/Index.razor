@@ -34,22 +34,29 @@
         }
         else
         {
-            <MudList>
+            <MudList Clickable="true">
                 @foreach (var place in _placeList)
                 {
-                    <MudListItem>
-                        <div class="place-item">
-                            <MudImage ObjectFit="ObjectFit.Contain" Src="@place.ImageUrl" Width="100" Height="100" />
+                    <MudListItem Class="list-item">
+                        <div class="flex-row">
                             <div>
-                                <MudText>@place.Name</MudText>
-                                <MudText>@place.Address</MudText>
-                                <MudText>@place.DistanceString</MudText>
-                                <MudText>@place.ContactNumber</MudText>
+                                <div class="flex-row">
+                                    <MudText Class="right-margin">@place.Name</MudText>
+                                    <MudText Class="right-margin">@place.CategoriesString</MudText>
+                                </div>
+                                <div class="flex-row">
+                                    <MudText Class="right-margin">@place.DistanceString</MudText>
+                                    <MudText Class="right-margin">@place.ContactNumber</MudText>
+                                </div>
                             </div>
-                            <div>
-                                <MudText>@place.CategoriesString</MudText>
-                            </div>
+                            <MudSpacer />
+
+                            @if (place.ImageUrl != null)
+                            {
+                                <MudImage ObjectFit="ObjectFit.Contain" Src="@place.ImageUrl" Width="70" Height="70" />
+                            }
                         </div>
+
                     </MudListItem>
                 }
             </MudList>

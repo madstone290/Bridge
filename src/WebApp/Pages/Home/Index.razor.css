@@ -26,11 +26,20 @@
     flex-direction: row;
 }
 
-::deep .place-item {
-    display: flex;
-    flex-direction: row;
+::deep .list-item {
+    border: 1px solid #dddddd;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    padding-top: 0px;
+    padding-bottom: 0px;
 }
 
-::deep .place-item > *{
-    margin: 5px;
+::deep .flex-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+::deep .right-margin {
+    margin-right: 20px;
 }
