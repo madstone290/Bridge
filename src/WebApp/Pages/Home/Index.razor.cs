@@ -8,6 +8,7 @@ using Bridge.WebApp.Services.GeoLocation;
 using Bridge.WebApp.Services.ReverseGeocode;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.JSInterop;
 using MudBlazor;
 
 namespace Bridge.WebApp.Pages.Home
@@ -20,6 +21,8 @@ namespace Bridge.WebApp.Pages.Home
         private object? _selectedPlace;
 
         private MudTextField<string>? _searchField;
+
+        private IJSObjectReference? _jsModule;
 
         /// <summary>
         /// 검색어
@@ -63,8 +66,13 @@ namespace Bridge.WebApp.Pages.Home
         [Inject]
         public IDynamicMapService MapService { get; set; } = null!;
 
+        [Inject]
+        public IJSRuntime JSRuntime { get; set; } = null!;
+
         protected override async Task OnInitializedAsync()
         {
+            _jsModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./Pages/Home/Index.razor.js");
+
             var geoResult =  await GeoService.GetLocationAsync();
             if (geoResult.Success)
             {
@@ -94,13 +102,16 @@ namespace Bridge.WebApp.Pages.Home
             
         }
 
-        private void SelectedMarkerChanged(string markerId)
+        private async void SelectedMarkerChanged(string markerId)
         {
             if(long.TryParse(markerId, out long id))
             {
                 var place = _placeList.FirstOrDefault(x => x.Id == id);
                 _selectedPlace = place;
                 StateHasChanged();
+
+                if(_jsModule != null)
+                    await _jsModule.InvokeVoidAsync("scrollTo", id.ToString());
             }
         }
 

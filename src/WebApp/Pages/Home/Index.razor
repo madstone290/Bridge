@@ -36,10 +36,10 @@
                 }
                 else
                 {
-                    <MudList @bind-SelectedValue="_selectedPlace" Clickable="true" Style="overflow-y:scroll; height:600px;">
+                    <MudList id="mudlist" @bind-SelectedValue="_selectedPlace" Clickable="true" Style="overflow-y:scroll; height:600px;">
                         @foreach (var place in _placeList)
                         {
-                            <MudListItem Class="list-item" Value="place" OnClick="@(() => ListItem_Click(place))">
+                            <MudListItem id="@place.Id" Class="list-item" Value="place" OnClick="@(() => ListItem_Click(place))">
                                 <div class="flex-row">
                                     <div>
                                         <div class="flex-row">
