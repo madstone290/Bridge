@@ -40,25 +40,7 @@
                         @foreach (var place in _placeList)
                         {
                             <MudListItem id="@place.Id" Class="list-item" Value="place" OnClick="@(() => ListItem_Click(place))">
-                                <div class="flex-row">
-                                    <div>
-                                        <div class="flex-row">
-                                            <MudText Class="right-margin text-nowrap">@place.Name</MudText>
-                                            <MudText Class="right-margin text-nowrap" Style="max-width:500px;">@place.CategoriesString</MudText>
-                                        </div>
-                                        <div class="flex-row">
-                                            <MudText Class="right-margin text-nowrap">@place.DistanceString</MudText>
-                                            <MudText Class="right-margin text-nowrap">@place.ContactNumber</MudText>
-                                        </div>
-                                    </div>
-                                    <MudSpacer />
-
-                                    @if (place.ImageUrl != null)
-                                    {
-                                        <MudImage ObjectFit="ObjectFit.Contain" Src="@place.ImageUrl" Width="70" Height="70" />
-                                    }
-                                </div>
-
+                                <Bridge.WebApp.Pages.Home.Components.PlaceListItem Place="place"/>
                             </MudListItem>
                         }
                     </MudList>

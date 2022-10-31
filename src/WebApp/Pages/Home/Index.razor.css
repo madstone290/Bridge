@@ -36,19 +36,24 @@
     padding-right: 4px;
 }
 
-::deep .flex-row {
+::deep .place-list-item {
     display: flex;
     flex-direction: row;
     align-items: center;
 }
 
-::deep .right-margin {
+::deep .place-list-item .flex-r {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+::deep .place-list-item .right-margin {
     margin-right: 20px;
 }
 
-::deep .text-nowrap {
+::deep .place-list-item .text-nowrap {
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
 }
-
