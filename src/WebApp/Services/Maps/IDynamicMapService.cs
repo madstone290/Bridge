@@ -13,7 +13,14 @@ namespace Bridge.WebApp.Services.Maps
         /// </summary>
         /// <param name="sessionId">세션 아이디. 서비스에서 맵 식별을 위해 사용한다.</param>
         /// <param name="callback">이벤트 콜백</param>
-        void SetLocationChangedCallback(string sessionId, EventCallback<MapPoint> callback);
+        void SetCenterChangedCallback(string sessionId, EventCallback<MapPoint> callback);
+
+        /// <summary>
+        /// 마우스 클릭 이벤트 콜백을 등록한다.
+        /// </summary>
+        /// <param name="sessionId"></param>
+        /// <param name="callback"></param>
+        void SetOnClickCallback(string sessionId, EventCallback<MapPoint> callback);
 
         /// <summary>
         /// 맵을 초기화한다
@@ -75,14 +82,20 @@ namespace Bridge.WebApp.Services.Maps
             public double? CenterY { get; init; }
         }
 
+
         private const string JsFile = "/js/naver_map.js";
+
+        #region 자바스크립트 함수 식별자
         private const string InitId = "init";
         private const string CloseId = "close";
         private const string GetMarkerLocationId = "getMarkerLocation";
+        #endregion
+
 
         private readonly IJSRuntime _jsRuntime;
         private readonly DotNetObjectReference<NaverMapService> _dotNetRef;
-        private readonly Dictionary<string, EventCallback<MapPoint>> _locationChangedCallbacks = new();
+        private readonly Dictionary<string, EventCallback<MapPoint>> _centerChangedCallbacks = new();
+        private readonly Dictionary<string, EventCallback<MapPoint>> _onClickCallbacks = new();
 
         private IJSObjectReference? _module;
 
@@ -93,17 +106,31 @@ namespace Bridge.WebApp.Services.Maps
             _dotNetRef = DotNetObjectReference.Create(this);
         }
 
-        public void SetLocationChangedCallback(string sessionId, EventCallback<MapPoint> callback)
+        public void SetCenterChangedCallback(string sessionId, EventCallback<MapPoint> callback)
         {
-            _locationChangedCallbacks[sessionId] = callback;
+            _centerChangedCallbacks[sessionId] = callback;
+        }
+
+        public void SetOnClickCallback(string sessionId, EventCallback<MapPoint> callback)
+        {
+            _onClickCallbacks[sessionId] = callback;
         }
 
         [JSInvokable]
-        public void OnLocationChanged(string sessionId, double x, double y)
+        public void OnCenterChanged(string sessionId, double x, double y)
         {
-            if (_locationChangedCallbacks.TryGetValue(sessionId, out var callback))
+            if (_centerChangedCallbacks.TryGetValue(sessionId, out var callback))
                 callback.InvokeAsync(new MapPoint() { X = x, Y = y });
         }
+
+
+        [JSInvokable]
+        public void OnClick(string sessionId, double x, double y)
+        {
+            if (_onClickCallbacks.TryGetValue(sessionId, out var callback))
+                callback.InvokeAsync(new MapPoint() { X = x, Y = y });
+        }
+
 
         public async Task InitAsync(string sessionId, IMapOptions mapOptions)
         {
@@ -122,7 +149,8 @@ namespace Bridge.WebApp.Services.Maps
 
         public async Task CloseAsync(string sessionId)
         {
-            _locationChangedCallbacks.Remove(sessionId);
+            _centerChangedCallbacks.Remove(sessionId);
+            _onClickCallbacks.Remove(sessionId);
 
             if (_module == null)
                 return;

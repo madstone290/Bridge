@@ -77,7 +77,6 @@ namespace Bridge.WebApp.Pages.Home
                 CenterX = _centerLocation?.Longitude,
                 CenterY = _centerLocation?.Latitude
             };
-            MapService.SetLocationChangedCallback(_mapSessionId, new EventCallback<MapPoint>(this, OnLocationChanged));
             _ = MapService.InitAsync(_mapSessionId, mapOptions);
 
             if(_centerLocation != null)

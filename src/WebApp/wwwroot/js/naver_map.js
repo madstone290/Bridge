@@ -3,10 +3,14 @@
  * */
 
 /**
- * 닷넷참조 함수식별자. 좌표 변경시 호출
+ * 닷넷참조 함수식별자. 지도 클릭시 호출
  * */
-const OnLocationChangedId = 'OnLocationChanged';
+const OnClickId = 'OnClick';
 
+/**
+ * 닷넷참조 함수식별자. 중심 위치 변경시 호출
+ * */
+const OnCenterChangedId = 'OnCenterChanged';
 
 /**
  * 닷넷참조 맵. SessionId를 키로 사용한다.
@@ -52,6 +56,8 @@ export function init(sessionId, dotNetRef, mapId, centerX, centerY) {
 
     naver.maps.Event.addListener(map, 'center_changed', function (center) {
         console.log(center);
+
+        dotNetRef.invokeMethodAsync(OnCenterChangedId, sessionId, center.x, center.y);
     });
 
     naver.maps.Event.addListener(map, 'zoom_changed', function (zoom) {
@@ -64,7 +70,7 @@ export function init(sessionId, dotNetRef, mapId, centerX, centerY) {
 
         marker.setPosition(e.latlng);
 
-        dotNetRef.invokeMethodAsync(OnLocationChangedId, sessionId, e.latlng.x, e.latlng.y);
+        dotNetRef.invokeMethodAsync(OnClickId, sessionId, e.latlng.x, e.latlng.y);
     });
 }
 
