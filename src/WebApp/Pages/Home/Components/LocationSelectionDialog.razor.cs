@@ -38,7 +38,7 @@ namespace Bridge.WebApp.Pages.Home.Components
                 MapId = MapId,
                 CenterX = Longitude,
                 CenterY = Latitude,
-                ShowMarker = true
+                ShowMyLocation = true
             };
 
             await MapService.InitAsync(_mapSessionId, mapOptions);

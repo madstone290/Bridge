@@ -25,7 +25,7 @@ namespace Bridge.WebApp.Services.DynamicMap.Naver
             /// <summary>
             /// 마커 사용여부
             /// </summary>
-            public bool ShowMarker { get; init; }
+            public bool ShowMyLocation { get; init; }
         }
 
         private const string JsFile = "/js/naver_map.js";
@@ -86,7 +86,7 @@ namespace Bridge.WebApp.Services.DynamicMap.Naver
             _module = await _jsRuntime.InvokeAsync<IJSObjectReference>("import", JsFile);
 
             var naverMapOptions = (MapOptions)mapOptions;
-            await _module.InvokeVoidAsync(InitId, sessionId, _dotNetRef, naverMapOptions.MapId, naverMapOptions.CenterX, naverMapOptions.CenterY, naverMapOptions.ShowMarker);
+            await _module.InvokeVoidAsync(InitId, sessionId, _dotNetRef, naverMapOptions.MapId, naverMapOptions.CenterX, naverMapOptions.CenterY, naverMapOptions.ShowMyLocation);
         }
 
         public async Task<MapPoint> GetSelectedLocationAsync(string sessionId)
@@ -96,28 +96,28 @@ namespace Bridge.WebApp.Services.DynamicMap.Naver
             return await _module.InvokeAsync<MapPoint>(GetMarkerLocationId, sessionId);
         }
 
-        public async Task AddMarkers(string sessionId, IEnumerable<Marker> markers)
+        public async Task AddMarkersAsync(string sessionId, IEnumerable<Marker> markers)
         {
             if (_module == null)
                 return;
             await _module.InvokeVoidAsync(AddMarkersId, sessionId, markers);
         }
 
-        public async Task ClearMarkers(string sessionId)
+        public async Task ClearMarkersAsync(string sessionId)
         {
             if (_module == null)
                 return;
             await _module.InvokeVoidAsync(ClearMarkersId, sessionId);
         }
 
-        public async Task SelectMarker(string sessionId, string markerId)
+        public async Task SelectMarkerAsync(string sessionId, string markerId)
         {
             if (_module == null)
                 return;
             await _module.InvokeVoidAsync(SelectMarkerId, sessionId, markerId);
         }
 
-        public async Task Move(string sessionId, double latitude, double longitude)
+        public async Task MoveAsync(string sessionId, double latitude, double longitude)
         {
             if (_module == null)
                 return;

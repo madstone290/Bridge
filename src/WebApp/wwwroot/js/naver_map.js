@@ -23,9 +23,9 @@ let _dotNetRefMap = new Map();
 let _mapMap = new Map();
 
 /**
- * 현재 위치 마커 맵. SessionId를 키로 사용한다.
+ * 내 위치 마커 맵. SessionId를 키로 사용한다.
  * */
-let _markerMap = new Map();
+let _myLocationMarkerMap = new Map();
 
 /**
  * 마커리스트 맵. SessionId를 키로 사용한다.
@@ -41,9 +41,9 @@ let _selectedMarkerMap = new Map();
  * @param {string} mapId 맵초기화를 위한 div 요소 아이디
  * @param {number} centerX X축 중심위치. 경도
  * @param {number} centerY Y축 중심위치. 위도
- * @param {boolean} showMarker 마커 사용여부
+ * @param {boolean} showMyLocation 내 위치 표시여부
  */
-export function init(sessionId, dotNetRef, mapId, centerX, centerY, showMarker) {
+export function init(sessionId, dotNetRef, mapId, centerX, centerY, showMyLocation) {
     console.log(sessionId);
     _dotNetRefMap.set(sessionId, dotNetRef);
 
@@ -56,12 +56,12 @@ export function init(sessionId, dotNetRef, mapId, centerX, centerY, showMarker) 
     let map = new naver.maps.Map(mapId, mapOptions);
     _mapMap.set(sessionId, map);
 
-    if (showMarker) {
-        let marker = new naver.maps.Marker({
+    if (showMyLocation) {
+        let myLocationMarker = new naver.maps.Marker({
             map: map,
             position: map.getCenter(),
         });
-        _markerMap.set(sessionId, marker);
+        _myLocationMarkerMap.set(sessionId, myLocationMarker);
     }
 
     naver.maps.Event.addListener(map, 'center_changed', function (center) {
@@ -76,7 +76,7 @@ export function init(sessionId, dotNetRef, mapId, centerX, centerY, showMarker) 
     // 클릭으로 위치가 변경된 경우
     naver.maps.Event.addListener(map, 'click', function (e) {
         //console.log(e);
-        let marker = _markerMap.get(sessionId);
+        let marker = _myLocationMarkerMap.get(sessionId);
         if (marker)
             marker.setPosition(e.latlng);
 
@@ -169,9 +169,9 @@ export function move(sessionId, latitude, longitude) {
 export function close(sessionId) {
     _dotNetRefMap.delete(sessionId);
     _mapMap.delete(sessionId);
-    _markerMap.delete(sessionId);
+    _myLocationMarkerMap.delete(sessionId);
 }
 
 export function getMarkerLocation(sessionId) {
-    return _markerMap.get(sessionId).getPosition();
+    return _myLocationMarkerMap.get(sessionId).getPosition();
 }

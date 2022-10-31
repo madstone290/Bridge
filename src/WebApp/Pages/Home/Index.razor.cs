@@ -140,8 +140,8 @@ namespace Bridge.WebApp.Pages.Home
                 Longitude = x.Longitude
             });
 
-            await MapService.ClearMarkers(_mapSessionId);
-            await MapService.AddMarkers(_mapSessionId, markers);
+            await MapService.ClearMarkersAsync(_mapSessionId);
+            await MapService.AddMarkersAsync(_mapSessionId, markers);
             #endregion
         }
 
@@ -186,8 +186,8 @@ namespace Bridge.WebApp.Pages.Home
 
         private void ListItem_Click(PlaceListModel place)
         {
-            MapService.SelectMarker(_mapSessionId, place.Id.ToString());
-            MapService.Move(_mapSessionId, place.Latitude, place.Longitude);
+            MapService.SelectMarkerAsync(_mapSessionId, place.Id.ToString());
+            MapService.MoveAsync(_mapSessionId, place.Latitude, place.Longitude);
         }
 
         async ValueTask IAsyncDisposable.DisposeAsync()

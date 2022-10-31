@@ -30,13 +30,37 @@ namespace Bridge.WebApp.Services.DynamicMap
         /// <returns></returns>
         Task InitAsync(string sessionId, IMapOptions mapOptions);
 
-        Task AddMarkers(string sessionId, IEnumerable<Marker> markers);
+        /// <summary>
+        /// 마커를 추가한다
+        /// </summary>
+        /// <param name="sessionId"></param>
+        /// <param name="markers"></param>
+        /// <returns></returns>
+        Task AddMarkersAsync(string sessionId, IEnumerable<Marker> markers);
 
-        Task ClearMarkers(string sessionId);
+        /// <summary>
+        /// 마커를 제거한다
+        /// </summary>
+        /// <param name="sessionId"></param>
+        /// <returns></returns>
+        Task ClearMarkersAsync(string sessionId);
 
-        Task SelectMarker(string sessionId, string markerId);
+        /// <summary>
+        /// 마커를 선택한다
+        /// </summary>
+        /// <param name="sessionId"></param>
+        /// <param name="markerId"></param>
+        /// <returns></returns>
+        Task SelectMarkerAsync(string sessionId, string markerId);
 
-        Task Move(string sessionId, double latitude, double longitude);
+        /// <summary>
+        /// 해당 위치로 이동한다
+        /// </summary>
+        /// <param name="sessionId"></param>
+        /// <param name="latitude"></param>
+        /// <param name="longitude"></param>
+        /// <returns></returns>
+        Task MoveAsync(string sessionId, double latitude, double longitude);
 
         /// <summary>
         /// 맵을 닫는다
