@@ -30,12 +30,13 @@ namespace Bridge.WebApp.Pages.Home.Components
 
         protected override async Task OnInitializedAsync()
         {
-            MapService.SetCenterChangedCallback(_mapSessionId, new(this, OnLocationChanged));
+            MapService.SetOnClickCallback(_mapSessionId, new(this, OnLocationChanged));
             var mapOptions = new NaverMapService.MapOptions()
             {
                 MapId = MapId,
                 CenterX = Longitude,
-                CenterY = Latitude
+                CenterY = Latitude,
+                ShowMarker = true
             };
 
             await MapService.InitAsync(_mapSessionId, mapOptions);

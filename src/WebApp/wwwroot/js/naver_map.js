@@ -34,8 +34,9 @@ let _markerMap = new Map();
  * @param {string} mapId 맵초기화를 위한 div 요소 아이디
  * @param {number} centerX X축 중심위치. 경도
  * @param {number} centerY Y축 중심위치. 위도
+ * @param {boolean} showMarker 마커 사용여부
  */
-export function init(sessionId, dotNetRef, mapId, centerX, centerY) {
+export function init(sessionId, dotNetRef, mapId, centerX, centerY, showMarker) {
     console.log(sessionId);
     _dotNetRefMap.set(sessionId, dotNetRef);
 
@@ -48,27 +49,29 @@ export function init(sessionId, dotNetRef, mapId, centerX, centerY) {
     let map = new naver.maps.Map(mapId, mapOptions);
     _mapMap.set(sessionId, map);
 
-    let marker = new naver.maps.Marker({
-        map: map,
-        position: map.getCenter(),
-    });
-    _markerMap.set(sessionId, marker);
+    if (showMarker) {
+        let marker = new naver.maps.Marker({
+            map: map,
+            position: map.getCenter(),
+        });
+        _markerMap.set(sessionId, marker);
+    }
 
     naver.maps.Event.addListener(map, 'center_changed', function (center) {
-        console.log(center);
-
+        //console.log(center);
         dotNetRef.invokeMethodAsync(OnCenterChangedId, sessionId, center.x, center.y);
     });
 
     naver.maps.Event.addListener(map, 'zoom_changed', function (zoom) {
-        console.log(zoom);
+        //console.log(zoom);
     });
 
     // 클릭으로 위치가 변경된 경우
     naver.maps.Event.addListener(map, 'click', function (e) {
-        console.log(e);
-
-        marker.setPosition(e.latlng);
+        //console.log(e);
+        let marker = _markerMap.get(sessionId);
+        if (marker)
+            marker.setPosition(e.latlng);
 
         dotNetRef.invokeMethodAsync(OnClickId, sessionId, e.latlng.x, e.latlng.y);
     });

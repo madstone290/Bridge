@@ -80,6 +80,11 @@ namespace Bridge.WebApp.Services.Maps
             /// 위도. Y축 중심위치
             /// </summary>
             public double? CenterY { get; init; }
+
+            /// <summary>
+            /// 마커 사용여부
+            /// </summary>
+            public bool ShowMarker { get; init; }
         }
 
 
@@ -137,7 +142,7 @@ namespace Bridge.WebApp.Services.Maps
             _module = await _jsRuntime.InvokeAsync<IJSObjectReference>("import", JsFile);
 
             var naverMapOptions = (MapOptions)mapOptions;
-            await _module.InvokeVoidAsync(InitId, sessionId, _dotNetRef, naverMapOptions.MapId, naverMapOptions.CenterX, naverMapOptions.CenterY);
+            await _module.InvokeVoidAsync(InitId, sessionId, _dotNetRef, naverMapOptions.MapId, naverMapOptions.CenterX, naverMapOptions.CenterY, naverMapOptions.ShowMarker);
         }
 
         public async Task<MapPoint> GetSelectedLocationAsync(string sessionId)
