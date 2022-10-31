@@ -28,13 +28,14 @@ namespace Bridge.WebApp.Services.DynamicMap.Naver
             public bool ShowMarker { get; init; }
         }
 
-
         private const string JsFile = "/js/naver_map.js";
 
         #region 자바스크립트 함수 식별자
         private const string InitId = "init";
         private const string CloseId = "close";
         private const string GetMarkerLocationId = "getMarkerLocation";
+        private const string AddMarkersId = "addMarkers";
+        private const string ClearMarkersId = "clearMarkers";
         #endregion
 
 
@@ -93,6 +94,20 @@ namespace Bridge.WebApp.Services.DynamicMap.Naver
             return await _module.InvokeAsync<MapPoint>(GetMarkerLocationId, sessionId);
         }
 
+        public async Task AddMarkers(string sessionId, IEnumerable<Marker> markers)
+        {
+            if (_module == null)
+                return;
+            await _module.InvokeVoidAsync(AddMarkersId, sessionId, markers);
+        }
+
+        public async Task ClearMarkers(string sessionId)
+        {
+            if (_module == null)
+                return;
+            await _module.InvokeVoidAsync(ClearMarkersId, sessionId);
+        }
+
         public async Task CloseAsync(string sessionId)
         {
             _centerChangedCallbacks.Remove(sessionId);
@@ -112,5 +127,6 @@ namespace Bridge.WebApp.Services.DynamicMap.Naver
             await _module.DisposeAsync();
         }
 
+     
     }
 }

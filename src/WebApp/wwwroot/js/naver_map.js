@@ -28,6 +28,11 @@ let _mapMap = new Map();
 let _markerMap = new Map();
 
 /**
+ * 마커리스트 맵. SessionId를 키로 사용한다.
+ * */
+let _markersMap = new Map();
+
+/**
  * 네이버 맵을 초기화 한다
  * @param {string} sessionId 세션 아이디
  * @param {any} dotNetRef 닷넷 참조객체
@@ -45,7 +50,7 @@ export function init(sessionId, dotNetRef, mapId, centerX, centerY, showMarker) 
     };
     if (centerX && centerY)
         mapOptions.center = new naver.maps.LatLng(centerY, centerX);
-
+    
     let map = new naver.maps.Map(mapId, mapOptions);
     _mapMap.set(sessionId, map);
 
@@ -75,6 +80,34 @@ export function init(sessionId, dotNetRef, mapId, centerX, centerY, showMarker) 
 
         dotNetRef.invokeMethodAsync(OnClickId, sessionId, e.latlng.x, e.latlng.y);
     });
+}
+
+export function addMarkers(sessionId, markers) {
+    console.log(markers);
+
+    let map = _mapMap.get(sessionId);
+
+    var naverMarkerArray = new Array(markers.length);
+    for (let i = 0; i < markers.length; i++) {
+        let naverMarker = new naver.maps.Marker({
+            map: map,
+            position: new naver.maps.LatLng(markers[i].latitude, markers[i].longitude),
+        });
+        naverMarker.id = markers[i].markerId;
+
+        naverMarkerArray[i] = naverMarker;
+    }
+    _markersMap.set(sessionId, naverMarkerArray);
+}
+
+export function clearMarkers(sessionId) {
+    let naverMarkers = _markersMap.get(sessionId);
+    if (!naverMarkers)
+        return;
+
+    for (let i = 0; i < naverMarkers.length; i++) {
+        naverMarkers[i].setMap(null);
+    }
 }
 
 /**

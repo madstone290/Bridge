@@ -30,6 +30,10 @@ namespace Bridge.WebApp.Services.DynamicMap
         /// <returns></returns>
         Task InitAsync(string sessionId, IMapOptions mapOptions);
 
+        Task AddMarkers(string sessionId, IEnumerable<Marker> markers);
+
+        Task ClearMarkers(string sessionId);
+
         /// <summary>
         /// 맵을 닫는다
         /// </summary>

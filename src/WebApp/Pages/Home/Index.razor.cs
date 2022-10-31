@@ -89,17 +89,6 @@ namespace Bridge.WebApp.Pages.Home
             }
         }
 
-        private async void OnLocationChanged(MapPoint point)
-        {
-            _centerLocation = new LatLon(point.Y, point.X);
-
-            var addressResult = await ReverseGeocodeService.GetAddressAsync(_centerLocation.Latitude, _centerLocation.Longitude);
-            _centerAddress = addressResult.Data;
-
-            StateHasChanged();
-        }
-
-
         public async Task AutoComplete_OnKeyUpAsync(KeyboardEventArgs args)
         {
             if (args.Key == "Enter")
@@ -141,6 +130,18 @@ namespace Bridge.WebApp.Pages.Home
 
             _searched = true;
             await _searchField.BlurAsync();
+
+            #region 마커 표시
+            var markers = _placeList.Select(x => new Marker()
+            {
+                Id = x.Id.ToString(),
+                Latitude = x.Latitude,
+                Longitude = x.Longitude
+            });
+
+            await MapService.ClearMarkers(_mapSessionId);
+            await MapService.AddMarkers(_mapSessionId, markers);
+            #endregion
         }
 
         private async Task Settings_ClickAsync()
