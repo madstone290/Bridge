@@ -2,7 +2,7 @@ using Bridge.Shared.Extensions;
 using Microsoft.Extensions.Options;
 using System.ComponentModel.DataAnnotations;
 
-namespace Bridge.WebApp.Services.Maps
+namespace Bridge.WebApp.Services.ReverseGeocode.Naver
 {
     /// <summary>
     /// 네이버 역좌표변환 API
@@ -93,7 +93,7 @@ namespace Bridge.WebApp.Services.Maps
 
             var response = await _httpClient.SendAsync(request);
             var body = await response.Content.ReadFromJsonAsync<ResponseBody>();
-            
+
             if (body == null)
                 return Bridge.Shared.Result<ResponseBody>.FailResult("응답 바디 변환에 실패하였습니다");
 
