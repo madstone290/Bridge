@@ -34,6 +34,10 @@ namespace Bridge.WebApp.Services.DynamicMap
 
         Task ClearMarkers(string sessionId);
 
+        Task SelectMarker(string sessionId, string markerId);
+
+        Task Move(string sessionId, double latitude, double longitude);
+
         /// <summary>
         /// 맵을 닫는다
         /// </summary>
@@ -47,6 +51,7 @@ namespace Bridge.WebApp.Services.DynamicMap
         /// <param name="sessionId">세션 아이디. 서비스에서 맵 식별을 위해 사용한다.</param>
         /// <returns>사용자가 선택한 위치</returns>
         Task<MapPoint> GetSelectedLocationAsync(string sessionId);
+        
     }
 
 }

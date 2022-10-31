@@ -135,6 +135,7 @@ namespace Bridge.WebApp.Pages.Home
             var markers = _placeList.Select(x => new Marker()
             {
                 Id = x.Id.ToString(),
+                Name = x.Name,
                 Latitude = x.Latitude,
                 Longitude = x.Longitude
             });
@@ -181,6 +182,12 @@ namespace Bridge.WebApp.Pages.Home
                 _centerLocation = new LatLon(data.Latitude, data.Longitude);
                 _centerAddress = data.Address;
             }
+        }
+
+        private void ListItem_Click(PlaceListModel place)
+        {
+            MapService.SelectMarker(_mapSessionId, place.Id.ToString());
+            MapService.Move(_mapSessionId, place.Latitude, place.Longitude);
         }
 
         async ValueTask IAsyncDisposable.DisposeAsync()

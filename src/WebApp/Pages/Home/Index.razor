@@ -39,7 +39,7 @@
                     <MudList Clickable="true" Style="overflow-y:scroll; height:600px;">
                         @foreach (var place in _placeList)
                         {
-                            <MudListItem Class="list-item">
+                            <MudListItem Class="list-item" OnClick="@(() => ListItem_Click(place))">
                                 <div class="flex-row">
                                     <div>
                                         <div class="flex-row">

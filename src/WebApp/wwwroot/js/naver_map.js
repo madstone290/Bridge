@@ -32,6 +32,8 @@ let _markerMap = new Map();
  * */
 let _markersMap = new Map();
 
+let _selectedMarkerMap = new Map();
+
 /**
  * 네이버 맵을 초기화 한다
  * @param {string} sessionId 세션 아이디
@@ -83,21 +85,29 @@ export function init(sessionId, dotNetRef, mapId, centerX, centerY, showMarker) 
 }
 
 export function addMarkers(sessionId, markers) {
-    console.log(markers);
-
+    //console.log(markers);
     let map = _mapMap.get(sessionId);
 
-    var naverMarkerArray = new Array(markers.length);
+    var naverMarkers = new Array(markers.length);
     for (let i = 0; i < markers.length; i++) {
         let naverMarker = new naver.maps.Marker({
             map: map,
             position: new naver.maps.LatLng(markers[i].latitude, markers[i].longitude),
+            icon: {
+                content: `
+                        <div style="display:flex; flex-direction:row;">
+                            <img style="width:24px; height:24px;" src="/img/location-sign.png" />
+                            <div>${markers[i].name}</div>
+                        </div>`,
+                origin: new naver.maps.Point(0, 0),
+                anchor: new naver.maps.Point(12, 24)
+            }
         });
-        naverMarker.id = markers[i].markerId;
+        naverMarker.tag = markers[i];
 
-        naverMarkerArray[i] = naverMarker;
+        naverMarkers[i] = naverMarker;
     }
-    _markersMap.set(sessionId, naverMarkerArray);
+    _markersMap.set(sessionId, naverMarkers);
 }
 
 export function clearMarkers(sessionId) {
@@ -108,6 +118,49 @@ export function clearMarkers(sessionId) {
     for (let i = 0; i < naverMarkers.length; i++) {
         naverMarkers[i].setMap(null);
     }
+}
+
+export function selectMarker(sessionId, markerId) {
+    let naverMarkers = _markersMap.get(sessionId);
+    if (!naverMarkers)
+        return;
+
+    let selectedMarker = _selectedMarkerMap.get(sessionId);
+    if (selectedMarker) {
+        selectedMarker.setIcon({
+            content: `
+                        <div style="display:flex; flex-direction:row;">
+                            <img style="width:24px; height:24px;" src="/img/location-sign.png" />
+                            <div>${selectedMarker.tag.name}</div>
+                        </div>`,
+            origin: new naver.maps.Point(0, 0),
+            anchor: new naver.maps.Point(12, 24)
+        });
+    }
+
+    for (let i = 0; i < naverMarkers.length; i++) {
+        if (naverMarkers[i].tag.id == markerId) {
+            console.log(naverMarkers[i]);
+            naverMarkers[i].setIcon({
+                content: `
+                        <div style="display:flex; flex-direction:row;">
+                            <img style="width:24px; height:24px;" src="/img/selected-location-sign.png" />
+                            <div>${naverMarkers[i].tag.name}</div>
+                        </div>`,
+                origin: new naver.maps.Point(0, 0),
+                anchor: new naver.maps.Point(12, 24)
+            });
+
+            _selectedMarkerMap.set(sessionId, naverMarkers[i]);
+        }
+    }
+}
+
+export function move(sessionId, latitude, longitude) {
+    let map = _mapMap.get(sessionId);
+    if (!map)
+        return;
+    map.setCenter(new naver.maps.LatLng(latitude, longitude));
 }
 
 /**
