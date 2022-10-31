@@ -17,6 +17,8 @@ namespace Bridge.WebApp.Pages.Home
         private const string MapId = "map";
         private readonly string _mapSessionId = Guid.NewGuid().ToString();
 
+        private object? _selectedPlace;
+
         private MudTextField<string>? _searchField;
 
         /// <summary>
@@ -80,12 +82,25 @@ namespace Bridge.WebApp.Pages.Home
                 CenterX = _centerLocation?.Longitude,
                 CenterY = _centerLocation?.Latitude
             };
+            MapService.SetOnSelectedMarkerChangedCallback(_mapSessionId, new(this, SelectedMarkerChanged));
             _ = MapService.InitAsync(_mapSessionId, mapOptions);
 
             if(_centerLocation != null)
             {
                 var addressResult = await ReverseGeocodeService.GetAddressAsync(_centerLocation.Latitude, _centerLocation.Longitude);
                 _centerAddress = addressResult.Data;
+            }
+
+            
+        }
+
+        private void SelectedMarkerChanged(string markerId)
+        {
+            if(long.TryParse(markerId, out long id))
+            {
+                var place = _placeList.FirstOrDefault(x => x.Id == id);
+                _selectedPlace = place;
+                StateHasChanged();
             }
         }
 

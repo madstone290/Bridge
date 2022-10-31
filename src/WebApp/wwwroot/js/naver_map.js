@@ -13,6 +13,11 @@ const OnClickId = 'OnClick';
 const OnCenterChangedId = 'OnCenterChanged';
 
 /**
+ * 닷넷참조 함수식별자. 사용자가 마커를 선택하는 경우 호출
+ * */
+const OnSelectedMarkerChangedId = 'OnSelectedMarkerChanged';
+
+/**
  * 닷넷참조 맵. SessionId를 키로 사용한다.
  * */
 let _dotNetRefMap = new Map();
@@ -103,6 +108,17 @@ export function addMarkers(sessionId, markers) {
                 anchor: new naver.maps.Point(12, 24)
             }
         });
+
+        naver.maps.Event.addListener(naverMarker, 'click', (e) => {
+            //console.log(e);
+            selectMarker(sessionId, naverMarker.tag.id);
+
+            let dotNetRef = _dotNetRefMap.get(sessionId);
+            if (dotNetRef) {
+                dotNetRef.invokeMethodAsync(OnSelectedMarkerChangedId, sessionId, naverMarker.tag.id);
+            }
+        });
+
         naverMarker.tag = markers[i];
 
         naverMarkers[i] = naverMarker;

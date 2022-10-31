@@ -45,6 +45,7 @@ namespace Bridge.WebApp.Services.DynamicMap.Naver
         private readonly DotNetObjectReference<NaverMapService> _dotNetRef;
         private readonly Dictionary<string, EventCallback<MapPoint>> _centerChangedCallbacks = new();
         private readonly Dictionary<string, EventCallback<MapPoint>> _onClickCallbacks = new();
+        private readonly Dictionary<string, EventCallback<string>> _onSelectedMarkerChangedCallbacks = new();
 
         private IJSObjectReference? _module;
 
@@ -65,6 +66,11 @@ namespace Bridge.WebApp.Services.DynamicMap.Naver
             _onClickCallbacks[sessionId] = callback;
         }
 
+        public void SetOnSelectedMarkerChangedCallback(string sessionId, EventCallback<string> callback)
+        {
+            _onSelectedMarkerChangedCallbacks[sessionId] = callback;
+        }
+
         [JSInvokable]
         public void OnCenterChanged(string sessionId, double x, double y)
         {
@@ -80,6 +86,12 @@ namespace Bridge.WebApp.Services.DynamicMap.Naver
                 callback.InvokeAsync(new MapPoint() { X = x, Y = y });
         }
 
+        [JSInvokable]
+        public void OnSelectedMarkerChanged(string sessionId, string markerId)
+        {
+            if (_onSelectedMarkerChangedCallbacks.TryGetValue(sessionId, out var callback))
+                callback.InvokeAsync(markerId);
+        }
 
         public async Task InitAsync(string sessionId, IMapOptions mapOptions)
         {
@@ -142,6 +154,7 @@ namespace Bridge.WebApp.Services.DynamicMap.Naver
                 return;
             await _module.DisposeAsync();
         }
+
 
     }
 }

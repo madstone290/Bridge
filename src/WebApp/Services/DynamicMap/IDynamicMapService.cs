@@ -23,6 +23,13 @@ namespace Bridge.WebApp.Services.DynamicMap
         void SetOnClickCallback(string sessionId, EventCallback<MapPoint> callback);
 
         /// <summary>
+        /// 선택한 마커가 변경되는 경우 호출할 콜백을 등록한다.
+        /// </summary>
+        /// <param name="sessionId"></param>
+        /// <param name="callback">마커ID를 파라미터로 갖는 콜백</param>
+        void SetOnSelectedMarkerChangedCallback(string sessionId, EventCallback<string> callback);
+
+        /// <summary>
         /// 맵을 초기화한다
         /// </summary>
         /// <param name="sessionId">세션 아이디. 서비스에서 맵 식별을 위해 사용한다.</param>
