@@ -2,10 +2,12 @@ using Bridge.Application.Places.Queries;
 using Bridge.WebApp.Api.ApiClients;
 using Bridge.WebApp.Pages.Home.Components;
 using Bridge.WebApp.Pages.Home.Models;
+using Bridge.WebApp.Pages.Home.Records;
 using Bridge.WebApp.Services.DynamicMap;
 using Bridge.WebApp.Services.DynamicMap.Naver;
 using Bridge.WebApp.Services.GeoLocation;
 using Bridge.WebApp.Services.ReverseGeocode;
+using ClosedXML;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
@@ -32,7 +34,7 @@ namespace Bridge.WebApp.Pages.Home
         /// <summary>
         /// 검색된 장소 목록
         /// </summary>
-        private List<PlaceListModel> _placeList = new();
+        private readonly List<PlaceRecord> _placeList = new();
 
         /// <summary>
         /// 검색 실행 여부. 실행 여부에 따라 빈 장소목록에 대한 출력이 다르다.
@@ -55,9 +57,6 @@ namespace Bridge.WebApp.Pages.Home
         private LatLon? _centerLocation;
 
         [Inject]
-        public PlaceApiClient PlaceApiClient { get; set; } = null!;
-
-        [Inject]
         public IHtmlGeoService GeoService { get; set; } = null!;
 
         [Inject]
@@ -68,6 +67,10 @@ namespace Bridge.WebApp.Pages.Home
 
         [Inject]
         public IJSRuntime JSRuntime { get; set; } = null!;
+
+        [Inject]
+        public IndexModel Model { get; set; } = null!;
+
 
         protected override async Task OnInitializedAsync()
         {
@@ -98,8 +101,6 @@ namespace Bridge.WebApp.Pages.Home
                 var addressResult = await ReverseGeocodeService.GetAddressAsync(_centerLocation.Latitude, _centerLocation.Longitude);
                 _centerAddress = addressResult.Data;
             }
-
-            
         }
 
         private async void SelectedMarkerChanged(string markerId)
@@ -132,27 +133,12 @@ namespace Bridge.WebApp.Pages.Home
             if (_centerLocation == null)
                 return;
             
-            var query = new SearchPlacesQuery()
-            {
-                SearchText = _searchText,
-                Latitude = _centerLocation.Latitude,
-                Longitude = _centerLocation.Longitude
-            };
-            var result = await PlaceApiClient.SearchPlaces(query);
-
-            if (!ValidationService.Validate(result))
-                return;
+            var result = await Model.SeachPlacesAsync(_searchText, _centerLocation.Latitude, _centerLocation.Longitude);
+            if (!result.Success)
+                Snackbar.Add(result.Error, Severity.Error);
 
             _placeList.Clear();
-            _placeList.AddRange(result.Data!
-                .Select(x => 
-                {
-                    var place = PlaceListModel.ToPlaceModel(x);
-                    if (x.ImagePath != null)
-                        place.ImageUrl = new Uri(PlaceApiClient.HttpClient.BaseAddress!, x.ImagePath).ToString();
-                    return place;
-                })
-                .OrderBy(x => x.Distance));
+            _placeList.AddRange(Model.PlaceList);
 
             _searched = true;
             await _searchField.BlurAsync();
@@ -210,7 +196,7 @@ namespace Bridge.WebApp.Pages.Home
             }
         }
 
-        private void ListItem_Click(PlaceListModel place)
+        private void ListItem_Click(PlaceRecord place)
         {
             MapService.SelectMarkerAsync(_mapSessionId, place.Id.ToString());
             MapService.MoveAsync(_mapSessionId, place.Latitude, place.Longitude);

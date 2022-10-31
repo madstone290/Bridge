@@ -1,6 +1,6 @@
-namespace Bridge.WebApp.Pages.Home.Models
+namespace Bridge.WebApp.Pages.Home.Records
 {
-    public class OpeningTimeListModel
+    public class OpeningTimeRecords
     {
 
         private static readonly Dictionary<DayOfWeek, string> _dayStrings = new()
