@@ -40,6 +40,39 @@ let _markersMap = new Map();
 let _selectedMarkerMap = new Map();
 
 /**
+ * 마커 아이콘 컬렉션
+ * */
+const _markerIcons = {
+    selectedLocation: {
+        content: `
+<div style="display:flex; flex-direction:row;">
+    <img style="width:24px; height:24px;" src="/img/selected-location-sign.png" />
+</div>`,
+        origin: new naver.maps.Point(0, 0),
+        anchor: new naver.maps.Point(12, 24)
+    },
+    location: {
+        content: `
+<div style="display:flex; flex-direction:row;">
+    <img style="width:24px; height:24px;" src="/img/location-sign.png" />
+</div>`,
+        origin: new naver.maps.Point(0, 0),
+        anchor: new naver.maps.Point(12, 24)
+    }
+};
+
+const _markerFunctions = {
+    select: function(marker) {
+        marker.setIcon(_markerIcons.selectedLocation);
+        marker.setZIndex(100);
+    },
+    deselect: function(marker) {
+        marker.setIcon(_markerIcons.location);
+        marker.setZIndex(0);
+    }
+}
+
+/**
  * 네이버 맵을 초기화 한다
  * @param {string} sessionId 세션 아이디
  * @param {any} dotNetRef 닷넷 참조객체
@@ -98,15 +131,7 @@ export function addMarkers(sessionId, markers) {
         let naverMarker = new naver.maps.Marker({
             map: map,
             position: new naver.maps.LatLng(markers[i].latitude, markers[i].longitude),
-            icon: {
-                content: `
-                        <div style="display:flex; flex-direction:row;">
-                            <img style="width:24px; height:24px;" src="/img/location-sign.png" />
-                            <div>${markers[i].name}</div>
-                        </div>`,
-                origin: new naver.maps.Point(0, 0),
-                anchor: new naver.maps.Point(12, 24)
-            }
+            icon: _markerIcons.location
         });
 
         naver.maps.Event.addListener(naverMarker, 'click', (e) => {
@@ -143,30 +168,13 @@ export function selectMarker(sessionId, markerId) {
 
     let selectedMarker = _selectedMarkerMap.get(sessionId);
     if (selectedMarker) {
-        selectedMarker.setIcon({
-            content: `
-                        <div style="display:flex; flex-direction:row;">
-                            <img style="width:24px; height:24px;" src="/img/location-sign.png" />
-                            <div>${selectedMarker.tag.name}</div>
-                        </div>`,
-            origin: new naver.maps.Point(0, 0),
-            anchor: new naver.maps.Point(12, 24)
-        });
+        _markerFunctions.deselect(selectedMarker);
     }
 
     for (let i = 0; i < naverMarkers.length; i++) {
         if (naverMarkers[i].tag.id == markerId) {
-            console.log(naverMarkers[i]);
-            naverMarkers[i].setIcon({
-                content: `
-                        <div style="display:flex; flex-direction:row;">
-                            <img style="width:24px; height:24px;" src="/img/selected-location-sign.png" />
-                            <div>${naverMarkers[i].tag.name}</div>
-                        </div>`,
-                origin: new naver.maps.Point(0, 0),
-                anchor: new naver.maps.Point(12, 24)
-            });
-
+            _markerFunctions.select(naverMarkers[i]);
+          
             _selectedMarkerMap.set(sessionId, naverMarkers[i]);
         }
     }
