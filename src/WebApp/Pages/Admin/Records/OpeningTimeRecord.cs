@@ -1,8 +1,8 @@
 using Bridge.Application.Places.Dtos;
 
-namespace Bridge.WebApp.Pages.Admin.Models
+namespace Bridge.WebApp.Pages.Admin.Records
 {
-    public class OpeningTimeModel
+    public class OpeningTimeRecord
     {
         private static readonly Dictionary<DayOfWeek, string> _dayStrings = new()
         {
@@ -15,9 +15,9 @@ namespace Bridge.WebApp.Pages.Admin.Models
             { DayOfWeek.Sunday, "일요일" },
         };
 
-        public static OpeningTimeModel Create(OpeningTimeDto t)
+        public static OpeningTimeRecord Create(OpeningTimeDto t)
         {
-            return new OpeningTimeModel()
+            return new OpeningTimeRecord()
             {
                 Day = t.Day,
                 Dayoff = t.Dayoff,

@@ -1,6 +1,7 @@
 using Bridge.WebApp.Api.ApiClients.Admin;
 using Bridge.WebApp.Pages.Admin.Components;
 using Bridge.WebApp.Pages.Admin.Models;
+using Bridge.WebApp.Pages.Admin.Records;
 using Bridge.WebApp.Shared;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
@@ -27,7 +28,7 @@ namespace Bridge.WebApp.Pages.Admin
         private readonly PlaceFormModel _place = new();
         private readonly PlaceFormModel _placeBackup = new();
         private readonly PlaceFormModel.Validator _validator = new();
-        private readonly List<ProductModel> _products = new();
+        private readonly List<ProductRecord> _products = new();
 
         /// <summary>
         /// 제품 검색어
@@ -164,7 +165,7 @@ namespace Bridge.WebApp.Pages.Admin
             }
         }
 
-        private async void UpdateProduct_Click(ProductModel product)
+        private async void UpdateProduct_Click(ProductRecord product)
         {
             var parameters = new DialogParameters();
             parameters.Add(nameof(ProductModalForm.FormMode), FormMode.Update);
@@ -243,11 +244,11 @@ namespace Bridge.WebApp.Pages.Admin
             _pageCount = productsDto.TotalPages;
 
             _products.Clear();
-            _products.AddRange(productsDto.List.Select(x => ProductModel.Create(x)));
+            _products.AddRange(productsDto.List.Select(x => ProductRecord.Create(x)));
             StateHasChanged();
         }
 
-        private async void DiscardProduct_Click(ProductModel product)
+        private async void DiscardProduct_Click(ProductRecord product)
         {
             var parameters = new DialogParameters
             {

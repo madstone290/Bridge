@@ -1,4 +1,5 @@
 using Bridge.Application.Places.Dtos;
+using Bridge.WebApp.Pages.Admin.Records;
 using FluentValidation;
 using System.ComponentModel;
 
@@ -40,7 +41,7 @@ namespace Bridge.WebApp.Pages.Admin.Models
             };
         }
 
-        public static OpeningTimeFormModel Create(OpeningTimeModel x)
+        public static OpeningTimeFormModel Create(OpeningTimeRecord x)
         {
             return new OpeningTimeFormModel()
             {

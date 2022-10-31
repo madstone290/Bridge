@@ -1,13 +1,13 @@
 using Bridge.Application.Places.ReadModels;
 using Bridge.Domain.Places.Entities;
 
-namespace Bridge.WebApp.Pages.Admin.Models
+namespace Bridge.WebApp.Pages.Admin.Records
 {
-    public class PlaceModel
+    public class PlaceRecord
     {
-        public static PlaceModel ToPlaceModel(PlaceReadModel x)
+        public static PlaceRecord ToPlaceModel(PlaceReadModel x)
         {
-            return new PlaceModel()
+            return new PlaceRecord()
             {
                 Id = x.Id,
                 Type = x.Type,
@@ -21,7 +21,7 @@ namespace Bridge.WebApp.Pages.Admin.Models
                 Northing = x.Location.Northing,
                 Categories = x.Categories.ToList(),
                 ContactNumber = x.ContactNumber,
-                OpeningTimes = x.OpeningTimes.Select(t => new OpeningTimeModel()
+                OpeningTimes = x.OpeningTimes.Select(t => new OpeningTimeRecord()
                 {
                     Day = t.Day,
                     Dayoff = t.Dayoff,
@@ -127,13 +127,13 @@ namespace Bridge.WebApp.Pages.Admin.Models
         /// <summary>
         /// 영업시간
         /// </summary>
-        public IEnumerable<OpeningTimeModel> OpeningTimes { get; set; } = Enumerable.Empty<OpeningTimeModel>();
+        public IEnumerable<OpeningTimeRecord> OpeningTimes { get; set; } = Enumerable.Empty<OpeningTimeRecord>();
 
-        public IEnumerable<OpeningTimeModel> OpeningTimesFromMonday
+        public IEnumerable<OpeningTimeRecord> OpeningTimesFromMonday
         {
             get
             {
-                var openingTimes = new List<OpeningTimeModel>();
+                var openingTimes = new List<OpeningTimeRecord>();
                 openingTimes.Add(OpeningTimes.First(x => x.Day == DayOfWeek.Monday));
                 openingTimes.Add(OpeningTimes.First(x => x.Day == DayOfWeek.Tuesday));
                 openingTimes.Add(OpeningTimes.First(x => x.Day == DayOfWeek.Wednesday));

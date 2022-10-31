@@ -2,12 +2,12 @@ using Bridge.Domain.Places.Entities.Places;
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 
-namespace Bridge.WebApp.Pages.Admin.DataModels
+namespace Bridge.WebApp.Pages.Admin.Records
 {
     /// <summary>
     /// 대구광역시 공중화장실 엑셀 데이터 모델
     /// </summary>
-    public class DaeguRestroomExcelDataModel
+    public class DaeguRestroomExcelRecord
     {
         /// <summary>
         /// 화장실 이름

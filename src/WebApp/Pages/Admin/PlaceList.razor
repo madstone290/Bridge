@@ -1,5 +1,6 @@
 @using Bridge.Domain.Places.Entities
 @using Bridge.WebApp.Pages.Admin.Models
+@using Bridge.WebApp.Pages.Admin.Records
 @attribute [Route(PageRoutes.Admin.PlaceList)]
 @attribute [Authorize(Policy = Bridge.Shared.Constants.PolicyConstants.Admin)]
 
@@ -46,7 +47,7 @@
                        StartIcon="@Icons.Material.Filled.Add">화장실 엑셀 업로드</MudButton>
         </MudToolBar>
 
-        <MudTable T="PlaceModel"
+        <MudTable T="PlaceRecord"
                   Items="_places"
                   RowsPerPage="_rowsPerPage"
                   Hover="true"

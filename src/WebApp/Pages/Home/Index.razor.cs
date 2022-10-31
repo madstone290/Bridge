@@ -69,7 +69,7 @@ namespace Bridge.WebApp.Pages.Home
         public IJSRuntime JSRuntime { get; set; } = null!;
 
         [Inject]
-        public IndexModel Model { get; set; } = null!;
+        public PlaceListModel Model { get; set; } = null!;
 
 
         protected override async Task OnInitializedAsync()

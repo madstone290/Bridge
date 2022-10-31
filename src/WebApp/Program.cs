@@ -92,8 +92,8 @@ builder.Services.AddScoped<AdminProductApiClient>();
 builder.Services.AddScoped<AdminRestroomApiClient>();
 builder.Services.AddScoped<PlaceApiClient>();
 
-builder.Services.AddScoped<IndexModel>();
-builder.Services.AddScoped<PlaceListModel>();
+builder.Services.AddScoped<Bridge.WebApp.Pages.Home.Models.PlaceListModel>();
+builder.Services.AddScoped<Bridge.WebApp.Pages.Admin.Models.PlaceListModel>();
 
 var app = builder.Build();
 

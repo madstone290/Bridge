@@ -3,6 +3,7 @@ using Bridge.Shared.Extensions;
 using Bridge.WebApp.Api.ApiClients.Admin;
 using Bridge.WebApp.Pages.Admin.Components;
 using Bridge.WebApp.Pages.Admin.Models;
+using Bridge.WebApp.Pages.Admin.Records;
 using Bridge.WebApp.Services;
 using Bridge.WebApp.Shared;
 using Microsoft.AspNetCore.Components;
@@ -27,7 +28,7 @@ namespace Bridge.WebApp.Pages.Admin
         /// <summary>
         /// 장소 목록
         /// </summary>
-        private readonly List<PlaceModel> _places = new();
+        private readonly List<PlaceRecord> _places = new();
 
         /// <summary>
         ///  검색할 장소 타입
@@ -87,7 +88,7 @@ namespace Bridge.WebApp.Pages.Admin
             _pageCount = placeList.TotalPages;
 
             _places.Clear();
-            _places.AddRange(placeList.List.Select(x => PlaceModel.ToPlaceModel(x)));
+            _places.AddRange(placeList.List.Select(x => PlaceRecord.ToPlaceModel(x)));
             StateHasChanged();
         }
 
@@ -151,12 +152,12 @@ namespace Bridge.WebApp.Pages.Admin
             await dialog.Result;
         }
 
-        private void ToggleShowOpeningTime_Click(PlaceModel place)
+        private void ToggleShowOpeningTime_Click(PlaceRecord place)
         {
             place.ShowOpeningTimes = !place.ShowOpeningTimes;
         }
 
-        private async void EditPlace_Click(PlaceModel place)
+        private async void EditPlace_Click(PlaceRecord place)
         {
             if (place.Type == PlaceType.Restroom)
             {
@@ -187,12 +188,12 @@ namespace Bridge.WebApp.Pages.Admin
                 place.DetailAddress = placeDto.Address.DetailAddress;
                 place.Categories = placeDto.Categories;
                 place.ContactNumber = placeDto.ContactNumber;
-                place.OpeningTimes = placeDto.OpeningTimes.Select(x => OpeningTimeModel.Create(x));
+                place.OpeningTimes = placeDto.OpeningTimes.Select(x => OpeningTimeRecord.Create(x));
                 StateHasChanged();
             }
         }
 
-        private async void ShowRestroomModal(PlaceModel place)
+        private async void ShowRestroomModal(PlaceRecord place)
         {
             var parameters = new DialogParameters
             {
@@ -217,23 +218,23 @@ namespace Bridge.WebApp.Pages.Admin
                 place.DetailAddress = placeDto.Address.DetailAddress;
                 place.Categories = placeDto.Categories;
                 place.ContactNumber = placeDto.ContactNumber;
-                place.OpeningTimes = placeDto.OpeningTimes.Select(x => OpeningTimeModel.Create(x));
+                place.OpeningTimes = placeDto.OpeningTimes.Select(x => OpeningTimeRecord.Create(x));
                 StateHasChanged();
             }
         }
 
-        private void ManagePlace_Click(PlaceModel place)
+        private void ManagePlace_Click(PlaceRecord place)
         {
             var uri = PageRoutes.Admin.PlaceView.AddRouteParam("PlaceId", place.Id);
             NavManager.NavigateTo(uri);
         }
 
-        private void ManageProduct_Click(PlaceModel place)
+        private void ManageProduct_Click(PlaceRecord place)
         {
             NavManager.NavigateTo(PageRoutes.Admin.PlaceProductList.AddRouteParam("PlaceId", place.Id));
         }
 
-        private async void ClosePlace_Click(PlaceModel place)
+        private async void ClosePlace_Click(PlaceRecord place)
         {
             var parameters = new DialogParameters
             {

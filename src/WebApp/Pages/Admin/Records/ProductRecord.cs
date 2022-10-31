@@ -1,13 +1,13 @@
 using Bridge.Application.Products.ReadModels;
 using Bridge.Domain.Products.Entities;
 
-namespace Bridge.WebApp.Pages.Admin.Models
+namespace Bridge.WebApp.Pages.Admin.Records
 {
-    public class ProductModel
+    public class ProductRecord
     {
-        public static ProductModel Create(ProductReadModel x)
+        public static ProductRecord Create(ProductReadModel x)
         {
-            return new ProductModel()
+            return new ProductRecord()
             {
                 Id = x.Id,
                 Name = x.Name,

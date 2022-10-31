@@ -1,7 +1,7 @@
 using Bridge.Application.Places.ReadModels;
 using Bridge.Shared.Extensions;
 using Bridge.WebApp.Api.ApiClients.Admin;
-using Bridge.WebApp.Pages.Admin.Models;
+using Bridge.WebApp.Pages.Admin.Records;
 using Microsoft.AspNetCore.Components;
 
 namespace Bridge.WebApp.Pages.Admin
@@ -11,7 +11,7 @@ namespace Bridge.WebApp.Pages.Admin
         /// <summary>
         /// 장소 목록
         /// </summary>
-        private readonly List<ProductModel> _products = new();
+        private readonly List<ProductRecord> _products = new();
 
         private readonly PlaceReadModel _place = new();
 
@@ -42,7 +42,7 @@ namespace Bridge.WebApp.Pages.Admin
         /// </summary>
         /// <param name="product"></param>
         /// <returns></returns>
-        private bool Search(ProductModel product)
+        private bool Search(ProductRecord product)
         {
             if (string.IsNullOrWhiteSpace(_searchString))
                 return true;
@@ -75,7 +75,7 @@ namespace Bridge.WebApp.Pages.Admin
 
             var productListDto = productResult.Data!;
             _products.Clear();
-            _products.AddRange(productListDto.OrderByDescending(x=> x.CreationDateTime).Select(x => ProductModel.Create(x)));
+            _products.AddRange(productListDto.OrderByDescending(x=> x.CreationDateTime).Select(x => ProductRecord.Create(x)));
         }
 
     }

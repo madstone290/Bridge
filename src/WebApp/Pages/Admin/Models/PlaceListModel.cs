@@ -1,6 +1,6 @@
 using Bridge.WebApp.Api;
 using Bridge.WebApp.Api.ApiClients.Admin;
-using Bridge.WebApp.Pages.Admin.DataModels;
+using Bridge.WebApp.Pages.Admin.Records;
 using Bridge.WebApp.Services;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
@@ -21,7 +21,7 @@ namespace Bridge.WebApp.Pages.Admin.Models
 
         private ExcelOptions ExcelOptions { get; } = new ()
         {
-            Columns = typeof(DaeguRestroomExcelDataModel).GetProperties()
+            Columns = typeof(DaeguRestroomExcelRecord).GetProperties()
                 .Select(x => new ExcelOptions.Column(x.Name, x.GetCustomAttribute<DisplayAttribute>()?.Name ?? x.Name))
         };
 
@@ -33,12 +33,12 @@ namespace Bridge.WebApp.Pages.Admin.Models
 
         public async Task DownloadExcel()
         {
-            await _excelService.DownloadAsync<DaeguRestroomExcelDataModel>("화장실 폼.xlsx", new List<DaeguRestroomExcelDataModel>(), ExcelOptions);
+            await _excelService.DownloadAsync<DaeguRestroomExcelRecord>("화장실 폼.xlsx", new List<DaeguRestroomExcelRecord>(), ExcelOptions);
         }
 
         public async Task UploadExcel()
         {
-            var restrooms = await _excelService.UploadAsync<DaeguRestroomExcelDataModel>(ExcelOptions);
+            var restrooms = await _excelService.UploadAsync<DaeguRestroomExcelRecord>(ExcelOptions);
             if (!restrooms.Any())
                 return;
             
