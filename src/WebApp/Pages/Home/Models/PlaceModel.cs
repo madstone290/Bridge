@@ -1,13 +1,13 @@
 using Bridge.Application.Places.ReadModels;
 using Bridge.Domain.Places.Entities;
 
-namespace Bridge.WebApp.Pages.Home.Records
+namespace Bridge.WebApp.Pages.Home.Models
 {
-    public class PlaceRecord
+    public class PlaceModel
     {
-        public static PlaceRecord Create(PlaceReadModel x)
+        public static PlaceModel Create(PlaceReadModel x)
         {
-            return new PlaceRecord()
+            return new PlaceModel()
             {
                 Id = x.Id,
                 Type = x.Type,
@@ -21,7 +21,7 @@ namespace Bridge.WebApp.Pages.Home.Records
                 Northing = x.Location.Northing,
                 Categories = x.Categories.ToList(),
                 ContactNumber = x.ContactNumber,
-                OpeningTimes = x.OpeningTimes.Select(t => new OpeningTimeRecords()
+                OpeningTimes = x.OpeningTimes.Select(t => new OpeningTimeModel()
                 {
                     Day = t.Day,
                     Dayoff = t.Dayoff,
@@ -136,7 +136,7 @@ namespace Bridge.WebApp.Pages.Home.Records
         /// <summary>
         /// 영업시간
         /// </summary>
-        public List<OpeningTimeRecords> OpeningTimes { get; set; } = new();
+        public List<OpeningTimeModel> OpeningTimes { get; set; } = new();
 
         /// <summary>
         /// 영업시간 보여주기 여부

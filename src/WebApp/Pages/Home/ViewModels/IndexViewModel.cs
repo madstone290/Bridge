@@ -1,6 +1,7 @@
+using Bridge.Application.Places.Queries;
+using Bridge.WebApp.Api.ApiClients;
 using Bridge.WebApp.Pages.Home.Components;
 using Bridge.WebApp.Pages.Home.Models;
-using Bridge.WebApp.Pages.Home.Records;
 using Bridge.WebApp.Services.DynamicMap;
 using Bridge.WebApp.Services.DynamicMap.Naver;
 using Bridge.WebApp.Services.GeoLocation;
@@ -15,8 +16,9 @@ namespace Bridge.WebApp.Pages.Home.ViewModels
     public class IndexViewModel : IIndexViewModel
     {
         private readonly string SESSION_ID = Guid.NewGuid().ToString();
+        private readonly List<PlaceModel> _places = new();
 
-        private readonly IndexModel _model;
+        private readonly PlaceApiClient _placeApiClient;
         private readonly ISnackbar _snackbar;
         private readonly IDialogService _dialogService;
         private readonly IDynamicMapService _mapService;
@@ -26,9 +28,9 @@ namespace Bridge.WebApp.Pages.Home.ViewModels
 
         private IJSObjectReference? _jsModule;
 
-        public IndexViewModel(IndexModel model, ISnackbar snackbar, IDialogService dialogService, IDynamicMapService mapService, IHtmlGeoService geoService, IReverseGeocodeService reverseGeocodeService, IJSRuntime jsRuntime)
+        public IndexViewModel(PlaceApiClient placeApiClient, ISnackbar snackbar, IDialogService dialogService, IDynamicMapService mapService, IHtmlGeoService geoService, IReverseGeocodeService reverseGeocodeService, IJSRuntime jsRuntime)
         {
-            _model = model;
+            _placeApiClient = placeApiClient;
             _snackbar = snackbar;
             _dialogService = dialogService;
             _mapService = mapService;
@@ -43,12 +45,10 @@ namespace Bridge.WebApp.Pages.Home.ViewModels
         public LatLon? CurrentLocation { get; set; }
         public string? CurrentAddress { get; set; }
         public object? SelectedListItem { get; set; }
-        public PlaceRecord? SelectedPlace { get; set; }
-        public IEnumerable<PlaceRecord> Places { get; set; } = Enumerable.Empty<PlaceRecord>();
+        public PlaceModel? SelectedPlace { get; set; }
+        public IEnumerable<PlaceModel> Places => _places;
         public EventCallback SearchCompleted { get; set; }
         public IHandleEvent Receiver { get; set; } = null!;
-        public EventCallback PropertyChanged { get; set; }
-        public Action ForceRender { get; set; }
 
         public async Task InitAsync()
         {
@@ -105,24 +105,57 @@ namespace Bridge.WebApp.Pages.Home.ViewModels
                 var place = Places.FirstOrDefault(x => x.Id == id);
                 SelectedPlace = place;
                 SelectedListItem = place;
-                ForceRender();
 
-                //if (_jsModule != null)
-                //    await _jsModule.InvokeVoidAsync("scrollTo", id.ToString());
+                if (_jsModule != null)
+                    await _jsModule.InvokeVoidAsync("scrollTo", id.ToString());
             }
         }
 
         public async Task SearchPlacesAsync()
         {
-            if (string.IsNullOrEmpty(SearchText)) return;
-            if (CurrentLocation == null) return;
+            await LoadPlacesFromServer();
 
-            var result = await _model.SeachPlacesAsync(SearchText, CurrentLocation.Latitude, CurrentLocation.Longitude);
-            if (!result.Success)
-                _snackbar.Add(result.Error, Severity.Error);
+            await CreateMarkers();
+        }
 
-            Places = _model.PlaceList;
-            
+        private async Task LoadPlacesFromServer()
+        {
+            if (string.IsNullOrEmpty(SearchText)) 
+                return;
+            if (CurrentLocation == null) 
+                return;
+
+            var query = new SearchPlacesQuery()
+            {
+                SearchText = SearchText,
+                Latitude = CurrentLocation.Latitude,
+                Longitude = CurrentLocation.Longitude
+            };
+            var apiResult = await _placeApiClient.SearchPlaces(query);
+            if (!apiResult.Success)
+            {
+                _snackbar.Add(apiResult.Error, Severity.Error);
+                return;
+            }
+            if (apiResult.Data == null)
+            {
+                _snackbar.Add("데이터가 없습니다", Severity.Error);
+                return;
+            }
+
+            _places.Clear();
+            _places.AddRange(apiResult.Data.Select(x =>
+            {
+                var place = PlaceModel.Create(x);
+                if (x.ImagePath != null)
+                    place.ImageUrl = new Uri(_placeApiClient.HttpClient.BaseAddress!, x.ImagePath).ToString();
+                return place;
+            })
+            .OrderBy(x => x.Distance));
+        }
+
+        private async Task CreateMarkers()
+        {
             var markers = Places.Select(x => new Marker()
             {
                 Id = x.Id.ToString(),
@@ -134,8 +167,9 @@ namespace Bridge.WebApp.Pages.Home.ViewModels
             await _mapService.AddMarkersAsync(SESSION_ID, markers);
 
             if (SearchCompleted.HasDelegate)
-                _ = SearchCompleted.InvokeAsync();
+                await SearchCompleted.InvokeAsync();
         }
+
 
         public async Task Handle_KeyUp(KeyboardEventArgs args)
         {
@@ -150,7 +184,7 @@ namespace Bridge.WebApp.Pages.Home.ViewModels
         /// </summary>
         /// <param name="place"></param>
         /// <returns></returns>
-        public async Task Handle_PlaceSelected(PlaceRecord place)
+        public async Task Handle_PlaceSelected(PlaceModel place)
         {
             await _mapService.SelectMarkerAsync(SESSION_ID, place.Id.ToString());
             await _mapService.MoveAsync(SESSION_ID, place.Latitude, place.Longitude);

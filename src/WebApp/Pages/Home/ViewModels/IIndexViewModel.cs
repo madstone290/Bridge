@@ -1,4 +1,4 @@
-using Bridge.WebApp.Pages.Home.Records;
+using Bridge.WebApp.Pages.Home.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 
@@ -6,9 +6,7 @@ namespace Bridge.WebApp.Pages.Home.ViewModels
 {
     public interface IIndexViewModel : IAsyncDisposable
     {
-        IHandleEvent Receiver { get; set; }
-
-        Action ForceRender { get; set; }
+        IHandleEvent Receiver { set; }
 
         string MapElementId { get; }
 
@@ -22,11 +20,11 @@ namespace Bridge.WebApp.Pages.Home.ViewModels
 
         object? SelectedListItem { get; set; }
 
-        PlaceRecord? SelectedPlace { get; set; }
+        PlaceModel? SelectedPlace { get; set; }
 
-        IEnumerable<PlaceRecord> Places { get; set; }
+        IEnumerable<PlaceModel> Places { get; }
 
-        EventCallback SearchCompleted { get; set; }
+        EventCallback SearchCompleted { set; }
 
         Task InitAsync();
 
@@ -36,7 +34,7 @@ namespace Bridge.WebApp.Pages.Home.ViewModels
 
         Task Handle_KeyUp(KeyboardEventArgs args);
 
-        Task Handle_PlaceSelected(PlaceRecord place);
+        Task Handle_PlaceSelected(PlaceModel place);
 
     }
 }

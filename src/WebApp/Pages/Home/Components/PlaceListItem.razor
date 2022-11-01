@@ -1,4 +1,4 @@
-@using Bridge.WebApp.Pages.Home.Records
+@using Bridge.WebApp.Pages.Home.Models
 
 <div class="place-list-item">
     <div>
@@ -30,5 +30,5 @@
     public bool ShowExpansionIcon{ get; set; }
 
     [Parameter]
-    public PlaceRecord Place { get; set; } = null!;
+    public PlaceModel Place { get; set; } = null!;
 }

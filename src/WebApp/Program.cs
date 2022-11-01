@@ -94,7 +94,6 @@ builder.Services.AddScoped<AdminRestroomApiClient>();
 builder.Services.AddScoped<PlaceApiClient>();
 
 builder.Services.AddScoped<IIndexViewModel, IndexViewModel>();
-builder.Services.AddScoped<IndexModel>();
 builder.Services.AddScoped<PlaceListModel>();
 
 var app = builder.Build();
