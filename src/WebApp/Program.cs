@@ -4,8 +4,7 @@ using Bridge.Shared.Constants;
 using Bridge.WebApp.Api.ApiClients;
 using Bridge.WebApp.Api.ApiClients.Admin;
 using Bridge.WebApp.Api.ApiClients.Identity;
-using Bridge.WebApp.Pages.Admin.Models;
-using Bridge.WebApp.Pages.Home.Models;
+using Bridge.WebApp.Pages.Admin.ViewModels;
 using Bridge.WebApp.Pages.Home.ViewModels;
 using Bridge.WebApp.Services;
 using Bridge.WebApp.Services.DynamicMap;
@@ -94,7 +93,7 @@ builder.Services.AddScoped<AdminRestroomApiClient>();
 builder.Services.AddScoped<PlaceApiClient>();
 
 builder.Services.AddScoped<IIndexViewModel, IndexViewModel>();
-builder.Services.AddScoped<PlaceListModel>();
+builder.Services.AddScoped<IPlaceListViewModel, PlaceListViewModel>();
 
 var app = builder.Build();
 

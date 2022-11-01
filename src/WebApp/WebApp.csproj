@@ -1,39 +1,30 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-	<RootNamespace>Bridge.WebApp</RootNamespace>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <RootNamespace>Bridge.WebApp</RootNamespace>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <Content Remove="Secrets\naver_api_config.json" />
-  </ItemGroup>
 
-  <ItemGroup>
-    <None Include="Secrets\naver_api_config.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Blazored.LocalStorage" Version="4.2.0" />
+        <PackageReference Include="ClosedXML" Version="0.97.0" />
+        <PackageReference Include="FluentValidation" Version="11.2.2" />
+        <PackageReference Include="MudBlazor" Version="6.0.15" />
+    </ItemGroup>
+    
+    <ItemGroup>
+        <ProjectReference Include="..\Api\Api.csproj" />
+        <ProjectReference Include="..\Application\Application.csproj" />
+        <ProjectReference Include="..\Shared\Shared.csproj" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Blazored.LocalStorage" Version="4.2.0" />
-    <PackageReference Include="ClosedXML" Version="0.97.0" />
-    <PackageReference Include="FluentValidation" Version="11.2.2" />
-    <PackageReference Include="MudBlazor" Version="6.0.15" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Api\Api.csproj" />
-    <ProjectReference Include="..\Application\Application.csproj" />
-    <ProjectReference Include="..\Shared\Shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="ExpandedXml">
-      <HintPath>..\ExpandedXml.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
+    <ItemGroup>
+        <Reference Include="ExpandedXml">
+            <HintPath>..\ExpandedXml.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+    
 </Project>

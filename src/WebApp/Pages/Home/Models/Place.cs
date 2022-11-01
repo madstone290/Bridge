@@ -21,7 +21,7 @@ namespace Bridge.WebApp.Pages.Home.Models
                 Northing = x.Location.Northing,
                 Categories = x.Categories.ToList(),
                 ContactNumber = x.ContactNumber,
-                OpeningTimes = x.OpeningTimes.Select(t => new OpeningTimeModel()
+                OpeningTimes = x.OpeningTimes.Select(t => new OpeningTime()
                 {
                     Day = t.Day,
                     Dayoff = t.Dayoff,
@@ -136,7 +136,7 @@ namespace Bridge.WebApp.Pages.Home.Models
         /// <summary>
         /// 영업시간
         /// </summary>
-        public List<OpeningTimeModel> OpeningTimes { get; set; } = new();
+        public List<OpeningTime> OpeningTimes { get; set; } = new();
 
         /// <summary>
         /// 영업시간 보여주기 여부
