@@ -20,9 +20,9 @@ namespace Bridge.WebApp.Pages.Home.ViewModels
 
         object? SelectedListItem { get; set; }
 
-        PlaceModel? SelectedPlace { get; set; }
+        Place? SelectedPlace { get; set; }
 
-        IEnumerable<PlaceModel> Places { get; }
+        IEnumerable<Place> Places { get; }
 
         EventCallback SearchCompleted { set; }
 
@@ -34,7 +34,7 @@ namespace Bridge.WebApp.Pages.Home.ViewModels
 
         Task Handle_KeyUp(KeyboardEventArgs args);
 
-        Task Handle_PlaceSelected(PlaceModel place);
+        Task Handle_PlaceSelected(Place place);
 
     }
 }

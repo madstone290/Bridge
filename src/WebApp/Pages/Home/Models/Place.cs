@@ -3,11 +3,11 @@ using Bridge.Domain.Places.Entities;
 
 namespace Bridge.WebApp.Pages.Home.Models
 {
-    public class PlaceModel
+    public class Place
     {
-        public static PlaceModel Create(PlaceReadModel x)
+        public static Place Create(PlaceReadModel x)
         {
-            return new PlaceModel()
+            return new Place()
             {
                 Id = x.Id,
                 Type = x.Type,

@@ -16,7 +16,7 @@ namespace Bridge.WebApp.Pages.Home.ViewModels
     public class IndexViewModel : IIndexViewModel
     {
         private readonly string SESSION_ID = Guid.NewGuid().ToString();
-        private readonly List<PlaceModel> _places = new();
+        private readonly List<Place> _places = new();
 
         private readonly PlaceApiClient _placeApiClient;
         private readonly ISnackbar _snackbar;
@@ -45,14 +45,14 @@ namespace Bridge.WebApp.Pages.Home.ViewModels
         public LatLon? CurrentLocation { get; set; }
         public string? CurrentAddress { get; set; }
         public object? SelectedListItem { get; set; }
-        public PlaceModel? SelectedPlace { get; set; }
-        public IEnumerable<PlaceModel> Places => _places;
+        public Place? SelectedPlace { get; set; }
+        public IEnumerable<Place> Places => _places;
         public EventCallback SearchCompleted { get; set; }
         public IHandleEvent Receiver { get; set; } = null!;
 
         public async Task InitAsync()
         {
-            _jsModule = await _jsRuntime.InvokeAsync<IJSObjectReference>("import", "./Pages/Home/Index.razor.js");
+            _jsModule = await _jsRuntime.InvokeAsync<IJSObjectReference>("import", "./Pages/Home/Views/Index.razor.js");
 
             await GetCurrentLocationAsync();
 
@@ -146,7 +146,7 @@ namespace Bridge.WebApp.Pages.Home.ViewModels
             _places.Clear();
             _places.AddRange(apiResult.Data.Select(x =>
             {
-                var place = PlaceModel.Create(x);
+                var place = Place.Create(x);
                 if (x.ImagePath != null)
                     place.ImageUrl = new Uri(_placeApiClient.HttpClient.BaseAddress!, x.ImagePath).ToString();
                 return place;
@@ -184,7 +184,7 @@ namespace Bridge.WebApp.Pages.Home.ViewModels
         /// </summary>
         /// <param name="place"></param>
         /// <returns></returns>
-        public async Task Handle_PlaceSelected(PlaceModel place)
+        public async Task Handle_PlaceSelected(Place place)
         {
             await _mapService.SelectMarkerAsync(SESSION_ID, place.Id.ToString());
             await _mapService.MoveAsync(SESSION_ID, place.Latitude, place.Longitude);
