@@ -1,5 +1,7 @@
+@using Bridge.WebApp.Pages.Home.ViewModels
 @attribute [Route(PageRoutes.Home)]
 @attribute [AllowAnonymous]
+@inject IIndexViewModel VM
 
 <PageTitle>플차</PageTitle>
 
@@ -8,11 +10,9 @@
         <div class="address-line">
             <MudButton Style="flex: 1 1 auto;"
                        Color="Color.Info"
-                       OnClick="SelectLocation_ClickAsync">
-                @_centerAddress
+                       OnClick="VM.ShowLocationSelectionAsync">
+                @VM.CurrentAddress
             </MudButton>
-            <MudIconButton OnClick="Settings_ClickAsync"
-                           Icon="@Icons.Material.Filled.Settings" />
         </div>
 
         <div style="display:flex; flex-direction:row;">
@@ -21,14 +21,14 @@
                     <MudTextField @ref="_searchField"
                                   Placeholder="검색어를 입력하세요"
                                   T="string"
-                                  @bind-Value="_searchText"
+                                  @bind-Value="VM.SearchText"
                                   Adornment="Adornment.Start"
                                   AdornmentIcon="@Icons.Material.Filled.Search"
                                   Variant="Variant.Outlined"
-                                  OnKeyUp="AutoComplete_OnKeyUpAsync" />
+                                  OnKeyUp="VM.Handle_KeyUp" />
                 </div>
 
-                @if (_searched && !_placeList.Any())
+                @if (VM.Searched && !VM.Places.Any())
                 {
                     <div style="padding:10px;">
                         <MudText>검색결과가 없습니다</MudText>
@@ -36,19 +36,33 @@
                 }
                 else
                 {
-                    <MudList id="mudlist" @bind-SelectedValue="_selectedPlace" Clickable="true" Style="overflow-y:scroll; height:600px;">
-                        @foreach (var place in _placeList)
+                    <MudList id="mudlist" @bind-SelectedValue="VM.SelectedListItem" Clickable="true" Style="overflow-y:scroll; height:600px;">
+                        @foreach (var place in VM.Places)
                         {
-                            <MudListItem id="@place.Id" Class="list-item" Value="place" OnClick="@(() => ListItem_Click(place))">
+                            <MudListItem id="@place.Id" Class="list-item" Value="place" OnClick="@(()=> VM.Handle_PlaceSelected(place))">
                                 <Bridge.WebApp.Pages.Home.Components.PlaceListItem Place="place"/>
                             </MudListItem>
                         }
                     </MudList>
                 }
             </div>
-            <div id="@MapId" style="width:100%; height:600px; margin:4px;">
+            <div id="@VM.MapElementId" style="width:100%; height:600px; margin:4px;">
             </div>
         </div>
 
     </MudContainer>
 </div>
+@code {
+    private MudTextField<string>? _searchField;
+
+    protected override async Task OnInitializedAsync()
+    {
+        VM.ForceRender = () => StateHasChanged();
+        VM.Receiver = this;
+        VM.SearchCompleted = new EventCallback(this, () =>
+        {
+            _searchField?.BlurAsync();
+        });
+        await VM.InitAsync();
+    }
+}

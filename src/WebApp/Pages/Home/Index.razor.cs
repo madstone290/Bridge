@@ -15,7 +15,7 @@ using MudBlazor;
 
 namespace Bridge.WebApp.Pages.Home
 {
-    public partial class Index : IAsyncDisposable
+    public partial class Index1 : ComponentBase, IAsyncDisposable
     {
         private const string MapId = "map";
         private readonly string _mapSessionId = Guid.NewGuid().ToString();
@@ -69,7 +69,7 @@ namespace Bridge.WebApp.Pages.Home
         public IJSRuntime JSRuntime { get; set; } = null!;
 
         [Inject]
-        public PlaceListModel Model { get; set; } = null!;
+        public IndexModel Model { get; set; } = null!;
 
 
         protected override async Task OnInitializedAsync()
@@ -84,9 +84,8 @@ namespace Bridge.WebApp.Pages.Home
             }
             else
             {
-                Snackbar.Add(geoResult.Error, Severity.Error);
+                //Snackbar.Add(geoResult.Error, Severity.Error);
             }
-
             var mapOptions = new NaverMapService.MapOptions()
             {
                 MapId = MapId,
@@ -134,8 +133,8 @@ namespace Bridge.WebApp.Pages.Home
                 return;
             
             var result = await Model.SeachPlacesAsync(_searchText, _centerLocation.Latitude, _centerLocation.Longitude);
-            if (!result.Success)
-                Snackbar.Add(result.Error, Severity.Error);
+            //if (!result.Success)
+            //    Snackbar.Add(result.Error, Severity.Error);
 
             _placeList.Clear();
             _placeList.AddRange(Model.PlaceList);
@@ -163,14 +162,14 @@ namespace Bridge.WebApp.Pages.Home
             parameters.Add(nameof(SearchSettingsDialog.Distance), _searchDistance);
 
             var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
-            var dialog = DialogService.Show<SearchSettingsDialog>(string.Empty, parameters, options);
-            var result = await dialog.Result;
+            //var dialog = DialogService.Show<SearchSettingsDialog>(string.Empty, parameters, options);
+            //var result = await dialog.Result;
             
-            if (!result.Cancelled)
-            {
-                var resultData = (dynamic)result.Data;
-                _searchDistance = resultData.Distance;
-            }
+            //if (!result.Cancelled)
+            //{
+            //    var resultData = (dynamic)result.Data;
+            //    _searchDistance = resultData.Distance;
+            //}
         }
 
         private async Task SelectLocation_ClickAsync()
@@ -186,14 +185,14 @@ namespace Bridge.WebApp.Pages.Home
                 { nameof (LocationSelectionDialog.Latitude), _centerLocation?.Latitude },
                 { nameof (LocationSelectionDialog.Address), _centerAddress }
             };
-            var dialog = DialogService.Show<LocationSelectionDialog>(null, options: dialogOptions, parameters: dialogParameters);
-            var result = await dialog.Result;
-            if (!result.Cancelled)
-            {
-                var data = (dynamic)result.Data;
-                _centerLocation = new LatLon(data.Latitude, data.Longitude);
-                _centerAddress = data.Address;
-            }
+            //var dialog = DialogService.Show<LocationSelectionDialog>(null, options: dialogOptions, parameters: dialogParameters);
+            //var result = await dialog.Result;
+            //if (!result.Cancelled)
+            //{
+            //    var data = (dynamic)result.Data;
+            //    _centerLocation = new LatLon(data.Latitude, data.Longitude);
+            //    _centerAddress = data.Address;
+            //}
         }
 
         private void ListItem_Click(PlaceRecord place)

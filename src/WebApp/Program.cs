@@ -6,6 +6,7 @@ using Bridge.WebApp.Api.ApiClients.Admin;
 using Bridge.WebApp.Api.ApiClients.Identity;
 using Bridge.WebApp.Pages.Admin.Models;
 using Bridge.WebApp.Pages.Home.Models;
+using Bridge.WebApp.Pages.Home.ViewModels;
 using Bridge.WebApp.Services;
 using Bridge.WebApp.Services.DynamicMap;
 using Bridge.WebApp.Services.DynamicMap.Naver;
@@ -92,8 +93,9 @@ builder.Services.AddScoped<AdminProductApiClient>();
 builder.Services.AddScoped<AdminRestroomApiClient>();
 builder.Services.AddScoped<PlaceApiClient>();
 
-builder.Services.AddScoped<Bridge.WebApp.Pages.Home.Models.PlaceListModel>();
-builder.Services.AddScoped<Bridge.WebApp.Pages.Admin.Models.PlaceListModel>();
+builder.Services.AddScoped<IIndexViewModel, IndexViewModel>();
+builder.Services.AddScoped<IndexModel>();
+builder.Services.AddScoped<PlaceListModel>();
 
 var app = builder.Build();
 

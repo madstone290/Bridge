@@ -5,11 +5,11 @@ using Bridge.WebApp.Pages.Home.Records;
 
 namespace Bridge.WebApp.Pages.Home.Models
 {
-    public class PlaceListModel
+    public class IndexModel
     {
         private readonly PlaceApiClient _placeApiClient;
 
-        public PlaceListModel(PlaceApiClient placeApiClient)
+        public IndexModel(PlaceApiClient placeApiClient)
         {
             _placeApiClient = placeApiClient;
         }
