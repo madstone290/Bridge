@@ -82,7 +82,7 @@ const _markerFunctions = {
  * @param {boolean} showMyLocation 내 위치 표시여부
  */
 export function init(sessionId, dotNetRef, mapId, centerX, centerY, showMyLocation) {
-    console.log(sessionId);
+    console.log("new session", sessionId);
     _dotNetRefMap.set(sessionId, dotNetRef);
 
     let mapOptions = {

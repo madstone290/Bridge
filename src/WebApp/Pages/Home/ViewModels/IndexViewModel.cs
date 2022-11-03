@@ -2,13 +2,13 @@ using Bridge.Application.Places.Queries;
 using Bridge.WebApp.Api.ApiClients;
 using Bridge.WebApp.Pages.Home.Components;
 using Bridge.WebApp.Pages.Home.Models;
+using Bridge.WebApp.Services;
 using Bridge.WebApp.Services.DynamicMap;
 using Bridge.WebApp.Services.DynamicMap.Naver;
 using Bridge.WebApp.Services.GeoLocation;
 using Bridge.WebApp.Services.ReverseGeocode;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-using Microsoft.JSInterop;
 using MudBlazor;
 
 namespace Bridge.WebApp.Pages.Home.ViewModels
@@ -24,11 +24,10 @@ namespace Bridge.WebApp.Pages.Home.ViewModels
         private readonly IDynamicMapService _mapService;
         private readonly IHtmlGeoService _geoService;
         private readonly IReverseGeocodeService _reverseGeocodeService;
-        private readonly IJSRuntime _jsRuntime;
+        private readonly ICommonJsService _commonJsService;
 
-        private IJSObjectReference? _jsModule;
 
-        public IndexViewModel(PlaceApiClient placeApiClient, ISnackbar snackbar, IDialogService dialogService, IDynamicMapService mapService, IHtmlGeoService geoService, IReverseGeocodeService reverseGeocodeService, IJSRuntime jsRuntime)
+        public IndexViewModel(PlaceApiClient placeApiClient, ISnackbar snackbar, IDialogService dialogService, IDynamicMapService mapService, IHtmlGeoService geoService, IReverseGeocodeService reverseGeocodeService, ICommonJsService commonJsService)
         {
             _placeApiClient = placeApiClient;
             _snackbar = snackbar;
@@ -36,10 +35,11 @@ namespace Bridge.WebApp.Pages.Home.ViewModels
             _mapService = mapService;
             _geoService = geoService;
             _reverseGeocodeService = reverseGeocodeService;
-            _jsRuntime = jsRuntime;
+            _commonJsService = commonJsService;
         }
 
         public string MapElementId { get; } = "MapId";
+        public string ListElementId { get; } = "MudList";
         public bool Searched { get; private set; }
         public string SearchText { get; set; } = string.Empty;
         public LatLon? CurrentLocation { get; set; }
@@ -52,10 +52,8 @@ namespace Bridge.WebApp.Pages.Home.ViewModels
 
         public async Task InitAsync()
         {
-            _jsModule = await _jsRuntime.InvokeAsync<IJSObjectReference>("import", "./Pages/Home/Views/Index.razor.js");
-
+            await _commonJsService.Initialzie();
             await GetCurrentLocationAsync();
-
             await Task.WhenAll(GetCurrentAddressAsync(), InitDynamicMapAsync());
         }
 
@@ -106,8 +104,7 @@ namespace Bridge.WebApp.Pages.Home.ViewModels
                 SelectedPlace = place;
                 SelectedListItem = place;
 
-                if (_jsModule != null)
-                    await _jsModule.InvokeVoidAsync("scrollTo", id.ToString());
+                await _commonJsService.ScrollAsync(ListElementId, id.ToString());
             }
         }
 
@@ -120,9 +117,9 @@ namespace Bridge.WebApp.Pages.Home.ViewModels
 
         private async Task LoadPlacesFromServer()
         {
-            if (string.IsNullOrEmpty(SearchText)) 
+            if (string.IsNullOrEmpty(SearchText))
                 return;
-            if (CurrentLocation == null) 
+            if (CurrentLocation == null)
                 return;
 
             var query = new SearchPlacesQuery()
@@ -213,11 +210,9 @@ namespace Bridge.WebApp.Pages.Home.ViewModels
             }
         }
 
-        public async ValueTask DisposeAsync()
+        async ValueTask IAsyncDisposable.DisposeAsync()
         {
             await _mapService.CloseAsync(SESSION_ID);
         }
-
-
     }
 }

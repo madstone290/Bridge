@@ -73,6 +73,7 @@ builder.Services.AddSingleton<HttpClient>((sp) =>
 });
 
 builder.Services.AddBlazoredLocalStorage();
+builder.Services.AddScoped<ICommonJsService, CommonJsService>();
 builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<IExcelService, ExcelService>();
 builder.Services.AddScoped<IApiResultValidationService, SnackbarApiResultValidationService>();
@@ -92,8 +93,8 @@ builder.Services.AddScoped<AdminProductApiClient>();
 builder.Services.AddScoped<AdminRestroomApiClient>();
 builder.Services.AddScoped<PlaceApiClient>();
 
-builder.Services.AddScoped<IIndexViewModel, IndexViewModel>();
-builder.Services.AddScoped<IPlaceListViewModel, PlaceListViewModel>();
+builder.Services.AddTransient<IIndexViewModel, IndexViewModel>();
+builder.Services.AddTransient<IPlaceListViewModel, PlaceListViewModel>();
 
 var app = builder.Build();
 

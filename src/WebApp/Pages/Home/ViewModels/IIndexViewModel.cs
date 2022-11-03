@@ -10,6 +10,8 @@ namespace Bridge.WebApp.Pages.Home.ViewModels
 
         string MapElementId { get; }
 
+        string ListElementId { get; }
+
         bool Searched { get; }
 
         string SearchText { get; set; }

@@ -2,6 +2,7 @@
 @attribute [Route(PageRoutes.Home)]
 @attribute [AllowAnonymous]
 @inject IIndexViewModel VM
+@implements IAsyncDisposable
 
 <PageTitle>플차</PageTitle>
 
@@ -36,7 +37,7 @@
                 }
                 else
                 {
-                    <MudList id="mudlist" @bind-SelectedValue="VM.SelectedListItem" Clickable="true" Style="overflow-y:scroll; height:600px;">
+                    <MudList id="@VM.ListElementId" @bind-SelectedValue="VM.SelectedListItem" Clickable="true" Style="overflow-y:scroll; height:600px;">
                         @foreach (var place in VM.Places)
                         {
                             <MudListItem id="@place.Id" Class="list-item" Value="place" OnClick="@(()=> VM.Handle_PlaceSelected(place))">
@@ -63,5 +64,11 @@
             _searchField?.BlurAsync();
         });
         await VM.InitAsync();
+    }
+
+
+    async ValueTask IAsyncDisposable.DisposeAsync()
+    {
+        await VM.DisposeAsync();
     }
 }
