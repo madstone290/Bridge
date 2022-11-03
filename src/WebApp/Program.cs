@@ -6,6 +6,7 @@ using Bridge.WebApp.Api.ApiClients.Admin;
 using Bridge.WebApp.Api.ApiClients.Identity;
 using Bridge.WebApp.Pages.Admin.ViewModels;
 using Bridge.WebApp.Pages.Admin.ViewModels.Implement;
+using Bridge.WebApp.Pages.Admin.Views.Components;
 using Bridge.WebApp.Pages.Home.ViewModels;
 using Bridge.WebApp.Services;
 using Bridge.WebApp.Services.DynamicMap;
@@ -100,7 +101,9 @@ builder.Services.AddTransient<IPlaceListViewModel, PlaceListViewModel>();
 builder.Services.AddTransient<IPlaceViewModel, PlaceViewModel>();
 builder.Services.AddTransient<IPlaceProductListViewModel, PlaceProductListViewModel>();
 builder.Services.AddTransient<IOpeningTimeViewModel, OpeningTimeViewModel>();
-
+builder.Services.AddTransient<IRestroomFormViewModel, RestroomFormViewModel>();
+builder.Services.AddTransient<IProductFormViewModel, ProductFormViewModel>();
+builder.Services.AddTransient<IPlaceFormViewModel, PlaceFormViewModel>();
 
 var app = builder.Build();
 

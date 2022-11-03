@@ -1,6 +1,6 @@
 ﻿using Bridge.WebApp.Api.ApiClients.Admin;
-using Bridge.WebApp.Pages.Admin.Components;
 using Bridge.WebApp.Pages.Admin.Models;
+using Bridge.WebApp.Pages.Admin.Views.Components;
 using Bridge.WebApp.Services;
 using Bridge.WebApp.Shared;
 using Microsoft.AspNetCore.Components.Forms;
@@ -236,10 +236,10 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
         public async Task OnCreateProductClick()
         {
             var parameters = new DialogParameters();
-            parameters.Add(nameof(ProductModalForm.PlaceId), _place.Id);
+            parameters.Add(nameof(ProductFormView.PlaceId), _place.Id);
 
             var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
-            var dialog = _dialogService.Show<ProductModalForm>(string.Empty, parameters, options);
+            var dialog = _dialogService.Show<ProductFormView>(string.Empty, parameters, options);
             var result = await dialog.Result;
 
             if (!result.Cancelled)
@@ -251,11 +251,11 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
         public async Task OnUpdateProductClick(ProductModel product)
         {
             var parameters = new DialogParameters();
-            parameters.Add(nameof(ProductModalForm.FormMode), FormMode.Update);
-            parameters.Add(nameof(ProductModalForm.ProductId), product.Id);
+            parameters.Add(nameof(ProductFormView.FormMode), FormMode.Update);
+            parameters.Add(nameof(ProductFormView.ProductId), product.Id);
 
             var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
-            var dialog = _dialogService.Show<ProductModalForm>(string.Empty, parameters, options);
+            var dialog = _dialogService.Show<ProductFormView>(string.Empty, parameters, options);
             var result = await dialog.Result;
 
             if (!result.Cancelled)

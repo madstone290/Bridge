@@ -61,6 +61,11 @@ namespace Bridge.WebApp.Pages.Admin.Models
         public IEnumerable<ProductCategory> Categories { get; set; } = Enumerable.Empty<ProductCategory>();
 
         /// <summary>
+        /// 제품 이미지 소스
+        /// </summary>
+        public string? ImageSrc { get; set; }
+
+        /// <summary>
         /// 제품유형 문자열
         /// </summary>
         public string TypeString => Type.ToString();

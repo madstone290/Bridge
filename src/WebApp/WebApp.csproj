@@ -26,9 +26,5 @@
             <HintPath>..\ExpandedXml.dll</HintPath>
         </Reference>
     </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Pages\Admin\Records\" />
-    </ItemGroup>
     
 </Project>

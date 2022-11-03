@@ -1,13 +1,14 @@
 @using Bridge.Domain.Products.Entities
+@using Bridge.WebApp.Pages.Admin.ViewModels
+@inject IProductFormViewModel VM
+
 <MudDialog>
     <DialogContent>
-        <MudForm @ref="_form"
-                 @bind-IsValid="_isFormValid"
-                 Model="_product"
+        <MudForm @bind-IsValid="VM.IsProductValid"
                  ValidationDelay="0">
             <MudGrid Spacing="1">
                 <MudItem xs="12">
-                    <MudImage Src="@_imgSrc" Width="200" Height="200" ObjectPosition="ObjectPosition.Center" />
+                    <MudImage Src="@VM.Product.ImageSrc" Width="200" Height="200" ObjectPosition="ObjectPosition.Center" />
                 </MudItem>
                 <MudItem xs="12">
                     <MudButton HtmlTag="label"
@@ -16,12 +17,12 @@
                                FullWidth="true"
                                StartIcon="@Icons.Filled.CloudUpload"
                                for="fileInput">이미지</MudButton>
-                    <InputFile id="fileInput" hidden OnChange="UploadFiles" accept=".jpg, .png" />
+                    <InputFile id="fileInput" hidden OnChange="VM.OnImageFileChanged" accept=".jpg, .png" />
                 </MudItem>
                 <MudItem xs="12">
-                    <AdvSelect @bind-Value="_product.Type"
+                    <AdvSelect @bind-Value="VM.Product.Type"
                                T="ProductType"
-                               Validation="@(_validator.PropertyValidation(x=> x.Type))"
+                               Validation="@(VM.GetValidation(x=> x.Type))"
                                Label="제품타입"
                                AutoFocus="true">
                         @{
@@ -33,21 +34,21 @@
                     </AdvSelect>
                 </MudItem>
                 <MudItem xs="12">
-                    <AdvTextField @bind-Value="_product.Name"
-                                  Validation="@(_validator.PropertyValidation(x=> x.Name))"
+                    <AdvTextField @bind-Value="VM.Product.Name"
+                                  Validation="@VM.GetValidation(x=> x.Name)"
                                   Label="제품명" />
                 </MudItem>
                 <MudItem xs="12">
-                    <AdvTextField @bind-Value="_product.Price"
+                    <AdvTextField @bind-Value="VM.Product.Price"
                                   Label="가격"
-                                  Validation="@(_validator.PropertyValidation(x=> x.Price))" />
+                                  Validation="@VM.GetValidation(x=> x.Price)" />
                 </MudItem>
                 <MudItem xs="12">
-                    <AdvSelect @bind-SelectedValues="_product.Categories"
+                    <AdvSelect @bind-SelectedValues="VM.Product.Categories"
                                T="ProductCategory"
                                MultiSelection="true"
                                Label="카테고리"
-                               Validation="@(_validator.PropertyValidation(x=> x.Categories))">
+                               Validation="@(VM.GetValidation(x=> x.Categories))">
                         @foreach (var category in Enum.GetValues<ProductCategory>())
                         {
                             <MudSelectItem Value="category"></MudSelectItem>
@@ -60,13 +61,45 @@
     <DialogActions>
         <MudButton Variant="Variant.Filled"
                    Color="Color.Error"
-                   OnClick="Cancel_Click">
+                   OnClick="VM.OnCancelClick">
             취소
         </MudButton>
         <MudButton Variant="Variant.Filled"
                    Color="Color.Primary"
-                   OnClick="Save_Click">
+                   OnClick="VM.OnSaveClick">
             저장
         </MudButton>
     </DialogActions>
 </MudDialog>
+
+@code {
+    /// <summary>
+    /// 폼 모드
+    /// </summary>
+    [Parameter]
+    public FormMode FormMode { get; set; }
+
+    /// <summary>
+    /// 제품 아이디
+    /// </summary>
+    [Parameter]
+    public long ProductId { get; set; }
+
+    /// <summary>
+    /// 장소 아이디
+    /// </summary>
+    [Parameter]
+    public long PlaceId { get; set; }
+
+    [CascadingParameter]
+    public MudDialogInstance MudDialog { get; set; } = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        VM.ProductId = ProductId;
+        VM.PlaceId = PlaceId;
+        VM.MudDialog = MudDialog;
+        VM.FormMode = FormMode;
+        await VM.Initialize();
+    }
+}

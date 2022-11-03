@@ -1,8 +1,8 @@
 using Bridge.Domain.Places.Entities;
 using Bridge.Shared.Extensions;
 using Bridge.WebApp.Api.ApiClients.Admin;
-using Bridge.WebApp.Pages.Admin.Components;
 using Bridge.WebApp.Pages.Admin.Models;
+using Bridge.WebApp.Pages.Admin.Views.Components;
 using Bridge.WebApp.Services;
 using Bridge.WebApp.Shared;
 using Microsoft.AspNetCore.Components;
@@ -107,11 +107,11 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
         {
             var parameters = new DialogParameters
             {
-                { nameof(PlaceModalForm.FormMode), FormMode.Create }
+                { nameof(PlaceFormView.FormMode), FormMode.Create }
             };
 
             var options = new DialogOptions { MaxWidth = MaxWidth.Large };
-            var dialog = _dialogService.Show<PlaceModalForm>(string.Empty, parameters, options);
+            var dialog = _dialogService.Show<PlaceFormView>(string.Empty, parameters, options);
             var dialogResult = await dialog.Result;
             if (!dialogResult.Cancelled)
             {
@@ -123,11 +123,11 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
         {
             var parameters = new DialogParameters
             {
-                { nameof(RestroomModalForm.FormMode), FormMode.Create }
+                { nameof(RestroomFormView.FormMode), FormMode.Create }
             };
 
             var options = new DialogOptions { MaxWidth = MaxWidth.Large };
-            var dialog = _dialogService.Show<RestroomModalForm>(string.Empty, parameters, options);
+            var dialog = _dialogService.Show<RestroomFormView>(string.Empty, parameters, options);
             var dialogResult = await dialog.Result;
             if (!dialogResult.Cancelled)
             {
@@ -219,12 +219,12 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
 
             var parameters = new DialogParameters
             {
-                { nameof(PlaceModalForm.FormMode), FormMode.Update },
-                { nameof(PlaceModalForm.PlaceId), place.Id }
+                { nameof(PlaceFormView.FormMode), FormMode.Update },
+                { nameof(PlaceFormView.PlaceId), place.Id }
             };
 
             var options = new DialogOptions { MaxWidth = MaxWidth.Large };
-            var dialog = _dialogService.Show<PlaceModalForm>(string.Empty, parameters, options);
+            var dialog = _dialogService.Show<PlaceFormView>(string.Empty, parameters, options);
             var dialogResult = await dialog.Result;
             if (!dialogResult.Cancelled)
             {
@@ -248,12 +248,12 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
         {
             var parameters = new DialogParameters
                 {
-                    { nameof(RestroomModalForm.FormMode), FormMode.Update },
-                    { nameof(RestroomModalForm.PlaceId), place.Id }
+                    { nameof(RestroomFormView.FormMode), FormMode.Update },
+                    { nameof(RestroomFormView.PlaceId), place.Id }
                 };
 
             var options = new DialogOptions { MaxWidth = MaxWidth.Large };
-            var dialog = _dialogService.Show<RestroomModalForm>(string.Empty, parameters, options);
+            var dialog = _dialogService.Show<RestroomFormView>(string.Empty, parameters, options);
             var dialogResult = await dialog.Result;
             if (!dialogResult.Cancelled)
             {

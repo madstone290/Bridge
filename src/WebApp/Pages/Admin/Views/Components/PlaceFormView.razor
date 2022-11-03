@@ -1,9 +1,11 @@
 @using Bridge.Domain.Places.Entities
+@using Bridge.WebApp.Pages.Admin.ViewModels
+@inject IPlaceFormViewModel VM
+
 <MudDialog>
     <DialogContent>
         <div Style="max-height:750px; padding:10px; overflow-y: scroll">
-            <MudForm @ref="_form"
-                     Model="_place"
+            <MudForm @bind-IsValid="VM.IsPlaceValid"
                      ValidationDelay="0">
                 <div class="container">
                     <MudText Typo="Typo.h5">기본 정보</MudText>
@@ -11,7 +13,7 @@
                     <MudDivider Style="margin-bottom:4px;"/>
                     <MudGrid Spacing="1">
                         <MudItem xs="12">
-                            <MudImage Src="@_place.ImageUrl" Width="200" Height="200" />
+                            <MudImage Src="@VM.Place.ImageUrl" Width="200" Height="200" />
                         </MudItem>
                         <MudItem xs="12">
                             <MudButton HtmlTag="label"
@@ -20,12 +22,12 @@
                                        FullWidth="true"
                                        StartIcon="@Icons.Filled.CloudUpload"
                                        for="fileInput">이미지</MudButton>
-                            <InputFile id="fileInput" hidden OnChange="UploadFiles" accept=".jpg, .png" />
+                            <InputFile id="fileInput" hidden OnChange="VM.OnImageFileChange" accept=".jpg, .png" />
                         </MudItem>
                         <MudItem xs="12">
-                            <AdvSelect @bind-Value="_place.Type"
+                            <AdvSelect @bind-Value="VM.Place.Type"
                                        T="PlaceType"
-                                       Validation="@(_validator.PropertyValidation(x=> x.Type))"
+                                       Validation="@(VM.GetValidation(x=> x.Type))"
                                        Label="타입">
                                 @{
                                     foreach (var placeType in Enum.GetValues<PlaceType>())
@@ -36,31 +38,31 @@
                             </AdvSelect>
                         </MudItem>
                         <MudItem xs="12">
-                            <AdvTextField @bind-Value="_place.Name"
-                                          Validation="@(_validator.PropertyValidation(x=> x.Name))"
+                            <AdvTextField @bind-Value="VM.Place.Name"
+                                          Validation="@(VM.GetValidation(x=> x.Name))"
                                           Label="장소명" />
                         </MudItem>
                         <MudItem xs="12">
-                            <AdvTextField @bind-Value="_place.BaseAddress"
+                            <AdvTextField @bind-Value="VM.Place.BaseAddress"
                                           Label="기본주소"
-                                          Validation="@(_validator.PropertyValidation(x=> x.BaseAddress))" />
+                                          Validation="@(VM.GetValidation(x=> x.BaseAddress))" />
                         </MudItem>
                         <MudItem xs="12">
-                            <AdvTextField @bind-Value="_place.DetailAddress"
+                            <AdvTextField @bind-Value="VM.Place.DetailAddress"
                                           Label="상세주소"
-                                          Validation="@(_validator.PropertyValidation(x=> x.DetailAddress))" />
+                                          Validation="@(VM.GetValidation(x=> x.DetailAddress))" />
                         </MudItem>
                         <MudItem xs="12">
-                            <AdvTextField @bind-Value="_place.ContactNumber"
-                                          Validation="@(_validator.PropertyValidation(x=> x.ContactNumber))"
+                            <AdvTextField @bind-Value="VM.Place.ContactNumber"
+                                          Validation="@(VM.GetValidation(x=> x.ContactNumber))"
                                           Label="연락처" />
                         </MudItem>
                         <MudItem xs="12">
-                            <AdvSelect @bind-SelectedValues="_place.Categories"
+                            <AdvSelect @bind-SelectedValues="VM.Place.Categories"
                                        T="PlaceCategory"
                                        MultiSelection="true"
                                        Label="카테고리"
-                                       Validation="@(_validator.PropertyValidation(x=> x.Categories))">
+                                       Validation="@(VM.GetValidation(x=> x.Categories))">
                                 @foreach (var category in Enum.GetValues<PlaceCategory>())
                                 {
                                     <MudSelectItem Value="category"></MudSelectItem>
@@ -75,7 +77,7 @@
                     <MudDivider Style="margin-bottom:4px;" />
                     <MudGrid Spacing="1">
                         <MudItem xs="12">
-                            @foreach (var openingTime in _place.OpeningTimes)
+                            @foreach (var openingTime in VM.Place.OpeningTimes)
                             {
                                 <Bridge.WebApp.Pages.Admin.Views.Components.OpeningTimeView OpeningTime="openingTime" IsReadOnly="false" />
                             }
@@ -88,13 +90,38 @@
     <DialogActions>
         <MudButton Variant="Variant.Filled"
                    Color="Color.Error"
-                   OnClick="Cancel_Click">
+                   OnClick="VM.OnCancelClick">
             취소
         </MudButton>
         <MudButton Variant="Variant.Filled"
                    Color="Color.Primary"
-                   OnClick="Save_Click">
+                   OnClick="VM.OnSaveClick">
             저장
         </MudButton>
     </DialogActions>
 </MudDialog>
+@code{
+
+    [CascadingParameter]
+    public MudDialogInstance MudDialog { get; set; } = null!;
+
+    /// <summary>
+    /// 장소 아이디
+    /// </summary>
+    [Parameter]
+    public long PlaceId { get; set; }
+
+    /// <summary>
+    /// 폼 모드
+    /// </summary>
+    [Parameter]
+    public FormMode FormMode { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        VM.MudDialog = MudDialog;
+        VM.PlaceId = PlaceId;
+        VM.FormMode = FormMode;
+        await VM.Initialize();
+    }
+}
