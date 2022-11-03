@@ -41,7 +41,7 @@
                         @foreach (var place in VM.Places)
                         {
                             <MudListItem id="@place.Id" Class="list-item" Value="place" OnClick="@(()=> VM.Handle_PlaceSelected(place))">
-                                <Bridge.WebApp.Pages.Home.Components.PlaceListItem Place="place"/>
+                                <Bridge.WebApp.Pages.Home.Views.Components.PlaceItemView Place="place"/>
                             </MudListItem>
                         }
                     </MudList>

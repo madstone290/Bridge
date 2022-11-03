@@ -88,9 +88,18 @@ namespace Bridge.WebApp.Api
             if (content != null)
                 request.Content = JsonContent.Create(content);
 
-            var response = await HttpClient.SendAsync(request);
-
-            return await BuildResultAsync<TData>(response);
+            ApiResult<TData> result;
+            try
+            {
+                var response = await HttpClient.SendAsync(request);
+                result = await BuildResultAsync<TData>(response);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                result = ApiResult<TData>.ExceptionResult(ex);
+            }
+            return result;
         }
 
     }

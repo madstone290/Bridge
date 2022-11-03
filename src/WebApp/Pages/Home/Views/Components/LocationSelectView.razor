@@ -1,0 +1,55 @@
+@using Bridge.WebApp.Pages.Home.Models
+@using Bridge.WebApp.Pages.Home.ViewModels
+@using Bridge.WebApp.Services
+@using Bridge.WebApp.Services.DynamicMap
+@using Bridge.WebApp.Services.ReverseGeocode
+@implements IAsyncDisposable
+@inject ILocationSelectViewModel VM
+
+<MudDialog>
+    <DialogContent>
+        <div style="display:flex; flex-direction:row;">
+            <MudButton Color="Color.Tertiary"
+                       Variant="Variant.Text"
+                       StartIcon="@Icons.Material.Filled.ArrowBack"
+                       OnClick="VM.OnCancelClick"></MudButton>
+            <MudButton Style="flex: 1 1 auto;"
+                       Color="Color.Primary"
+                       Variant="Variant.Filled"
+                       OnClick="VM.OnOkClick">이 위치에서 검색</MudButton>
+        </div>
+        <MudText Typo="Typo.subtitle1" Align="Align.Center" Color="Color.Info">
+            @VM.CurrentAddress
+        </MudText>
+        <div id="@VM.MapElementId" style="width:600px; height:600px;">
+        </div>
+    </DialogContent>
+</MudDialog>
+@code {
+    [CascadingParameter]
+    public MudDialogInstance MudDialog { get; set; } = null!;
+
+    [Parameter]
+    public LatLon CurrentLocation{ get; set; }
+
+    [Parameter]
+    public string? CurrentAddress { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        VM.Receiver = this;
+        VM.MudDialog = MudDialog;
+        VM.CurrentLocation = CurrentLocation;
+        VM.CurrentAddress = CurrentAddress;
+
+        await VM.Initialize();
+    }
+
+    async ValueTask IAsyncDisposable.DisposeAsync()
+    {
+        await VM.DisposeAsync();
+        GC.SuppressFinalize(this);
+    }
+        
+}
+}

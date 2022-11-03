@@ -11,3 +11,24 @@
                    OnClick="Save_Click">저장</MudButton>
     </DialogActions>
 </MudDialog>
+@code{
+
+    [CascadingParameter]
+    private MudDialogInstance MudDialog { get; set; } = null!;
+
+    [Parameter]
+    public double Distance { get; set; }
+
+    private void Cancel_Click()
+    {
+        MudDialog.Cancel();
+    }
+
+    private void Save_Click()
+    {
+        MudDialog.Close(new
+        {
+            Distance
+        });
+    }
+}

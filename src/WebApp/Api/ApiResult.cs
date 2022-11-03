@@ -71,6 +71,13 @@ namespace Bridge.WebApp.Api
         public static ApiResult<TData> UnsupportedStatusCodeResult(HttpStatusCode statusCode) => new(false, default, $"지원하지 않는 상태코드입니다: {statusCode}");
 
         /// <summary>
+        /// 요청 송수신중 예외 발생
+        /// </summary>
+        /// <param name="ex"></param>
+        /// <returns></returns>
+        public static ApiResult<TData> ExceptionResult(Exception ex) => new(false, default, ex.Message);
+
+        /// <summary>
         /// API 에러
         /// </summary>
         public ApiError? ApiError { get; }

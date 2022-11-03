@@ -8,6 +8,7 @@ using Bridge.WebApp.Pages.Admin.ViewModels;
 using Bridge.WebApp.Pages.Admin.ViewModels.Implement;
 using Bridge.WebApp.Pages.Admin.Views.Components;
 using Bridge.WebApp.Pages.Home.ViewModels;
+using Bridge.WebApp.Pages.Home.ViewModels.Implement;
 using Bridge.WebApp.Services;
 using Bridge.WebApp.Services.DynamicMap;
 using Bridge.WebApp.Services.DynamicMap.Naver;
@@ -96,6 +97,7 @@ builder.Services.AddScoped<AdminRestroomApiClient>();
 builder.Services.AddScoped<PlaceApiClient>();
 
 builder.Services.AddTransient<IIndexViewModel, IndexViewModel>();
+builder.Services.AddTransient<ILocationSelectViewModel, LocationSelectViewModel>();
 
 builder.Services.AddTransient<IPlaceListViewModel, PlaceListViewModel>();
 builder.Services.AddTransient<IPlaceViewModel, PlaceViewModel>();

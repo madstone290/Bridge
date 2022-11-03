@@ -1,7 +1,7 @@
 using Bridge.Application.Places.Queries;
 using Bridge.WebApp.Api.ApiClients;
-using Bridge.WebApp.Pages.Home.Components;
 using Bridge.WebApp.Pages.Home.Models;
+using Bridge.WebApp.Pages.Home.Views.Components;
 using Bridge.WebApp.Services;
 using Bridge.WebApp.Services.DynamicMap;
 using Bridge.WebApp.Services.DynamicMap.Naver;
@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
 
-namespace Bridge.WebApp.Pages.Home.ViewModels
+namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
 {
     public class IndexViewModel : IIndexViewModel
     {
@@ -196,17 +196,16 @@ namespace Bridge.WebApp.Pages.Home.ViewModels
             };
             var dialogParameters = new DialogParameters
             {
-                { nameof (LocationSelectionDialog.Longitude), CurrentLocation?.Longitude },
-                { nameof (LocationSelectionDialog.Latitude), CurrentLocation?.Latitude },
-                { nameof (LocationSelectionDialog.Address), CurrentAddress }
+                { nameof (LocationSelectView.CurrentLocation), CurrentLocation },
+                { nameof (LocationSelectView.CurrentAddress), CurrentAddress }
             };
-            var dialog = _dialogService.Show<LocationSelectionDialog>(null, options: dialogOptions, parameters: dialogParameters);
+            var dialog = _dialogService.Show<LocationSelectView>(null, options: dialogOptions, parameters: dialogParameters);
             var result = await dialog.Result;
             if (!result.Cancelled)
             {
                 var data = (dynamic)result.Data;
-                CurrentLocation = new LatLon(data.Latitude, data.Longitude);
-                CurrentAddress = data.Address;
+                CurrentLocation = data.CurrentLocation;
+                CurrentAddress = data.CurrentAddress;
             }
         }
 
