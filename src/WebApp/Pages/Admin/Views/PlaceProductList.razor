@@ -1,18 +1,20 @@
 @using Bridge.Domain.Places.Entities
 @using Bridge.WebApp.Pages.Admin.Models
 @using Bridge.WebApp.Pages.Admin.Records
+@using Bridge.WebApp.Pages.Admin.ViewModels
 @attribute [Route(PageRoutes.Admin.PlaceProductList)]
 @attribute [Authorize(Policy = Bridge.Shared.Constants.PolicyConstants.Admin)]
+@inject IPlaceProductListViewModel VM
 
 <div class="page">
     <MudGrid Spacing="1">
         <MudItem xs="6" sm="3">
-            <AdvTextField Value="_place.Name"
+            <AdvTextField Value="VM.Place.Name"
                           ReadOnly="true"
                           Label="장소명" />
         </MudItem>
         <MudItem xs="6" sm="3">
-            <AdvTextField Value="_place.Address.ToString()"
+            <AdvTextField Value="VM.Place.Address.ToString()"
                           ReadOnly="true"
                           Label="주소" />
         </MudItem>
@@ -22,25 +24,25 @@
         <MudButton Variant="Variant.Filled"
                    StartIcon="@Icons.Material.Filled.Refresh"
                    IconColor="Color.Surface"
-                   OnClick="Load_ClickAsync"
+                   OnClick="VM.OnLoadClick"
                    Color="Color.Secondary">조회</MudButton>
         <MudButton Variant="Variant.Filled"
                    Color="Color.Primary"
                    IconColor="Color.Surface"
-                   OnClick="Create_Click"
+                   OnClick="VM.OnCreateClick"
                    StartIcon="@Icons.Material.Filled.Add">추가</MudButton>
 
         <div class="search-field">
             <MudTextField T="string"
-                          @bind-Text="_searchString"
+                          @bind-Text="VM.SearchText"
                           Placeholder="검색">
             </MudTextField>
         </div>
     </MudToolBar>
 
     <MudTable T="ProductRecord"
-              Items="_products"
-              Filter="Search">
+              Items="VM.Products"
+              Filter="VM.FilterProduct">
         <HeaderContent>
             <MudTh>타입</MudTh>
             <MudTh>제품명</MudTh>
@@ -50,27 +52,37 @@
 
         <RowTemplate>
             <MudTd DataLabel="타입">
-                <MudHighlighter Text="@context.TypeString" HighlightedText="@_searchString" />
+                <MudHighlighter Text="@context.TypeString" HighlightedText="@VM.SearchText" />
             </MudTd>
             <MudTd DataLabel="제품명">
-                <MudHighlighter Text="@context.Name" HighlightedText="@_searchString" />
+                <MudHighlighter Text="@context.Name" HighlightedText="@VM.SearchText" />
             </MudTd>
             <MudTd DataLabel="가격">
-                <MudHighlighter Text="@context.PriceString" HighlightedText="@_searchString" />
+                <MudHighlighter Text="@context.PriceString" HighlightedText="@VM.SearchText" />
             </MudTd>
             <MudTd DataLabel="카테고리">
-                <MudHighlighter Text="@context.CategoriesString" HighlightedText="@_searchString" />
+                <MudHighlighter Text="@context.CategoriesString" HighlightedText="@VM.SearchText" />
             </MudTd>
         </RowTemplate>
 
         <FooterContent>
             <MudTFootRow>
-                <MudTd colSpan="100">총 @(_products.Count)개의 행</MudTd>
+                <MudTd colSpan="100">총 @(VM.Products.Count())개의 행</MudTd>
             </MudTFootRow>
         </FooterContent>
     </MudTable>
 </div>
 
 @code {
+    /// <summary>
+    /// 장소 아이디
+    /// </summary>
+    [Parameter]
+    public long PlaceId { get; set; }
 
+    protected override async Task OnInitializedAsync()
+    {
+        VM.PlaceId = PlaceId;
+        await VM.Initialize();
+    }
 }

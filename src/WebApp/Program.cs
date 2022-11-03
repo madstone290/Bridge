@@ -95,8 +95,10 @@ builder.Services.AddScoped<AdminRestroomApiClient>();
 builder.Services.AddScoped<PlaceApiClient>();
 
 builder.Services.AddTransient<IIndexViewModel, IndexViewModel>();
+
 builder.Services.AddTransient<IPlaceListViewModel, PlaceListViewModel>();
 builder.Services.AddTransient<IPlaceViewModel, PlaceViewModel>();
+builder.Services.AddTransient<IPlaceProductListViewModel, PlaceProductListViewModel>();
 
 var app = builder.Build();
 
