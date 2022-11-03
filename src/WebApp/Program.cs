@@ -99,6 +99,8 @@ builder.Services.AddTransient<IIndexViewModel, IndexViewModel>();
 builder.Services.AddTransient<IPlaceListViewModel, PlaceListViewModel>();
 builder.Services.AddTransient<IPlaceViewModel, PlaceViewModel>();
 builder.Services.AddTransient<IPlaceProductListViewModel, PlaceProductListViewModel>();
+builder.Services.AddTransient<IOpeningTimeViewModel, OpeningTimeViewModel>();
+
 
 var app = builder.Build();
 

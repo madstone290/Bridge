@@ -109,7 +109,7 @@
                         <td colspan="4">
                             @foreach (var openingTime in context.OpeningTimesFromMonday)
                             {
-                                <Bridge.WebApp.Pages.Admin.Components.OpeningTimeListItem OpeningTime="openingTime" ReadOnly="true" />
+                                <Bridge.WebApp.Pages.Admin.Views.Components.OpeningTimeView OpeningTime="openingTime" IsReadOnly="true" />
                             }
                         </td>
                     </MudTr>

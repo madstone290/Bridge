@@ -1,7 +1,6 @@
 ﻿using Bridge.WebApp.Api.ApiClients.Admin;
 using Bridge.WebApp.Pages.Admin.Components;
 using Bridge.WebApp.Pages.Admin.Models;
-using Bridge.WebApp.Pages.Admin.ViewModels;
 using Bridge.WebApp.Services;
 using Bridge.WebApp.Shared;
 using Microsoft.AspNetCore.Components.Forms;
@@ -89,7 +88,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
             _place.DetailAddress = placeDto.Address.DetailAddress;
             _place.Categories = placeDto.Categories;
             _place.ContactNumber = placeDto.ContactNumber;
-            _place.OpeningTimes = placeDto.OpeningTimes.Select(x => OpeningTimeModel.Create(x));
+            _place.OpeningTimes = placeDto.OpeningTimes.Select(x => OpeningTimeModel.Create(x)).ToList();
 
             if (placeDto.ImagePath != null)
                 _place.ImageUrl = new Uri(_placeApiClient.HttpClient.BaseAddress!, placeDto.ImagePath).ToString();

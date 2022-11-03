@@ -80,7 +80,7 @@
                         <MudItem xs="12">
                             @foreach (var openingTime in _model.OpeningTimes)
                             {
-                                <Bridge.WebApp.Pages.Admin.Components.OpeningTimeListItem OpeningTime="openingTime" />
+                                <Bridge.WebApp.Pages.Admin.Views.Components.OpeningTimeView OpeningTime="openingTime" IsReadOnly="false" />
                             }
                         </MudItem>
                     </MudGrid>
