@@ -1,11 +1,15 @@
-﻿
-namespace Bridge.Domain.Places.Entities
+namespace Bridge.Domain.Places.Enums
 {
     /// <summary>
-    /// 장소 범주
+    /// 장소 유형
     /// </summary>
-    public enum PlaceCategory
+    public enum PlaceType
     {
+        /// <summary>
+        /// 기타
+        /// </summary>
+        Other,
+
         /// <summary>
         /// 약국
         /// </summary>
@@ -27,24 +31,9 @@ namespace Bridge.Domain.Places.Entities
         Restaurant,
 
         /// <summary>
-        /// 애완동물 가게
+        /// 화장실
         /// </summary>
-        PetStore,
-
-        /// <summary>
-        /// 동물병원
-        /// </summary>
-        PetHospital,
-
-        /// <summary>
-        /// 비건 음식점
-        /// </summary>
-        VeganRestaurant,
-
-        /// <summary>
-        /// 비건 카페
-        /// </summary>
-        VeganCafeteria,
+        Restroom
 
     }
 }

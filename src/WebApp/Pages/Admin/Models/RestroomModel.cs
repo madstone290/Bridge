@@ -1,4 +1,4 @@
-using Bridge.Domain.Places.Entities.Places;
+using Bridge.Domain.Places.Enums;
 
 namespace Bridge.WebApp.Pages.Admin.Models
 {

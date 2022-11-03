@@ -1,5 +1,4 @@
-using Bridge.Domain.Places.Entities;
-using Bridge.Domain.Products.Entities;
+using Bridge.Domain.Products.Enums;
 
 namespace Bridge.Application.Products.ReadModels
 {

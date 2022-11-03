@@ -1,5 +1,6 @@
 using Bridge.Domain.Places.Entities;
 using Bridge.Domain.Products.Entities;
+using Bridge.Domain.Products.Enums;
 using Bridge.Domain.Products.Exception;
 using Bridge.UnitTests.DomainTests.Builders;
 using FluentAssertions;

@@ -1,5 +1,5 @@
 ﻿using Bridge.Application.Places.Commands;
-using Bridge.Domain.Places.Entities.Places;
+using Bridge.Domain.Places.Enums;
 using Bridge.WebApp.Api.ApiClients.Admin;
 using Bridge.WebApp.Pages.Admin.Models;
 using Bridge.WebApp.Services;

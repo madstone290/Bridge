@@ -1,6 +1,7 @@
 using Bridge.Application.Places.Commands;
 using Bridge.Application.Places.Dtos;
 using Bridge.Application.Places.ReadModels;
+using Bridge.Domain.Places.Enums;
 using Bridge.IntegrationTests.Config;
 using Bridge.Shared;
 using FluentAssertions;
@@ -86,7 +87,7 @@ namespace Bridge.IntegrationTests.Admin
                     }
                 },
                 IsUnisex = false,
-                DiaperTableLocation = Domain.Places.Entities.Places.DiaperTableLocation.FemaleToilet,
+                DiaperTableLocation = DiaperTableLocation.FemaleToilet,
                 MaleToilet = 2,
                 MaleUrinal = 3,
                 MaleDisabledToilet = 1,
@@ -179,7 +180,7 @@ namespace Bridge.IntegrationTests.Admin
                     }
                 },
                 IsUnisex = false,
-                DiaperTableLocation = Domain.Places.Entities.Places.DiaperTableLocation.FemaleToilet,
+                DiaperTableLocation = DiaperTableLocation.FemaleToilet,
                 MaleToilet = 2,
                 MaleUrinal = 3,
                 MaleDisabledToilet = 1,

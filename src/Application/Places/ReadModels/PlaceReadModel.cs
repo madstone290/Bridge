@@ -1,5 +1,5 @@
 using Bridge.Application.Places.Dtos;
-using Bridge.Domain.Places.Entities;
+using Bridge.Domain.Places.Enums;
 
 namespace Bridge.Application.Places.ReadModels
 {

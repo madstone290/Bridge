@@ -1,4 +1,4 @@
-namespace Bridge.Domain.Places.Entities
+namespace Bridge.Domain.Places.Enums
 {
     /// <summary>
     /// 장소 상태
@@ -9,7 +9,7 @@ namespace Bridge.Domain.Places.Entities
         /// 영업중
         /// </summary>
         Open,
-           
+
         /// <summary>
         /// 폐업
         /// </summary>

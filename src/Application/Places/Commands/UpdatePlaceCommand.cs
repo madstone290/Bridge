@@ -2,7 +2,7 @@ using Bridge.Application.Common;
 using Bridge.Application.Common.Exceptions.EntityNotFoundExceptions;
 using Bridge.Application.Common.Services;
 using Bridge.Application.Places.Dtos;
-using Bridge.Domain.Places.Entities;
+using Bridge.Domain.Places.Enums;
 using Bridge.Domain.Places.Repos;
 using MediatR;
 

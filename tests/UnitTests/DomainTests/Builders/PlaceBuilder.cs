@@ -1,5 +1,6 @@
 using Bridge.Domain.Common.ValueObjects;
 using Bridge.Domain.Places.Entities;
+using Bridge.Domain.Places.Enums;
 
 namespace Bridge.UnitTests.DomainTests.Builders
 {

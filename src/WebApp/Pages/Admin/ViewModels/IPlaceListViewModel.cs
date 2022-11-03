@@ -1,4 +1,4 @@
-using Bridge.Domain.Places.Entities;
+using Bridge.Domain.Places.Enums;
 using Bridge.WebApp.Pages.Admin.Models;
 using Microsoft.AspNetCore.Components.Web;
 

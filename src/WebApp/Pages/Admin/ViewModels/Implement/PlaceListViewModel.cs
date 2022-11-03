@@ -1,4 +1,4 @@
-using Bridge.Domain.Places.Entities;
+using Bridge.Domain.Places.Enums;
 using Bridge.Shared.Extensions;
 using Bridge.WebApp.Api.ApiClients.Admin;
 using Bridge.WebApp.Pages.Admin.Models;
@@ -18,12 +18,12 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
         private const string SelectAll = "전체";
         private readonly Dictionary<PlaceType, string> _placeTypeTexts = new()
         {
-            { Domain.Places.Entities.PlaceType.Other, "기타" },
-            { Domain.Places.Entities.PlaceType.Pharmacy, "약국" },
-            { Domain.Places.Entities.PlaceType.Hospital, "병원" },
-            { Domain.Places.Entities.PlaceType.Cafeteria, "카페" },
-            { Domain.Places.Entities.PlaceType.Restaurant, "식당" },
-            { Domain.Places.Entities.PlaceType.Restroom, "공중화장실" },
+            { Domain.Places.Enums.PlaceType.Other, "기타" },
+            { Domain.Places.Enums.PlaceType.Pharmacy, "약국" },
+            { Domain.Places.Enums.PlaceType.Hospital, "병원" },
+            { Domain.Places.Enums.PlaceType.Cafeteria, "카페" },
+            { Domain.Places.Enums.PlaceType.Restaurant, "식당" },
+            { Domain.Places.Enums.PlaceType.Restroom, "공중화장실" },
         };
         private readonly List<PlaceModel> _placeRecords = new();
         private readonly ExcelOptions _excelOptions = new()
@@ -211,7 +211,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
 
         public async Task OnEditPlaceClick(PlaceModel place)
         {
-            if (place.Type == Domain.Places.Entities.PlaceType.Restroom)
+            if (place.Type == Domain.Places.Enums.PlaceType.Restroom)
             {
                 await ShowRestroomModal(place);
                 return;

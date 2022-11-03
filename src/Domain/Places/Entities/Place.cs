@@ -1,5 +1,6 @@
 using Bridge.Domain.Common;
 using Bridge.Domain.Common.ValueObjects;
+using Bridge.Domain.Places.Enums;
 using Bridge.Domain.Places.Exceptions;
 
 namespace Bridge.Domain.Places.Entities

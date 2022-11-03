@@ -1,5 +1,5 @@
 using Bridge.Application.Products.ReadModels;
-using Bridge.Domain.Products.Entities;
+using Bridge.Domain.Products.Enums;
 using FluentValidation;
 
 namespace Bridge.WebApp.Pages.Admin.Models

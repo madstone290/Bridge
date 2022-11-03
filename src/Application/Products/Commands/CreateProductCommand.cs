@@ -2,6 +2,7 @@ using Bridge.Application.Common;
 using Bridge.Application.Common.Exceptions.EntityNotFoundExceptions;
 using Bridge.Domain.Places.Repos;
 using Bridge.Domain.Products.Entities;
+using Bridge.Domain.Products.Enums;
 using Bridge.Domain.Products.Repos;
 
 namespace Bridge.Application.Products.Commands

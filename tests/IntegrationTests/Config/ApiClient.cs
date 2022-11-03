@@ -3,8 +3,8 @@ using Bridge.Application.Places.Dtos;
 using Bridge.Application.Products.Commands;
 using Bridge.Application.Products.Queries;
 using Bridge.Application.Products.ReadModels;
-using Bridge.Domain.Places.Entities;
-using Bridge.Domain.Products.Entities;
+using Bridge.Domain.Places.Enums;
+using Bridge.Domain.Products.Enums;
 using Bridge.IntegrationTests.Config.ApiClients;
 
 namespace Bridge.IntegrationTests.Config

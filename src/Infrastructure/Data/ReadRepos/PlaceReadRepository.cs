@@ -3,6 +3,7 @@ using Bridge.Application.Places.Dtos;
 using Bridge.Application.Places.ReadModels;
 using Bridge.Application.Places.Repos;
 using Bridge.Domain.Places.Entities;
+using Bridge.Domain.Places.Enums;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 

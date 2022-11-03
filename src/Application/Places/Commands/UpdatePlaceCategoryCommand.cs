@@ -1,6 +1,6 @@
 ﻿using Bridge.Application.Common;
 using Bridge.Application.Common.Exceptions.EntityNotFoundExceptions;
-using Bridge.Domain.Places.Entities;
+using Bridge.Domain.Places.Enums;
 using Bridge.Domain.Places.Repos;
 using MediatR;
 

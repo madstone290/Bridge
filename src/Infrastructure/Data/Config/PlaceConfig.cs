@@ -1,4 +1,5 @@
 using Bridge.Domain.Places.Entities;
+using Bridge.Domain.Places.Enums;
 using Bridge.Shared.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

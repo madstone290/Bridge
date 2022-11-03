@@ -3,7 +3,7 @@ using Bridge.Application.Places.Commands;
 using Bridge.Application.Places.Dtos;
 using Bridge.Application.Places.Queries;
 using Bridge.Application.Places.ReadModels;
-using Bridge.Domain.Places.Entities;
+using Bridge.Domain.Places.Enums;
 using Bridge.IntegrationTests.Config;
 using Bridge.IntegrationTests.Data;
 using Bridge.Shared;

@@ -1,4 +1,4 @@
-using Bridge.Domain.Places.Entities.Places;
+using Bridge.Domain.Places.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 
@@ -104,10 +104,10 @@ namespace Bridge.WebApp.Pages.Admin.Models
             BaseAddress = string.IsNullOrWhiteSpace(JibunAddress) ? RoadAddress : JibunAddress;
             DiaperTableLocation = (DiaperTableLocationText?.Trim()) switch
             {
-                "남자화장실" => (DiaperTableLocation?)Domain.Places.Entities.Places.DiaperTableLocation.MaleToilet,
-                "여자화장실" => (DiaperTableLocation?)Domain.Places.Entities.Places.DiaperTableLocation.FemaleToilet,
-                "남자화장실+여자화장실" or "여자화장실+남자화장실" => (DiaperTableLocation?)Domain.Places.Entities.Places.DiaperTableLocation.Both,
-                _ => (DiaperTableLocation?)Domain.Places.Entities.Places.DiaperTableLocation.None,
+                "남자화장실" => (DiaperTableLocation?)Domain.Places.Enums.DiaperTableLocation.MaleToilet,
+                "여자화장실" => (DiaperTableLocation?)Domain.Places.Enums.DiaperTableLocation.FemaleToilet,
+                "남자화장실+여자화장실" or "여자화장실+남자화장실" => (DiaperTableLocation?)Domain.Places.Enums.DiaperTableLocation.Both,
+                _ => (DiaperTableLocation?)Domain.Places.Enums.DiaperTableLocation.None,
             };
 
             var trimmedOpeningTimeText = OpeningTimeText?.Trim();

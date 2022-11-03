@@ -1,4 +1,4 @@
-﻿using Bridge.Domain.Places.Entities.Places;
+﻿using Bridge.Domain.Places.Enums;
 using Bridge.WebApp.Pages.Admin.Models;
 using MudBlazor;
 using System.Linq.Expressions;

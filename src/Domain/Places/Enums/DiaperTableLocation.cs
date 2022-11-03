@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Bridge.Domain.Places.Entities.Places
+namespace Bridge.Domain.Places.Enums
 {
     /// <summary>
     /// 기저귀 테이블 위치

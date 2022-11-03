@@ -1,6 +1,7 @@
 using Bridge.Application.Common;
 using Bridge.Application.Places.ReadModels;
 using Bridge.Domain.Places.Entities;
+using Bridge.Domain.Places.Enums;
 
 namespace Bridge.Application.Places.Repos
 {

@@ -1,4 +1,4 @@
-namespace Bridge.Domain.Places.Entities
+namespace Bridge.Domain.Products.Enums
 {
     /// <summary>
     /// 제품 상태
@@ -9,7 +9,7 @@ namespace Bridge.Domain.Places.Entities
         /// 사용중
         /// </summary>
         Used,
-           
+
         /// <summary>
         /// 폐기됨
         /// </summary>
