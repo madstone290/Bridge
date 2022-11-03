@@ -5,6 +5,7 @@ using Bridge.WebApp.Api.ApiClients;
 using Bridge.WebApp.Api.ApiClients.Admin;
 using Bridge.WebApp.Api.ApiClients.Identity;
 using Bridge.WebApp.Pages.Admin.ViewModels;
+using Bridge.WebApp.Pages.Admin.ViewModels.Implement;
 using Bridge.WebApp.Pages.Home.ViewModels;
 using Bridge.WebApp.Services;
 using Bridge.WebApp.Services.DynamicMap;
@@ -95,6 +96,7 @@ builder.Services.AddScoped<PlaceApiClient>();
 
 builder.Services.AddTransient<IIndexViewModel, IndexViewModel>();
 builder.Services.AddTransient<IPlaceListViewModel, PlaceListViewModel>();
+builder.Services.AddTransient<IPlaceViewModel, PlaceViewModel>();
 
 var app = builder.Build();
 

@@ -3,6 +3,7 @@ using Bridge.Shared.Extensions;
 using Bridge.WebApp.Api.ApiClients.Admin;
 using Bridge.WebApp.Pages.Admin.Components;
 using Bridge.WebApp.Pages.Admin.Records;
+using Bridge.WebApp.Pages.Admin.ViewModels;
 using Bridge.WebApp.Services;
 using Bridge.WebApp.Shared;
 using Microsoft.AspNetCore.Components;
@@ -11,7 +12,7 @@ using MudBlazor;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
-namespace Bridge.WebApp.Pages.Admin.ViewModels
+namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
 {
     public class PlaceListViewModel : IPlaceListViewModel
     {
@@ -97,7 +98,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels
                 await LoadPlaces();
             }
         }
-        
+
         public async Task OnLoadClick()
         {
             await LoadPlaces();
@@ -137,7 +138,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels
 
         public async Task OnRestroomExcelDownloadClick()
         {
-            await _excelService.DownloadAsync<DaeguRestroomExcelRecord>("화장실 폼.xlsx", new List<DaeguRestroomExcelRecord>(), _excelOptions);
+            await _excelService.DownloadAsync("화장실 폼.xlsx", new List<DaeguRestroomExcelRecord>(), _excelOptions);
         }
 
         public async Task OnRestroomExcelUploadClick()
