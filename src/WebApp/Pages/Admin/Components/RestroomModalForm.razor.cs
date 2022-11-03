@@ -9,8 +9,8 @@ namespace Bridge.WebApp.Pages.Admin.Components
     public partial class RestroomModalForm
     {
         private MudForm? _form;
-        private readonly RestroomFormModel _model = new();
-        private readonly PlaceFormModel.Validator _validator = new();
+        private readonly RestroomModel _model = new();
+        private readonly PlaceModel.Validator _validator = new();
 
         public static string DiaperTableLocationText(DiaperTableLocation? location)
         {

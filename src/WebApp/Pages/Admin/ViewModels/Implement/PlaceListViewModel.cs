@@ -2,8 +2,7 @@ using Bridge.Domain.Places.Entities;
 using Bridge.Shared.Extensions;
 using Bridge.WebApp.Api.ApiClients.Admin;
 using Bridge.WebApp.Pages.Admin.Components;
-using Bridge.WebApp.Pages.Admin.Records;
-using Bridge.WebApp.Pages.Admin.ViewModels;
+using Bridge.WebApp.Pages.Admin.Models;
 using Bridge.WebApp.Services;
 using Bridge.WebApp.Shared;
 using Microsoft.AspNetCore.Components;
@@ -26,10 +25,10 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
             { Domain.Places.Entities.PlaceType.Restaurant, "식당" },
             { Domain.Places.Entities.PlaceType.Restroom, "공중화장실" },
         };
-        private readonly List<PlaceRecord> _placeRecords = new();
+        private readonly List<PlaceModel> _placeRecords = new();
         private readonly ExcelOptions _excelOptions = new()
         {
-            Columns = typeof(DaeguRestroomExcelRecord).GetProperties()
+            Columns = typeof(DaeguRestroomExcelModel).GetProperties()
                .Select(x => new ExcelOptions.Column(x.Name, x.GetCustomAttribute<DisplayAttribute>()?.Name ?? x.Name))
         };
 
@@ -60,7 +59,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
         public int PageCount { get; set; }
         public int PageNumber { get; set; } = 1;
         public int RowsPerPage { get; set; } = 10;
-        public IEnumerable<PlaceRecord> Places => _placeRecords;
+        public IEnumerable<PlaceModel> Places => _placeRecords;
 
         private async Task LoadPlaces()
         {
@@ -75,7 +74,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
             PageCount = placeList.TotalPages;
 
             _placeRecords.Clear();
-            _placeRecords.AddRange(placeList.List.Select(x => PlaceRecord.ToPlaceModel(x)));
+            _placeRecords.AddRange(placeList.List.Select(x => PlaceModel.CreateFromReadModel(x)));
         }
 
         public Task Initialize()
@@ -138,13 +137,13 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
 
         public async Task OnRestroomExcelDownloadClick()
         {
-            await _excelService.DownloadAsync("화장실 폼.xlsx", new List<DaeguRestroomExcelRecord>(), _excelOptions);
+            await _excelService.DownloadAsync("화장실 폼.xlsx", new List<DaeguRestroomExcelModel>(), _excelOptions);
         }
 
         public async Task OnRestroomExcelUploadClick()
         {
             // 엑셀에서 데이터 읽기
-            var restrooms = await _excelService.UploadAsync<DaeguRestroomExcelRecord>(_excelOptions);
+            var restrooms = await _excelService.UploadAsync<DaeguRestroomExcelModel>(_excelOptions);
             foreach (var restroom in restrooms)
                 restroom.ReadFromText();
 
@@ -204,13 +203,13 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
             await dialog.Result;
         }
 
-        public async Task OnShowOpeningTimeClick(PlaceRecord place)
+        public async Task OnShowOpeningTimeClick(PlaceModel place)
         {
             place.ShowOpeningTimes = !place.ShowOpeningTimes;
             await Task.CompletedTask;
         }
 
-        public async Task OnEditPlaceClick(PlaceRecord place)
+        public async Task OnEditPlaceClick(PlaceModel place)
         {
             if (place.Type == Domain.Places.Entities.PlaceType.Restroom)
             {
@@ -241,11 +240,11 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
                 place.DetailAddress = placeDto.Address.DetailAddress;
                 place.Categories = placeDto.Categories;
                 place.ContactNumber = placeDto.ContactNumber;
-                place.OpeningTimes = placeDto.OpeningTimes.Select(x => OpeningTimeRecord.Create(x));
+                place.OpeningTimes = placeDto.OpeningTimes.Select(x => OpeningTimeModel.Create(x));
             }
         }
 
-        private async Task ShowRestroomModal(PlaceRecord place)
+        private async Task ShowRestroomModal(PlaceModel place)
         {
             var parameters = new DialogParameters
                 {
@@ -270,24 +269,24 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
                 place.DetailAddress = placeDto.Address.DetailAddress;
                 place.Categories = placeDto.Categories;
                 place.ContactNumber = placeDto.ContactNumber;
-                place.OpeningTimes = placeDto.OpeningTimes.Select(x => OpeningTimeRecord.Create(x));
+                place.OpeningTimes = placeDto.OpeningTimes.Select(x => OpeningTimeModel.Create(x));
             }
         }
 
-        public async Task OnManagePlaceClick(PlaceRecord place)
+        public async Task OnManagePlaceClick(PlaceModel place)
         {
             var uri = PageRoutes.Admin.PlaceView.AddRouteParam("PlaceId", place.Id);
             _navManager.NavigateTo(uri);
             await Task.CompletedTask;
         }
 
-        public async Task OnManageProductClick(PlaceRecord place)
+        public async Task OnManageProductClick(PlaceModel place)
         {
             _navManager.NavigateTo(PageRoutes.Admin.PlaceProductList.AddRouteParam("PlaceId", place.Id));
             await Task.CompletedTask;
         }
 
-        public async Task OnClosePlaceClick(PlaceRecord place)
+        public async Task OnClosePlaceClick(PlaceModel place)
         {
             var parameters = new DialogParameters
             {

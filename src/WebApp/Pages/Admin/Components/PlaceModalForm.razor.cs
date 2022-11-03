@@ -10,8 +10,8 @@ namespace Bridge.WebApp.Pages.Admin.Components
     public partial class PlaceModalForm
     {
         private MudForm? _form;
-        private readonly PlaceFormModel _place = new();
-        private readonly PlaceFormModel.Validator _validator = new();
+        private readonly PlaceModel _place = new();
+        private readonly PlaceModel.Validator _validator = new();
 
         [CascadingParameter]
         public MudDialogInstance MudDialog { get; set; } = null!;
@@ -48,7 +48,7 @@ namespace Bridge.WebApp.Pages.Admin.Components
                 _place.DetailAddress = placeDto.Address.DetailAddress;
                 _place.Categories = placeDto.Categories;
                 _place.ContactNumber = placeDto.ContactNumber;
-                _place.OpeningTimes = placeDto.OpeningTimes.Select(x => OpeningTimeFormModel.Create(x));
+                _place.OpeningTimes = placeDto.OpeningTimes.Select(x => OpeningTimeModel.Create(x));
 
                 if (placeDto.ImagePath != null)
                     _place.ImageUrl = new Uri(PlaceApiClient.HttpClient.BaseAddress!, placeDto.ImagePath).ToString();
@@ -88,8 +88,8 @@ namespace Bridge.WebApp.Pages.Admin.Components
                         OpeningTimes = _place.OpeningTimes.Select(t => new Application.Places.Dtos.OpeningTimeDto()
                         {
                             Day = t.Day,
-                            Dayoff = t.Dayoff,
-                            TwentyFourHours = t.TwentyFourHours,
+                            Dayoff = t.IsDayoff,
+                            TwentyFourHours = t.Is24Hours,
                             BreakEndTime = t.BreakEndTime,
                             BreakStartTime = t.BreakStartTime,
                             OpenTime = t.OpenTime,
@@ -120,8 +120,8 @@ namespace Bridge.WebApp.Pages.Admin.Components
                         OpeningTimes = _place.OpeningTimes.Select(t => new Application.Places.Dtos.OpeningTimeDto()
                         {
                             Day = t.Day,
-                            Dayoff = t.Dayoff,
-                            TwentyFourHours = t.TwentyFourHours,
+                            Dayoff = t.IsDayoff,
+                            TwentyFourHours = t.Is24Hours,
                             BreakEndTime = t.BreakEndTime,
                             BreakStartTime = t.BreakStartTime,
                             OpenTime = t.OpenTime,

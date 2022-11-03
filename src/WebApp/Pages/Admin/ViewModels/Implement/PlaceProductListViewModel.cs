@@ -1,7 +1,7 @@
 ﻿using Bridge.Application.Places.ReadModels;
 using Bridge.Shared.Extensions;
 using Bridge.WebApp.Api.ApiClients.Admin;
-using Bridge.WebApp.Pages.Admin.Records;
+using Bridge.WebApp.Pages.Admin.Models;
 using Bridge.WebApp.Services;
 using Microsoft.AspNetCore.Components;
 
@@ -10,7 +10,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
     public class PlaceProductListViewModel : IPlaceProductListViewModel
     {
         private readonly PlaceReadModel _place = new();
-        private readonly List<ProductRecord> _products = new();
+        private readonly List<ProductModel> _products = new();
 
         private readonly AdminPlaceApiClient _placeApiClient;
         private readonly AdminProductApiClient _productApiClient;
@@ -28,7 +28,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
         public long PlaceId { get; set; }
         public PlaceReadModel Place => _place;
         public string SearchText { get; set; } = string.Empty;
-        public IEnumerable<ProductRecord> Products => _products;
+        public IEnumerable<ProductModel> Products => _products;
 
         private async Task LoadData()
         {
@@ -49,7 +49,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
 
             var productListDto = productResult.Data!;
             _products.Clear();
-            _products.AddRange(productListDto.OrderByDescending(x => x.CreationDateTime).Select(x => ProductRecord.Create(x)));
+            _products.AddRange(productListDto.OrderByDescending(x => x.CreationDateTime).Select(x => ProductModel.Create(x)));
         }
 
         public async Task Initialize()
@@ -68,7 +68,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
             await LoadData();
         }
 
-        public bool FilterProduct(ProductRecord product)
+        public bool FilterProduct(ProductModel product)
         {
             if (string.IsNullOrWhiteSpace(SearchText))
                 return true;

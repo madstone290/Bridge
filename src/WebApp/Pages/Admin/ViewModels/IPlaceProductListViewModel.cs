@@ -1,5 +1,5 @@
 ﻿using Bridge.Application.Places.ReadModels;
-using Bridge.WebApp.Pages.Admin.Records;
+using Bridge.WebApp.Pages.Admin.Models;
 
 namespace Bridge.WebApp.Pages.Admin.ViewModels
 {
@@ -11,9 +11,9 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels
 
         string SearchText { get; set; }
 
-        IEnumerable<ProductRecord> Products { get; }
+        IEnumerable<ProductModel> Products { get; }
 
-        bool FilterProduct(ProductRecord product);
+        bool FilterProduct(ProductModel product);
 
         Task Initialize();
 

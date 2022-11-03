@@ -1,7 +1,6 @@
 ﻿using Bridge.WebApp.Api.ApiClients.Admin;
 using Bridge.WebApp.Pages.Admin.Components;
 using Bridge.WebApp.Pages.Admin.Models;
-using Bridge.WebApp.Pages.Admin.Records;
 using Bridge.WebApp.Pages.Admin.ViewModels;
 using Bridge.WebApp.Services;
 using Bridge.WebApp.Shared;
@@ -13,10 +12,10 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
 {
     public class PlaceViewModel : IPlaceViewModel
     {
-        private readonly PlaceFormModel _place = new();
-        private readonly PlaceFormModel.Validator _validator = new();
-        private readonly PlaceFormModel _placeBackup = new();
-        private readonly List<ProductRecord> _products = new();
+        private readonly PlaceModel _place = new();
+        private readonly PlaceModel.Validator _validator = new();
+        private readonly PlaceModel _placeBackup = new();
+        private readonly List<ProductModel> _products = new();
 
 
         private readonly AdminPlaceApiClient _placeApiClient;
@@ -42,7 +41,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
 
         public bool BaseInfoReadOnly { get; private set; } = true;
 
-        public PlaceFormModel Place => _place;
+        public PlaceModel Place => _place;
 
         public bool OpeningTimeReadOnly { get; private set; } = true;
 
@@ -52,7 +51,23 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
         public int PageNumber { get; set; } = 1;
         public int RowsPerPage { get; set; } = 10;
 
-        public IEnumerable<ProductRecord> Products => _products;
+        public IEnumerable<ProductModel> Products => _products;
+
+        private void CopyPlace(PlaceModel source, PlaceModel target)
+        {
+            target.Id = source.Id;
+            target.Type = source.Type;
+            target.Name = source.Name;
+            target.BaseAddress = source.BaseAddress;
+            target.DetailAddress = source.DetailAddress;
+            target.ImageChanged = source.ImageChanged;
+            target.ImageName = source.ImageName;
+            target.ImageData = source.ImageData;
+            target.ImageUrl = source.ImageUrl;
+            target.Categories = source.Categories;
+            target.ContactNumber = source.ContactNumber;
+            target.OpeningTimes = source.OpeningTimes;
+        }
 
         private async Task LoadPlaceAsync()
         {
@@ -74,12 +89,12 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
             _place.DetailAddress = placeDto.Address.DetailAddress;
             _place.Categories = placeDto.Categories;
             _place.ContactNumber = placeDto.ContactNumber;
-            _place.OpeningTimes = placeDto.OpeningTimes.Select(x => OpeningTimeFormModel.Create(x));
+            _place.OpeningTimes = placeDto.OpeningTimes.Select(x => OpeningTimeModel.Create(x));
 
             if (placeDto.ImagePath != null)
                 _place.ImageUrl = new Uri(_placeApiClient.HttpClient.BaseAddress!, placeDto.ImagePath).ToString();
 
-            PlaceFormModel.Copy(_place, _placeBackup);
+            CopyPlace(_place, _placeBackup);
         }
 
         private async Task LoadProductsAsync()
@@ -94,7 +109,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
             PageCount = productsDto.TotalPages;
 
             _products.Clear();
-            _products.AddRange(productsDto.List.Select(x => ProductRecord.Create(x)));
+            _products.AddRange(productsDto.List.Select(x => ProductModel.Create(x)));
         }
 
         public async Task Initialize()
@@ -105,7 +120,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
             await Task.WhenAll(placeTask, productTask);
         }
 
-        public Func<TProperty, Task<IEnumerable<string>>> GetValidation<TProperty>(Expression<Func<PlaceFormModel, TProperty>> expression)
+        public Func<TProperty, Task<IEnumerable<string>>> GetValidation<TProperty>(Expression<Func<PlaceModel, TProperty>> expression)
         {
             return _validator.PropertyValidation(expression);
         }
@@ -140,7 +155,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
 
         public async Task OnCancelBaseInfoClick()
         {
-            PlaceFormModel.Copy(_placeBackup, _place);
+            CopyPlace(_placeBackup, _place);
             BaseInfoReadOnly = true;
             await Task.CompletedTask;
         }
@@ -168,11 +183,11 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
 
             if (!_validationService.Validate(result))
             {
-                PlaceFormModel.Copy(_placeBackup, _place);
+                CopyPlace(_placeBackup, _place);
                 return;
             }
 
-            PlaceFormModel.Copy(_place, _placeBackup);
+            CopyPlace(_place, _placeBackup);
             BaseInfoReadOnly = true;
         }
 
@@ -184,7 +199,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
 
         public Task OnCancelOpeningTimeClick()
         {
-            PlaceFormModel.Copy(_placeBackup, _place);
+            CopyPlace(_placeBackup, _place);
             OpeningTimeReadOnly = true;
             return Task.CompletedTask;
         }
@@ -200,8 +215,8 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
                 OpeningTimes = _place.OpeningTimes.Select(t => new Application.Places.Dtos.OpeningTimeDto()
                 {
                     Day = t.Day,
-                    Dayoff = t.Dayoff,
-                    TwentyFourHours = t.TwentyFourHours,
+                    Dayoff = t.IsDayoff,
+                    TwentyFourHours = t.Is24Hours,
                     BreakEndTime = t.BreakEndTime,
                     BreakStartTime = t.BreakStartTime,
                     OpenTime = t.OpenTime,
@@ -211,11 +226,11 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
 
             if (!_validationService.Validate(result))
             {
-                PlaceFormModel.Copy(_placeBackup, _place);
+                CopyPlace(_placeBackup, _place);
                 return;
             }
 
-            PlaceFormModel.Copy(_place, _placeBackup);
+            CopyPlace(_place, _placeBackup);
             OpeningTimeReadOnly = true;
         }
 
@@ -234,7 +249,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
             }
         }
 
-        public async Task OnUpdateProductClick(ProductRecord product)
+        public async Task OnUpdateProductClick(ProductModel product)
         {
             var parameters = new DialogParameters();
             parameters.Add(nameof(ProductModalForm.FormMode), FormMode.Update);
@@ -259,7 +274,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
             }
         }
 
-        public async Task OnDiscardProductClick(ProductRecord product)
+        public async Task OnDiscardProductClick(ProductModel product)
         {
             var parameters = new DialogParameters
             {

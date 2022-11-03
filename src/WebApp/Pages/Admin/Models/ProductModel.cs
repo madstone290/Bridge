@@ -1,11 +1,12 @@
+using Bridge.Application.Products.ReadModels;
 using Bridge.Domain.Products.Entities;
 using FluentValidation;
 
 namespace Bridge.WebApp.Pages.Admin.Models
 {
-    public class ProductFormModel
+    public class ProductModel
     {
-        public class Validator : BaseValidator<ProductFormModel>
+        public class Validator : BaseValidator<ProductModel>
         {
             public Validator()
             {
@@ -16,8 +17,20 @@ namespace Bridge.WebApp.Pages.Admin.Models
                 RuleFor(x => x.PlaceId)
                     .GreaterThan(0)
                     .WithMessage("* 필수");
-
             }
+        }
+
+        public static ProductModel Create(ProductReadModel x)
+        {
+            return new ProductModel()
+            {
+                Id = x.Id,
+                Name = x.Name,
+                PlaceId = x.PlaceId,
+                Categories = x.Categories,
+                Price = x.Price,
+                Type = x.Type,
+            };
         }
 
         public long Id { get; set; }
@@ -46,5 +59,20 @@ namespace Bridge.WebApp.Pages.Admin.Models
         /// 제품 범주
         /// </summary>
         public IEnumerable<ProductCategory> Categories { get; set; } = Enumerable.Empty<ProductCategory>();
+
+        /// <summary>
+        /// 제품유형 문자열
+        /// </summary>
+        public string TypeString => Type.ToString();
+
+        /// <summary>
+        /// 제품 가격 문자열
+        /// </summary>
+        public string PriceString => Price?.ToString() ?? string.Empty;
+
+        /// <summary>
+        /// 카테고리 문자열
+        /// </summary>
+        public string CategoriesString => string.Join(", ", Categories);
     }
 }

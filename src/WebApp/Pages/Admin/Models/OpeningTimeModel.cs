@@ -1,9 +1,12 @@
 using Bridge.Application.Places.Dtos;
 
-namespace Bridge.WebApp.Pages.Admin.Records
+namespace Bridge.WebApp.Pages.Admin.Models
 {
-    public class OpeningTimeRecord
+    public class OpeningTimeModel
     {
+        public OpeningTimeModel() { }
+        public OpeningTimeModel(DayOfWeek day) { Day = day; }
+
         private static readonly Dictionary<DayOfWeek, string> _dayStrings = new()
         {
             { DayOfWeek.Monday, "월요일" },
@@ -15,13 +18,13 @@ namespace Bridge.WebApp.Pages.Admin.Records
             { DayOfWeek.Sunday, "일요일" },
         };
 
-        public static OpeningTimeRecord Create(OpeningTimeDto t)
+        public static OpeningTimeModel Create(OpeningTimeDto t)
         {
-            return new OpeningTimeRecord()
+            return new OpeningTimeModel()
             {
                 Day = t.Day,
-                Dayoff = t.Dayoff,
-                TwentyFourHours = t.TwentyFourHours,
+                IsDayoff = t.Dayoff,
+                Is24Hours = t.TwentyFourHours,
                 OpenTime = t.OpenTime,
                 CloseTime = t.CloseTime,
                 BreakStartTime = t.BreakStartTime,
@@ -35,57 +38,57 @@ namespace Bridge.WebApp.Pages.Admin.Records
         public DayOfWeek Day { get; set; }
 
         /// <summary>
-        /// 영업요일
-        /// </summary>
-        public string DayString => _dayStrings[Day];
-
-        /// <summary>
         /// 휴무일
         /// </summary>
-        public bool Dayoff { get; set; }
+        public bool IsDayoff { get; set; }
 
         /// <summary>
         /// 24시간 영업
         /// </summary>
-        public bool TwentyFourHours { get; set; }
+        public bool Is24Hours { get; set; }
 
         /// <summary>
         /// 개점 시간
         /// </summary>
         public TimeSpan? OpenTime { get; set; }
 
-        public string OpenTimeString => OpenTime.HasValue
-            ? $"{OpenTime:hh\\:mm}"
-            : "??";
-
         /// <summary>
         /// 폐점 시간
         /// </summary>
         public TimeSpan? CloseTime { get; set; }
-
-        public string CloseTimeString => CloseTime.HasValue
-            ? $"{CloseTime:hh\\:mm}"
-            : "??";
 
         /// <summary>
         /// 휴식 시작시간
         /// </summary>
         public TimeSpan? BreakStartTime { get; set; }
 
-        public string BreakStartTimeString => BreakStartTime.HasValue
-           ? $"{BreakStartTime:hh\\:mm}"
-           : string.Empty;
-
         /// <summary>
         /// 휴식 종료시간
         /// </summary>
         public TimeSpan? BreakEndTime { get; set; }
 
+        /// <summary>
+        /// 영업요일
+        /// </summary>
+        public string DayString => _dayStrings[Day];
+
+        public string OpenTimeString => OpenTime.HasValue
+            ? $"{OpenTime:hh\\:mm}"
+            : "??";
+
+        public string CloseTimeString => CloseTime.HasValue
+            ? $"{CloseTime:hh\\:mm}"
+            : "??";
+
+        public string BreakStartTimeString => BreakStartTime.HasValue
+           ? $"{BreakStartTime:hh\\:mm}"
+           : string.Empty;
+
         public string BreakEndTimeString => BreakEndTime.HasValue
             ? $"{BreakEndTime:hh\\:mm}"
             : string.Empty;
 
-        string? BreakTimeString()
+        private string? GetBreakTimeString()
         {
             if (BreakStartTime.HasValue && BreakEndTime.HasValue)
                 return $"  휴식 {BreakStartTimeString}~{BreakEndTimeString}";
@@ -98,12 +101,34 @@ namespace Bridge.WebApp.Pages.Admin.Records
         /// <returns></returns>
         public string ToSingleLineString()
         {
-            if (Dayoff)
+            if (IsDayoff)
                 return $"{DayString} 휴무일";
-            if (TwentyFourHours)
-                return $"{DayString} 24시간 영업" + BreakTimeString();
+            if (Is24Hours)
+                return $"{DayString} 24시간 영업" + GetBreakTimeString();
 
-            return $"{DayString} {OpenTimeString}~{CloseTimeString}" + BreakTimeString();
+            return $"{DayString} {OpenTimeString}~{CloseTimeString}" + GetBreakTimeString();
         }
+
+        public void SyncIs24Hours()
+        {
+            if (Is24Hours)
+            {
+                OpenTime = null;
+                CloseTime = null;
+                IsDayoff = false;
+            }
+        }
+
+        public void SyncIsDayoff()
+        {
+            if (IsDayoff)
+            {
+                OpenTime = null;
+                CloseTime = null;
+                Is24Hours = false;
+            }
+        }
+       
+
     }
 }

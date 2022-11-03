@@ -1,7 +1,6 @@
-@using Bridge.WebApp.Pages.Admin.Records
+@using Bridge.WebApp.Pages.Admin.Models
 @using Bridge.Domain.Places.Entities
 @using Bridge.Domain.Products.Entities
-@using Bridge.WebApp.Pages.Admin.Models
 @using Bridge.WebApp.Pages.Admin.ViewModels
 @inject IPlaceViewModel VM
 
@@ -143,7 +142,7 @@
                 <MudButton Class="button" Variant="Variant.Outlined">검색</MudButton>
             </MudToolBar>
 
-            <MudTable T="ProductRecord"
+            <MudTable T="ProductModel"
                       RowsPerPage="VM.RowsPerPage"
                       Hover="true"
                       Dense="true"

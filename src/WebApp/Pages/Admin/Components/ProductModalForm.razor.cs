@@ -12,8 +12,8 @@ namespace Bridge.WebApp.Pages.Admin.Components
     {
         private MudForm? _form;
         private bool _isFormValid;
-        private readonly ProductFormModel _product = new();
-        private readonly ProductFormModel.Validator _validator = new();
+        private readonly ProductModel _product = new();
+        private readonly ProductModel.Validator _validator = new();
 
         private string? _imgSrc;
 

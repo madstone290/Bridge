@@ -1,13 +1,40 @@
 using Bridge.Application.Places.ReadModels;
 using Bridge.Domain.Places.Entities;
+using FluentValidation;
 
-namespace Bridge.WebApp.Pages.Admin.Records
+namespace Bridge.WebApp.Pages.Admin.Models
 {
-    public class PlaceRecord
+    public class PlaceModel
     {
-        public static PlaceRecord ToPlaceModel(PlaceReadModel x)
+        public class Validator : BaseValidator<PlaceModel>
         {
-            return new PlaceRecord()
+            public Validator()
+            {
+                RuleFor(x => x.Name)
+                    .NotEmpty()
+                    .WithMessage("* 필수");
+
+                RuleFor(x => x.BaseAddress)
+                    .NotEmpty()
+                    .WithMessage("* 필수");
+            }
+        }
+
+        private readonly List<OpeningTimeModel> _openingTimes = new()
+        {
+            new OpeningTimeModel(DayOfWeek.Monday),
+            new OpeningTimeModel(DayOfWeek.Tuesday),
+            new OpeningTimeModel(DayOfWeek.Wednesday),
+            new OpeningTimeModel(DayOfWeek.Thursday),
+            new OpeningTimeModel(DayOfWeek.Friday),
+            new OpeningTimeModel(DayOfWeek.Saturday),
+            new OpeningTimeModel(DayOfWeek.Sunday),
+        };
+
+
+        public static PlaceModel CreateFromReadModel(PlaceReadModel x)
+        {
+            return new PlaceModel()
             {
                 Id = x.Id,
                 Type = x.Type,
@@ -21,11 +48,11 @@ namespace Bridge.WebApp.Pages.Admin.Records
                 Northing = x.Location.Northing,
                 Categories = x.Categories.ToList(),
                 ContactNumber = x.ContactNumber,
-                OpeningTimes = x.OpeningTimes.Select(t => new OpeningTimeRecord()
+                OpeningTimes = x.OpeningTimes.Select(t => new OpeningTimeModel()
                 {
                     Day = t.Day,
-                    Dayoff = t.Dayoff,
-                    TwentyFourHours = t.TwentyFourHours,
+                    IsDayoff = t.Dayoff,
+                    Is24Hours = t.TwentyFourHours,
                     OpenTime = t.OpenTime,
                     CloseTime = t.CloseTime,
                     BreakStartTime = t.BreakStartTime,
@@ -125,29 +152,69 @@ namespace Bridge.WebApp.Pages.Admin.Records
         public string? ContactNumber { get; set; }
 
         /// <summary>
+        /// 영업시간 보여주기 여부
+        /// </summary>
+        public bool ShowOpeningTimes { get; set; }
+
+        #region Form 속성
+        /// <summary>
+        /// 이미지 변경 여부
+        /// </summary>
+        public bool ImageChanged { get; set; }
+
+        /// <summary>
+        /// 이미지 이름
+        /// </summary>
+        public string? ImageName { get; set; }
+
+        /// <summary>
+        /// 이미지 데이터
+        /// </summary>
+        public byte[]? ImageData { get; set; }
+
+        /// <summary>
+        /// 이미지 Url
+        /// </summary>
+        public string? ImageUrl { get; set; }
+        #endregion
+
+        /// <summary>
         /// 영업시간
         /// </summary>
-        public IEnumerable<OpeningTimeRecord> OpeningTimes { get; set; } = Enumerable.Empty<OpeningTimeRecord>();
+        public IEnumerable<OpeningTimeModel> OpeningTimes
+        {
+            get => _openingTimes;
+            set
+            {
+                foreach (var openingTime in _openingTimes.ToArray())
+                {
+                    var entry = value.FirstOrDefault(x => x.Day == openingTime.Day);
+                    if (entry != null)
+                    {
+                        _openingTimes.Remove(_openingTimes.First(x => x.Day == openingTime.Day));
+                        _openingTimes.Add(entry);
+                    }
+                }
+            }
+        }
 
-        public IEnumerable<OpeningTimeRecord> OpeningTimesFromMonday
+        public IEnumerable<OpeningTimeModel> OpeningTimesFromMonday
         {
             get
             {
-                var openingTimes = new List<OpeningTimeRecord>();
-                openingTimes.Add(OpeningTimes.First(x => x.Day == DayOfWeek.Monday));
-                openingTimes.Add(OpeningTimes.First(x => x.Day == DayOfWeek.Tuesday));
-                openingTimes.Add(OpeningTimes.First(x => x.Day == DayOfWeek.Wednesday));
-                openingTimes.Add(OpeningTimes.First(x => x.Day == DayOfWeek.Thursday));
-                openingTimes.Add(OpeningTimes.First(x => x.Day == DayOfWeek.Friday));
-                openingTimes.Add(OpeningTimes.First(x => x.Day == DayOfWeek.Saturday));
-                openingTimes.Add(OpeningTimes.First(x => x.Day == DayOfWeek.Sunday));
+                var openingTimes = new List<OpeningTimeModel>
+                {
+                    OpeningTimes.First(x => x.Day == DayOfWeek.Monday),
+                    OpeningTimes.First(x => x.Day == DayOfWeek.Tuesday),
+                    OpeningTimes.First(x => x.Day == DayOfWeek.Wednesday),
+                    OpeningTimes.First(x => x.Day == DayOfWeek.Thursday),
+                    OpeningTimes.First(x => x.Day == DayOfWeek.Friday),
+                    OpeningTimes.First(x => x.Day == DayOfWeek.Saturday),
+                    OpeningTimes.First(x => x.Day == DayOfWeek.Sunday)
+                };
                 return openingTimes;
             }
         }
 
-        /// <summary>
-        /// 영업시간 보여주기 여부
-        /// </summary>
-        public bool ShowOpeningTimes { get; set; }
     }
 }

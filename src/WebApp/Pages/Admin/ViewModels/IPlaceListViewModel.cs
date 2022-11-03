@@ -1,5 +1,5 @@
 using Bridge.Domain.Places.Entities;
-using Bridge.WebApp.Pages.Admin.Records;
+using Bridge.WebApp.Pages.Admin.Models;
 using Microsoft.AspNetCore.Components.Web;
 
 namespace Bridge.WebApp.Pages.Admin.ViewModels
@@ -18,7 +18,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels
 
         int RowsPerPage { get; set; }
 
-        IEnumerable<PlaceRecord> Places { get; }
+        IEnumerable<PlaceModel> Places { get; }
 
         string GetPlaceTypeText(PlaceType? placeType);
 
@@ -34,15 +34,15 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels
 
         Task OnRestroomExcelUploadClick();
 
-        Task OnShowOpeningTimeClick(PlaceRecord place);
+        Task OnShowOpeningTimeClick(PlaceModel place);
 
-        Task OnEditPlaceClick(PlaceRecord place);
+        Task OnEditPlaceClick(PlaceModel place);
 
-        Task OnManagePlaceClick(PlaceRecord place);
+        Task OnManagePlaceClick(PlaceModel place);
 
-        Task OnManageProductClick(PlaceRecord place);
+        Task OnManageProductClick(PlaceModel place);
 
-        Task OnClosePlaceClick(PlaceRecord place);
+        Task OnClosePlaceClick(PlaceModel place);
 
         Task OnPageNumberChanged(int pageNumber);
 

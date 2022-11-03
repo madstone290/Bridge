@@ -5,17 +5,17 @@ using Bridge.WebApp.Api.ApiClients.Admin;
 
 namespace Bridge.WebApp.Pages.Admin.Models
 {
-    public class RestroomFormModel
+    public class RestroomModel
     {
-        private readonly List<OpeningTimeFormModel> _openingTimes = new()
+        private readonly List<OpeningTimeModel> _openingTimes = new()
         {
-            new OpeningTimeFormModel(DayOfWeek.Monday),
-            new OpeningTimeFormModel(DayOfWeek.Tuesday),
-            new OpeningTimeFormModel(DayOfWeek.Wednesday),
-            new OpeningTimeFormModel(DayOfWeek.Thursday),
-            new OpeningTimeFormModel(DayOfWeek.Friday),
-            new OpeningTimeFormModel(DayOfWeek.Saturday),
-            new OpeningTimeFormModel(DayOfWeek.Sunday),
+            new OpeningTimeModel(DayOfWeek.Monday),
+            new OpeningTimeModel(DayOfWeek.Tuesday),
+            new OpeningTimeModel(DayOfWeek.Wednesday),
+            new OpeningTimeModel(DayOfWeek.Thursday),
+            new OpeningTimeModel(DayOfWeek.Friday),
+            new OpeningTimeModel(DayOfWeek.Saturday),
+            new OpeningTimeModel(DayOfWeek.Sunday),
         };
 
         public AdminRestroomApiClient RestroomApiClient { get; set; } = null!;
@@ -71,7 +71,7 @@ namespace Bridge.WebApp.Pages.Admin.Models
         /// <summary>
         /// 영업시간
         /// </summary>
-        public IEnumerable<OpeningTimeFormModel> OpeningTimes
+        public IEnumerable<OpeningTimeModel> OpeningTimes
         {
             get => _openingTimes;
             set
@@ -91,7 +91,7 @@ namespace Bridge.WebApp.Pages.Admin.Models
         /// <summary>
         /// 영업시간(월요일부터)
         /// </summary>
-        public IEnumerable<OpeningTimeFormModel> OpeningTimesFromMonday
+        public IEnumerable<OpeningTimeModel> OpeningTimesFromMonday
         {
             get
             {
@@ -127,7 +127,7 @@ namespace Bridge.WebApp.Pages.Admin.Models
             FemaleToilet = restroomDto.FemaleToilet;
             FemaleDisabledToilet = restroomDto.FemaleDisabledToilet;
             FemaleKidToilet = restroomDto.FemaleKidToilet;
-            OpeningTimes = restroomDto.OpeningTimes.Select(x => OpeningTimeFormModel.Create(x));
+            OpeningTimes = restroomDto.OpeningTimes.Select(x => OpeningTimeModel.Create(x));
 
             return result;
         }
@@ -156,8 +156,8 @@ namespace Bridge.WebApp.Pages.Admin.Models
                 OpeningTimes = OpeningTimes.Select(t => new Application.Places.Dtos.OpeningTimeDto()
                 {
                     Day = t.Day,
-                    Dayoff = t.Dayoff,
-                    TwentyFourHours = t.TwentyFourHours,
+                    Dayoff = t.IsDayoff,
+                    TwentyFourHours = t.Is24Hours,
                     BreakEndTime = t.BreakEndTime,
                     BreakStartTime = t.BreakStartTime,
                     OpenTime = t.OpenTime,
@@ -195,8 +195,8 @@ namespace Bridge.WebApp.Pages.Admin.Models
                 OpeningTimes = OpeningTimes.Select(t => new Application.Places.Dtos.OpeningTimeDto()
                 {
                     Day = t.Day,
-                    Dayoff = t.Dayoff,
-                    TwentyFourHours = t.TwentyFourHours,
+                    Dayoff = t.IsDayoff,
+                    TwentyFourHours = t.Is24Hours,
                     BreakEndTime = t.BreakEndTime,
                     BreakStartTime = t.BreakStartTime,
                     OpenTime = t.OpenTime,
