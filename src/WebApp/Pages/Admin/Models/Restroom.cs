@@ -2,7 +2,7 @@ using Bridge.Domain.Places.Enums;
 
 namespace Bridge.WebApp.Pages.Admin.Models
 {
-    public class RestroomModel : PlaceModel
+    public class Restroom : Place
     {
         /// <summary>
         /// 남녀공용여부

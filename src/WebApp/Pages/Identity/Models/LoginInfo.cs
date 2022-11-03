@@ -2,9 +2,9 @@ using FluentValidation;
 
 namespace Bridge.WebApp.Pages.Identity.Models
 {
-    public class LoginModel
+    public class LoginInfo
     {
-        public class Validator : BaseValidator<LoginModel>
+        public class Validator : BaseValidator<LoginInfo>
         {
             public Validator()
             {

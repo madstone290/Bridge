@@ -9,7 +9,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
 {
     public class ProductFormViewModel : IProductFormViewModel
     {
-        private readonly ProductModel.Validator _validator = new();
+        private readonly Product.Validator _validator = new();
 
         private readonly AdminProductApiClient _productApiClient;
         private readonly IApiResultValidationService _validationService;
@@ -24,7 +24,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
 
         public long ProductId { get; set; }
         public long PlaceId { get; set; }
-        public ProductModel Product { get; private set; } = new();
+        public Product Product { get; private set; } = new();
         public MudDialogInstance MudDialog { get; set; } = null!;
         public FormMode FormMode { get; set; }
         public bool IsProductValid { get; set; }
@@ -57,7 +57,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
             return _validationService.Validate(result);
         }
 
-        public Func<TProperty, Task<IEnumerable<string>>> GetValidation<TProperty>(System.Linq.Expressions.Expression<Func<ProductModel, TProperty>> expression)
+        public Func<TProperty, Task<IEnumerable<string>>> GetValidation<TProperty>(System.Linq.Expressions.Expression<Func<Product, TProperty>> expression)
         {
             return _validator.PropertyValidation(expression);
         }

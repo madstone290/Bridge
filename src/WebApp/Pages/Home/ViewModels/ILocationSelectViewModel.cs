@@ -2,7 +2,7 @@
 
 namespace Bridge.WebApp.Pages.Home.ViewModels
 {
-    public interface ILocationSelectViewModel : IModalViewModel, IAsyncDisposable, IEventReceiver
+    public interface ILocationSelectViewModel : IModal, IAsyncDisposable, IEventReceiver
     {
         string MapElementId { get; }
 

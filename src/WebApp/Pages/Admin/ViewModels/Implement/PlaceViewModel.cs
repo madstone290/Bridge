@@ -11,10 +11,10 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
 {
     public class PlaceViewModel : IPlaceViewModel
     {
-        private readonly PlaceModel _place = new();
-        private readonly PlaceModel.Validator _validator = new();
-        private readonly PlaceModel _placeBackup = new();
-        private readonly List<ProductModel> _products = new();
+        private readonly Place _place = new();
+        private readonly Place.Validator _validator = new();
+        private readonly Place _placeBackup = new();
+        private readonly List<Product> _products = new();
 
 
         private readonly AdminPlaceApiClient _placeApiClient;
@@ -40,7 +40,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
 
         public bool BaseInfoReadOnly { get; private set; } = true;
 
-        public PlaceModel Place => _place;
+        public Place Place => _place;
 
         public bool OpeningTimeReadOnly { get; private set; } = true;
 
@@ -50,9 +50,9 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
         public int PageNumber { get; set; } = 1;
         public int RowsPerPage { get; set; } = 10;
 
-        public IEnumerable<ProductModel> Products => _products;
+        public IEnumerable<Product> Products => _products;
 
-        private void CopyPlace(PlaceModel source, PlaceModel target)
+        private void CopyPlace(Place source, Place target)
         {
             target.Id = source.Id;
             target.Type = source.Type;
@@ -88,7 +88,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
             _place.DetailAddress = placeDto.Address.DetailAddress;
             _place.Categories = placeDto.Categories;
             _place.ContactNumber = placeDto.ContactNumber;
-            _place.OpeningTimes = placeDto.OpeningTimes.Select(x => OpeningTimeModel.Create(x)).ToList();
+            _place.OpeningTimes = placeDto.OpeningTimes.Select(x => OpeningTime.Create(x)).ToList();
 
             if (placeDto.ImagePath != null)
                 _place.ImageUrl = new Uri(_placeApiClient.HttpClient.BaseAddress!, placeDto.ImagePath).ToString();
@@ -108,7 +108,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
             PageCount = productsDto.TotalPages;
 
             _products.Clear();
-            _products.AddRange(productsDto.List.Select(x => ProductModel.Create(x)));
+            _products.AddRange(productsDto.List.Select(x => Product.Create(x)));
         }
 
         public async Task Initialize()
@@ -119,7 +119,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
             await Task.WhenAll(placeTask, productTask);
         }
 
-        public Func<TProperty, Task<IEnumerable<string>>> GetValidation<TProperty>(Expression<Func<PlaceModel, TProperty>> expression)
+        public Func<TProperty, Task<IEnumerable<string>>> GetValidation<TProperty>(Expression<Func<Place, TProperty>> expression)
         {
             return _validator.PropertyValidation(expression);
         }
@@ -248,7 +248,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
             }
         }
 
-        public async Task OnUpdateProductClick(ProductModel product)
+        public async Task OnUpdateProductClick(Product product)
         {
             var parameters = new DialogParameters();
             parameters.Add(nameof(ProductFormView.FormMode), FormMode.Update);
@@ -273,7 +273,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
             }
         }
 
-        public async Task OnDiscardProductClick(ProductModel product)
+        public async Task OnDiscardProductClick(Product product)
         {
             var parameters = new DialogParameters
             {

@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Components.Forms;
 
 namespace Bridge.WebApp.Pages.Admin.ViewModels
 {
-    public interface IProductFormViewModel : IFormViewModel<ProductModel>, IModalViewModel
+    public interface IProductFormViewModel : IFormValidation<Product>, IModal
     {
         long PlaceId { get; set; }
         long ProductId { get; set; }
-        ProductModel Product { get; }
+        Product Product { get; }
         bool IsProductValid { get; set; }
 
         Task OnImageFileChanged(InputFileChangeEventArgs args);

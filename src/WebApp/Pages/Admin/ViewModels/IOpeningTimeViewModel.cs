@@ -4,7 +4,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels
 {
     public interface IOpeningTimeViewModel
     {
-        OpeningTimeModel OpeningTime { get; set; }
+        OpeningTime OpeningTime { get; set; }
         bool IsReadOnly { get; set; }
         string OpenDay { get; }
         TimeSpan? OpenTime { get; set; }

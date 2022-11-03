@@ -10,7 +10,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
 {
     public class RestroomFormViewModel : IRestroomFormViewModel
     {
-        private readonly PlaceModel.Validator _validator = new();
+        private readonly Place.Validator _validator = new();
 
         private readonly AdminRestroomApiClient _restroomApiClient;
         private readonly IApiResultValidationService _validationService;
@@ -23,7 +23,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
 
         public MudDialogInstance MudDialog { get; set; } = null!;
         public long RestroomId { get; set; }
-        public RestroomModel Restroom { get; private set; } = new();
+        public Restroom Restroom { get; private set; } = new();
         public FormMode FormMode { get; set; }
         public bool IsRestroomValid { get; set; }
 
@@ -117,7 +117,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
                 return "알 수 없음";
         }
 
-        public Func<TProperty, Task<IEnumerable<string>>> GetValidation<TProperty>(Expression<Func<PlaceModel, TProperty>> expression)
+        public Func<TProperty, Task<IEnumerable<string>>> GetValidation<TProperty>(Expression<Func<Place, TProperty>> expression)
         {
             return _validator.PropertyValidation(expression);
         }
@@ -146,7 +146,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
                 Restroom.FemaleToilet = restroomDto.FemaleToilet;
                 Restroom.FemaleDisabledToilet = restroomDto.FemaleDisabledToilet;
                 Restroom.FemaleKidToilet = restroomDto.FemaleKidToilet;
-                Restroom.OpeningTimes = restroomDto.OpeningTimes.Select(x => OpeningTimeModel.Create(x)).ToList();
+                Restroom.OpeningTimes = restroomDto.OpeningTimes.Select(x => OpeningTime.Create(x)).ToList();
             }
         }
 

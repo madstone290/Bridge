@@ -9,8 +9,8 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
 {
     public class PlaceFormViewModel : IPlaceFormViewModel
     {
-        private readonly PlaceModel _place = new();
-        private readonly PlaceModel.Validator _validator = new();
+        private readonly Place _place = new();
+        private readonly Place.Validator _validator = new();
 
         private readonly AdminPlaceApiClient _placeApiClient;
         private readonly IApiResultValidationService _validationService;
@@ -26,7 +26,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
         public long PlaceId { get; set; }
         public FormMode FormMode { get; set; }
         public bool IsPlaceValid { get; set; }
-        public PlaceModel Place => _place;
+        public Place Place => _place;
         public MudDialogInstance MudDialog { get; set; } = null!;
         public FormMode Mode { get; set; }
 
@@ -93,7 +93,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
         }
 
 
-        public Func<TProperty, Task<IEnumerable<string>>> GetValidation<TProperty>(System.Linq.Expressions.Expression<Func<PlaceModel, TProperty>> expression)
+        public Func<TProperty, Task<IEnumerable<string>>> GetValidation<TProperty>(System.Linq.Expressions.Expression<Func<Place, TProperty>> expression)
         {
             return _validator.PropertyValidation(expression);
         }
@@ -114,7 +114,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
                 _place.DetailAddress = placeDto.Address.DetailAddress;
                 _place.Categories = placeDto.Categories;
                 _place.ContactNumber = placeDto.ContactNumber;
-                _place.OpeningTimes = placeDto.OpeningTimes.Select(x => OpeningTimeModel.Create(x));
+                _place.OpeningTimes = placeDto.OpeningTimes.Select(x => OpeningTime.Create(x));
 
                 if (placeDto.ImagePath != null)
                     _place.ImageUrl = new Uri(_placeApiClient.HttpClient.BaseAddress!, placeDto.ImagePath).ToString();

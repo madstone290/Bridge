@@ -4,7 +4,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
 {
     public class OpeningTimeViewModel : IOpeningTimeViewModel
     {
-        public OpeningTimeModel OpeningTime { get; set; } = null!;
+        public OpeningTime OpeningTime { get; set; } = null!;
 
         public string OpenDay => OpeningTime.DayString;
 

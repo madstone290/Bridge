@@ -4,9 +4,9 @@ using FluentValidation;
 
 namespace Bridge.WebApp.Pages.Admin.Models
 {
-    public class ProductModel
+    public class Product
     {
-        public class Validator : BaseValidator<ProductModel>
+        public class Validator : BaseValidator<Product>
         {
             public Validator()
             {
@@ -20,9 +20,9 @@ namespace Bridge.WebApp.Pages.Admin.Models
             }
         }
 
-        public static ProductModel Create(ProductReadModel x)
+        public static Product Create(ProductReadModel x)
         {
-            return new ProductModel()
+            return new Product()
             {
                 Id = x.Id,
                 Name = x.Name,

@@ -4,9 +4,9 @@ using FluentValidation;
 
 namespace Bridge.WebApp.Pages.Admin.Models
 {
-    public class PlaceModel
+    public class Place
     {
-        public class Validator : BaseValidator<PlaceModel>
+        public class Validator : BaseValidator<Place>
         {
             public Validator()
             {
@@ -20,21 +20,21 @@ namespace Bridge.WebApp.Pages.Admin.Models
             }
         }
 
-        private readonly List<OpeningTimeModel> _openingTimes = new()
+        private readonly List<OpeningTime> _openingTimes = new()
         {
-            new OpeningTimeModel(DayOfWeek.Monday),
-            new OpeningTimeModel(DayOfWeek.Tuesday),
-            new OpeningTimeModel(DayOfWeek.Wednesday),
-            new OpeningTimeModel(DayOfWeek.Thursday),
-            new OpeningTimeModel(DayOfWeek.Friday),
-            new OpeningTimeModel(DayOfWeek.Saturday),
-            new OpeningTimeModel(DayOfWeek.Sunday),
+            new OpeningTime(DayOfWeek.Monday),
+            new OpeningTime(DayOfWeek.Tuesday),
+            new OpeningTime(DayOfWeek.Wednesday),
+            new OpeningTime(DayOfWeek.Thursday),
+            new OpeningTime(DayOfWeek.Friday),
+            new OpeningTime(DayOfWeek.Saturday),
+            new OpeningTime(DayOfWeek.Sunday),
         };
 
 
-        public static PlaceModel CreateFromReadModel(PlaceReadModel x)
+        public static Place CreateFromReadModel(PlaceReadModel x)
         {
-            return new PlaceModel()
+            return new Place()
             {
                 Id = x.Id,
                 Type = x.Type,
@@ -48,7 +48,7 @@ namespace Bridge.WebApp.Pages.Admin.Models
                 Northing = x.Location.Northing,
                 Categories = x.Categories.ToList(),
                 ContactNumber = x.ContactNumber,
-                OpeningTimes = x.OpeningTimes.Select(t => new OpeningTimeModel()
+                OpeningTimes = x.OpeningTimes.Select(t => new OpeningTime()
                 {
                     Day = t.Day,
                     IsDayoff = t.Dayoff,
@@ -181,7 +181,7 @@ namespace Bridge.WebApp.Pages.Admin.Models
         /// <summary>
         /// 영업시간
         /// </summary>
-        public IEnumerable<OpeningTimeModel> OpeningTimes
+        public IEnumerable<OpeningTime> OpeningTimes
         {
             get => _openingTimes;
             set
@@ -198,11 +198,11 @@ namespace Bridge.WebApp.Pages.Admin.Models
             }
         }
 
-        public IEnumerable<OpeningTimeModel> OpeningTimesFromMonday
+        public IEnumerable<OpeningTime> OpeningTimesFromMonday
         {
             get
             {
-                var openingTimes = new List<OpeningTimeModel>
+                var openingTimes = new List<OpeningTime>
                 {
                     OpeningTimes.First(x => x.Day == DayOfWeek.Monday),
                     OpeningTimes.First(x => x.Day == DayOfWeek.Tuesday),

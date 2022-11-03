@@ -9,8 +9,8 @@ namespace Bridge.WebApp.Pages.Identity
 {
     public partial class Register
     {
-        private readonly RegisterModel _registerModel = new();
-        private readonly RegisterModel.Validator _validator = new();
+        private readonly RegisterInfo _registerModel = new();
+        private readonly RegisterInfo.Validator _validator = new();
 
         private MudForm? _form;
 

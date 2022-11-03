@@ -1,4 +1,3 @@
-@using Bridge.Domain.Places.Entities
 @using Bridge.WebApp.Pages.Admin.Models
 @using Bridge.WebApp.Pages.Admin.ViewModels
 @attribute [Route(PageRoutes.Admin.PlaceProductList)]
@@ -39,7 +38,7 @@
         </div>
     </MudToolBar>
 
-    <MudTable T="ProductModel"
+    <MudTable T="Product"
               Items="VM.Products"
               Filter="VM.FilterProduct">
         <HeaderContent>

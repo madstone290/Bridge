@@ -11,9 +11,9 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels
 
         string SearchText { get; set; }
 
-        IEnumerable<ProductModel> Products { get; }
+        IEnumerable<Product> Products { get; }
 
-        bool FilterProduct(ProductModel product);
+        bool FilterProduct(Product product);
 
         Task Initialize();
 

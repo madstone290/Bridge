@@ -18,7 +18,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels
 
         int RowsPerPage { get; set; }
 
-        IEnumerable<PlaceModel> Places { get; }
+        IEnumerable<Place> Places { get; }
 
         string GetPlaceTypeText(PlaceType? placeType);
 
@@ -34,15 +34,15 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels
 
         Task OnRestroomExcelUploadClick();
 
-        Task OnShowOpeningTimeClick(PlaceModel place);
+        Task OnShowOpeningTimeClick(Place place);
 
-        Task OnEditPlaceClick(PlaceModel place);
+        Task OnEditPlaceClick(Place place);
 
-        Task OnManagePlaceClick(PlaceModel place);
+        Task OnManagePlaceClick(Place place);
 
-        Task OnManageProductClick(PlaceModel place);
+        Task OnManageProductClick(Place place);
 
-        Task OnClosePlaceClick(PlaceModel place);
+        Task OnClosePlaceClick(Place place);
 
         Task OnPageNumberChanged(int pageNumber);
 

@@ -1,10 +1,9 @@
 ﻿using Bridge.WebApp.Pages.Admin.Models;
 using Microsoft.AspNetCore.Components.Forms;
-using System.Linq.Expressions;
 
 namespace Bridge.WebApp.Pages.Admin.ViewModels
 {
-    public interface IPlaceViewModel
+    public interface IPlaceViewModel : IValidation<Place>
     {
         Task Initialize();
 
@@ -14,9 +13,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels
 
         bool IsBaseInfoValid { get; set; }
 
-        PlaceModel Place { get; }
-
-        Func<TProperty, Task<IEnumerable<string>>> GetValidation<TProperty>(Expression<Func<PlaceModel, TProperty>> expression);
+        Place Place { get; }
 
         Task OnUploadFileChange(InputFileChangeEventArgs args);
 
@@ -46,13 +43,13 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels
 
         int RowsPerPage { get; set; }
 
-        IEnumerable<ProductModel> Products { get; }
+        IEnumerable<Product> Products { get; }
 
         Task OnCreateProductClick();
 
-        Task OnUpdateProductClick(ProductModel product);
+        Task OnUpdateProductClick(Product product);
 
-        Task OnDiscardProductClick(ProductModel product);
+        Task OnDiscardProductClick(Product product);
 
         Task OnPageNumberChanged(int pageNumber);
 

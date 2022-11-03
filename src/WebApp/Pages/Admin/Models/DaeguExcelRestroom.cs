@@ -7,7 +7,7 @@ namespace Bridge.WebApp.Pages.Admin.Models
     /// <summary>
     /// 대구광역시 공중화장실 엑셀 데이터 모델
     /// </summary>
-    public class DaeguRestroomExcelModel
+    public class DaeguExcelRestroom
     {
         /// <summary>
         /// 화장실 이름

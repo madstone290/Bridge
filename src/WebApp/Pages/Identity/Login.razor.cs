@@ -10,8 +10,8 @@ namespace Bridge.WebApp.Pages.Identity
 {
     public partial class Login
     {
-        private readonly LoginModel _loginModel = new();
-        private readonly LoginModel.Validator _validator = new();
+        private readonly LoginInfo _loginModel = new();
+        private readonly LoginInfo.Validator _validator = new();
 
         private MudForm? _form;
         private MudTextField<string>? _passwordField;
