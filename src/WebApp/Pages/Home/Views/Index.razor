@@ -70,5 +70,6 @@
     async ValueTask IAsyncDisposable.DisposeAsync()
     {
         await VM.DisposeAsync();
+        GC.SuppressFinalize(this);
     }
 }

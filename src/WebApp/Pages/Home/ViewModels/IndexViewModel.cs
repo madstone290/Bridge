@@ -213,6 +213,7 @@ namespace Bridge.WebApp.Pages.Home.ViewModels
         async ValueTask IAsyncDisposable.DisposeAsync()
         {
             await _mapService.CloseAsync(SESSION_ID);
+            GC.SuppressFinalize(this);
         }
     }
 }
