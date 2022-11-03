@@ -2,7 +2,6 @@ using Bridge.Domain.Places.Entities;
 using Bridge.Shared.Extensions;
 using Bridge.WebApp.Api.ApiClients.Admin;
 using Bridge.WebApp.Pages.Admin.Components;
-using Bridge.WebApp.Pages.Admin.Models;
 using Bridge.WebApp.Pages.Admin.Records;
 using Bridge.WebApp.Services;
 using Bridge.WebApp.Shared;
@@ -38,17 +37,15 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels
         private readonly IExcelService _excelService;
         private readonly IApiResultValidationService _validationService;
         private readonly IDialogService _dialogService;
-        private readonly ISnackbar _snackbar;
         private readonly NavigationManager _navManager;
 
-        public PlaceListViewModel(AdminRestroomApiClient restroomApiClient, AdminPlaceApiClient placeApiClient, IExcelService excelService, IApiResultValidationService validationService, IDialogService dialogService, ISnackbar snackbar, NavigationManager navManager)
+        public PlaceListViewModel(AdminRestroomApiClient restroomApiClient, AdminPlaceApiClient placeApiClient, IExcelService excelService, IApiResultValidationService validationService, IDialogService dialogService, NavigationManager navManager)
         {
             _restroomApiClient = restroomApiClient;
             _placeApiClient = placeApiClient;
             _excelService = excelService;
             _validationService = validationService;
             _dialogService = dialogService;
-            _snackbar = snackbar;
             _navManager = navManager;
         }
 
