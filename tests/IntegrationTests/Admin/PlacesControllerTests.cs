@@ -235,7 +235,7 @@ namespace Bridge.IntegrationTests.Admin
         [InlineData(DayOfWeek.Monday, false, true, null, null, null, null)]
         [InlineData(DayOfWeek.Tuesday, false, false, 6, 18, null, null)]
         [InlineData(DayOfWeek.Wednesday, false, false, 6, 18, 15, 16)]
-        public async Task Update_OpeningTimes_Return_Ok(DayOfWeek day, bool dayoff, bool twentyFourHours, double? openTime, double? closeTime,
+        public async Task Update_OpeningTimes_Return_Ok(DayOfWeek day, bool isDayoff, bool is24Hours, double? openTime, double? closeTime,
             double? breakStartTime, double? breakEndTime)
         {
             // Arrange
@@ -248,8 +248,8 @@ namespace Bridge.IntegrationTests.Admin
                      new OpeningTimeDto()
                     {
                         Day = day,
-                        Dayoff = dayoff,
-                        TwentyFourHours = twentyFourHours,
+                        IsDayoff = isDayoff,
+                        Is24Hours = is24Hours,
                         OpenTime = openTime.HasValue ? TimeSpan.FromHours(openTime.Value) : null,
                         CloseTime = closeTime.HasValue ? TimeSpan.FromHours(closeTime.Value) : null,
                         BreakStartTime = breakStartTime.HasValue ? TimeSpan.FromHours(breakStartTime.Value) : null,
@@ -416,7 +416,7 @@ namespace Bridge.IntegrationTests.Admin
         [InlineData("킴 미용실", "대구광역시 수성구 황금동 887-4", "3층", "053-442-2345", "Restaurant", "Cafeteria", false, false, "12:00", "20:00", null, null)]
         [InlineData("다이소 황금점", "대구광역시 수성구 청수로 81", "다이소", "053-411-2345", "Restaurant", "PetStore", true, false, null, null, null, null)]
         public async Task Update_Place_Return_Ok(string name, string baseAddress, string detailAddress,
-            string contactNumber, string category1, string category2, bool dayoff, bool twentyFourHours, string openTime,
+            string contactNumber, string category1, string category2, bool isDayoff, bool is24Hours, string openTime,
             string closeTime, string? breakStartTime, string? breakEndTime)
         {
             // Arrange
@@ -436,8 +436,8 @@ namespace Bridge.IntegrationTests.Admin
                 {
                     new OpeningTimeDto(){
                         Day = DayOfWeek.Monday,
-                        Dayoff = dayoff,
-                        TwentyFourHours = twentyFourHours,
+                        IsDayoff = isDayoff,
+                        Is24Hours = is24Hours,
                         OpenTime = openTime == null ? null :  TimeSpan.Parse(openTime),
                         CloseTime =  closeTime == null ? null : TimeSpan.Parse(closeTime),
                         BreakStartTime = breakStartTime == null ? null : TimeSpan.Parse(breakStartTime),

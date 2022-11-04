@@ -1,4 +1,4 @@
-﻿using Bridge.Domain.Common;
+using Bridge.Domain.Common;
 using Bridge.Domain.Places.Exceptions;
 using System;
 using System.Collections.Generic;
@@ -37,7 +37,7 @@ namespace Bridge.Domain.Places.Entities
         {
             return new OpeningTime(day)
             {
-                TwentyFourHours = true
+                Is24Hours = true
             };
         }
 
@@ -45,7 +45,7 @@ namespace Bridge.Domain.Places.Entities
         {
             return new OpeningTime(day)
             {
-                Dayoff = true
+                IsDayoff = true
             };
         }
 
@@ -57,12 +57,12 @@ namespace Bridge.Domain.Places.Entities
         /// <summary>
         /// 휴무일
         /// </summary>
-        public bool Dayoff { get; private set;  }
+        public bool IsDayoff { get; private set;  }
 
         /// <summary>
         /// 24시간 영업 여부
         /// </summary>
-        public bool TwentyFourHours { get; private set; }
+        public bool Is24Hours { get; private set; }
 
         /// <summary>
         /// 개점 시간
@@ -95,8 +95,8 @@ namespace Bridge.Domain.Places.Entities
             OpenTime = openTime;
             CloseTime = closeTime;
 
-            Dayoff = false;
-            TwentyFourHours = false;
+            IsDayoff = false;
+            Is24Hours = false;
         }
 
 
@@ -110,7 +110,7 @@ namespace Bridge.Domain.Places.Entities
             BreakStartTime = breakStartTime;
             BreakEndTime = breakEndTime;
 
-            Dayoff = false;
+            IsDayoff = false;
         }
 
         /// <summary>
@@ -127,8 +127,8 @@ namespace Bridge.Domain.Places.Entities
         /// </summary>
         internal void SetDayoff()
         {
-            Dayoff = true;
-            TwentyFourHours = false;
+            IsDayoff = true;
+            Is24Hours = false;
             OpenTime = null;
             CloseTime = null;
             BreakStartTime = null;
@@ -140,7 +140,7 @@ namespace Bridge.Domain.Places.Entities
         /// </summary>
         internal void ClearDayoff()
         {
-            Dayoff = false;
+            IsDayoff = false;
         }
 
         /// <summary>
@@ -148,8 +148,8 @@ namespace Bridge.Domain.Places.Entities
         /// </summary>
         internal void SetTwentyFourHours()
         {
-            TwentyFourHours = true;
-            Dayoff = false;
+            Is24Hours = true;
+            IsDayoff = false;
             OpenTime = null;
             CloseTime = null;
         }
@@ -159,7 +159,7 @@ namespace Bridge.Domain.Places.Entities
         /// </summary>
         internal void ClearTwentyFourHours()
         {
-            TwentyFourHours = false;
+            Is24Hours = false;
         }
     }
 }

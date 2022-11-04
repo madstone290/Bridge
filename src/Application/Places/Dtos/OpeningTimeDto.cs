@@ -10,12 +10,12 @@ namespace Bridge.Application.Places.Dtos
         /// <summary>
         /// 휴무일
         /// </summary>
-        public bool Dayoff { get; set; }
+        public bool IsDayoff { get; set; }
 
         /// <summary>
         /// 24시간 영업
         /// </summary>
-        public bool TwentyFourHours { get; set; }
+        public bool Is24Hours { get; set; }
 
         /// <summary>
         /// 개점 시간

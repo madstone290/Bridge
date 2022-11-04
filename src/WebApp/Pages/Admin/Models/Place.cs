@@ -51,8 +51,8 @@ namespace Bridge.WebApp.Pages.Admin.Models
                 OpeningTimes = x.OpeningTimes.Select(t => new OpeningTime()
                 {
                     Day = t.Day,
-                    IsDayoff = t.Dayoff,
-                    Is24Hours = t.TwentyFourHours,
+                    IsDayoff = t.IsDayoff,
+                    Is24Hours = t.Is24Hours,
                     OpenTime = t.OpenTime,
                     CloseTime = t.CloseTime,
                     BreakStartTime = t.BreakStartTime,

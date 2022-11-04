@@ -175,13 +175,13 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
                     LastUpdateDateTimeLocal = x.LastUpdateDateTime,
                     OpeningTimes = new List<Application.Places.Dtos.OpeningTimeDto>()
                     {
-                        new Application.Places.Dtos.OpeningTimeDto(){ Day = DayOfWeek.Monday, TwentyFourHours = x.Is24Hours, OpenTime = x.OpenTime, CloseTime = x.CloseTime },
-                        new Application.Places.Dtos.OpeningTimeDto(){ Day = DayOfWeek.Tuesday, TwentyFourHours = x.Is24Hours, OpenTime = x.OpenTime, CloseTime = x.CloseTime },
-                        new Application.Places.Dtos.OpeningTimeDto(){ Day = DayOfWeek.Wednesday, TwentyFourHours = x.Is24Hours, OpenTime = x.OpenTime, CloseTime = x.CloseTime },
-                        new Application.Places.Dtos.OpeningTimeDto(){ Day = DayOfWeek.Thursday, TwentyFourHours = x.Is24Hours, OpenTime = x.OpenTime, CloseTime = x.CloseTime },
-                        new Application.Places.Dtos.OpeningTimeDto(){ Day = DayOfWeek.Friday, TwentyFourHours = x.Is24Hours, OpenTime = x.OpenTime, CloseTime = x.CloseTime },
-                        new Application.Places.Dtos.OpeningTimeDto(){ Day = DayOfWeek.Saturday, TwentyFourHours = x.Is24Hours, OpenTime = x.OpenTime, CloseTime = x.CloseTime },
-                        new Application.Places.Dtos.OpeningTimeDto(){ Day = DayOfWeek.Sunday, TwentyFourHours = x.Is24Hours, OpenTime = x.OpenTime, CloseTime = x.CloseTime },
+                        new Application.Places.Dtos.OpeningTimeDto(){ Day = DayOfWeek.Monday, Is24Hours = x.Is24Hours, OpenTime = x.OpenTime, CloseTime = x.CloseTime },
+                        new Application.Places.Dtos.OpeningTimeDto(){ Day = DayOfWeek.Tuesday, Is24Hours = x.Is24Hours, OpenTime = x.OpenTime, CloseTime = x.CloseTime },
+                        new Application.Places.Dtos.OpeningTimeDto(){ Day = DayOfWeek.Wednesday, Is24Hours = x.Is24Hours, OpenTime = x.OpenTime, CloseTime = x.CloseTime },
+                        new Application.Places.Dtos.OpeningTimeDto(){ Day = DayOfWeek.Thursday, Is24Hours = x.Is24Hours, OpenTime = x.OpenTime, CloseTime = x.CloseTime },
+                        new Application.Places.Dtos.OpeningTimeDto(){ Day = DayOfWeek.Friday, Is24Hours = x.Is24Hours, OpenTime = x.OpenTime, CloseTime = x.CloseTime },
+                        new Application.Places.Dtos.OpeningTimeDto(){ Day = DayOfWeek.Saturday, Is24Hours = x.Is24Hours, OpenTime = x.OpenTime, CloseTime = x.CloseTime },
+                        new Application.Places.Dtos.OpeningTimeDto(){ Day = DayOfWeek.Sunday, Is24Hours = x.Is24Hours, OpenTime = x.OpenTime, CloseTime = x.CloseTime },
                     }
                 })
             };

@@ -51,8 +51,8 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
                 OpeningTimes = Restroom.OpeningTimes.Select(t => new Application.Places.Dtos.OpeningTimeDto()
                 {
                     Day = t.Day,
-                    Dayoff = t.IsDayoff,
-                    TwentyFourHours = t.Is24Hours,
+                    IsDayoff = t.IsDayoff,
+                    Is24Hours = t.Is24Hours,
                     BreakEndTime = t.BreakEndTime,
                     BreakStartTime = t.BreakStartTime,
                     OpenTime = t.OpenTime,
@@ -95,8 +95,8 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
                 OpeningTimes = Restroom.OpeningTimes.Select(t => new Application.Places.Dtos.OpeningTimeDto()
                 {
                     Day = t.Day,
-                    Dayoff = t.IsDayoff,
-                    TwentyFourHours = t.Is24Hours,
+                    IsDayoff = t.IsDayoff,
+                    Is24Hours = t.Is24Hours,
                     BreakEndTime = t.BreakEndTime,
                     BreakStartTime = t.BreakStartTime,
                     OpenTime = t.OpenTime,

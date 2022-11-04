@@ -42,8 +42,8 @@ namespace Bridge.Infrastructure.Data.ReadRepos
             OpeningTimes = x.OpeningTimes.Select(t => new OpeningTimeDto()
             {
                 Day = t.Day,
-                Dayoff = t.Dayoff,
-                TwentyFourHours = t.TwentyFourHours,
+                IsDayoff = t.IsDayoff,
+                Is24Hours = t.Is24Hours,
                 OpenTime = t.OpenTime,
                 CloseTime = t.CloseTime,
                 BreakEndTime = t.BreakEndTime,
@@ -102,8 +102,8 @@ namespace Bridge.Infrastructure.Data.ReadRepos
                     OpeningTimes = x.OpeningTimes.Select(t => new OpeningTimeDto()
                     {
                         Day = t.Day,
-                        Dayoff = t.Dayoff,
-                        TwentyFourHours = t.TwentyFourHours,
+                        IsDayoff = t.IsDayoff,
+                        Is24Hours = t.Is24Hours,
                         OpenTime = t.OpenTime,
                         CloseTime = t.CloseTime,
                         BreakEndTime = t.BreakEndTime,

@@ -62,8 +62,8 @@ namespace Bridge.Application.Places.Commands
                                 if (openingTimeDto.BreakStartTime.HasValue && openingTimeDto.BreakEndTime.HasValue)
                                     restroom.SetBreakTime(openingTimeDto.Day, openingTimeDto.BreakStartTime.Value, openingTimeDto.BreakEndTime.Value);
 
-                                restroom.SetDayoff(openingTimeDto.Day, openingTimeDto.Dayoff);
-                                restroom.SetTwentyFourHours(openingTimeDto.Day, openingTimeDto.TwentyFourHours);
+                                restroom.SetDayoff(openingTimeDto.Day, openingTimeDto.IsDayoff);
+                                restroom.SetTwentyFourHours(openingTimeDto.Day, openingTimeDto.Is24Hours);
                             }
                             restroomList.Add(restroom);
                         }

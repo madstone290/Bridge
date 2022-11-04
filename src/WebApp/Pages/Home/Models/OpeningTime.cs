@@ -27,12 +27,12 @@ namespace Bridge.WebApp.Pages.Home.Models
         /// <summary>
         /// 휴무일
         /// </summary>
-        public bool Dayoff { get; set; }
+        public bool IsDayoff { get; set; }
 
         /// <summary>
         /// 24시간 영업
         /// </summary>
-        public bool TwentyFourHours { get; set; }
+        public bool Is24Hours { get; set; }
 
         /// <summary>
         /// 개점 시간
@@ -83,9 +83,9 @@ namespace Bridge.WebApp.Pages.Home.Models
         /// <returns></returns>
         public string ToSingleLineString()
         {
-            if (Dayoff)
+            if (IsDayoff)
                 return $"{DayString} 휴무일";
-            if (TwentyFourHours)
+            if (Is24Hours)
                 return $"{DayString} 24시간 영업" + BreakTimeString();
 
             return $"{DayString} {OpenTimeString}~{CloseTimeString}" + BreakTimeString();
