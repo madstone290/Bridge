@@ -1,10 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Bridge.Shared.Extensions
 {
@@ -19,16 +13,32 @@ namespace Bridge.Shared.Extensions
         /// <returns></returns>
         public static string AddQueryParam(this string uri, string name, object? value)
         {
-            bool hasQuery = uri.Contains('?');
+            var valueString = Convert.ToString(value);
+            if (valueString == null) //null인 경우 uri 반환
+                return uri;
 
-            if (hasQuery)
-            {
-                return uri + "&" + name + "=" + value;
-            }
-            else
-            {
-                return uri + "?" + name + "=" + value;
-            }
+            var queryIndex = uri.IndexOf('?');
+            var hasQuery = queryIndex != -1;
+
+            if(!hasQuery) // 쿼리가 없는 경우 파라미터 추가
+                return uri + "?" + name + "=" + valueString;
+
+            
+            var nameIndex = uri.IndexOf(name + "=", queryIndex);
+            var parameterExist = nameIndex != -1;
+            if (!parameterExist) // 동일한 파라미터가 없는 경우 새 파라미터 추가
+                return uri + "&" + name + "=" + valueString;
+
+            // 파라미터가 중복되는 경우 덮어쓰기
+            var valueIndex = nameIndex + name.Length + 1;
+            var ampersandIndex = uri.IndexOf("&", valueIndex);
+            if (ampersandIndex == -1)
+                ampersandIndex = uri.Length;
+
+            var oldValueLength = ampersandIndex - valueIndex;
+            uri = uri.Remove(valueIndex, oldValueLength);
+            uri = uri.Insert(valueIndex, valueString);
+            return uri;
         }
 
         /// <summary>
