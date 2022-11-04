@@ -1,6 +1,5 @@
 using Bridge.Application.Common.Services;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
 
 namespace Bridge.Infrastructure.Services
 {

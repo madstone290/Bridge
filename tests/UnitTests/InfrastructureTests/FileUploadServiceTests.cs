@@ -26,7 +26,8 @@ namespace Bridge.UnitTests.InfrastructureTests
             var newFilePath = uploadService.UploadFile(directory, fileName, fileData);
 
             // Assert
-            File.Exists(newFilePath).Should().BeTrue();
+            newFilePath.Should().NotBeNull();
+            File.Exists(Path.Combine(_environmentMockup.ContentRootPath, newFilePath!)).Should().BeTrue();
         }
     }
 }
