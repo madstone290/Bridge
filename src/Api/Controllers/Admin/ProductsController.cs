@@ -24,7 +24,7 @@ namespace Bridge.Api.Controllers.Admin
         [HttpGet]
         [Route(ApiRoutes.Admin.Products.Get)]
         [ProducesResponseType(typeof(ProductReadModel), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetProduct([FromRoute] long id)
+        public async Task<IActionResult> GetProduct([FromRoute] Guid id)
         {
             var query = new GetProductByIdQuery()
             {
@@ -37,7 +37,7 @@ namespace Bridge.Api.Controllers.Admin
         [HttpGet]
         [Route(ApiRoutes.Admin.Products.GetPaginatedList)]
         [ProducesResponseType(typeof(PaginatedList<ProductReadModel>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetProducts([FromQuery] long placeId, [FromQuery] int? pageNumber, [FromQuery] int? pageSize)
+        public async Task<IActionResult> GetProducts([FromQuery] Guid placeId, [FromQuery] int? pageNumber, [FromQuery] int? pageSize)
         {
             var query = new GetProductsPaginationQuery()
             {
@@ -52,7 +52,7 @@ namespace Bridge.Api.Controllers.Admin
         [HttpGet]
         [Route(ApiRoutes.Admin.Products.GetList)]
         [ProducesResponseType(typeof(List<ProductReadModel>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetProducts([FromQuery] long placeId)
+        public async Task<IActionResult> GetProducts([FromQuery] Guid placeId)
         {
             var query = new GetProductsByPlaceIdQuery()
             {
@@ -64,7 +64,7 @@ namespace Bridge.Api.Controllers.Admin
 
         [HttpPost]
         [Route(ApiRoutes.Admin.Products.Create)]
-        [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK)]
         public async Task<IActionResult> CreateProduct([FromBody] CreateProductCommand command)
         {
             var placeId = await _mediator.Send(command);
@@ -74,7 +74,7 @@ namespace Bridge.Api.Controllers.Admin
         [HttpPut]
         [Route(ApiRoutes.Admin.Products.Update)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> UpdateProduct([FromRoute] long id, [FromBody] UpdateProductCommand command)
+        public async Task<IActionResult> UpdateProduct([FromRoute] Guid id, [FromBody] UpdateProductCommand command)
         {
             command.Id = id;
             await _mediator.Send(command);
@@ -84,7 +84,7 @@ namespace Bridge.Api.Controllers.Admin
         [HttpPut]
         [Route(ApiRoutes.Admin.Products.Discard)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> Discard([FromRoute] long id)
+        public async Task<IActionResult> Discard([FromRoute] Guid id)
         {
             var command = new DiscardProductCommand() { Id = id };
             await _mediator.Send(command);

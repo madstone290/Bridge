@@ -50,8 +50,8 @@ namespace Bridge.IntegrationTests.Admin
 
             // Assert
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-            var id = await response.Content.ReadFromJsonAsync<long>();
-            id.Should().BeGreaterThan(0);
+            var id = await response.Content.ReadFromJsonAsync<Guid>();
+            id.Should().NotBeEmpty();
         }
 
 
@@ -105,7 +105,7 @@ namespace Bridge.IntegrationTests.Admin
             var createResponse = await _client.SendAsAdminAsync(createRequest);
 
             // Act
-            var id = await createResponse.Content.ReadFromJsonAsync<long>();
+            var id = await createResponse.Content.ReadFromJsonAsync<Guid>();
             var request = new HttpRequestMessage(HttpMethod.Get, ApiRoutes.Admin.Restrooms.Get.Replace("{id}", $"{id}"));
             var response = await _client.SendAsAdminAsync(request);
 
@@ -149,7 +149,7 @@ namespace Bridge.IntegrationTests.Admin
             };
             var createRequest = new HttpRequestMessage(HttpMethod.Post, ApiRoutes.Admin.Restrooms.Create) { Content = JsonContent.Create(createCommand) };
             var createResponse = await _client.SendAsAdminAsync(createRequest);
-            var restroomId = await createResponse.Content.ReadFromJsonAsync<long>();
+            var restroomId = await createResponse.Content.ReadFromJsonAsync<Guid>();
 
             var updateCommand = new UpdateRestroomCommand()
             {

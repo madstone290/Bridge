@@ -18,7 +18,7 @@ namespace Bridge.WebApp.Api.ApiClients.Admin
         /// </summary>
         /// <param name="id">장소 아이디</param>
         /// <returns>장소</returns>
-        public async Task<ApiResult<ProductReadModel?>> GetProductById(long id)
+        public async Task<ApiResult<ProductReadModel?>> GetProductById(Guid id)
         {
             return await SendAsync<ProductReadModel?>(HttpMethod.Get, ApiRoutes.Admin.Products.Get.AddRouteParam("{id}", id));
         }
@@ -28,7 +28,7 @@ namespace Bridge.WebApp.Api.ApiClients.Admin
         /// </summary>
         /// <param name="placeId">장소 아이디</param>
         /// <returns></returns>
-        public async Task<ApiResult<List<ProductReadModel>>> GetProductList(long placeId)
+        public async Task<ApiResult<List<ProductReadModel>>> GetProductList(Guid placeId)
         {
             return await SendAsync<List<ProductReadModel>>(HttpMethod.Get, ApiRoutes.Admin.Products.GetList
                 .AddQueryParam("placeId", placeId));
@@ -41,7 +41,7 @@ namespace Bridge.WebApp.Api.ApiClients.Admin
         /// <param name="pageNumber"></param>
         /// <param name="pageSize"></param>
         /// <returns></returns>
-        public async Task<ApiResult<PaginatedList<ProductReadModel>>> GetPaginatedProductList(long placeId, int pageNumber, int pageSize)
+        public async Task<ApiResult<PaginatedList<ProductReadModel>>> GetPaginatedProductList(Guid placeId, int pageNumber, int pageSize)
         {
             return await SendAsync<PaginatedList<ProductReadModel>>(HttpMethod.Get, ApiRoutes.Admin.Products.GetPaginatedList
                 .AddQueryParam("placeId", placeId)
@@ -54,9 +54,9 @@ namespace Bridge.WebApp.Api.ApiClients.Admin
         /// </summary>
         /// <param name="command">제품</param>
         /// <returns></returns>
-        public async Task<ApiResult<long>> CreateProduct(CreateProductCommand command)
+        public async Task<ApiResult<Guid>> CreateProduct(CreateProductCommand command)
         {
-            return await SendAsync<long>(HttpMethod.Post, ApiRoutes.Admin.Products.Create, command);
+            return await SendAsync<Guid>(HttpMethod.Post, ApiRoutes.Admin.Products.Create, command);
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace Bridge.WebApp.Api.ApiClients.Admin
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
-        public async Task<ApiResult<Void>> DiscardProduct(long id)
+        public async Task<ApiResult<Void>> DiscardProduct(Guid id)
         {
             return await SendAsync<Void>(HttpMethod.Put, ApiRoutes.Admin.Products.Discard.AddRouteParam("id", id));
         }

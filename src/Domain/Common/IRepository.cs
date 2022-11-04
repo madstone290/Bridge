@@ -9,9 +9,9 @@ namespace Bridge.Domain.Common
 {
     public interface IRepository<T> where T : Entity, IAggregateRoot
     {
-        Task<bool> ExistByIdAsync(long id);
+        Task<bool> ExistByIdAsync(Guid id);
 
-        Task<T?> FindByIdAsync(long id);
+        Task<T?> FindByIdAsync(Guid id);
 
         Task AddAsync(T entity);
 

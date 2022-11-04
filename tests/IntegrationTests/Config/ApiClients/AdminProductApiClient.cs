@@ -21,14 +21,14 @@ namespace Bridge.IntegrationTests.Config.ApiClients
         /// <param name="client"></param>
         /// <param name="command"></param>
         /// <returns></returns>
-        public async Task<long> CreateProductAsync(CreateProductCommand command)
+        public async Task<Guid> CreateProductAsync(CreateProductCommand command)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, ApiRoutes.Admin.Products.Create)
             {
                 Content = JsonContent.Create(command)
             };
             var response = await Client.SendAsAdminAsync(request);
-            return await response.Content.ReadFromJsonAsync<long>();
+            return await response.Content.ReadFromJsonAsync<Guid>();
         }
 
         public async Task<ProductReadModel?> GetProductAsync(GetProductByIdQuery query)

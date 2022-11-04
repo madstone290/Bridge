@@ -1,4 +1,4 @@
-﻿using Bridge.Application.Common;
+using Bridge.Application.Common;
 using Bridge.Application.Common.Exceptions.EntityNotFoundExceptions;
 using Bridge.Domain.Places.Enums;
 using Bridge.Domain.Places.Repos;
@@ -8,7 +8,7 @@ namespace Bridge.Application.Places.Commands
 {
     public class UpdatePlaceCategoryCommand : ICommand
     {
-        public long PlaceId { get; set; }
+        public Guid PlaceId { get; set; }
         public List<PlaceCategory> Categories { get; set; } = new();
     }
 

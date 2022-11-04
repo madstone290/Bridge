@@ -13,7 +13,7 @@ namespace Bridge.Application.Products.Commands
         /// <summary>
         /// 제품 아이디
         /// </summary>
-        public long Id { get; set; }
+        public Guid Id { get; set; }
     }
 
     public class DiscardProductCommandHandler : CommandHandler<DiscardProductCommand, Unit>

@@ -37,7 +37,7 @@ namespace Bridge.WebApp.Pages.Home.Models
         /// <summary>
         /// 아이디
         /// </summary>
-        public long Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// 장소유형

@@ -1,11 +1,7 @@
-using Bridge.Application.Places.Commands;
 using Bridge.Application.Places.Queries;
 using Bridge.Application.Places.ReadModels;
-using Bridge.Domain.Places.Entities;
 using Bridge.Shared;
-using Bridge.Shared.Constants;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bridge.Api.Controllers
@@ -22,7 +18,7 @@ namespace Bridge.Api.Controllers
         [HttpGet]
         [Route(ApiRoutes.Places.Get)]
         [ProducesResponseType(typeof(PlaceReadModel), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetPlace([FromRoute] long id)
+        public async Task<IActionResult> GetPlace([FromRoute] Guid id)
         {
             var query = new GetPlaceByIdQuery()
             {

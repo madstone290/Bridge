@@ -1,4 +1,4 @@
-﻿using Bridge.WebApp.Api.ApiClients.Admin;
+using Bridge.WebApp.Api.ApiClients.Admin;
 using Bridge.WebApp.Pages.Admin.Models;
 using Bridge.WebApp.Pages.Admin.Views.Components;
 using Bridge.WebApp.Services;
@@ -32,18 +32,12 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
             _snackbar = snackbar;
         }
 
-        public long PlaceId { get; set; }
-
+        public Guid PlaceId { get; set; }
         public bool IsBaseInfoValid { get; set; }
-
         public bool IsOpeningTimeValid { get; set; }
-
         public bool BaseInfoReadOnly { get; private set; } = true;
-
         public Place Place => _place;
-
         public bool OpeningTimeReadOnly { get; private set; } = true;
-
         public string SearchText { get; set; } = string.Empty;
         public int TotalCount { get; set; }
         public int PageCount { get; set; }

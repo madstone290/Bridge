@@ -10,7 +10,7 @@ namespace Bridge.Application.Places.ReadModels
         /// <summary>
         /// 아이디
         /// </summary>
-        public long Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// 상태

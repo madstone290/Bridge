@@ -1,11 +1,11 @@
-﻿using Bridge.Domain.Places.Enums;
+using Bridge.Domain.Places.Enums;
 using Bridge.WebApp.Pages.Admin.Models;
 
 namespace Bridge.WebApp.Pages.Admin.ViewModels
 {
     public interface IRestroomFormViewModel : IFormValidation<Place>, IModal
     {
-        long RestroomId { get; set; }
+        Guid RestroomId { get; set; }
 
         Restroom Restroom { get; }
 

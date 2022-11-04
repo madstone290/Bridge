@@ -1,4 +1,3 @@
-using Bridge.Domain.Places.Entities;
 using Bridge.Domain.Products.Entities;
 using Bridge.Domain.Products.Enums;
 using Bridge.Shared.Json;
@@ -9,13 +8,10 @@ using System.Text.Json;
 
 namespace Bridge.Infrastructure.Data.Config
 {
-    public class ProductConfig : IEntityTypeConfiguration<Product>
+    public class ProductConfig : ConfigBase<Product>
     {
-        public void Configure(EntityTypeBuilder<Product> builder)
+        public override void Configure(EntityTypeBuilder<Product> builder)
         {
-            // Id
-            builder.HasKey(x => x.Id);
-
             // ProductType
             builder.Property(x => x.Type)
                 .HasConversion<string>();
@@ -26,7 +22,6 @@ namespace Bridge.Infrastructure.Data.Config
             // Place
             builder.HasOne(x => x.Place)
                 .WithMany()
-                .HasForeignKey(x => x.PlaceId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             // Price
@@ -41,5 +36,6 @@ namespace Bridge.Infrastructure.Data.Config
                 );
 
         }
+
     }
 }

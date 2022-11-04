@@ -1,4 +1,4 @@
-﻿using Bridge.Application.Places.ReadModels;
+using Bridge.Application.Places.ReadModels;
 using Bridge.Shared.Extensions;
 using Bridge.WebApp.Api.ApiClients.Admin;
 using Bridge.WebApp.Pages.Admin.Models;
@@ -25,7 +25,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
             _validationService = validationService;
         }
 
-        public long PlaceId { get; set; }
+        public Guid PlaceId { get; set; }
         public PlaceReadModel Place => _place;
         public string SearchText { get; set; } = string.Empty;
         public IEnumerable<Product> Products => _products;

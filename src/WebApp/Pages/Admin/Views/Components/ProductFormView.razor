@@ -83,13 +83,13 @@
     /// 제품 아이디
     /// </summary>
     [Parameter]
-    public long ProductId { get; set; }
+    public Guid ProductId { get; set; }
 
     /// <summary>
     /// 장소 아이디
     /// </summary>
     [Parameter]
-    public long PlaceId { get; set; }
+    public Guid PlaceId { get; set; }
 
     [CascadingParameter]
     public MudDialogInstance MudDialog { get; set; } = null!;

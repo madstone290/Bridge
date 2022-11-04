@@ -13,7 +13,7 @@ namespace Bridge.IntegrationTests.Config.ApiClients
             Client = client;
         }
 
-        public async Task<long> CreatePlaceAsync(CreatePlaceCommand command)
+        public async Task<Guid> CreatePlaceAsync(CreatePlaceCommand command)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, ApiRoutes.Admin.Places.Create)
             {
@@ -22,7 +22,7 @@ namespace Bridge.IntegrationTests.Config.ApiClients
             var response = await Client.SendAsAdminAsync(request);
             if (!response.IsSuccessStatusCode)
                 throw new Exception($"요청 실패 {response.StatusCode}");
-            return await response.Content.ReadFromJsonAsync<long>();
+            return await response.Content.ReadFromJsonAsync<Guid>();
         }
     }
 }

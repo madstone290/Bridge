@@ -10,7 +10,7 @@ namespace Bridge.Application.Places.Commands
     /// <summary>
     /// 장소를 생성한다
     /// </summary>
-    public class CreatePlaceCommand : ICommand<long>
+    public class CreatePlaceCommand : ICommand<Guid>
     {
         /// <summary>
         /// 장소유형
@@ -53,7 +53,7 @@ namespace Bridge.Application.Places.Commands
         public List<OpeningTimeDto> OpeningTimes { get; set; } = new();
     }
 
-    public class CreatePlaceCommandHandler : CommandHandler<CreatePlaceCommand, long>
+    public class CreatePlaceCommandHandler : CommandHandler<CreatePlaceCommand, Guid>
     {
         private readonly IAddressLocationService _addressLocationService;
         private readonly IFileUploadService _fileUploadService;
@@ -71,7 +71,7 @@ namespace Bridge.Application.Places.Commands
             _unitOfWork = unitOfWork;
         }
 
-        public override async Task<long> HandleCommand(CreatePlaceCommand command, CancellationToken cancellationToken)
+        public override async Task<Guid> HandleCommand(CreatePlaceCommand command, CancellationToken cancellationToken)
         {
             var addressLocation = await _addressLocationService.CreateAddressLocationAsync(command.Address.BaseAddress, command.Address.DetailAddress);
             var place = Place.Create(command.Type, command.Name, addressLocation.Item1, addressLocation.Item2);

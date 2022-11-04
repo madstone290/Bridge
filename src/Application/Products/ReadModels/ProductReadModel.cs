@@ -7,7 +7,7 @@ namespace Bridge.Application.Products.ReadModels
         /// <summary>
         /// 아이디
         /// </summary>
-        public long Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// 제품유형
@@ -32,7 +32,7 @@ namespace Bridge.Application.Products.ReadModels
         /// <summary>
         /// 제품이 판매되는 장소
         /// </summary>
-        public long PlaceId { get; set; }
+        public Guid PlaceId { get; set; }
 
         /// <summary>
         /// 제품 가격

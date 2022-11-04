@@ -27,6 +27,8 @@ namespace Bridge.Domain.Products.Entities
             Status = ProductStatus.Used;
             CreationDateTime = DateTime.UtcNow;
             SetName(name);
+            
+            Place = place;
             PlaceId = place.Id;
         }
 
@@ -64,7 +66,7 @@ namespace Bridge.Domain.Products.Entities
         /// <summary>
         /// 제품이 판매되는 장소
         /// </summary>
-        public long PlaceId { get; private set; }
+        public Guid PlaceId { get; private set; }
 
         /// <summary>
         /// 제품 가격
@@ -88,7 +90,7 @@ namespace Bridge.Domain.Products.Entities
 
             if (Name == name)
                 return;
-
+            
             Name = name;
         }
 
@@ -128,8 +130,10 @@ namespace Bridge.Domain.Products.Entities
         /// <param name="category"></param>
         public void AddCategory(ProductCategory category)
         {
-            _categories = new HashSet<ProductCategory>(_categories);
-            _categories.Add(category);
+            _categories = new HashSet<ProductCategory>(_categories)
+            {
+                category
+            };
         }
 
         /// <summary>

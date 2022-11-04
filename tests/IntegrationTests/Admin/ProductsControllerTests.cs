@@ -23,7 +23,7 @@ namespace Bridge.IntegrationTests.Admin
 
 
 
-        async Task<CreateProductCommand> DefaultCreateProductCommandAsync(long? placeId = null)
+        async Task<CreateProductCommand> DefaultCreateProductCommandAsync(Guid? placeId = null)
         {
             placeId ??= await _apiClient.CreatePlaceAsync();
             return new CreateProductCommand()
@@ -90,8 +90,8 @@ namespace Bridge.IntegrationTests.Admin
 
             // Assert
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-            var id = await response.Content.ReadFromJsonAsync<long>();
-            id.Should().BeGreaterThan(0);
+            var id = await response.Content.ReadFromJsonAsync<Guid>();
+            id.Should().NotBeEmpty();
         }
 
 

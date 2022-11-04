@@ -3,6 +3,7 @@ using System;
 using Bridge.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Bridge.Infrastructure.Migrations.Bridge.Postgresql
 {
     [DbContext(typeof(BridgeContext))]
-    partial class BridgeContextModelSnapshot : ModelSnapshot
+    [Migration("20221104034820_AddEntityPk-step1")]
+    partial class AddEntityPkstep1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,7 +42,7 @@ namespace Bridge.Infrastructure.Migrations.Bridge.Postgresql
                     b.Property<DateTime>("CreationDateTimeUtc")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("IdTemp")
                         .HasColumnType("uuid");
 
                     b.Property<string>("ImagePath")
@@ -81,14 +83,14 @@ namespace Bridge.Infrastructure.Migrations.Bridge.Postgresql
                     b.Property<DateTime>("CreationDateTime")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("IdTemp")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid>("PlaceId")
+                    b.Property<Guid>("PlaceIdTemp")
                         .HasColumnType("uuid");
 
                     b.Property<int>("PlacePk")
@@ -246,7 +248,7 @@ namespace Bridge.Infrastructure.Migrations.Bridge.Postgresql
                                 .IsRequired()
                                 .HasColumnType("text");
 
-                            b1.Property<Guid>("Id")
+                            b1.Property<Guid>("IdTemp")
                                 .HasColumnType("uuid");
 
                             b1.Property<bool>("Is24Hours")

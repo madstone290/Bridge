@@ -26,12 +26,12 @@ namespace Bridge.Infrastructure.Data
             Set.Remove(entity);
         }
 
-        public async Task<bool> ExistByIdAsync(long id)
+        public async Task<bool> ExistByIdAsync(Guid id)
         {
             return await Set.AnyAsync(x => x.Id == id);
         }
 
-        public virtual async Task<T?> FindByIdAsync(long id)
+        public virtual async Task<T?> FindByIdAsync(Guid id)
         {
             return await Set.FirstOrDefaultAsync(x => x.Id == id);
         }

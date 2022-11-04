@@ -23,7 +23,7 @@ namespace Bridge.Api.Controllers.Admin
         [HttpGet]
         [Route(ApiRoutes.Admin.Restrooms.Get)]
         [ProducesResponseType(typeof(RestroomReadModel), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetPlace([FromRoute] long id)
+        public async Task<IActionResult> GetPlace([FromRoute] Guid id)
         {
             var query = new GetRestroomByIdQuery() { Id = id };
             var place = await _mediator.Send(query);
@@ -32,7 +32,7 @@ namespace Bridge.Api.Controllers.Admin
 
         [HttpPost]
         [Route(ApiRoutes.Admin.Restrooms.Create)]
-        [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK)]
         public async Task<IActionResult> CreateRestroom([FromBody] CreateRestroomCommand command)
         {
             var placeId = await _mediator.Send(command);
@@ -51,7 +51,7 @@ namespace Bridge.Api.Controllers.Admin
         [HttpPut]
         [Route(ApiRoutes.Admin.Restrooms.Update)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> UpdateRestroom([FromRoute] long id, [FromBody] UpdateRestroomCommand command)
+        public async Task<IActionResult> UpdateRestroom([FromRoute] Guid id, [FromBody] UpdateRestroomCommand command)
         {
             command.Id = id;
             await _mediator.Send(command);

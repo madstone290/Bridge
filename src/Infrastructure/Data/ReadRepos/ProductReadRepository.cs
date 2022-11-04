@@ -25,7 +25,7 @@ namespace Bridge.Infrastructure.Data.ReadRepos
             Categories = x.Categories.ToList(),
         };
 
-        public async Task<PaginatedList<ProductReadModel>> GetPaginatedProductsAsync(long placeId, int pageNumber = 1, int pageSize = 50)
+        public async Task<PaginatedList<ProductReadModel>> GetPaginatedProductsAsync(Guid placeId, int pageNumber = 1, int pageSize = 50)
         {
             return await Set
                 .Where(x=> x.Status == ProductStatus.Used)

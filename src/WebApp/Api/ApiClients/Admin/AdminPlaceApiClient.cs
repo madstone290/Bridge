@@ -20,7 +20,7 @@ namespace Bridge.WebApp.Api.ApiClients.Admin
         /// </summary>
         /// <param name="id">장소 아이디</param>
         /// <returns>장소</returns>
-        public async Task<ApiResult<PlaceReadModel?>> GetPlaceById(long id)
+        public async Task<ApiResult<PlaceReadModel?>> GetPlaceById(Guid id)
         {
             return await SendAsync<PlaceReadModel?>(HttpMethod.Get, ApiRoutes.Admin.Places.Get.AddRouteParam("{id}", id));
         }
@@ -53,9 +53,9 @@ namespace Bridge.WebApp.Api.ApiClients.Admin
         /// </summary>
         /// <param name="command">장소</param>
         /// <returns></returns>
-        public async Task<ApiResult<long>> CreatePlace(CreatePlaceCommand command)
+        public async Task<ApiResult<Guid>> CreatePlace(CreatePlaceCommand command)
         {
-            return await SendAsync<long>(HttpMethod.Post, ApiRoutes.Admin.Places.Create, command);
+            return await SendAsync<Guid>(HttpMethod.Post, ApiRoutes.Admin.Places.Create, command);
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace Bridge.WebApp.Api.ApiClients.Admin
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
-        public async Task<ApiResult<Void>> ClosePlace(long id)
+        public async Task<ApiResult<Void>> ClosePlace(Guid id)
         {
             return await SendAsync<Void>(HttpMethod.Put, ApiRoutes.Admin.Places.Close.AddRouteParam("id", id));
         }

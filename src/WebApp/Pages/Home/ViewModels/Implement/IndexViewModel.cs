@@ -98,7 +98,7 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
 
         private async void OnSelectedMarkerChangedCallback(string markerId)
         {
-            if (long.TryParse(markerId, out long id))
+            if (Guid.TryParse(markerId, out Guid id))
             {
                 var place = Places.FirstOrDefault(x => x.Id == id);
                 SelectedPlace = place;
@@ -149,6 +149,8 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
                 return place;
             })
             .OrderBy(x => x.Distance));
+
+            Searched = true;
         }
 
         private async Task CreateMarkers()

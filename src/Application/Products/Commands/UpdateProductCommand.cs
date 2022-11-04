@@ -11,7 +11,7 @@ namespace Bridge.Application.Products.Commands
         /// <summary>
         /// 제품 아이디
         /// </summary>
-        public long Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// 제품명

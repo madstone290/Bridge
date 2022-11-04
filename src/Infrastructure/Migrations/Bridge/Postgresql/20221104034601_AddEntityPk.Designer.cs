@@ -3,6 +3,7 @@ using System;
 using Bridge.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Bridge.Infrastructure.Migrations.Bridge.Postgresql
 {
     [DbContext(typeof(BridgeContext))]
-    partial class BridgeContextModelSnapshot : ModelSnapshot
+    [Migration("20221104034601_AddEntityPk")]
+    partial class AddEntityPk
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,11 +26,11 @@ namespace Bridge.Infrastructure.Migrations.Bridge.Postgresql
 
             modelBuilder.Entity("Bridge.Domain.Places.Entities.Place", b =>
                 {
-                    b.Property<int>("Pk")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Pk"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Categories")
                         .IsRequired()
@@ -40,7 +42,7 @@ namespace Bridge.Infrastructure.Migrations.Bridge.Postgresql
                     b.Property<DateTime>("CreationDateTimeUtc")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("IdTemp")
                         .HasColumnType("uuid");
 
                     b.Property<string>("ImagePath")
@@ -61,18 +63,18 @@ namespace Bridge.Infrastructure.Migrations.Bridge.Postgresql
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("Pk");
+                    b.HasKey("Id");
 
                     b.ToTable("Places");
                 });
 
             modelBuilder.Entity("Bridge.Domain.Products.Entities.Product", b =>
                 {
-                    b.Property<int>("Pk")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Pk"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Categories")
                         .IsRequired()
@@ -81,18 +83,18 @@ namespace Bridge.Infrastructure.Migrations.Bridge.Postgresql
                     b.Property<DateTime>("CreationDateTime")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("IdTemp")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid>("PlaceId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("PlacePk")
+                    b.Property<int>("PlaceId")
                         .HasColumnType("integer");
+
+                    b.Property<Guid>("PlaceIdTemp")
+                        .HasColumnType("uuid");
 
                     b.Property<decimal?>("Price")
                         .HasPrecision(18, 4)
@@ -106,9 +108,9 @@ namespace Bridge.Infrastructure.Migrations.Bridge.Postgresql
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("Pk");
+                    b.HasKey("Id");
 
-                    b.HasIndex("PlacePk");
+                    b.HasIndex("PlaceId");
 
                     b.ToTable("Products");
                 });
@@ -157,7 +159,7 @@ namespace Bridge.Infrastructure.Migrations.Bridge.Postgresql
                 {
                     b.OwnsOne("Bridge.Domain.Common.ValueObjects.Address", "Address", b1 =>
                         {
-                            b1.Property<int>("PlacePk")
+                            b1.Property<int>("PlaceId")
                                 .HasColumnType("integer");
 
                             b1.Property<string>("DetailAddress")
@@ -192,17 +194,17 @@ namespace Bridge.Infrastructure.Migrations.Bridge.Postgresql
                                 .IsRequired()
                                 .HasColumnType("text");
 
-                            b1.HasKey("PlacePk");
+                            b1.HasKey("PlaceId");
 
                             b1.ToTable("Places");
 
                             b1.WithOwner()
-                                .HasForeignKey("PlacePk");
+                                .HasForeignKey("PlaceId");
                         });
 
                     b.OwnsOne("Bridge.Domain.Common.ValueObjects.Location", "Location", b1 =>
                         {
-                            b1.Property<int>("PlacePk")
+                            b1.Property<int>("PlaceId")
                                 .HasColumnType("integer");
 
                             b1.Property<double>("Easting")
@@ -217,21 +219,21 @@ namespace Bridge.Infrastructure.Migrations.Bridge.Postgresql
                             b1.Property<double>("Northing")
                                 .HasColumnType("double precision");
 
-                            b1.HasKey("PlacePk");
+                            b1.HasKey("PlaceId");
 
                             b1.ToTable("Places");
 
                             b1.WithOwner()
-                                .HasForeignKey("PlacePk");
+                                .HasForeignKey("PlaceId");
                         });
 
                     b.OwnsMany("Bridge.Domain.Places.Entities.OpeningTime", "OpeningTimes", b1 =>
                         {
-                            b1.Property<int>("Pk")
+                            b1.Property<int>("Id")
                                 .ValueGeneratedOnAdd()
                                 .HasColumnType("integer");
 
-                            NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b1.Property<int>("Pk"));
+                            NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b1.Property<int>("Id"));
 
                             b1.Property<TimeSpan?>("BreakEndTime")
                                 .HasColumnType("interval");
@@ -246,7 +248,7 @@ namespace Bridge.Infrastructure.Migrations.Bridge.Postgresql
                                 .IsRequired()
                                 .HasColumnType("text");
 
-                            b1.Property<Guid>("Id")
+                            b1.Property<Guid>("IdTemp")
                                 .HasColumnType("uuid");
 
                             b1.Property<bool>("Is24Hours")
@@ -258,17 +260,17 @@ namespace Bridge.Infrastructure.Migrations.Bridge.Postgresql
                             b1.Property<TimeSpan?>("OpenTime")
                                 .HasColumnType("interval");
 
-                            b1.Property<int>("PlacePk")
+                            b1.Property<int>("PlaceId")
                                 .HasColumnType("integer");
 
-                            b1.HasKey("Pk");
+                            b1.HasKey("Id");
 
-                            b1.HasIndex("PlacePk");
+                            b1.HasIndex("PlaceId");
 
                             b1.ToTable("OpeningTime");
 
                             b1.WithOwner()
-                                .HasForeignKey("PlacePk");
+                                .HasForeignKey("PlaceId");
                         });
 
                     b.Navigation("Address")
@@ -284,7 +286,7 @@ namespace Bridge.Infrastructure.Migrations.Bridge.Postgresql
                 {
                     b.HasOne("Bridge.Domain.Places.Entities.Place", "Place")
                         .WithMany()
-                        .HasForeignKey("PlacePk")
+                        .HasForeignKey("PlaceId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -295,7 +297,7 @@ namespace Bridge.Infrastructure.Migrations.Bridge.Postgresql
                 {
                     b.HasOne("Bridge.Domain.Places.Entities.Place", null)
                         .WithOne()
-                        .HasForeignKey("Bridge.Domain.Places.Entities.Places.Restroom", "Pk")
+                        .HasForeignKey("Bridge.Domain.Places.Entities.Places.Restroom", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

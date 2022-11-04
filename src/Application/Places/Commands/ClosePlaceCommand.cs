@@ -13,7 +13,7 @@ namespace Bridge.Application.Places.Commands
         /// <summary>
         /// 장소 아이디
         /// </summary>
-        public long Id { get; set; }
+        public Guid Id { get; set; }
     }
 
     public class ClosePlaceCommandHandler : CommandHandler<ClosePlaceCommand, Unit>

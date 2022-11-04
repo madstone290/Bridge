@@ -15,7 +15,7 @@ namespace Bridge.WebApp.Pages.Admin.Models
                     .WithMessage("* 필수");
 
                 RuleFor(x => x.PlaceId)
-                    .GreaterThan(0)
+                    .NotEmpty()
                     .WithMessage("* 필수");
             }
         }
@@ -33,7 +33,7 @@ namespace Bridge.WebApp.Pages.Admin.Models
             };
         }
 
-        public long Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// 제품타입
@@ -48,7 +48,7 @@ namespace Bridge.WebApp.Pages.Admin.Models
         /// <summary>
         /// 제품이 판매되는 장소
         /// </summary>
-        public long PlaceId { get; set; }
+        public Guid PlaceId { get; set; }
 
         /// <summary>
         /// 제품 가격

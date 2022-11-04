@@ -1,4 +1,4 @@
-﻿using Bridge.Application.Products.Commands;
+using Bridge.Application.Products.Commands;
 using Bridge.WebApp.Api.ApiClients.Admin;
 using Bridge.WebApp.Pages.Admin.Models;
 using Bridge.WebApp.Services;
@@ -22,8 +22,8 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
             _snackbar = snackbar;
         }
 
-        public long ProductId { get; set; }
-        public long PlaceId { get; set; }
+        public Guid ProductId { get; set; }
+        public Guid PlaceId { get; set; }
         public Product Product { get; private set; } = new();
         public MudDialogInstance MudDialog { get; set; } = null!;
         public FormMode FormMode { get; set; }

@@ -7,7 +7,7 @@ using Bridge.Domain.Places.Repos;
 
 namespace Bridge.Application.Places.Commands
 {
-    public record CreateRestroomCommand : ICommand<long>
+    public record CreateRestroomCommand : ICommand<Guid>
     {
         /// <summary>
         /// 화장실명
@@ -58,7 +58,7 @@ namespace Bridge.Application.Places.Commands
         public List<OpeningTimeDto> OpeningTimes { get; set; } = new();
     }
 
-    public class CreateRestroomCommandHandler : CommandHandler<CreateRestroomCommand, long>
+    public class CreateRestroomCommandHandler : CommandHandler<CreateRestroomCommand, Guid>
     {
         private readonly IAddressLocationService _addressLocationService;
         private readonly IPlaceRepository _placeRepository;
@@ -73,7 +73,7 @@ namespace Bridge.Application.Places.Commands
             _unitOfWork = unitOfWork;
         }
 
-        public override async Task<long> HandleCommand(CreateRestroomCommand command, CancellationToken cancellationToken)
+        public override async Task<Guid> HandleCommand(CreateRestroomCommand command, CancellationToken cancellationToken)
         {
             var addressLocation = await _addressLocationService.CreateAddressLocationAsync(command.Address.BaseAddress, command.Address.DetailAddress);
             var restroom = new Restroom(command.Name, addressLocation.Item1, addressLocation.Item2);

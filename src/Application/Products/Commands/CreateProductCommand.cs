@@ -7,7 +7,7 @@ using Bridge.Domain.Products.Repos;
 
 namespace Bridge.Application.Products.Commands
 {
-    public class CreateProductCommand : ICommand<long>
+    public class CreateProductCommand : ICommand<Guid>
     {
         /// <summary>
         /// 제품명
@@ -17,7 +17,7 @@ namespace Bridge.Application.Products.Commands
         /// <summary>
         /// 제품이 판매되는 장소
         /// </summary>
-        public long PlaceId { get; set; }
+        public Guid PlaceId { get; set; }
 
         /// <summary>
         /// 제품 가격
@@ -31,7 +31,7 @@ namespace Bridge.Application.Products.Commands
 
     }
 
-    public class CreateProductCommandHandler : CommandHandler<CreateProductCommand, long>
+    public class CreateProductCommandHandler : CommandHandler<CreateProductCommand, Guid>
     {
         private readonly IProductRepository _productRepository;
         private readonly IPlaceRepository _placeRepository;
@@ -44,7 +44,7 @@ namespace Bridge.Application.Products.Commands
             _unitOfWork = unitOfWork;
         }
 
-        public override async Task<long> HandleCommand(CreateProductCommand command, CancellationToken cancellationToken)
+        public override async Task<Guid> HandleCommand(CreateProductCommand command, CancellationToken cancellationToken)
         {
             var place = await _placeRepository.FindByIdAsync(command.PlaceId) ?? throw new PlaceNotFoundException(new { command.PlaceId });
 

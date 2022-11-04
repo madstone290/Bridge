@@ -1,16 +1,15 @@
 using Bridge.Domain.Places.Entities;
 using Bridge.Domain.Places.Enums;
 using Bridge.Shared.Json;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Text.Json;
 
 namespace Bridge.Infrastructure.Data.Config
 {
-    public class PlaceConfig : IEntityTypeConfiguration<Place>
+    public class PlaceConfig : ConfigBase<Place>
     {
-        public void Configure(EntityTypeBuilder<Place> builder)
+        public override void Configure(EntityTypeBuilder<Place> builder)
         {
             // PlaceType
             builder.Property(x => x.Type)
@@ -27,7 +26,7 @@ namespace Bridge.Infrastructure.Data.Config
 
             // OpeningTimes
             var timeBuilder = builder.OwnsMany(x => x.OpeningTimes);
-            timeBuilder.HasKey(x => x.Id);
+            timeBuilder.HasKey(x => x.Pk);
             timeBuilder.Property(x => x.Day)
                 .HasConversion<string>();
 
@@ -37,7 +36,6 @@ namespace Bridge.Infrastructure.Data.Config
                     value => JsonSerializer.Serialize(value, JsonOptions.Default),
                     providerValue => JsonSerializer.Deserialize<HashSet<PlaceCategory>>(providerValue, JsonOptions.Default) ?? new HashSet<PlaceCategory>())
                 );
-
         }
     }
 }

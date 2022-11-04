@@ -9,7 +9,7 @@ namespace Bridge.Application.Products.Queries
         /// <summary>
         /// 장소 아이디
         /// </summary>
-        public long PlaceId { get; set; }
+        public Guid PlaceId { get; set; }
 
         /// <summary>
         /// 페이저 크기

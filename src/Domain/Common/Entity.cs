@@ -1,9 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Bridge.Domain.Common
 {
     /// <summary>
@@ -12,8 +6,15 @@ namespace Bridge.Domain.Common
     public class Entity
     {
         /// <summary>
+        /// 테이블 PK
+        /// </summary>
+        public int Pk { get; private set; }
+
+        /// <summary>
         /// 엔티티 아이디
         /// </summary>
-        public long Id { get; private set; }
+        public Guid Id { get; private set; } = Guid.NewGuid();
+
+        
     }
 }

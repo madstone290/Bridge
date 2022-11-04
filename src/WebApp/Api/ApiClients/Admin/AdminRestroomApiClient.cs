@@ -17,7 +17,7 @@ namespace Bridge.WebApp.Api.ApiClients.Admin
         /// </summary>
         /// <param name="id">장소 아이디</param>
         /// <returns>장소</returns>
-        public async Task<ApiResult<RestroomReadModel?>> GetRestroomById(long id)
+        public async Task<ApiResult<RestroomReadModel?>> GetRestroomById(Guid id)
         {
             return await SendAsync<RestroomReadModel?>(HttpMethod.Get, ApiRoutes.Admin.Restrooms.Get.AddRouteParam("{id}", id));
         }
@@ -27,9 +27,9 @@ namespace Bridge.WebApp.Api.ApiClients.Admin
         /// </summary>
         /// <param name="command">화장실</param>
         /// <returns></returns>
-        public async Task<ApiResult<long>> CreateRestroom(CreateRestroomCommand command)
+        public async Task<ApiResult<Guid>> CreateRestroom(CreateRestroomCommand command)
         {
-            return await SendAsync<long>(HttpMethod.Post, ApiRoutes.Admin.Restrooms.Create, command);
+            return await SendAsync<Guid>(HttpMethod.Post, ApiRoutes.Admin.Restrooms.Create, command);
         }
 
         /// <summary>

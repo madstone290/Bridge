@@ -1,4 +1,4 @@
-﻿using Bridge.Application.Places.Commands;
+using Bridge.Application.Places.Commands;
 using Bridge.WebApp.Api.ApiClients.Admin;
 using Bridge.WebApp.Pages.Admin.Models;
 using Bridge.WebApp.Services;
@@ -23,7 +23,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
             _snackbar = snackbar;
         }
 
-        public long PlaceId { get; set; }
+        public Guid PlaceId { get; set; }
         public FormMode FormMode { get; set; }
         public bool IsPlaceValid { get; set; }
         public Place Place => _place;

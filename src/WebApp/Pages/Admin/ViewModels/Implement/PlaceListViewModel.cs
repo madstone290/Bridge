@@ -228,7 +228,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
             var dialogResult = await dialog.Result;
             if (!dialogResult.Cancelled)
             {
-                var placeId = (long)dialogResult.Data;
+                var placeId = (Guid)dialogResult.Data;
                 var placeResult = await _placeApiClient.GetPlaceById(placeId);
                 if (!_validationService.Validate(placeResult))
                     return;
@@ -257,7 +257,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
             var dialogResult = await dialog.Result;
             if (!dialogResult.Cancelled)
             {
-                var placeId = (long)dialogResult.Data;
+                var placeId = (Guid)dialogResult.Data;
                 var placeResult = await _placeApiClient.GetPlaceById(placeId);
                 if (!_validationService.Validate(placeResult))
                     return;

@@ -1,4 +1,4 @@
-﻿using Bridge.Application.Places.Commands;
+using Bridge.Application.Places.Commands;
 using Bridge.Domain.Places.Enums;
 using Bridge.WebApp.Api.ApiClients.Admin;
 using Bridge.WebApp.Pages.Admin.Models;
@@ -22,7 +22,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
         }
 
         public MudDialogInstance MudDialog { get; set; } = null!;
-        public long RestroomId { get; set; }
+        public Guid RestroomId { get; set; }
         public Restroom Restroom { get; private set; } = new();
         public FormMode FormMode { get; set; }
         public bool IsRestroomValid { get; set; }

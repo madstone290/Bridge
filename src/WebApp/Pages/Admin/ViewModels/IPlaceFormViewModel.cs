@@ -1,4 +1,4 @@
-﻿using Bridge.WebApp.Pages.Admin.Models;
+using Bridge.WebApp.Pages.Admin.Models;
 using Microsoft.AspNetCore.Components.Forms;
 
 namespace Bridge.WebApp.Pages.Admin.ViewModels
@@ -7,7 +7,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels
     {
         bool IsPlaceValid { get; set; }
 
-        long PlaceId { get; set; }
+        Guid PlaceId { get; set; }
 
         Place Place { get; }
 

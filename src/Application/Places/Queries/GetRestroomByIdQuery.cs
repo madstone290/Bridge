@@ -12,7 +12,7 @@ namespace Bridge.Application.Places.Queries
         /// <summary>
         /// 장소 아이디
         /// </summary>
-        public long Id { get; set; }
+        public Guid Id { get; set; }
     }
 
     public class GetRestroomByIdQueryHandler : QueryHandler<GetRestroomByIdQuery, RestroomReadModel?>

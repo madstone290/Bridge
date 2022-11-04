@@ -1,12 +1,12 @@
-﻿using Bridge.WebApp.Pages.Admin.Models;
+using Bridge.WebApp.Pages.Admin.Models;
 using Microsoft.AspNetCore.Components.Forms;
 
 namespace Bridge.WebApp.Pages.Admin.ViewModels
 {
     public interface IProductFormViewModel : IFormValidation<Product>, IModal
     {
-        long PlaceId { get; set; }
-        long ProductId { get; set; }
+        Guid PlaceId { get; set; }
+        Guid ProductId { get; set; }
         Product Product { get; }
         bool IsProductValid { get; set; }
 

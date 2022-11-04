@@ -12,6 +12,6 @@ namespace Bridge.Application.Products.Repos
         /// <param name="pageNumber"></param>
         /// <param name="pageSize"></param>
         /// <returns></returns>
-        Task<PaginatedList<ProductReadModel>> GetPaginatedProductsAsync(long placeId, int pageNumber = 1, int pageSize = 50);
+        Task<PaginatedList<ProductReadModel>> GetPaginatedProductsAsync(Guid placeId, int pageNumber = 1, int pageSize = 50);
     }
 }

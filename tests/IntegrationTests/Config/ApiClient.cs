@@ -23,12 +23,12 @@ namespace Bridge.IntegrationTests.Config
             ProductApiClient = productApiClient;
         }
 
-        public async Task<long> CreateProductAsync(CreateProductCommand command)
+        public async Task<Guid> CreateProductAsync(CreateProductCommand command)
         {
             return await ProductApiClient.CreateProductAsync(command);
         }
 
-        public async Task<long> CreateProductAsync(long? placeId = null)
+        public async Task<Guid> CreateProductAsync(Guid? placeId = null)
         {
             placeId ??= await CreatePlaceAsync();
 
@@ -41,17 +41,17 @@ namespace Bridge.IntegrationTests.Config
             return await CreateProductAsync(command);
         }
 
-        public async Task<ProductReadModel?> GetProductAsync(long productId)
+        public async Task<ProductReadModel?> GetProductAsync(Guid productId)
         {
             return await ProductApiClient.GetProductAsync(new GetProductByIdQuery() { Id = productId });
         }
 
-        public async Task<long> CreatePlaceAsync(CreatePlaceCommand command)
+        public async Task<Guid> CreatePlaceAsync(CreatePlaceCommand command)
         {
             return await PlaceApiClient.CreatePlaceAsync(command);
         }
 
-        public async Task<long> CreatePlaceAsync()
+        public async Task<Guid> CreatePlaceAsync()
         {
             var command = new CreatePlaceCommand()
             {

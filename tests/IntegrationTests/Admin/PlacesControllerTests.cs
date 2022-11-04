@@ -112,8 +112,8 @@ namespace Bridge.IntegrationTests.Admin
 
             // Assert
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-            var id = await response.Content.ReadFromJsonAsync<long>();
-            id.Should().BeGreaterThan(0);
+            var id = await response.Content.ReadFromJsonAsync<Guid>();
+            id.Should().NotBeEmpty();
         }
 
 
@@ -165,7 +165,7 @@ namespace Bridge.IntegrationTests.Admin
             var createResponse = await _client.SendAsAdminAsync(createRequest);
 
             // Act
-            var id = await createResponse.Content.ReadFromJsonAsync<long>();
+            var id = await createResponse.Content.ReadFromJsonAsync<Guid>();
             var request = new HttpRequestMessage(HttpMethod.Get,ApiRoutes.Admin.Places.Get.Replace("{id}", $"{id}"));
             var response = await _client.SendAsAdminAsync(request);
 

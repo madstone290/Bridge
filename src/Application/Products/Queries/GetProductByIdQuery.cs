@@ -6,7 +6,7 @@ namespace Bridge.Application.Products.Queries
 {
     public class GetProductByIdQuery : IQuery<ProductReadModel?>
     {
-        public long Id { get; set; }
+        public Guid Id { get; set; }
     }
     
     public class GetProductByIdQueryHandler : QueryHandler<GetProductByIdQuery, ProductReadModel?>

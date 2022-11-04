@@ -25,7 +25,7 @@ namespace Bridge.Api.Controllers.Admin
         [HttpGet]
         [Route(ApiRoutes.Admin.Places.Get)]
         [ProducesResponseType(typeof(PlaceReadModel), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetPlace([FromRoute] long id)
+        public async Task<IActionResult> GetPlace([FromRoute] Guid id)
         {
             var query = new GetPlaceByIdQuery()
             {
@@ -62,7 +62,7 @@ namespace Bridge.Api.Controllers.Admin
 
         [HttpPost]
         [Route(ApiRoutes.Admin.Places.Create)]
-        [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK)]
         public async Task<IActionResult> CreatePlace([FromBody] CreatePlaceCommand command)
         {
             var placeId = await _mediator.Send(command);
@@ -72,7 +72,7 @@ namespace Bridge.Api.Controllers.Admin
         [HttpPut]
         [Route(ApiRoutes.Admin.Places.Update)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> UpdatePlace([FromRoute] long id, [FromBody] UpdatePlaceCommand command)
+        public async Task<IActionResult> UpdatePlace([FromRoute] Guid id, [FromBody] UpdatePlaceCommand command)
         {
             command.Id = id;
             await _mediator.Send(command);
@@ -82,7 +82,7 @@ namespace Bridge.Api.Controllers.Admin
         [HttpPut]
         [Route(ApiRoutes.Admin.Places.UpdateBaseInfo)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> UpdatePlaceBaseInfo([FromRoute] long id, [FromBody] UpdatePlaceBaseInfoCommand command)
+        public async Task<IActionResult> UpdatePlaceBaseInfo([FromRoute] Guid id, [FromBody] UpdatePlaceBaseInfoCommand command)
         {
             command.Id = id;
             await _mediator.Send(command);
@@ -93,7 +93,7 @@ namespace Bridge.Api.Controllers.Admin
         [HttpPut]
         [Route(ApiRoutes.Admin.Places.UpdateOpeningTimes)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> UpdatePlaceOpeningTimes([FromRoute] long id, [FromBody] UpdatePlaceOpeningTimesCommand command)
+        public async Task<IActionResult> UpdatePlaceOpeningTimes([FromRoute] Guid id, [FromBody] UpdatePlaceOpeningTimesCommand command)
         {
             command.Id = id;
             await _mediator.Send(command);
@@ -103,7 +103,7 @@ namespace Bridge.Api.Controllers.Admin
         [HttpPut]
         [Route(ApiRoutes.Admin.Places.UpdateCategories)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> UpdateCategories([FromRoute] long id, [FromBody] UpdatePlaceCategoryCommand command)
+        public async Task<IActionResult> UpdateCategories([FromRoute] Guid id, [FromBody] UpdatePlaceCategoryCommand command)
         {
             command.PlaceId = id;
             await _mediator.Send(command);
@@ -113,7 +113,7 @@ namespace Bridge.Api.Controllers.Admin
         [HttpPut]
         [Route(ApiRoutes.Admin.Places.Close)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> ClosePlace([FromRoute] long id)
+        public async Task<IActionResult> ClosePlace([FromRoute] Guid id)
         {
             var command = new ClosePlaceCommand() { Id = id };
             await _mediator.Send(command);

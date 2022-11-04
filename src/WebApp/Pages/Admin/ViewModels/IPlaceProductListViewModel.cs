@@ -1,11 +1,11 @@
-﻿using Bridge.Application.Places.ReadModels;
+using Bridge.Application.Places.ReadModels;
 using Bridge.WebApp.Pages.Admin.Models;
 
 namespace Bridge.WebApp.Pages.Admin.ViewModels
 {
     public interface IPlaceProductListViewModel
     {
-        long PlaceId { get; set; }
+        Guid PlaceId { get; set; }
         
         PlaceReadModel Place { get; }
 
