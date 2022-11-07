@@ -4,6 +4,7 @@ using Bridge.Shared.Constants;
 using Bridge.WebApp.Api.ApiClients;
 using Bridge.WebApp.Api.ApiClients.Admin;
 using Bridge.WebApp.Api.ApiClients.Identity;
+using Bridge.WebApp.Extensions;
 using Bridge.WebApp.Pages.Admin.ViewModels;
 using Bridge.WebApp.Pages.Admin.ViewModels.Implement;
 using Bridge.WebApp.Pages.Admin.Views.Components;
@@ -22,6 +23,8 @@ using MudBlazor.Services;
 using ILocalStorageService = Bridge.WebApp.Services.ILocalStorageService;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Configuration.HandleArgs(args);
 
 builder.Configuration.AddJsonFile("Secrets/encryption_service_config.json");
 builder.Configuration.AddJsonFile("Secrets/naver_api_config.json");
@@ -122,6 +125,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.MapControllers();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 

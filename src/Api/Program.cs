@@ -1,4 +1,5 @@
 using Bridge.Api.ActionFilters;
+using Bridge.Api.Extensions;
 using Bridge.Api.Middlewares;
 using Bridge.Application;
 using Bridge.Infrastructure;
@@ -8,7 +9,6 @@ using Bridge.Shared.Constants;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.FileProviders;
@@ -17,6 +17,8 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Configuration.HandleArgs(args);
 
 if (builder.Environment.IsProduction())
     builder.Configuration.AddJsonFile("Secrets/db_context_prod_secret.json");
