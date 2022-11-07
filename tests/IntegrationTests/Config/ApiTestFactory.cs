@@ -1,17 +1,12 @@
-using Bridge.Api.Controllers.Identity.Dtos;
-using Bridge.Application.Common.Services;
 using Bridge.Infrastructure.Data;
 using Bridge.Infrastructure.Identity.Services;
-using Bridge.Infrastructure.Services;
 using Bridge.IntegrationTests.Config.ApiClients;
-using Bridge.Shared;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Newtonsoft.Json.Linq;
-using System.Net.Http.Json;
 
 namespace Bridge.IntegrationTests.Config
 {

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Bridge.Api.Controllers.Identity.Dtos
+namespace Bridge.Shared.ApiContract.Dtos.Identity
 {
     public class VerificationDto
     {

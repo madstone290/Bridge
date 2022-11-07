@@ -1,6 +1,6 @@
-using Bridge.Api.Controllers.Identity.Dtos;
 using Bridge.Infrastructure.Identity;
 using Bridge.Shared;
+using Bridge.Shared.ApiContract.Dtos.Identity;
 using System.Net.Http.Json;
 
 namespace Bridge.IntegrationTests.Config

@@ -2,8 +2,8 @@ using Bridge.WebApp.Pages.Identity.Models;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using Bridge.WebApp.Api.ApiClients.Identity;
-using Bridge.Api.Controllers.Identity.Dtos;
 using Bridge.Shared.Extensions;
+using Bridge.Shared.ApiContract.Dtos.Identity;
 
 namespace Bridge.WebApp.Pages.Identity
 {

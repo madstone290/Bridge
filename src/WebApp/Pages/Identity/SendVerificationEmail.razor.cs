@@ -1,4 +1,4 @@
-using Bridge.Api.Controllers.Identity.Dtos;
+using Bridge.Shared.ApiContract.Dtos.Identity;
 using Bridge.WebApp.Api.ApiClients.Identity;
 using Microsoft.AspNetCore.Components;
 

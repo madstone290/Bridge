@@ -1,4 +1,4 @@
-namespace Bridge.Api.Controllers.Identity.Dtos
+namespace Bridge.Shared.ApiContract.Dtos.Identity
 {
     public class RefreshDto
     {

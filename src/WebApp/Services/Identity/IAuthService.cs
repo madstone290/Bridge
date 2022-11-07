@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Security.Claims;
 using Bridge.WebApp.Api.ApiClients.Identity;
-using Bridge.Api.Controllers.Identity.Dtos;
 using Bridge.WebApp.Constants;
 using Bridge.Shared.Constants;
+using Bridge.Shared.ApiContract.Dtos.Identity;
 
 namespace Bridge.WebApp.Services.Identity
 {
