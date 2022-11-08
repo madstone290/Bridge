@@ -1,0 +1,17 @@
+[Unit]
+Description=Bridge web
+
+[Service]
+WorkingDirectory=/home/ubuntu/bridge/web/green
+ExecStart=/usr/bin/dotnet WebApp.dll Color=green
+Restart=always
+RestartSec=10
+KillSignal=SIGINT
+SyslogIdentifier=Bridge web
+User=www-data
+Environment=ASPNETCORE_ENVIRONMENT=Production
+Environment=ASPNETCORE_URLS=http://localhost:22000
+Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false
+
+[Install]
+WantedBy=multi-user.target
