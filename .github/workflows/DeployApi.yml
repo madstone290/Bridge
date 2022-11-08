@@ -32,8 +32,6 @@ env:
 
 on:
   push:
-    tags:
-      - api-v*
 
 jobs:
   deploy:
