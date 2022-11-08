@@ -42,9 +42,10 @@ jobs:
         dotnet-version: ${{ env.DOTNET_VERSION }}
         
     - name: Create secrets
-      run: 
+      run: |
         mkdir -p ${{ env.API_SECRET_DIR }}
         echo '${{ secrets.DB_PRODUCTION_CONFIG }}' > ${{ env.API_SECRET_DIR }}/${{ env.DB_PRODUCTION_CONFIG_FILE }}
+        
         echo '${{ secrets.DB_DEVELOPMENT_CONFIG }}' > ${{ env.API_SECRET_DIR }}/${{ env.DB_DEVELOPMENT_CONFIG_FILE }}
         echo '${{ secrets.GEOCODE_API_CONFIG }}' > ${{ env.API_SECRET_DIR }}/${{ env.GEOCODE_API_CONFIG_FILE }}
         echo '${{ secrets.MAIL_SERVICE_CONFIG }}' > ${{ env.API_SECRET_DIR }}/${{ env.MAIL_SERVICE_CONFIG_FILE }}
