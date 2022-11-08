@@ -1,0 +1,84 @@
+name: Deploy Api  
+
+env:
+  # dotnet
+  DOTNET_VERSION: 6.0.x
+
+  # secret files
+  API_SECRET_DIR: Bridge.Api/Secrets
+  DB_PRODUCTION_CONFIG_FILE: db_production_config.json
+  DB_DEVELOPMENT_CONFIG_FILE: db_development_config.json
+  MAIL_SERVICE_CONFIG_FILE: mail_service_config.json
+  TOKEN_SERVICE_CONFIG_FILE: token_service_config.json
+  GEOCODE_API_CONFIG_FILE: geocode_api_config.json
+  
+  TEST_SECRET_DIR: Bridge.IntegrationTests/Secrets
+  DB_TEST_CONFIG_FILE: db_test_config.json
+
+on:
+  push:
+    tags:
+      - api-v*
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+    - name: Create secrets
+      run: 
+        mkdir -p ${{ env.API_SECRET_DIR }}
+        echo '${{ secrets.DB_PRODUCTION_CONFIG }}' > ${{ env.API_SECRET_DIR }}/${{ env.DB_PRODUCTION_CONFIG_FILE }}
+        echo '${{ secrets.DB_DEVELOPMENT_CONFIG }}' > ${{ env.API_SECRET_DIR }}/${{ env.DB_DEVELOPMENT_CONFIG_FILE }}
+        echo '${{ secrets.GEOCODE_API_CONFIG }}' > ${{ env.API_SECRET_DIR }}/${{ env.GEOCODE_API_CONFIG_FILE }}
+        echo '${{ secrets.MAIL_SERVICE_CONFIG }}' > ${{ env.API_SECRET_DIR }}/${{ env.MAIL_SERVICE_CONFIG_FILE }}
+        echo '${{ secrets.TOKEN_SERVICE_CONFIG }}' > ${{ env.API_SECRET_DIR }}/${{ env.TOKEN_SERVICE_CONFIG_FILE }}
+        
+        mkdir -p ${{ env.TEST_SECRET_DIR }}
+        echo '${{ secrets.TEST_DB_CONFIG }}' > ${{ env.TEST_SECRET_DIR }}/${{ env.TEST_DB_CONFIG_FILE }}
+        
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Build
+      run: dotnet build --no-restore
+    
+    # Skip test
+    
+    - name: Publish Local
+      run: dotnet publish ${{ env.PROJ_DIR }} -c Release -o ${{ env.SOURCE_DIR }}
+
+    - name: Publish Remote
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        port: ${{ secrets.SSH_PORT }}
+        key: ${{ secrets.SSH_KEY }}
+        source: "${{ env.SOURCE_DIR }}/*"
+        target: ${{ env.TARGET_DIR }}
+        rm: true
+        strip_components: 1 # remove 1 level path of source directory
+        
+    - name: Deploy
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_KEY }}
+        port: ${{ secrets.SSH_PORT }}
+        script: ${{ env.DEPLOY_SCRIPT }}
+
+    - name: Report
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        author_name: ${{ env.SLACK_AUTHOR }}
+        fields: eventName,message,commit,author,ref,workflow,job,took,pullRequest
+      env: 
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} 
+      if: always() 
