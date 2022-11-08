@@ -29,7 +29,8 @@ env:
 
 on:
   push:
-
+    tags:
+      - api-release*
 jobs:
   deploy:
     runs-on: ubuntu-latest
