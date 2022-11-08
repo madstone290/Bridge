@@ -46,7 +46,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
 
         public IEnumerable<Product> Products => _products;
 
-        private void CopyPlace(Place source, Place target)
+        private static void CopyPlace(Place source, Place target)
         {
             target.Id = source.Id;
             target.Type = source.Type;
@@ -66,7 +66,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
         {
             var placeTask = _placeApiClient.GetPlaceById(PlaceId);
 
-            await Task.WhenAll(placeTask);
+            await placeTask;
 
             var placeResult = placeTask.Result;
 
@@ -138,6 +138,15 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
             _place.ImageData = buffer;
             _place.ImageName = file.Name;
             _place.ImageChanged = true;
+        }
+
+        public async Task OnDeleteFileClick()
+        {
+            _place.ImageUrl = null;
+            _place.ImageData = null;
+            _place.ImageName = null;
+            _place.ImageChanged = true;
+            await Task.CompletedTask;
         }
 
         public async Task OnEditBaseInfoClick()
@@ -229,8 +238,10 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
 
         public async Task OnCreateProductClick()
         {
-            var parameters = new DialogParameters();
-            parameters.Add(nameof(ProductFormView.PlaceId), _place.Id);
+            var parameters = new DialogParameters
+            {
+                { nameof(ProductFormView.PlaceId), _place.Id }
+            };
 
             var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
             var dialog = _dialogService.Show<ProductFormView>(string.Empty, parameters, options);
@@ -244,9 +255,11 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
 
         public async Task OnUpdateProductClick(Product product)
         {
-            var parameters = new DialogParameters();
-            parameters.Add(nameof(ProductFormView.FormMode), FormMode.Update);
-            parameters.Add(nameof(ProductFormView.ProductId), product.Id);
+            var parameters = new DialogParameters
+            {
+                { nameof(ProductFormView.FormMode), FormMode.Update },
+                { nameof(ProductFormView.ProductId), product.Id }
+            };
 
             var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
             var dialog = _dialogService.Show<ProductFormView>(string.Empty, parameters, options);
@@ -298,5 +311,6 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
             RowsPerPage = rowsPerPage;
             await LoadProductsAsync();
         }
+
     }
 }

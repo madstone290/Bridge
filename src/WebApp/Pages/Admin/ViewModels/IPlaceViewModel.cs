@@ -17,6 +17,8 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels
 
         Task OnUploadFileChange(InputFileChangeEventArgs args);
 
+        Task OnDeleteFileClick();
+
         Task OnEditBaseInfoClick();
 
         Task OnCancelBaseInfoClick();

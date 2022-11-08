@@ -169,6 +169,16 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
             _place.ImageName = file.Name;
             _place.ImageChanged = true;
         }
-        
+
+        public async Task OnDeleteFileClick()
+        {
+            _place.ImageUrl = null;
+            _place.ImageData = null;
+            _place.ImageName = null;
+            _place.ImageChanged = true;
+            await Task.CompletedTask;
+        }
+
+
     }
 }

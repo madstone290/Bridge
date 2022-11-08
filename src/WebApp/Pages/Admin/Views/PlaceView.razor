@@ -22,20 +22,30 @@
             </div>
             <MudDivider Class="divider" />
             <MudForm ValidationDelay="0"
-                     @bind-IsValid="VM.IsBaseInfoValid" >
+                     @bind-IsValid="VM.IsBaseInfoValid">
                 <MudGrid Spacing="1">
                     <MudItem xs="12">
                         <MudImage Src="@VM.Place.ImageUrl" Width="200" Height="200" />
                     </MudItem>
-                    <MudItem xs="12">
+                    <MudItem xs="9">
                         <MudButton HtmlTag="label"
                                    Disabled="@VM.BaseInfoReadOnly"
                                    Variant="Variant.Outlined"
                                    Color="Color.Primary"
                                    FullWidth="true"
                                    StartIcon="@Icons.Filled.CloudUpload"
-                                   for="fileInput">이미지</MudButton>
+                                   for="fileInput">이미지 업로드</MudButton>
                         <InputFile id="fileInput" hidden OnChange="VM.OnUploadFileChange" accept=".jpg, .png" />
+
+                    </MudItem>
+                    <MudItem xs="3">
+                        <MudButton HtmlTag="label"
+                                   Disabled="@VM.BaseInfoReadOnly"
+                                   Variant="Variant.Outlined"
+                                   Color="Color.Secondary"
+                                   FullWidth="true"
+                                   StartIcon="@Icons.Filled.Delete"
+                                   OnClick="VM.OnDeleteFileClick">이미지 삭제</MudButton>
                     </MudItem>
                     <MudItem xs="12">
                         <AdvSelect @bind-Value="VM.Place.Type"
@@ -112,7 +122,7 @@
             </div>
             <MudDivider Class="divider" />
             <MudForm @bind-IsValid="VM.IsOpeningTimeValid"
-                ValidationDelay="0">
+                     ValidationDelay="0">
                 <MudGrid Spacing="1">
                     <MudItem xs="12">
                         @foreach (var openingTime in VM.Place.OpeningTimes)

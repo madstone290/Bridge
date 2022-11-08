@@ -87,8 +87,11 @@ namespace Bridge.Application.Places.Commands
             {
                 if (place.ImagePath != null)
                     _fileUploadService.DeleteFile(place.ImagePath);
+                
                 if (command.ImageName != null && command.ImageData != null)
                     place.ImagePath = _fileUploadService.UploadFile("PlaceImages", command.ImageName, command.ImageData);
+                else
+                    place.ImagePath = null;
             }
 
             await _unitOfWork.CommitAsync();

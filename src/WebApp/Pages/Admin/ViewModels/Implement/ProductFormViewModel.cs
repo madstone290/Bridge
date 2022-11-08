@@ -109,6 +109,12 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
             Product.ImageSrc = $"data:{format};base64,{base64}";
         }
 
+        public async Task OnDeleteFileClick()
+        {
+            Product.ImageSrc = null;
+            await Task.CompletedTask;
+        }
+
         public async Task OnSaveClick()
         {
             if (!IsProductValid)

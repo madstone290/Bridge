@@ -12,6 +12,8 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels
 
         Task OnImageFileChanged(InputFileChangeEventArgs args);
 
+        Task OnDeleteFileClick();
+
         Task Initialize();
 
         Task OnCancelClick();
