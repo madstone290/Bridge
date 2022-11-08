@@ -46,7 +46,7 @@ namespace Bridge.IntegrationTests.Config
                       // replace BridgeContext
                       services.RemoveAll<DbContextOptions<BridgeContext>>();
 
-                      var jsonString = File.ReadAllText("Secrets/bridge_test_secret.json");
+                      var jsonString = File.ReadAllText("Secrets/db_test_config.json");
                       var jObj = JObject.Parse(jsonString);
                       var connectionStringObj = jObj["ConnectionString"];
                       if (connectionStringObj == null)

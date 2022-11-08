@@ -21,9 +21,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.HandleArgs(args);
 
 if (builder.Environment.IsProduction())
-    builder.Configuration.AddJsonFile("Secrets/db_context_prod_secret.json");
+    builder.Configuration.AddJsonFile("Secrets/db_production_config.json");
 else
-    builder.Configuration.AddJsonFile("Secrets/db_context_dev_secret.json");
+    builder.Configuration.AddJsonFile("Secrets/db_development_config.json");
 
 builder.Configuration.AddJsonFile("Secrets/mail_service_config.json");
 builder.Configuration.AddJsonFile("Secrets/token_service_config.json");
