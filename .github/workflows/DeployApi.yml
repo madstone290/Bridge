@@ -11,12 +11,9 @@ env:
   MAIL_SERVICE_CONFIG_FILE: mail_service_config.json
   TOKEN_SERVICE_CONFIG_FILE: token_service_config.json
   GEOCODE_API_CONFIG_FILE: geocode_api_config.json
-  
-  TEST_SECRET_DIR: tests/IntegrationTests/Secrets
-  DB_TEST_CONFIG_FILE: db_test_config.json
 
   # deploy
-  PROJ_DIR: Bridge.Api
+  PROJ_DIR: src/Api
   
   # publish directory
   SOURCE_DIR: publish 
@@ -38,10 +35,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
+        
     - name: Create secrets
       run: 
         mkdir -p ${{ env.API_SECRET_DIR }}
@@ -50,10 +49,7 @@ jobs:
         echo '${{ secrets.GEOCODE_API_CONFIG }}' > ${{ env.API_SECRET_DIR }}/${{ env.GEOCODE_API_CONFIG_FILE }}
         echo '${{ secrets.MAIL_SERVICE_CONFIG }}' > ${{ env.API_SECRET_DIR }}/${{ env.MAIL_SERVICE_CONFIG_FILE }}
         echo '${{ secrets.TOKEN_SERVICE_CONFIG }}' > ${{ env.API_SECRET_DIR }}/${{ env.TOKEN_SERVICE_CONFIG_FILE }}
-        
-        mkdir -p ${{ env.TEST_SECRET_DIR }}
-        echo '${{ secrets.TEST_DB_CONFIG }}' > ${{ env.TEST_SECRET_DIR }}/${{ env.TEST_DB_CONFIG_FILE }}
-        
+      
     - name: Restore dependencies
       run: dotnet restore
       
