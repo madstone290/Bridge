@@ -30,7 +30,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{C6629776-A57F-4D2A-875F-6D041BF8457E}"
 	ProjectSection(SolutionItems) = preProject
-		docs\BusinessRules.md = docs\BusinessRules.md
+		docs\bridge-web-green.service = docs\bridge-web-green.service
+		HostingEnv.md = HostingEnv.md
 	EndProjectSection
 EndProject
 Global
