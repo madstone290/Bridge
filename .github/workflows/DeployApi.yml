@@ -5,14 +5,14 @@ env:
   DOTNET_VERSION: 6.0.x
 
   # secret files
-  API_SECRET_DIR: Bridge.Api/Secrets
+  API_SECRET_DIR: src/Api/Secrets
   DB_PRODUCTION_CONFIG_FILE: db_production_config.json
   DB_DEVELOPMENT_CONFIG_FILE: db_development_config.json
   MAIL_SERVICE_CONFIG_FILE: mail_service_config.json
   TOKEN_SERVICE_CONFIG_FILE: token_service_config.json
   GEOCODE_API_CONFIG_FILE: geocode_api_config.json
   
-  TEST_SECRET_DIR: Bridge.IntegrationTests/Secrets
+  TEST_SECRET_DIR: tests/IntegrationTests/Secrets
   DB_TEST_CONFIG_FILE: db_test_config.json
 
   # deploy
