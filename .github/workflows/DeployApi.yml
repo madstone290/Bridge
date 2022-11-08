@@ -15,6 +15,21 @@ env:
   TEST_SECRET_DIR: Bridge.IntegrationTests/Secrets
   DB_TEST_CONFIG_FILE: db_test_config.json
 
+  # deploy
+  PROJ_DIR: Bridge.Api
+  
+  # publish directory
+  SOURCE_DIR: publish 
+  # deploy directory in the remote machine
+  TARGET_DIR: bridge/api/publish 
+  
+  DEPLOY_SCRIPT: |
+    cd bridge/scripts
+    bash switchDeploy.sh api-config.sh
+    
+  # slack
+  SLACK_AUTHOR: '' # hide author_name with empty string
+
 on:
   push:
     tags:
