@@ -9,10 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Secrets\geocode_api_config.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Remove="Files\__do_not_delete_me__.txt" />
   </ItemGroup>
 
@@ -36,14 +32,14 @@
 
   <ItemGroup>
 	<InternalsVisibleTo Include="IntegrationTests" />
-	<None Include="Secrets\geocode_api_config.json">
-	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	</None>
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="Secrets\geocode_api_config.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Update="wwwroot\welcome.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
