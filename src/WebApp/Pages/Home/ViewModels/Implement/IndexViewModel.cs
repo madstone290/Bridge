@@ -93,6 +93,7 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
             };
 
             _mapService.SetOnSelectedMarkerChangedCallback(SESSION_ID, new(Receiver, OnSelectedMarkerChangedCallback));
+            _mapService.SetOnContextMenuClickedCallback(SESSION_ID, new(Receiver, OnContextMenuClickedCallback));
             await _mapService.InitAsync(SESSION_ID, mapOptions);
         }
 
@@ -105,6 +106,15 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
                 SelectedListItem = place;
 
                 await _commonJsService.ScrollAsync(ListElementId, id.ToString());
+            }
+        }
+
+        private async Task OnContextMenuClickedCallback(Tuple<string, MapPoint> tuple)
+        {
+            if(string.Equals(tuple.Item1, "menu1", StringComparison.OrdinalIgnoreCase))
+            {
+                CurrentLocation = new LatLon(tuple.Item2.Y, tuple.Item2.X);
+                await GetCurrentAddressAsync();
             }
         }
 

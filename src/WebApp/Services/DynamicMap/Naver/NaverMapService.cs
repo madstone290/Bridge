@@ -44,8 +44,8 @@ namespace Bridge.WebApp.Services.DynamicMap.Naver
         private readonly IJSRuntime _jsRuntime;
         private readonly DotNetObjectReference<NaverMapService> _dotNetRef;
         private readonly Dictionary<string, EventCallback<MapPoint>> _centerChangedCallbacks = new();
-        private readonly Dictionary<string, EventCallback<MapPoint>> _onClickCallbacks = new();
         private readonly Dictionary<string, EventCallback<string>> _onSelectedMarkerChangedCallbacks = new();
+        private readonly Dictionary<string, EventCallback<Tuple<string, MapPoint>>> _onContextMenuClickedCallbacks = new();
 
         private IJSObjectReference? _module;
 
@@ -61,14 +61,14 @@ namespace Bridge.WebApp.Services.DynamicMap.Naver
             _centerChangedCallbacks[sessionId] = callback;
         }
 
-        public void SetOnClickCallback(string sessionId, EventCallback<MapPoint> callback)
-        {
-            _onClickCallbacks[sessionId] = callback;
-        }
-
         public void SetOnSelectedMarkerChangedCallback(string sessionId, EventCallback<string> callback)
         {
             _onSelectedMarkerChangedCallbacks[sessionId] = callback;
+        }
+
+        public void SetOnContextMenuClickedCallback(string sessionId, EventCallback<Tuple<string, MapPoint>> callback)
+        {
+            _onContextMenuClickedCallbacks[sessionId] = callback;
         }
 
         [JSInvokable]
@@ -78,20 +78,20 @@ namespace Bridge.WebApp.Services.DynamicMap.Naver
                 callback.InvokeAsync(new MapPoint() { X = x, Y = y });
         }
 
-
-        [JSInvokable]
-        public void OnClick(string sessionId, double x, double y)
-        {
-            if (_onClickCallbacks.TryGetValue(sessionId, out var callback))
-                callback.InvokeAsync(new MapPoint() { X = x, Y = y });
-        }
-
         [JSInvokable]
         public void OnSelectedMarkerChanged(string sessionId, string markerId)
         {
             if (_onSelectedMarkerChangedCallbacks.TryGetValue(sessionId, out var callback))
                 callback.InvokeAsync(markerId);
         }
+
+        [JSInvokable]
+        public void OnContextMenuClicked(string sessionId, string menuId, double x, double y)
+        {
+            if (_onContextMenuClickedCallbacks.TryGetValue(sessionId, out var callback))
+                callback.InvokeAsync(new Tuple<string, MapPoint>(menuId, new MapPoint() {  X = x, Y = y }));
+        }
+
 
         public async Task InitAsync(string sessionId, IMapOptions mapOptions)
         {
@@ -139,7 +139,8 @@ namespace Bridge.WebApp.Services.DynamicMap.Naver
         public async Task CloseAsync(string sessionId)
         {
             _centerChangedCallbacks.Remove(sessionId);
-            _onClickCallbacks.Remove(sessionId);
+            _onContextMenuClickedCallbacks.Remove(sessionId);
+            _onSelectedMarkerChangedCallbacks.Remove(sessionId);
 
             if (_module == null)
                 return;
@@ -155,6 +156,6 @@ namespace Bridge.WebApp.Services.DynamicMap.Naver
             await _module.DisposeAsync();
         }
 
-
+   
     }
 }

@@ -3,11 +3,6 @@
  * */
 
 /**
- * 닷넷참조 함수식별자. 지도 클릭시 호출
- * */
-const OnClickId = 'OnClick';
-
-/**
  * 닷넷참조 함수식별자. 중심 위치 변경시 호출
  * */
 const OnCenterChangedId = 'OnCenterChanged';
@@ -16,6 +11,11 @@ const OnCenterChangedId = 'OnCenterChanged';
  * 닷넷참조 함수식별자. 사용자가 마커를 선택하는 경우 호출
  * */
 const OnSelectedMarkerChangedId = 'OnSelectedMarkerChanged';
+
+/**
+ * 닷넷참조 함수식별자. 사용자가 컨텍스트 메뉴를 선택하는 경우 호출
+ * */
+const OnContextMenuClickedId = 'OnContextMenuClicked';
 
 /**
  * 닷넷참조 맵. SessionId를 키로 사용한다.
@@ -31,6 +31,11 @@ let _mapMap = new Map();
  * 내 위치 마커 맵. SessionId를 키로 사용한다.
  * */
 let _myLocationMarkerMap = new Map();
+
+/**
+ * 메뉴 마커 맵. SessionId를 키로 사용한다.
+ * */
+let _menuMarkerMap = new Map();
 
 /**
  * 마커리스트 맵. SessionId를 키로 사용한다.
@@ -58,6 +63,15 @@ const _markerIcons = {
 </div>`,
         origin: new naver.maps.Point(0, 0),
         anchor: new naver.maps.Point(12, 24)
+    },
+    menu: {
+        content: `
+<div style="background-color:white; border:solid 1px #eee;">
+    <div id="menu1" style="padding: 4px;" onmouseover="this.style.backgroundColor='#eee'" onmouseleave="this.style.backgroundColor=null">이 위치에서 검색</div>
+    <div id="menu2" style="padding: 4px;" onmouseover="this.style.backgroundColor='#eee'" onmouseleave="this.style.backgroundColor=null">이 위치에 장소 추가</div>
+</div>`,
+        origin: new naver.maps.Point(0, 0),
+        anchor: new naver.maps.Point(0, 0)
     }
 };
 
@@ -69,6 +83,13 @@ const _markerFunctions = {
     deselect: function(marker) {
         marker.setIcon(_markerIcons.location);
         marker.setZIndex(0);
+    },
+    show: function (marker, map, position) {
+        marker.setMap(map);
+        marker.setPosition(position);
+    },
+    hide: function (marker) {
+        marker.setMap(null);
     }
 }
 
@@ -94,13 +115,31 @@ export function init(sessionId, dotNetRef, mapId, centerX, centerY, showMyLocati
     let map = new naver.maps.Map(mapId, mapOptions);
     _mapMap.set(sessionId, map);
 
-    if (showMyLocation) {
-        let myLocationMarker = new naver.maps.Marker({
-            map: map,
-            position: map.getCenter(),
-        });
-        _myLocationMarkerMap.set(sessionId, myLocationMarker);
-    }
+    
+    let myLocationMarker = new naver.maps.Marker();
+    _myLocationMarkerMap.set(sessionId, myLocationMarker);
+    
+
+    let menuMarker = new naver.maps.Marker({
+        icon: _markerIcons.menu
+    });
+    naver.maps.Event.addListener(menuMarker, 'click', (e) => {
+        console.log(e);
+        const menuId = e.domEvent.srcElement.id;
+        const x = menuMarker.tag.x;
+        const y = menuMarker.tag.y;
+        
+        dotNetRef.invokeMethodAsync(OnContextMenuClickedId, sessionId, menuId, x, y);
+
+        if (menuId == "menu1") {
+            myLocationMarker.setMap(map);
+            myLocationMarker.setPosition({ lat: y, lng: x });
+        }
+
+        _markerFunctions.hide(menuMarker);
+    });
+
+    _menuMarkerMap.set(sessionId, menuMarker);
 
     naver.maps.Event.addListener(map, 'center_changed', function (center) {
         //console.log(center);
@@ -111,14 +150,19 @@ export function init(sessionId, dotNetRef, mapId, centerX, centerY, showMyLocati
         //console.log(zoom);
     });
 
-    // 클릭으로 위치가 변경된 경우
-    naver.maps.Event.addListener(map, 'click', function (e) {
-        //console.log(e);
-        let marker = _myLocationMarkerMap.get(sessionId);
-        if (marker)
-            marker.setPosition(e.latlng);
+    naver.maps.Event.addListener(map, 'mousedown', function (zoom) {
+        let menu = _menuMarkerMap.get(sessionId);
+        _markerFunctions.hide(menu);
+    });
 
-        dotNetRef.invokeMethodAsync(OnClickId, sessionId, e.latlng.x, e.latlng.y);
+    naver.maps.Event.addListener(map, 'rightclick', function (e) {
+        console.log(e);
+        let menu = _menuMarkerMap.get(sessionId);
+        menu.tag = {
+            x: e.latlng.x,
+            y: e.latlng.y
+        };
+        _markerFunctions.show(menu, map, e.latlng);
     });
 }
 

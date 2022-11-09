@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
 
 namespace Bridge.WebApp.Services.DynamicMap
 {
@@ -16,18 +15,18 @@ namespace Bridge.WebApp.Services.DynamicMap
         void SetCenterChangedCallback(string sessionId, EventCallback<MapPoint> callback);
 
         /// <summary>
-        /// 마우스 클릭 이벤트 콜백을 등록한다.
-        /// </summary>
-        /// <param name="sessionId"></param>
-        /// <param name="callback"></param>
-        void SetOnClickCallback(string sessionId, EventCallback<MapPoint> callback);
-
-        /// <summary>
         /// 선택한 마커가 변경되는 경우 호출할 콜백을 등록한다.
         /// </summary>
         /// <param name="sessionId"></param>
         /// <param name="callback">마커ID를 파라미터로 갖는 콜백</param>
         void SetOnSelectedMarkerChangedCallback(string sessionId, EventCallback<string> callback);
+
+        /// <summary>
+        /// 컨텍스트 메뉴가 클릭되는 경우 호출할 콜백을 등록한다.
+        /// </summary>
+        /// <param name="sessionId"></param>
+        /// <param name="callback">메뉴ID/좌표를 파라미터로 갖는 콜백</param>
+        void SetOnContextMenuClickedCallback(string sessionId, EventCallback<Tuple<string, MapPoint>> callback);
 
         /// <summary>
         /// 맵을 초기화한다

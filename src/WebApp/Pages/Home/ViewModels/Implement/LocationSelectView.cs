@@ -1,4 +1,4 @@
-﻿using Bridge.WebApp.Pages.Home.Models;
+using Bridge.WebApp.Pages.Home.Models;
 using Bridge.WebApp.Services.DynamicMap;
 using Bridge.WebApp.Services.DynamicMap.Naver;
 using Bridge.WebApp.Services.ReverseGeocode;
@@ -32,17 +32,21 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
 
         public string? CurrentAddress { get; set; }
 
-        private async void OnLocationChanged(MapPoint point)
+        private async void OnContextMenuClicked(Tuple<string, MapPoint> tuple)
         {
-            CurrentLocation = new LatLon(point.Y, point.X);
+            if(tuple.Item1 == "menu1")
+            {
+                CurrentLocation = new LatLon(tuple.Item2.Y, tuple.Item2.X);
 
-            var result = await _reverseGeocodeService.GetAddressAsync(point.Y, point.X);
-            CurrentAddress = result.Data;
+                var result = await _reverseGeocodeService.GetAddressAsync(CurrentLocation.Latitude, CurrentLocation.Longitude);
+                CurrentAddress = result.Data;
+            }
+          
         }
 
         public async Task Initialize()
         {
-            _mapService.SetOnClickCallback(SESSION_ID, new(Receiver, OnLocationChanged));
+            _mapService.SetOnContextMenuClickedCallback(SESSION_ID, new(Receiver, OnContextMenuClicked));
             var mapOptions = new NaverMapService.MapOptions()
             {
                 MapId = MapElementId,
