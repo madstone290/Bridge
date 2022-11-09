@@ -2,7 +2,7 @@
 <CascadingAuthenticationState>
     <Router AppAssembly="@typeof(App).Assembly">
         <Found Context="routeData">
-            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@LayoutType">
                 <NotAuthorized>
                     @if (_authenticated)
                     {
@@ -33,10 +33,27 @@
     [Inject]
     public IAuthService AuthService { get; set; } = null!;
 
+    public Type LayoutType {
+        get
+        {
+            var route = NavManager.Uri.Remove(0, NavManager.BaseUri.Length);
+            if (route.StartsWith("admin", StringComparison.OrdinalIgnoreCase))
+                return typeof(AdminMainLayout);
+            else
+                return typeof(MainLayout);
+        }
+    }
+
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthService.GetAuthStateAsync();
         _authenticated = authState.IsAuthenticated;
+
+        Console.WriteLine(NavManager.Uri);
+
+        NavManager.Uri.Contains("/admin");
     }
+
+
 
 }
