@@ -32,6 +32,8 @@ namespace Bridge.WebApp.Pages.Home.ViewModels
 
         Task SearchPlacesAsync();
 
+        Task ClearPlacesAsync();
+
         Task ShowLocationSelectionAsync();
 
         Task Handle_KeyUp(KeyboardEventArgs args);

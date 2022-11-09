@@ -169,6 +169,15 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
                 await SearchCompleted.InvokeAsync();
         }
 
+        public async Task ClearPlacesAsync()
+        {
+            SearchText = String.Empty;
+
+            _places.Clear();
+            Searched = false;
+
+            await CreateMarkers();
+        }
 
         public async Task Handle_KeyUp(KeyboardEventArgs args)
         {

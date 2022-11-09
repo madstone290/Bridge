@@ -7,51 +7,48 @@
 <PageTitle>플차</PageTitle>
 
 <div class="page">
-    <MudContainer Class="search-container" MaxWidth="MaxWidth.Large">
+    <div id="@VM.MapElementId" style="width:100%; height:100%;">
+    </div>
+
+    <div class="search-container">
         <div class="address-line">
-            <MudButton Style="flex: 1 1 auto;"
-                       Color="Color.Info"
+            <MudButton Color="Color.Info"
                        OnClick="VM.ShowLocationSelectionAsync">
                 @VM.CurrentAddress
             </MudButton>
         </div>
 
-        <div style="display:flex; flex-direction:row;">
-            <div style="min-width:600px; max-width:600px;">
-                <div class="search-line">
-                    <MudTextField @ref="_searchField"git s
-                                  Placeholder="검색어를 입력하세요"
-                                  T="string"
-                                  @bind-Value="VM.SearchText"
-                                  Adornment="Adornment.Start"
-                                  AdornmentIcon="@Icons.Material.Filled.Search"
-                                  Variant="Variant.Outlined"
-                                  OnKeyUp="VM.Handle_KeyUp" />
-                </div>
-
-                @if (VM.Searched && !VM.Places.Any())
-                {
-                    <div style="padding:10px;">
-                        <MudText>검색결과가 없습니다</MudText>
-                    </div>
-                }
-                else
-                {
-                    <MudList id="@VM.ListElementId" @bind-SelectedValue="VM.SelectedListItem" Clickable="true" Style="overflow-y:scroll; height:600px;">
-                        @foreach (var place in VM.Places)
-                        {
-                            <MudListItem id="@place.Id" Class="list-item" Value="place" OnClick="@(()=> VM.Handle_PlaceSelected(place))">
-                                <Bridge.WebApp.Pages.Home.Views.Components.PlaceItemView Place="place"/>
-                            </MudListItem>
-                        }
-                    </MudList>
-                }
-            </div>
-            <div id="@VM.MapElementId" style="width:100%; height:600px; margin:4px;">
-            </div>
+        <div class="search-line"  >
+            <AdvTextField @ref="_searchField"
+                          Placeholder="검색어를 입력하세요"
+                          T="string"
+                          DisableUnderLine="true"
+                          @bind-Value="VM.SearchText"
+                          OnKeyUp="VM.Handle_KeyUp" />
+            <MudIconButton Icon="@Icons.Material.Outlined.Search" OnClick="VM.SearchPlacesAsync" />
+            <MudIconButton Icon="@Icons.Material.Outlined.Close" OnClick="VM.ClearPlacesAsync" />
         </div>
 
-    </MudContainer>
+        @if (VM.Searched && !VM.Places.Any())
+        {
+            <div class="place-list">
+                <div style="padding:20px;">
+                    검색결과가 없습니다
+                </div>
+            </div>
+        }
+        else
+        {
+            <MudList id="@VM.ListElementId" Class="place-list" @bind-SelectedValue="VM.SelectedListItem" Clickable="true">
+                @foreach (var place in VM.Places)
+                {
+                    <MudListItem id="@place.Id" Class="list-item" Value="place" OnClick="@(()=> VM.Handle_PlaceSelected(place))">
+                        <Bridge.WebApp.Pages.Home.Views.Components.PlaceItemView Place="place" />
+                    </MudListItem>
+                }
+            </MudList>
+        }
+    </div>
 </div>
 @code {
     private MudTextField<string>? _searchField;
