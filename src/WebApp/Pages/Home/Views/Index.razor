@@ -28,17 +28,26 @@
             <MudIconButton Icon="@Icons.Material.Outlined.Close" OnClick="VM.ClearPlacesAsync" />
         </div>
 
-        @if (VM.Searched && !VM.Places.Any())
-        {
-            <Bridge.WebApp.Pages.Home.Views.Components.NoSearchResult />
-        }
-        else
-        {
-            <Bridge.WebApp.Pages.Home.Views.Components.PlaceResultList ListElementId="@VM.ListElementId"
-                                                                       Places="@VM.Places"
-                                                                       OnPlaceClicked="@(new EventCallback<Place>(this, VM.Handle_PlaceSelected))"
-                                                                       SelectedListItem="@VM.SelectedListItem" />
-        }
+        <MudTabs>
+            <MudTabPanel Style="width:192px;" Text="제품">
+
+            </MudTabPanel>
+            <MudTabPanel Style="width:192px;" Text="장소">
+                @if (VM.Searched && !VM.Places.Any())
+                {
+                    <Bridge.WebApp.Pages.Home.Views.Components.NoSearchResult />
+                }
+                else
+                {
+                    <Bridge.WebApp.Pages.Home.Views.Components.PlaceResultList ListElementId="@VM.ListElementId"
+                                                                           Places="@VM.Places"
+                                                                           OnPlaceClicked="@(new EventCallback<Place>(this, VM.Handle_PlaceSelected))"
+                                                                           SelectedListItem="@VM.SelectedListItem" />
+                }
+            </MudTabPanel>
+        </MudTabs>
+
+
     </div>
 </div>
 @code {
