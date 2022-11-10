@@ -1,3 +1,4 @@
+@using Bridge.WebApp.Pages.Home.Models
 @using Bridge.WebApp.Pages.Home.ViewModels
 @attribute [Route(PageRoutes.Home)]
 @attribute [AllowAnonymous]
@@ -16,7 +17,7 @@
             <MudText Color="Color.Info">@VM.CurrentAddress</MudText>
         </div>
 
-        <div class="search-line"  >
+        <div class="search-line">
             <AdvTextField @ref="_searchField"
                           Placeholder="검색어를 입력하세요"
                           T="string"
@@ -33,14 +34,10 @@
         }
         else
         {
-            <MudList id="@VM.ListElementId" Class="place-list" @bind-SelectedValue="VM.SelectedListItem" Clickable="true">
-                @foreach (var place in VM.Places)
-                {
-                    <MudListItem id="@place.Id" Class="list-item" Value="place" OnClick="@(()=> VM.Handle_PlaceSelected(place))">
-                        <Bridge.WebApp.Pages.Home.Views.Components.PlaceItemView Place="place" />
-                    </MudListItem>
-                }
-            </MudList>
+            <Bridge.WebApp.Pages.Home.Views.Components.PlaceResultList ListElementId="@VM.ListElementId"
+                                                                       Places="@VM.Places"
+                                                                       OnPlaceClicked="@(new EventCallback<Place>(this, VM.Handle_PlaceSelected))"
+                                                                       SelectedListItem="@VM.SelectedListItem" />
         }
     </div>
 </div>

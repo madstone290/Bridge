@@ -1,0 +1,24 @@
+@using Bridge.WebApp.Pages.Home.Models
+
+<MudList id="@ListElementId" Class="place-list" @bind-SelectedValue="@SelectedListItem" Clickable="true">
+    @foreach (var place in Places)
+    {
+        <MudListItem id="@place.Id" Class="list-item" Value="place" OnClick="@(async ()=> await OnPlaceClicked.InvokeAsync(place))">
+            <Bridge.WebApp.Pages.Home.Views.Components.PlaceItemView Place="place" />
+        </MudListItem>
+    }
+</MudList>
+
+@code{
+    [Parameter]
+    public string ListElementId { get; set; } = string.Empty;
+
+    [Parameter]
+    public object? SelectedListItem { get; set; }
+
+    [Parameter]
+    public IEnumerable<Place> Places { get; set; } = Enumerable.Empty<Place>();
+
+    [Parameter]
+    public EventCallback<Place> OnPlaceClicked { get; set; }
+}
