@@ -10,77 +10,67 @@ namespace Bridge.WebApp.Services.DynamicMap
         /// <summary>
         /// 지도 중심위치가 변경될 경우 호출할 콜백을 등록한다.
         /// </summary>
-        /// <param name="sessionId">세션 아이디. 서비스에서 맵 식별을 위해 사용한다.</param>
         /// <param name="callback">이벤트 콜백</param>
-        void SetCenterChangedCallback(string sessionId, EventCallback<MapPoint> callback);
+        void SetCenterChangedCallback(EventCallback<MapPoint> callback);
 
         /// <summary>
         /// 선택한 마커가 변경되는 경우 호출할 콜백을 등록한다.
         /// </summary>
-        /// <param name="sessionId"></param>
         /// <param name="callback">마커ID를 파라미터로 갖는 콜백</param>
-        void SetOnSelectedMarkerChangedCallback(string sessionId, EventCallback<string> callback);
+        void SetOnSelectedMarkerChangedCallback(EventCallback<string> callback);
 
         /// <summary>
         /// 컨텍스트 메뉴가 클릭되는 경우 호출할 콜백을 등록한다.
         /// </summary>
-        /// <param name="sessionId"></param>
         /// <param name="callback">메뉴ID/좌표를 파라미터로 갖는 콜백</param>
-        void SetOnContextMenuClickedCallback(string sessionId, EventCallback<Tuple<string, MapPoint>> callback);
+        void SetOnContextMenuClickedCallback(EventCallback<Tuple<string, MapPoint>> callback);
 
         /// <summary>
         /// 맵을 초기화한다
         /// </summary>
-        /// <param name="sessionId">세션 아이디. 서비스에서 맵 식별을 위해 사용한다.</param>
         /// <param name="mapOptions">맵 옵션</param>
         /// <returns></returns>
-        Task InitAsync(string sessionId, IMapOptions mapOptions);
+        Task InitAsync(IMapOptions mapOptions);
 
         /// <summary>
-        /// 마커를 추가한다
+        /// 장소마커를 추가한다
         /// </summary>
-        /// <param name="sessionId"></param>
-        /// <param name="markers"></param>
+        /// <param name="placeMarkers"></param>
         /// <returns></returns>
-        Task AddMarkersAsync(string sessionId, IEnumerable<Marker> markers);
+        Task AddPlaceMarkersAsync(IEnumerable<Marker> placeMarkers);
 
         /// <summary>
-        /// 마커를 제거한다
+        /// 장소마커를 제거한다
         /// </summary>
-        /// <param name="sessionId"></param>
         /// <returns></returns>
-        Task ClearMarkersAsync(string sessionId);
+        Task ClearPlaceMarkersAsync();
 
         /// <summary>
-        /// 마커를 선택한다
+        /// 장소마커를 선택한다
         /// </summary>
-        /// <param name="sessionId"></param>
         /// <param name="markerId"></param>
         /// <returns></returns>
-        Task SelectMarkerAsync(string sessionId, string markerId);
+        Task SelectPlaceMarkerAsync(string markerId);
 
         /// <summary>
-        /// 해당 위치로 이동한다
+        /// 지도를 해당 위치로 이동한다
         /// </summary>
-        /// <param name="sessionId"></param>
         /// <param name="latitude"></param>
         /// <param name="longitude"></param>
         /// <returns></returns>
-        Task MoveAsync(string sessionId, double latitude, double longitude);
+        Task MoveAsync(double latitude, double longitude);
 
         /// <summary>
-        /// 맵을 닫는다
+        /// 맵을 해제한다
         /// </summary>
-        /// <param name="sessionId">세션 아이디. 서비스에서 맵 식별을 위해 사용한다.</param>
         /// <returns></returns>
-        Task CloseAsync(string sessionId);
+        Task DisposeMapAsync();
 
         /// <summary>
-        /// 사용자가 선택한 위치를 가져온다
+        /// 내 위치를 가져온다
         /// </summary>
-        /// <param name="sessionId">세션 아이디. 서비스에서 맵 식별을 위해 사용한다.</param>
-        /// <returns>사용자가 선택한 위치</returns>
-        Task<MapPoint> GetSelectedLocationAsync(string sessionId);
+        /// <returns>내 위치</returns>
+        Task<MapPoint> GetMyLocationAsync();
         
     }
 

@@ -21,34 +21,29 @@ namespace Bridge.WebApp.Services.DynamicMap.Naver
             /// 위도. Y축 중심위치
             /// </summary>
             public double? CenterY { get; init; }
-
-            /// <summary>
-            /// 마커 사용여부
-            /// </summary>
-            public bool ShowMyLocation { get; init; }
         }
 
         private const string JsFile = "/js/naver_map.js";
 
         #region 자바스크립트 함수 식별자
         private const string InitId = "init";
-        private const string CloseId = "close";
-        private const string GetMarkerLocationId = "getMarkerLocation";
-        private const string AddMarkersId = "addMarkers";
-        private const string ClearMarkersId = "clearMarkers";
-        private const string SelectMarkerId = "selectMarker";
+        private const string AddPlaceMarkersId = "addPlaceMarkers";
+        private const string ClearPlaceMarkersId = "clearPlaceMarkers";
+        private const string SelectPlaceMarkerId = "selectPlaceMarker";
         private const string MoveId = "move";
+        private const string GetMyLocationId = "getMyLocation";
+        private const string DisposeMapId = "disposeMap";
         #endregion
 
 
         private readonly IJSRuntime _jsRuntime;
         private readonly DotNetObjectReference<NaverMapService> _dotNetRef;
-        private readonly Dictionary<string, EventCallback<MapPoint>> _centerChangedCallbacks = new();
-        private readonly Dictionary<string, EventCallback<string>> _onSelectedMarkerChangedCallbacks = new();
-        private readonly Dictionary<string, EventCallback<Tuple<string, MapPoint>>> _onContextMenuClickedCallbacks = new();
+
+        private EventCallback<MapPoint> _centerChangedCallback;
+        private EventCallback<string> _onSelectedMarkerChangedCallback;
+        private EventCallback<Tuple<string, MapPoint>> _onContextMenuClickedCallback;
 
         private IJSObjectReference? _module;
-
 
         public NaverMapService(IJSRuntime jsRuntime)
         {
@@ -56,104 +51,97 @@ namespace Bridge.WebApp.Services.DynamicMap.Naver
             _dotNetRef = DotNetObjectReference.Create(this);
         }
 
-        public void SetCenterChangedCallback(string sessionId, EventCallback<MapPoint> callback)
+        private IJSObjectReference Module
         {
-            _centerChangedCallbacks[sessionId] = callback;
+            get
+            {
+                if (_module == null)
+                    throw new Exception("JS모듈이 초기화되지 않았습니다");
+                return _module;
+            }
         }
 
-        public void SetOnSelectedMarkerChangedCallback(string sessionId, EventCallback<string> callback)
+        public void SetCenterChangedCallback(EventCallback<MapPoint> callback)
         {
-            _onSelectedMarkerChangedCallbacks[sessionId] = callback;
+            _centerChangedCallback = callback;
         }
 
-        public void SetOnContextMenuClickedCallback(string sessionId, EventCallback<Tuple<string, MapPoint>> callback)
+        public void SetOnSelectedMarkerChangedCallback(EventCallback<string> callback)
         {
-            _onContextMenuClickedCallbacks[sessionId] = callback;
+            _onSelectedMarkerChangedCallback = callback;
         }
 
-        [JSInvokable]
-        public void OnCenterChanged(string sessionId, double x, double y)
+        public void SetOnContextMenuClickedCallback(EventCallback<Tuple<string, MapPoint>> callback)
         {
-            if (_centerChangedCallbacks.TryGetValue(sessionId, out var callback))
-                callback.InvokeAsync(new MapPoint() { X = x, Y = y });
-        }
-
-        [JSInvokable]
-        public void OnSelectedMarkerChanged(string sessionId, string markerId)
-        {
-            if (_onSelectedMarkerChangedCallbacks.TryGetValue(sessionId, out var callback))
-                callback.InvokeAsync(markerId);
+            _onContextMenuClickedCallback = callback;
         }
 
         [JSInvokable]
-        public void OnContextMenuClicked(string sessionId, string menuId, double x, double y)
+        public void OnCenterChanged(double x, double y)
         {
-            if (_onContextMenuClickedCallbacks.TryGetValue(sessionId, out var callback))
-                callback.InvokeAsync(new Tuple<string, MapPoint>(menuId, new MapPoint() {  X = x, Y = y }));
+            if(_centerChangedCallback.HasDelegate)
+                _centerChangedCallback.InvokeAsync(new MapPoint() { X = x, Y = y });
+        }
+
+        [JSInvokable]
+        public void OnSelectedPlaceMarkerChanged(string markerId)
+        {
+            if (_onSelectedMarkerChangedCallback.HasDelegate)
+                _onSelectedMarkerChangedCallback.InvokeAsync(markerId);
+        }
+
+        [JSInvokable]
+        public void OnContextMenuClicked(string menuId, double x, double y)
+        {
+            if (_onContextMenuClickedCallback.HasDelegate)
+                _onContextMenuClickedCallback.InvokeAsync(new Tuple<string, MapPoint>(menuId, new MapPoint() {  X = x, Y = y }));
         }
 
 
-        public async Task InitAsync(string sessionId, IMapOptions mapOptions)
+        public async Task InitAsync(IMapOptions mapOptions)
         {
             _module = await _jsRuntime.InvokeAsync<IJSObjectReference>("import", JsFile);
 
             var naverMapOptions = (MapOptions)mapOptions;
-            await _module.InvokeVoidAsync(InitId, sessionId, _dotNetRef, naverMapOptions.MapId, naverMapOptions.CenterX, naverMapOptions.CenterY, naverMapOptions.ShowMyLocation);
+            await _module.InvokeVoidAsync(InitId, _dotNetRef, naverMapOptions.MapId, naverMapOptions.CenterX, naverMapOptions.CenterY);
         }
 
-        public async Task<MapPoint> GetSelectedLocationAsync(string sessionId)
+        public async Task<MapPoint> GetMyLocationAsync()
         {
-            if (_module == null)
-                return new MapPoint();
-            return await _module.InvokeAsync<MapPoint>(GetMarkerLocationId, sessionId);
+            return await Module.InvokeAsync<MapPoint>(GetMyLocationId);
         }
 
-        public async Task AddMarkersAsync(string sessionId, IEnumerable<Marker> markers)
+        public async Task AddPlaceMarkersAsync(IEnumerable<Marker> markers)
         {
-            if (_module == null)
-                return;
-            await _module.InvokeVoidAsync(AddMarkersId, sessionId, markers);
+            await Module.InvokeVoidAsync(AddPlaceMarkersId, markers);
         }
 
-        public async Task ClearMarkersAsync(string sessionId)
+        public async Task ClearPlaceMarkersAsync()
         {
-            if (_module == null)
-                return;
-            await _module.InvokeVoidAsync(ClearMarkersId, sessionId);
+            await Module.InvokeVoidAsync(ClearPlaceMarkersId);
         }
 
-        public async Task SelectMarkerAsync(string sessionId, string markerId)
+        public async Task SelectPlaceMarkerAsync(string markerId)
         {
-            if (_module == null)
-                return;
-            await _module.InvokeVoidAsync(SelectMarkerId, sessionId, markerId);
+            await Module.InvokeVoidAsync(SelectPlaceMarkerId, markerId);
         }
 
-        public async Task MoveAsync(string sessionId, double latitude, double longitude)
+        public async Task MoveAsync(double latitude, double longitude)
         {
-            if (_module == null)
-                return;
-            await _module.InvokeVoidAsync(MoveId, sessionId, latitude, longitude);
+            await Module.InvokeVoidAsync(MoveId, latitude, longitude);
         }
 
-        public async Task CloseAsync(string sessionId)
+        public async Task DisposeMapAsync()
         {
-            _centerChangedCallbacks.Remove(sessionId);
-            _onContextMenuClickedCallbacks.Remove(sessionId);
-            _onSelectedMarkerChangedCallbacks.Remove(sessionId);
-
-            if (_module == null)
-                return;
-            await _module.InvokeVoidAsync(CloseId, sessionId);
+            await Module.InvokeVoidAsync(DisposeMapId);
         }
 
         public async ValueTask DisposeAsync()
         {
             _dotNetRef.Dispose();
 
-            if (_module == null)
-                return;
-            await _module.DisposeAsync();
+            if (_module != null)
+                await _module.DisposeAsync();
         }
 
    

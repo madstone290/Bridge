@@ -10,7 +10,7 @@ const OnCenterChangedId = 'OnCenterChanged';
 /**
  * 닷넷참조 함수식별자. 사용자가 마커를 선택하는 경우 호출
  * */
-const OnSelectedMarkerChangedId = 'OnSelectedMarkerChanged';
+const OnSelectedMarkerChangedId = 'OnSelectedPlaceMarkerChanged';
 
 /**
  * 닷넷참조 함수식별자. 사용자가 컨텍스트 메뉴를 선택하는 경우 호출
@@ -18,31 +18,34 @@ const OnSelectedMarkerChangedId = 'OnSelectedMarkerChanged';
 const OnContextMenuClickedId = 'OnContextMenuClicked';
 
 /**
- * 닷넷참조 맵. SessionId를 키로 사용한다.
+ * 닷넷참조자
  * */
-let _dotNetRefMap = new Map();
+let _dotNetRef;
 
 /**
- * 네이버맵 맵. SessionId를 키로 사용한다.
+ * 네이버맵
  * */
-let _mapMap = new Map();
+let _map;
 
 /**
- * 내 위치 마커 맵. SessionId를 키로 사용한다.
+ * 내 위치 마커
  * */
-let _myLocationMarkerMap = new Map();
+let _myLocationMarker;
 
 /**
- * 메뉴 마커 맵. SessionId를 키로 사용한다.
+ * 메뉴 마커
  * */
-let _menuMarkerMap = new Map();
+let _menuMarker;
 
 /**
- * 마커리스트 맵. SessionId를 키로 사용한다.
+ * 장소 마커 리스트
  * */
-let _markersMap = new Map();
+let _placeMarkers = [];
 
-let _selectedMarkerMap = new Map();
+/**
+ * 선택한 장소 마커
+ * */
+let _selectedPlaceMarker;
 
 /**
  * 마커 아이콘 컬렉션
@@ -95,16 +98,13 @@ const _markerFunctions = {
 
 /**
  * 네이버 맵을 초기화 한다
- * @param {string} sessionId 세션 아이디
  * @param {any} dotNetRef 닷넷 참조객체
  * @param {string} mapId 맵초기화를 위한 div 요소 아이디
  * @param {number} centerX X축 중심위치. 경도
  * @param {number} centerY Y축 중심위치. 위도
- * @param {boolean} showMyLocation 내 위치 표시여부
  */
-export function init(sessionId, dotNetRef, mapId, centerX, centerY, showMyLocation) {
-    console.log("new session", sessionId);
-    _dotNetRefMap.set(sessionId, dotNetRef);
+export function init(dotNetRef, mapId, centerX, centerY) {
+    _dotNetRef = dotNetRef;
 
     let mapOptions = {
         zoom: 17
@@ -112,134 +112,113 @@ export function init(sessionId, dotNetRef, mapId, centerX, centerY, showMyLocati
     if (centerX && centerY)
         mapOptions.center = new naver.maps.LatLng(centerY, centerX);
     
-    let map = new naver.maps.Map(mapId, mapOptions);
-    _mapMap.set(sessionId, map);
-
-    
-    let myLocationMarker = new naver.maps.Marker();
-    _myLocationMarkerMap.set(sessionId, myLocationMarker);
-    
-
-    let menuMarker = new naver.maps.Marker({
+    _map = new naver.maps.Map(mapId, mapOptions);
+    _myLocationMarker = new naver.maps.Marker();
+    _menuMarker = new naver.maps.Marker({
         icon: _markerIcons.menu
     });
-    naver.maps.Event.addListener(menuMarker, 'click', (e) => {
-        console.log(e);
+
+    naver.maps.Event.addListener(_menuMarker, 'click', (e) => {
         const menuId = e.domEvent.srcElement.id;
-        const x = menuMarker.tag.x;
-        const y = menuMarker.tag.y;
+        const x = _menuMarker.tag.x;
+        const y = _menuMarker.tag.y;
         
-        dotNetRef.invokeMethodAsync(OnContextMenuClickedId, sessionId, menuId, x, y);
+        dotNetRef.invokeMethodAsync(OnContextMenuClickedId, menuId, x, y);
 
         if (menuId == "menu1") {
-            myLocationMarker.setMap(map);
-            myLocationMarker.setPosition({ lat: y, lng: x });
+            _myLocationMarker.setMap(_map);
+            _myLocationMarker.setPosition({ lat: y, lng: x });
         }
 
-        _markerFunctions.hide(menuMarker);
+        _markerFunctions.hide(_menuMarker);
     });
 
-    _menuMarkerMap.set(sessionId, menuMarker);
-
-    naver.maps.Event.addListener(map, 'center_changed', function (center) {
-        //console.log(center);
-        dotNetRef.invokeMethodAsync(OnCenterChangedId, sessionId, center.x, center.y);
+    naver.maps.Event.addListener(_map, 'center_changed', function (center) {
+        dotNetRef.invokeMethodAsync(OnCenterChangedId, center.x, center.y);
     });
 
-    naver.maps.Event.addListener(map, 'zoom_changed', function (zoom) {
-        //console.log(zoom);
+    naver.maps.Event.addListener(_map, 'zoom_changed', function (zoom) {
     });
 
-    naver.maps.Event.addListener(map, 'mousedown', function (zoom) {
-        let menu = _menuMarkerMap.get(sessionId);
-        _markerFunctions.hide(menu);
+    naver.maps.Event.addListener(_map, 'mousedown', function (zoom) {
+        _markerFunctions.hide(_menuMarker);
     });
 
-    naver.maps.Event.addListener(map, 'rightclick', function (e) {
-        console.log(e);
-        let menu = _menuMarkerMap.get(sessionId);
-        menu.tag = {
+    naver.maps.Event.addListener(_map, 'rightclick', function (e) {
+        _menuMarker.tag = {
             x: e.latlng.x,
             y: e.latlng.y
         };
-        _markerFunctions.show(menu, map, e.latlng);
+        _markerFunctions.show(_menuMarker, _map, e.latlng);
     });
 }
 
-export function addMarkers(sessionId, markers) {
-    //console.log(markers);
-    let map = _mapMap.get(sessionId);
-
-    var naverMarkers = new Array(markers.length);
+export function addPlaceMarkers(markers) {
     for (let i = 0; i < markers.length; i++) {
-        let naverMarker = new naver.maps.Marker({
-            map: map,
+        let placeMarker = new naver.maps.Marker({
+            map: _map,
             position: new naver.maps.LatLng(markers[i].latitude, markers[i].longitude),
             icon: _markerIcons.location
         });
 
-        naver.maps.Event.addListener(naverMarker, 'click', (e) => {
-            //console.log(e);
-            selectMarker(sessionId, naverMarker.tag.id);
+        naver.maps.Event.addListener(placeMarker, 'click', (e) => {
+            selectPlaceMarker(placeMarker.tag.id);
 
-            let dotNetRef = _dotNetRefMap.get(sessionId);
-            if (dotNetRef) {
-                dotNetRef.invokeMethodAsync(OnSelectedMarkerChangedId, sessionId, naverMarker.tag.id);
+            if (_dotNetRef) {
+                _dotNetRef.invokeMethodAsync(OnSelectedMarkerChangedId, placeMarker.tag.id);
             }
         });
-
-        naverMarker.tag = markers[i];
-
-        naverMarkers[i] = naverMarker;
-    }
-    _markersMap.set(sessionId, naverMarkers);
-}
-
-export function clearMarkers(sessionId) {
-    let naverMarkers = _markersMap.get(sessionId);
-    if (!naverMarkers)
-        return;
-
-    for (let i = 0; i < naverMarkers.length; i++) {
-        naverMarkers[i].setMap(null);
+        placeMarker.tag = markers[i];
+        _placeMarkers.push(placeMarker);
     }
 }
 
-export function selectMarker(sessionId, markerId) {
-    let naverMarkers = _markersMap.get(sessionId);
-    if (!naverMarkers)
-        return;
+export function clearPlaceMarkers() {
+    for (let i = 0; i < _placeMarkers.length; i++) {
+        _placeMarkers[i].setMap(null);
+    }
+    _placeMarkers = [];
+}
 
-    let selectedMarker = _selectedMarkerMap.get(sessionId);
-    if (selectedMarker) {
-        _markerFunctions.deselect(selectedMarker);
+/**
+ * 주어진 ID를 가진 마커를 선택한다
+ * @param {any} markerId 마커 ID
+ */
+export function selectPlaceMarker(markerId) {
+    if (_selectedPlaceMarker) {
+        _markerFunctions.deselect(_selectedPlaceMarker);
     }
 
-    for (let i = 0; i < naverMarkers.length; i++) {
-        if (naverMarkers[i].tag.id == markerId) {
-            _markerFunctions.select(naverMarkers[i]);
+    for (let i = 0; i < _placeMarkers.length; i++) {
+        if (_placeMarkers[i].tag.id == markerId) {
+            _markerFunctions.select(_placeMarkers[i]);
           
-            _selectedMarkerMap.set(sessionId, naverMarkers[i]);
+            _selectedPlaceMarker = _placeMarkers[i];
         }
     }
 }
 
-export function move(sessionId, latitude, longitude) {
-    let map = _mapMap.get(sessionId);
-    if (!map)
-        return;
-    map.setCenter(new naver.maps.LatLng(latitude, longitude));
+/**
+ * 주어진 위치로 지도 이동
+ * @param {any} latitude
+ * @param {any} longitude
+ */
+export function move(latitude, longitude) {
+    _map.setCenter(new naver.maps.LatLng(latitude, longitude));
 }
 
 /**
- * 맵을 종료한다
+ * 내 위치를 조회한다
  * */
-export function close(sessionId) {
-    _dotNetRefMap.delete(sessionId);
-    _mapMap.delete(sessionId);
-    _myLocationMarkerMap.delete(sessionId);
+export function getMyLocation() {
+    return _myLocationMarker.getPosition();
 }
 
-export function getMarkerLocation(sessionId) {
-    return _myLocationMarkerMap.get(sessionId).getPosition();
+/**
+ * 사용된 자원을 해제한다.
+ * */
+export function disposeMap() {
+    _dotNetRef = null;
+    _map = null;
+    _myLocationMarker = null;
 }

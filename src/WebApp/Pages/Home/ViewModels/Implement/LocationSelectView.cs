@@ -9,11 +9,6 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
 {
     public class LocationSelectViewModel : ILocationSelectViewModel
     {
-        /// <summary>
-        /// 맵서비스 아이디
-        /// </summary>
-        private readonly string SESSION_ID = Guid.NewGuid().ToString();
-
         private readonly IDynamicMapService _mapService;
         private readonly IReverseGeocodeService _reverseGeocodeService;
 
@@ -46,16 +41,15 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
 
         public async Task Initialize()
         {
-            _mapService.SetOnContextMenuClickedCallback(SESSION_ID, new(Receiver, OnContextMenuClicked));
+            _mapService.SetOnContextMenuClickedCallback(new(Receiver, OnContextMenuClicked));
             var mapOptions = new NaverMapService.MapOptions()
             {
                 MapId = MapElementId,
                 CenterX = CurrentLocation?.Longitude,
                 CenterY = CurrentLocation?.Latitude,
-                ShowMyLocation = true
             };
 
-            await _mapService.InitAsync(SESSION_ID, mapOptions);
+            await _mapService.InitAsync(mapOptions);
         }
 
 
@@ -76,8 +70,8 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
                 MudDialog.Close(DialogResult.Ok(
                     new
                     {
-                        CurrentLocation = CurrentLocation,
-                        CurrentAddress = CurrentAddress
+                        CurrentLocation,
+                        CurrentAddress
                     }));
             }
             await Task.CompletedTask;
@@ -87,7 +81,7 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
 
         async ValueTask IAsyncDisposable.DisposeAsync()
         {
-            await _mapService.CloseAsync(SESSION_ID);
+            await _mapService.DisposeMapAsync();
             GC.SuppressFinalize(this);
         }
     }

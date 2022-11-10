@@ -15,7 +15,6 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
 {
     public class IndexViewModel : IIndexViewModel
     {
-        private readonly string SESSION_ID = Guid.NewGuid().ToString();
         private readonly List<Place> _places = new();
 
         private readonly PlaceApiClient _placeApiClient;
@@ -92,9 +91,9 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
                 CenterY = CurrentLocation?.Latitude
             };
 
-            _mapService.SetOnSelectedMarkerChangedCallback(SESSION_ID, new(Receiver, OnSelectedMarkerChangedCallback));
-            _mapService.SetOnContextMenuClickedCallback(SESSION_ID, new(Receiver, OnContextMenuClickedCallback));
-            await _mapService.InitAsync(SESSION_ID, mapOptions);
+            _mapService.SetOnSelectedMarkerChangedCallback(new(Receiver, OnSelectedMarkerChangedCallback));
+            _mapService.SetOnContextMenuClickedCallback(new(Receiver, OnContextMenuClickedCallback));
+            await _mapService.InitAsync(mapOptions);
         }
 
         private async void OnSelectedMarkerChangedCallback(string markerId)
@@ -172,8 +171,8 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
                 Latitude = x.Latitude,
                 Longitude = x.Longitude
             });
-            await _mapService.ClearMarkersAsync(SESSION_ID);
-            await _mapService.AddMarkersAsync(SESSION_ID, markers);
+            await _mapService.ClearPlaceMarkersAsync();
+            await _mapService.AddPlaceMarkersAsync(markers);
 
             if (SearchCompleted.HasDelegate)
                 await SearchCompleted.InvokeAsync();
@@ -204,8 +203,8 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
         /// <returns></returns>
         public async Task Handle_PlaceSelected(Place place)
         {
-            await _mapService.SelectMarkerAsync(SESSION_ID, place.Id.ToString());
-            await _mapService.MoveAsync(SESSION_ID, place.Latitude, place.Longitude);
+            await _mapService.SelectPlaceMarkerAsync(place.Id.ToString());
+            await _mapService.MoveAsync(place.Latitude, place.Longitude);
         }
 
         public async Task ShowLocationSelectionAsync()
@@ -232,7 +231,7 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
 
         async ValueTask IAsyncDisposable.DisposeAsync()
         {
-            await _mapService.CloseAsync(SESSION_ID);
+            await _mapService.DisposeMapAsync();
             GC.SuppressFinalize(this);
         }
     }
