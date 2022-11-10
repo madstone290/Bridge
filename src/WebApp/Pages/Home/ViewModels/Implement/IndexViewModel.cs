@@ -54,6 +54,9 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
             await _commonJsService.Initialzie();
             await GetCurrentLocationAsync();
             await Task.WhenAll(GetCurrentAddressAsync(), InitDynamicMapAsync());
+
+            if (CurrentLocation != null)
+                await _mapService.SetMyLocationAsync(new MapPoint() { X = CurrentLocation.Longitude, Y = CurrentLocation.Latitude });
         }
 
         private async Task GetCurrentLocationAsync()

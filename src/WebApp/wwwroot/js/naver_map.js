@@ -126,8 +126,7 @@ export function init(dotNetRef, mapId, centerX, centerY) {
         dotNetRef.invokeMethodAsync(OnContextMenuClickedId, menuId, x, y);
 
         if (menuId == "menu1") {
-            _myLocationMarker.setMap(_map);
-            _myLocationMarker.setPosition({ lat: y, lng: x });
+            setMyLocation({ lat: y, lng: x })
         }
 
         _markerFunctions.hide(_menuMarker);
@@ -206,6 +205,15 @@ export function selectPlaceMarker(markerId) {
 export function move(latitude, longitude) {
     _map.setCenter(new naver.maps.LatLng(latitude, longitude));
 }
+
+/**
+ * 내 위치를 설정한다.
+ * */
+export function setMyLocation(location) {
+    _myLocationMarker.setMap(_map);
+    _myLocationMarker.setPosition(location);
+}
+
 
 /**
  * 내 위치를 조회한다

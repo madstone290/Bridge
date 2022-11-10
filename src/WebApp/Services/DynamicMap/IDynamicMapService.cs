@@ -71,7 +71,15 @@ namespace Bridge.WebApp.Services.DynamicMap
         /// </summary>
         /// <returns>내 위치</returns>
         Task<MapPoint> GetMyLocationAsync();
-        
+
+        /// <summary>
+        /// 내 위치를 설정한다
+        /// </summary>
+        /// <param name="location"></param>
+        /// <returns></returns>
+        Task<MapPoint> SetMyLocationAsync(MapPoint location);
+
+
     }
 
 }

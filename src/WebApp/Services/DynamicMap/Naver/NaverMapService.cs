@@ -32,6 +32,7 @@ namespace Bridge.WebApp.Services.DynamicMap.Naver
         private const string SelectPlaceMarkerId = "selectPlaceMarker";
         private const string MoveId = "move";
         private const string GetMyLocationId = "getMyLocation";
+        private const string SetMyLocationId = "setMyLocation";
         private const string DisposeMapId = "disposeMap";
         #endregion
 
@@ -104,6 +105,11 @@ namespace Bridge.WebApp.Services.DynamicMap.Naver
 
             var naverMapOptions = (MapOptions)mapOptions;
             await _module.InvokeVoidAsync(InitId, _dotNetRef, naverMapOptions.MapId, naverMapOptions.CenterX, naverMapOptions.CenterY);
+        }
+
+        public async Task<MapPoint> SetMyLocationAsync(MapPoint location)
+        {
+            return await Module.InvokeAsync<MapPoint>(SetMyLocationId, location);
         }
 
         public async Task<MapPoint> GetMyLocationAsync()
