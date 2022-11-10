@@ -29,11 +29,7 @@
 
         @if (VM.Searched && !VM.Places.Any())
         {
-            <div class="place-list">
-                <div style="padding:20px;">
-                    검색결과가 없습니다
-                </div>
-            </div>
+            <Bridge.WebApp.Pages.Home.Views.Components.NoSearchResult />
         }
         else
         {
