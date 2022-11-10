@@ -1,16 +1,12 @@
 @using Bridge.WebApp.Pages.Home.ViewModels
-@attribute [Route(PageRoutes.Home)]
+@attribute [Route("/mobile")]
 @attribute [AllowAnonymous]
-@implements IAsyncDisposable
 @inject IIndexViewModel VM
-@inject ICommonJsService CommonJsService
+@implements IAsyncDisposable
 
 <PageTitle>플차</PageTitle>
 
 <div class="page">
-    <div id="@VM.MapElementId" style="width:100%; height:100%;">
-    </div>
-
     <div class="search-container">
         <div class="address-line">
             <MudText Color="Color.Info">@VM.CurrentAddress</MudText>
@@ -47,18 +43,15 @@
             </MudList>
         }
     </div>
+
+    <div id="@VM.MapElementId" style="width:100%; height:35vh;">
+    </div>
 </div>
 @code {
     private MudTextField<string>? _searchField;
 
     protected override async Task OnInitializedAsync()
     {
-        if (await CommonJsService.IsMobileBrowser())
-        {
-            NavManager.NavigateTo("/mobile");
-            return;
-        }
-
         VM.Receiver = this;
         VM.SearchCompleted = new EventCallback(this, () =>
         {

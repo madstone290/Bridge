@@ -1,5 +1,4 @@
-﻿using Bridge.WebApp.Api;
-using Microsoft.JSInterop;
+﻿using Microsoft.JSInterop;
 
 namespace Bridge.WebApp.Services
 {
@@ -9,18 +8,18 @@ namespace Bridge.WebApp.Services
     public interface ICommonJsService
     {
         /// <summary>
-        /// JS모듈을 초기화한다.
-        /// </summary>
-        /// <returns></returns>
-        Task Initialzie();
-
-        /// <summary>
         /// 아이템 위치까지 스크롤한다.
         /// </summary>
         /// <param name="parentId">아이템이 속한 부모 엘리멘트의 아이디</param>
         /// <param name="itemId">아이템 엘리멘트의 아이디</param>
         /// <returns></returns>
         Task ScrollAsync(string parentId, string itemId);
+
+        /// <summary>
+        /// 모바일 브라우저인지 확인한다.
+        /// </summary>
+        /// <returns></returns>
+        Task<bool> IsMobileBrowser();
     }
 
     public class CommonJsService : ICommonJsService
@@ -35,16 +34,22 @@ namespace Bridge.WebApp.Services
             _jsRuntime = jsRuntime;
         }
 
-        protected IJSObjectReference Module => _module!;
-
-        public async Task Initialzie()
+        private async Task<IJSObjectReference> GetModule()
         {
             _module ??= await _jsRuntime.InvokeAsync<IJSObjectReference>("import", JsFile);
+            return _module;
         }
 
         public async Task ScrollAsync(string parentId, string itemId)
         {
-            await Module.InvokeVoidAsync("scroll", parentId, itemId);
+            var module = await GetModule();
+            await module.InvokeVoidAsync("scroll", parentId, itemId);
+        }
+
+        public async Task<bool> IsMobileBrowser()
+        {
+            var module = await GetModule();
+            return await module.InvokeAsync<bool>("isMobileBrowser");
         }
 
     }

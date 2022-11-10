@@ -134,7 +134,8 @@ namespace Bridge.WebApp.Services.DynamicMap.Naver
 
         public async Task DisposeMapAsync()
         {
-            await Module.InvokeVoidAsync(DisposeMapId);
+            if(_module != null)
+                await Module.InvokeVoidAsync(DisposeMapId);
         }
 
         public async ValueTask DisposeAsync()

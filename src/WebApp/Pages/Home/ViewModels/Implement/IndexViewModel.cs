@@ -9,6 +9,7 @@ using Bridge.WebApp.Services.GeoLocation;
 using Bridge.WebApp.Services.ReverseGeocode;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.JSInterop;
 using MudBlazor;
 
 namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
@@ -51,7 +52,6 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
 
         public async Task InitAsync()
         {
-            await _commonJsService.Initialzie();
             await GetCurrentLocationAsync();
             await Task.WhenAll(GetCurrentAddressAsync(), InitDynamicMapAsync());
 
@@ -231,7 +231,13 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
 
         async ValueTask IAsyncDisposable.DisposeAsync()
         {
-            await _mapService.DisposeMapAsync();
+            try
+            {
+                await _mapService.DisposeMapAsync();
+            }
+            // 무시. F5 갱신시에는 SignalR커넥션이 끊어지므로 발생하는 오류
+            catch (JSDisconnectedException) { }
+            
             GC.SuppressFinalize(this);
         }
     }
