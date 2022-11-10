@@ -27,21 +27,17 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
 
         public string? CurrentAddress { get; set; }
 
-        private async void OnContextMenuClicked(Tuple<string, MapPoint> tuple)
+        private async void OnMyLocationChanged(MapPoint location)
         {
-            if(tuple.Item1 == "menu1")
-            {
-                CurrentLocation = new LatLon(tuple.Item2.Y, tuple.Item2.X);
-
-                var result = await _reverseGeocodeService.GetAddressAsync(CurrentLocation.Latitude, CurrentLocation.Longitude);
-                CurrentAddress = result.Data;
-            }
+            CurrentLocation = new LatLon(location.Y, location.X);
+            var result = await _reverseGeocodeService.GetAddressAsync(CurrentLocation.Latitude, CurrentLocation.Longitude);
+            CurrentAddress = result.Data;
           
         }
 
         public async Task Initialize()
         {
-            _mapService.SetOnContextMenuClickedCallback(new(Receiver, OnContextMenuClicked));
+            _mapService.MyLocationChangedCallback = new(Receiver, OnMyLocationChanged);
             var mapOptions = new NaverMapService.MapOptions()
             {
                 MapId = MapElementId,

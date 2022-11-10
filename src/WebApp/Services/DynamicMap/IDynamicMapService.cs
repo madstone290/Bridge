@@ -8,6 +8,11 @@ namespace Bridge.WebApp.Services.DynamicMap
     public interface IDynamicMapService : IAsyncDisposable
     {
         /// <summary>
+        /// 내 위치가 변경된 경우 호출할 콜백
+        /// </summary>
+        EventCallback<MapPoint> MyLocationChangedCallback { get; set; }
+
+        /// <summary>
         /// 지도 중심위치가 변경될 경우 호출할 콜백을 등록한다.
         /// </summary>
         /// <param name="callback">이벤트 콜백</param>
@@ -18,12 +23,6 @@ namespace Bridge.WebApp.Services.DynamicMap
         /// </summary>
         /// <param name="callback">마커ID를 파라미터로 갖는 콜백</param>
         void SetOnSelectedMarkerChangedCallback(EventCallback<string> callback);
-
-        /// <summary>
-        /// 컨텍스트 메뉴가 클릭되는 경우 호출할 콜백을 등록한다.
-        /// </summary>
-        /// <param name="callback">메뉴ID/좌표를 파라미터로 갖는 콜백</param>
-        void SetOnContextMenuClickedCallback(EventCallback<Tuple<string, MapPoint>> callback);
 
         /// <summary>
         /// 맵을 초기화한다

@@ -95,7 +95,7 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
             };
 
             _mapService.SetOnSelectedMarkerChangedCallback(new(Receiver, OnSelectedMarkerChangedCallback));
-            _mapService.SetOnContextMenuClickedCallback(new(Receiver, OnContextMenuClickedCallback));
+            _mapService.MyLocationChangedCallback = (new(Receiver, OnMyLocationChanged));
             await _mapService.InitAsync(mapOptions);
         }
 
@@ -111,13 +111,10 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
             }
         }
 
-        private async Task OnContextMenuClickedCallback(Tuple<string, MapPoint> tuple)
+        private async Task OnMyLocationChanged(MapPoint location)
         {
-            if(string.Equals(tuple.Item1, "menu1", StringComparison.OrdinalIgnoreCase))
-            {
-                CurrentLocation = new LatLon(tuple.Item2.Y, tuple.Item2.X);
-                await GetCurrentAddressAsync();
-            }
+            CurrentLocation = new LatLon(location.Y, location.X);
+            await GetCurrentAddressAsync();
         }
 
         public async Task SearchPlacesAsync()

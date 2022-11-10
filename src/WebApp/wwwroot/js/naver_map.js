@@ -8,14 +8,19 @@
 const OnCenterChangedId = 'OnCenterChanged';
 
 /**
+ * 닷넷참조 함수식별자. 내 위치 변경시 호출
+ * */
+const OnMyLocationChangedId = 'OnMyLocationChanged';
+
+/**
  * 닷넷참조 함수식별자. 사용자가 마커를 선택하는 경우 호출
  * */
 const OnSelectedMarkerChangedId = 'OnSelectedPlaceMarkerChanged';
 
-/**
- * 닷넷참조 함수식별자. 사용자가 컨텍스트 메뉴를 선택하는 경우 호출
- * */
-const OnContextMenuClickedId = 'OnContextMenuClicked';
+const MENU_Id = {
+    menu1: 'context_menu1',
+    menu2: 'context_menu2'
+}
 
 /**
  * 닷넷참조자
@@ -70,8 +75,8 @@ const _markerIcons = {
     menu: {
         content: `
 <div style="background-color:white; border:solid 1px #eee;">
-    <div id="menu1" style="padding: 4px;" onmouseover="this.style.backgroundColor='#eee'" onmouseleave="this.style.backgroundColor=null">이 위치에서 검색</div>
-    <div id="menu2" style="padding: 4px;" onmouseover="this.style.backgroundColor='#eee'" onmouseleave="this.style.backgroundColor=null">이 위치에 장소 추가</div>
+    <div id="${MENU_Id.menu1}" style="padding: 4px;" onmouseover="this.style.backgroundColor='#eee'" onmouseleave="this.style.backgroundColor=null">이 위치에서 검색</div>
+    <div id="${MENU_Id.menu2}" style="padding: 4px;" onmouseover="this.style.backgroundColor='#eee'" onmouseleave="this.style.backgroundColor=null">이 위치에 장소 추가</div>
 </div>`,
         origin: new naver.maps.Point(0, 0),
         anchor: new naver.maps.Point(0, 0)
@@ -120,20 +125,19 @@ export function init(dotNetRef, mapId, centerX, centerY) {
 
     naver.maps.Event.addListener(_menuMarker, 'click', (e) => {
         const menuId = e.domEvent.srcElement.id;
+        // x, y 좌표
         const x = _menuMarker.tag.x;
         const y = _menuMarker.tag.y;
-        
-        dotNetRef.invokeMethodAsync(OnContextMenuClickedId, menuId, x, y);
 
-        if (menuId == "menu1") {
-            setMyLocation({ lat: y, lng: x })
+        if (menuId == MENU_Id.menu1) {
+            setMyLocation({ lat: y, lng: x });
+            _dotNetRef.invokeMethodAsync(OnMyLocationChangedId, x, y);
         }
-
         _markerFunctions.hide(_menuMarker);
     });
 
     naver.maps.Event.addListener(_map, 'center_changed', function (center) {
-        dotNetRef.invokeMethodAsync(OnCenterChangedId, center.x, center.y);
+        _dotNetRef.invokeMethodAsync(OnCenterChangedId, center.x, center.y);
     });
 
     naver.maps.Event.addListener(_map, 'zoom_changed', function (zoom) {

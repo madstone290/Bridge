@@ -40,9 +40,6 @@ namespace Bridge.WebApp.Services.DynamicMap.Naver
         private readonly IJSRuntime _jsRuntime;
         private readonly DotNetObjectReference<NaverMapService> _dotNetRef;
 
-        private EventCallback<MapPoint> _centerChangedCallback;
-        private EventCallback<string> _onSelectedMarkerChangedCallback;
-        private EventCallback<Tuple<string, MapPoint>> _onContextMenuClickedCallback;
 
         private IJSObjectReference? _module;
 
@@ -62,42 +59,40 @@ namespace Bridge.WebApp.Services.DynamicMap.Naver
             }
         }
 
+        public EventCallback<MapPoint> MyLocationChangedCallback { get; set; }
+        public EventCallback<MapPoint> CenterChangedCallback { get; set; }
+        public EventCallback<string> SelectedMarkerChangedCallback { get; set; }
+
         public void SetCenterChangedCallback(EventCallback<MapPoint> callback)
         {
-            _centerChangedCallback = callback;
+            CenterChangedCallback = callback;
         }
 
         public void SetOnSelectedMarkerChangedCallback(EventCallback<string> callback)
         {
-            _onSelectedMarkerChangedCallback = callback;
-        }
-
-        public void SetOnContextMenuClickedCallback(EventCallback<Tuple<string, MapPoint>> callback)
-        {
-            _onContextMenuClickedCallback = callback;
+            SelectedMarkerChangedCallback = callback;
         }
 
         [JSInvokable]
         public void OnCenterChanged(double x, double y)
         {
-            if(_centerChangedCallback.HasDelegate)
-                _centerChangedCallback.InvokeAsync(new MapPoint() { X = x, Y = y });
+            if(CenterChangedCallback.HasDelegate)
+                CenterChangedCallback.InvokeAsync(new MapPoint() { X = x, Y = y });
+        }
+
+        [JSInvokable]
+        public void OnMyLocationChanged(double x, double y)
+        {
+            if (MyLocationChangedCallback.HasDelegate)
+                MyLocationChangedCallback.InvokeAsync(new MapPoint() { X = x, Y = y });
         }
 
         [JSInvokable]
         public void OnSelectedPlaceMarkerChanged(string markerId)
         {
-            if (_onSelectedMarkerChangedCallback.HasDelegate)
-                _onSelectedMarkerChangedCallback.InvokeAsync(markerId);
+            if (SelectedMarkerChangedCallback.HasDelegate)
+                SelectedMarkerChangedCallback.InvokeAsync(markerId);
         }
-
-        [JSInvokable]
-        public void OnContextMenuClicked(string menuId, double x, double y)
-        {
-            if (_onContextMenuClickedCallback.HasDelegate)
-                _onContextMenuClickedCallback.InvokeAsync(new Tuple<string, MapPoint>(menuId, new MapPoint() {  X = x, Y = y }));
-        }
-
 
         public async Task InitAsync(IMapOptions mapOptions)
         {
