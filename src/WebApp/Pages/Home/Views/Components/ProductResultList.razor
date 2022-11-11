@@ -1,0 +1,37 @@
+@using Bridge.WebApp.Pages.Home.Models
+
+<MudList id="@ListElementId" Class="product-result-list" SelectedValue="SelectedProduct" Clickable="true">
+    @foreach (var product in Products)
+    {
+        <MudListItem id="@product.Id" Class="list-item" Value="product" OnClick="@(async () => await OnProductClicked.InvokeAsync(product))">
+            <div>
+                <div class="flex-r">
+                    <MudText Class="right-margin text-nowrap">@product.Name</MudText>
+                </div>
+                <div class="flex-r">
+                    <MudText Class="right-margin text-nowrap">@product.DistanceString</MudText>
+                </div>
+            </div>
+            <MudSpacer />
+
+            @if (product.ImageSrc != null)
+            {
+                <MudImage ObjectFit="ObjectFit.Contain" Src="@product.ImageSrc" Width="70" Height="70" />
+            }
+        </MudListItem>
+    }
+</MudList>
+
+@code {
+    [Parameter]
+    public string ListElementId { get; set; } = string.Empty;
+
+    [Parameter]
+    public Product? SelectedProduct { get; set; }
+
+    [Parameter]
+    public IEnumerable<Product> Products { get; set; } = Enumerable.Empty<Product>();
+
+    [Parameter]
+    public EventCallback<Product> OnProductClicked { get; set; }
+}

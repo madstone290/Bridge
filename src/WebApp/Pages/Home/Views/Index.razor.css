@@ -4,17 +4,6 @@
     position: relative;
 }
 
-/* AutoComplete의 라벨을 표시하기 위한 마진을 제거한다*/
-::deep .mud-input > input.mud-input-root.mud-input-root-filled {
-    padding: 10px 12px 10px 12px;
-}
-
-/* AutoComplete Icon 마진 제거 */
-::deep .mud-input-adornment-start.mud-input-root-filled-shrink
-{
-    margin-top:0px;
-}
-
 ::deep .search-container {
     width: 400px;
     height: 100%;
@@ -23,16 +12,16 @@
     left: 0;
     padding: 8px;
     background: white;
-    display: flex;
-    flex-direction: column;
 }
 
 ::deep .address-line {
+    height: 24px;
     display: flex;
     flex-direction: row;
 }
 
 ::deep .search-line {
+    height: 50px;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -43,39 +32,78 @@
     border-color: #dddddd;
 }
 
-::deep .place-list {
-    overflow-y: auto; 
-    flex:1 1 auto;
+::deep .result-line {
+    height: calc(100% - 74px);
 }
 
-::deep .list-item {
-    border: 1px solid #dddddd;
-    margin-top: 1px;
-    margin-bottom: 1px;
-    padding-top: 0px;
-    padding-bottom: 0px;
-    padding-left: 4px;
-    padding-right: 4px;
+    ::deep .result-line .mud-tabs-panels {
+        height: inherit;
+    }
+
+::deep .product-result-list {
+    overflow-y: auto;
+    height: 100%;
 }
 
-::deep .place-list-item {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+    ::deep .product-result-list .list-item {
+        border: 1px solid #dddddd;
+        margin-top: 1px;
+        margin-bottom: 1px;
+        padding-top: 0px;
+        padding-bottom: 0px;
+        padding-left: 4px;
+        padding-right: 4px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+        ::deep .product-result-list .list-item .flex-r {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        ::deep .product-result-list .list-item .right-margin {
+            margin-right: 20px;
+        }
+
+        ::deep .product-result-list .list-item .text-nowrap {
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+
+
+::deep .place-result-list {
+    overflow-y: auto;
+    height: 100%;
 }
 
-::deep .place-list-item .flex-r {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-}
+    ::deep .place-result-list .list-item {
+        border: 1px solid #dddddd;
+        margin-top: 1px;
+        margin-bottom: 1px;
+        padding-top: 0px;
+        padding-bottom: 0px;
+        padding-left: 4px;
+        padding-right: 4px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
 
-::deep .place-list-item .right-margin {
-    margin-right: 20px;
-}
+        ::deep .place-result-list .list-item .flex-r {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
 
-::deep .place-list-item .text-nowrap {
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-}
+        ::deep .place-result-list .list-item .right-margin {
+            margin-right: 20px;
+        }
+
+        ::deep .place-result-list .list-item .text-nowrap {
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }

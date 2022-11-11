@@ -17,21 +17,20 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
     public class IndexViewModel : IIndexViewModel
     {
         private readonly List<Place> _places = new();
+        private readonly List<Product> _products = new();
 
         private readonly PlaceApiClient _placeApiClient;
         private readonly ISnackbar _snackbar;
-        private readonly IDialogService _dialogService;
         private readonly IDynamicMapService _mapService;
         private readonly IHtmlGeoService _geoService;
         private readonly IReverseGeocodeService _reverseGeocodeService;
         private readonly ICommonJsService _commonJsService;
 
 
-        public IndexViewModel(PlaceApiClient placeApiClient, ISnackbar snackbar, IDialogService dialogService, IDynamicMapService mapService, IHtmlGeoService geoService, IReverseGeocodeService reverseGeocodeService, ICommonJsService commonJsService)
+        public IndexViewModel(PlaceApiClient placeApiClient, ISnackbar snackbar, IDynamicMapService mapService, IHtmlGeoService geoService, IReverseGeocodeService reverseGeocodeService, ICommonJsService commonJsService)
         {
             _placeApiClient = placeApiClient;
             _snackbar = snackbar;
-            _dialogService = dialogService;
             _mapService = mapService;
             _geoService = geoService;
             _reverseGeocodeService = reverseGeocodeService;
@@ -39,16 +38,21 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
         }
 
         public string MapElementId { get; } = "MapId";
-        public string ListElementId { get; } = "MudList";
-        public bool Searched { get; private set; }
+        public string ProductListElementId { get; } = "ProductList";
+        public string PlaceListElementId { get; } = "PlaceList";
+        public bool PlaceSearched { get; private set; }
+        public bool ProductSearched { get; set; }
         public string SearchText { get; set; } = string.Empty;
         public LatLon? CurrentLocation { get; set; }
         public string? CurrentAddress { get; set; }
-        public object? SelectedListItem { get; set; }
         public Place? SelectedPlace { get; set; }
+        public Product? SelectedProduct { get; set; }
         public IEnumerable<Place> Places => _places;
         public EventCallback SearchCompleted { get; set; }
         public IHandleEvent Receiver { get; set; } = null!;
+        public IEnumerable<Product> Products => _products;
+        public ResultTab SelectedTab { get; set; } = ResultTab.Place;
+        
 
         public async Task InitAsync()
         {
@@ -105,9 +109,8 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
             {
                 var place = Places.FirstOrDefault(x => x.Id == id);
                 SelectedPlace = place;
-                SelectedListItem = place;
 
-                await _commonJsService.ScrollAsync(ListElementId, id.ToString());
+                await _commonJsService.ScrollAsync(PlaceListElementId, id.ToString());
             }
         }
 
@@ -117,25 +120,106 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
             await GetCurrentAddressAsync();
         }
 
-        public async Task SearchPlacesAsync()
+        private bool CanSearch()
         {
-            await LoadPlacesFromServer();
-
-            await CreateMarkers();
+            if(string.IsNullOrEmpty(SearchText))
+                return false;
+            if (CurrentLocation == null)
+                return false;
+            return true;
         }
 
-        private async Task LoadPlacesFromServer()
+        public async Task OnSearchClick()
         {
-            if (string.IsNullOrEmpty(SearchText))
-                return;
-            if (CurrentLocation == null)
+            if (!CanSearch())
                 return;
 
+            await ClearResultAsync();
+
+            await SearchAsync(CurrentLocation!);
+
+            if (SearchCompleted.HasDelegate)
+                await SearchCompleted.InvokeAsync();
+        }
+
+        /// <summary>
+        /// 검색 실행
+        /// </summary>
+        /// <returns></returns>
+        private async Task SearchAsync(LatLon location)
+        {
+            if (SelectedTab == ResultTab.Product)
+            {
+                await SearchProductsAsync(location);
+                await CreateProductMarkersAsync();
+            }
+            else
+            {
+                await SearchPlacesAsync(location);
+                await CreatePlaceMarkers();
+            }
+        }
+
+        private async Task SearchProductsAsync(LatLon location)
+        {
+            //var query = new SearchPlacesQuery()
+            //{
+            //    SearchText = SearchText,
+            //    Latitude = location.Latitude,
+            //    Longitude = location.Longitude
+            //};
+            //var apiResult = await _placeApiClient.SearchPlaces(query);
+            //if (!apiResult.Success)
+            //{
+            //    _snackbar.Add(apiResult.Error, Severity.Error);
+            //    return;
+            //}
+            //if (apiResult.Data == null)
+            //{
+            //    _snackbar.Add("데이터가 없습니다", Severity.Error);
+            //    return;
+            //}
+
+            _products.Clear();
+            _products.Add(new Product() { Name = "제품1", Distance = 200 });
+            _products.Add(new Product() { Name = "제품2", Distance = 300 });
+            //_places.AddRange(apiResult.Data.Select(x =>
+            //{
+            //    var place = Place.Create(x);
+            //    if (x.ImagePath != null)
+            //        place.ImageUrl = new Uri(_placeApiClient.HttpClient.BaseAddress!, x.ImagePath).ToString();
+            //    return place;
+            //})
+            //.OrderBy(x => x.Distance));
+
+
+            ProductSearched = true;
+        }
+
+        private async Task CreateProductMarkersAsync()
+        {
+            var markers = Products
+                .Where(x => x.Place != null)
+                .Select(x => x.Place!)
+                .Select(x => new Marker()
+                {
+                    Id = x.Id.ToString(),
+                    Name = x.Name,
+                    Latitude = x.Latitude,
+                    Longitude = x.Longitude
+                });
+
+            await _mapService.ClearPlaceMarkersAsync();
+            await _mapService.AddPlaceMarkersAsync(markers);
+        }
+
+        private async Task SearchPlacesAsync(LatLon location)
+        {
             var query = new SearchPlacesQuery()
             {
                 SearchText = SearchText,
-                Latitude = CurrentLocation.Latitude,
-                Longitude = CurrentLocation.Longitude
+                Latitude = location.Latitude,
+                Longitude = location.Longitude
             };
             var apiResult = await _placeApiClient.SearchPlaces(query);
             if (!apiResult.Success)
@@ -159,10 +243,10 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
             })
             .OrderBy(x => x.Distance));
 
-            Searched = true;
+            PlaceSearched = true;
         }
 
-        private async Task CreateMarkers()
+        private async Task CreatePlaceMarkers()
         {
             var markers = Places.Select(x => new Marker()
             {
@@ -173,60 +257,69 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
             });
             await _mapService.ClearPlaceMarkersAsync();
             await _mapService.AddPlaceMarkersAsync(markers);
-
-            if (SearchCompleted.HasDelegate)
-                await SearchCompleted.InvokeAsync();
         }
 
-        public async Task ClearPlacesAsync()
+        public async Task OnSelectedTabChanged(ResultTab tab)
         {
-            SearchText = String.Empty;
+            SelectedTab = tab;
+            if (!CanSearch())
+                return;
 
-            _places.Clear();
-            Searched = false;
-
-            await CreateMarkers();
+            if (tab == ResultTab.Product)
+            {
+                if(!ProductSearched)
+                    await SearchProductsAsync(CurrentLocation!);
+                await CreateProductMarkersAsync();
+            }
+            else if(tab == ResultTab.Place)
+            {
+                if(!PlaceSearched)
+                    await SearchPlacesAsync(CurrentLocation!);
+                await CreatePlaceMarkers();
+            }
+            
         }
 
-        public async Task Handle_KeyUp(KeyboardEventArgs args)
+        public async Task OnClearClick()
+        {
+            SearchText = string.Empty;
+
+            await ClearResultAsync();
+        }
+
+        private async Task ClearResultAsync()
+        {
+            _places.Clear();
+            _products.Clear();
+            PlaceSearched = false;
+            ProductSearched = false;
+
+            await CreatePlaceMarkers();
+        }
+
+        public async Task OnSearchFieldKeyUp(KeyboardEventArgs args)
         {
             if (args.Key == "Enter")
             {
-                await SearchPlacesAsync();
+                await OnSearchClick();
             }
         }
 
-        /// <summary>
-        /// 장소 리스트 아이템을 선택할 때
-        /// </summary>
-        /// <param name="place"></param>
-        /// <returns></returns>
-        public async Task Handle_PlaceSelected(Place place)
+        public async Task OnProductSelected(Product product)
         {
+            SelectedProduct = product;
+            if (product.Place == null)
+                return;
+            var place = product.Place;
             await _mapService.SelectPlaceMarkerAsync(place.Id.ToString());
             await _mapService.MoveAsync(place.Latitude, place.Longitude);
         }
 
-        public async Task ShowLocationSelectionAsync()
+        public async Task OnPlaceSelected(Place place)
         {
-            var dialogOptions = new DialogOptions()
-            {
-                MaxWidth = MaxWidth.Medium,
-                NoHeader = true
-            };
-            var dialogParameters = new DialogParameters
-            {
-                { nameof (LocationSelectView.CurrentLocation), CurrentLocation },
-                { nameof (LocationSelectView.CurrentAddress), CurrentAddress }
-            };
-            var dialog = _dialogService.Show<LocationSelectView>(null, options: dialogOptions, parameters: dialogParameters);
-            var result = await dialog.Result;
-            if (!result.Cancelled)
-            {
-                var data = (dynamic)result.Data;
-                CurrentLocation = data.CurrentLocation;
-                CurrentAddress = data.CurrentAddress;
-            }
+            SelectedPlace = place;
+            await _mapService.SelectPlaceMarkerAsync(place.Id.ToString());
+            await _mapService.MoveAsync(place.Latitude, place.Longitude);
         }
 
         async ValueTask IAsyncDisposable.DisposeAsync()
@@ -237,8 +330,9 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
             }
             // 무시. F5 갱신시에는 SignalR커넥션이 끊어지므로 발생하는 오류
             catch (JSDisconnectedException) { }
-            
+
             GC.SuppressFinalize(this);
         }
+
     }
 }

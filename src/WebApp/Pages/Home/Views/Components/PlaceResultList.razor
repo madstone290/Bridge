@@ -1,20 +1,35 @@
 @using Bridge.WebApp.Pages.Home.Models
 
-<MudList id="@ListElementId" Class="place-list" @bind-SelectedValue="@SelectedListItem" Clickable="true">
+<MudList id="@ListElementId" Class="place-result-list" SelectedValue="SelectedPlace" Clickable="true">
     @foreach (var place in Places)
     {
-        <MudListItem id="@place.Id" Class="list-item" Value="place" OnClick="@(async ()=> await OnPlaceClicked.InvokeAsync(place))">
-            <Bridge.WebApp.Pages.Home.Views.Components.PlaceItemView Place="place" />
+        <MudListItem id="@place.Id" Class="list-item" Value="place" OnClick="@(async () => await OnPlaceClicked.InvokeAsync(place))">
+                <div>
+                    <div class="flex-r">
+                        <MudText Class="right-margin text-nowrap">@place.Name</MudText>
+                        <MudText Class="right-margin text-nowrap" Style="max-width:500px;">@place.CategoriesString</MudText>
+                    </div>
+                    <div class="flex-r">
+                        <MudText Class="right-margin text-nowrap">@place.DistanceString</MudText>
+                        <MudText Class="right-margin text-nowrap">@place.ContactNumber</MudText>
+                    </div>
+                </div>
+                <MudSpacer />
+
+                @if (place.ImageUrl != null)
+                {
+                    <MudImage ObjectFit="ObjectFit.Contain" Src="@place.ImageUrl" Width="70" Height="70" />
+                }
         </MudListItem>
     }
 </MudList>
 
-@code{
+@code {
     [Parameter]
     public string ListElementId { get; set; } = string.Empty;
 
     [Parameter]
-    public object? SelectedListItem { get; set; }
+    public Place? SelectedPlace { get; set; }
 
     [Parameter]
     public IEnumerable<Place> Places { get; set; } = Enumerable.Empty<Place>();
