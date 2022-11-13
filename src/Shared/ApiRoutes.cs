@@ -72,6 +72,7 @@ namespace Bridge.Shared
         {
             public const string Get = "/api/Products/{id}";
             public const string GetList = "/api/Products";
+            public const string Search = "/api/Products/Search";
 
             public const string Create = "/api/Products";
 

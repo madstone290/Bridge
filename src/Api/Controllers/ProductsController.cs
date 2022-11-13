@@ -18,5 +18,14 @@ namespace Bridge.Api.Controllers
             _mediator = mediator;
         }
 
+
+        [HttpPost]
+        [Route(ApiRoutes.Products.Search)]
+        [ProducesResponseType(typeof(List<ProductReadModel>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> Search([FromBody] SearchProductsQuery query)
+        {
+            var places = await _mediator.Send(query);
+            return Ok(places);
+        }
     }
 }

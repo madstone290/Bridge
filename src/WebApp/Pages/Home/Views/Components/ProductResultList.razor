@@ -7,9 +7,11 @@
             <div>
                 <div class="flex-r">
                     <MudText Class="right-margin text-nowrap">@product.Name</MudText>
+                    <MudText Class="right-margin text-nowrap">@product.PriceString</MudText>
                 </div>
                 <div class="flex-r">
-                    <MudText Class="right-margin text-nowrap">@product.DistanceString</MudText>
+                    <MudText Class="right-margin text-nowrap">@product.Place?.Name</MudText>
+                    <MudText Class="right-margin text-nowrap">@product.Place?.DistanceString</MudText>
                 </div>
             </div>
             <MudSpacer />

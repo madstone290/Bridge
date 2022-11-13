@@ -1,7 +1,7 @@
 using Bridge.Application.Places.Queries;
+using Bridge.Application.Products.Queries;
 using Bridge.WebApp.Api.ApiClients;
 using Bridge.WebApp.Pages.Home.Models;
-using Bridge.WebApp.Pages.Home.Views.Components;
 using Bridge.WebApp.Services;
 using Bridge.WebApp.Services.DynamicMap;
 using Bridge.WebApp.Services.DynamicMap.Naver;
@@ -19,6 +19,7 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
         private readonly List<Place> _places = new();
         private readonly List<Product> _products = new();
 
+        private readonly ProductApiClient _productApiClient;
         private readonly PlaceApiClient _placeApiClient;
         private readonly ISnackbar _snackbar;
         private readonly IDynamicMapService _mapService;
@@ -27,8 +28,9 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
         private readonly ICommonJsService _commonJsService;
 
 
-        public IndexViewModel(PlaceApiClient placeApiClient, ISnackbar snackbar, IDynamicMapService mapService, IHtmlGeoService geoService, IReverseGeocodeService reverseGeocodeService, ICommonJsService commonJsService)
+        public IndexViewModel(ProductApiClient productApiClient, PlaceApiClient placeApiClient, ISnackbar snackbar, IDynamicMapService mapService, IHtmlGeoService geoService, IReverseGeocodeService reverseGeocodeService, ICommonJsService commonJsService)
         {
+            _productApiClient = productApiClient;
             _placeApiClient = placeApiClient;
             _snackbar = snackbar;
             _mapService = mapService;
@@ -51,7 +53,7 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
         public EventCallback SearchCompleted { get; set; }
         public IHandleEvent Receiver { get; set; } = null!;
         public IEnumerable<Product> Products => _products;
-        public ResultTab SelectedTab { get; set; } = ResultTab.Place;
+        public ResultTab SelectedTab { get; set; }
         
 
         public async Task InitAsync()
@@ -105,12 +107,20 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
 
         private async void OnSelectedMarkerChangedCallback(string markerId)
         {
-            if (Guid.TryParse(markerId, out Guid id))
+            if (Guid.TryParse(markerId, out Guid placeId))
             {
-                var place = Places.FirstOrDefault(x => x.Id == id);
-                SelectedPlace = place;
-
-                await _commonJsService.ScrollAsync(PlaceListElementId, id.ToString());
+                if(SelectedTab == ResultTab.Product)
+                {
+                    var product = Products.First(x => x.PlaceId == placeId);
+                    SelectedProduct = product;
+                    await _commonJsService.ScrollAsync(ProductListElementId, product.Id.ToString());
+                }
+                else
+                {
+                    var place = Places.First(x => x.Id == placeId);
+                    SelectedPlace = place;
+                    await _commonJsService.ScrollAsync(PlaceListElementId, place.Id.ToString());
+                }
             }
         }
 
@@ -162,35 +172,29 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
 
         private async Task SearchProductsAsync(LatLon location)
         {
-            //var query = new SearchPlacesQuery()
-            //{
-            //    SearchText = SearchText,
-            //    Latitude = location.Latitude,
-            //    Longitude = location.Longitude
-            //};
-            //var apiResult = await _placeApiClient.SearchPlaces(query);
-            //if (!apiResult.Success)
-            //{
-            //    _snackbar.Add(apiResult.Error, Severity.Error);
-            //    return;
-            //}
-            //if (apiResult.Data == null)
-            //{
-            //    _snackbar.Add("데이터가 없습니다", Severity.Error);
-            //    return;
-            //}
+            var query = new SearchProductsQuery()
+            {
+                SearchText = SearchText,
+                Latitude = location.Latitude,
+                Longitude = location.Longitude
+            };
+            var apiResult = await _productApiClient.SearchAsync(query);
+            if (!apiResult.Success)
+            {
+                _snackbar.Add(apiResult.Error, Severity.Error);
+                return;
+            }
+            if (apiResult.Data == null)
+            {
+                _snackbar.Add("데이터가 없습니다", Severity.Error);
+                return;
+            }
 
             _products.Clear();
-            _products.Add(new Product() { Name = "제품1", Distance = 200 });
-            _products.Add(new Product() { Name = "제품2", Distance = 300 });
-            //_places.AddRange(apiResult.Data.Select(x =>
-            //{
-            //    var place = Place.Create(x);
-            //    if (x.ImagePath != null)
-            //        place.ImageUrl = new Uri(_placeApiClient.HttpClient.BaseAddress!, x.ImagePath).ToString();
-            //    return place;
-            //})
-            //.OrderBy(x => x.Distance));
+            //_products.Add(new Product() { Name = "제품1", Distance = 200 });
+            //_products.Add(new Product() { Name = "제품2", Distance = 300 });
+            _products.AddRange(apiResult.Data.Select(x => Product.Create(x))
+                .OrderBy(x => x.Place?.Distance));
 
 
             ProductSearched = true;
@@ -199,14 +203,15 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
         private async Task CreateProductMarkersAsync()
         {
             var markers = Products
-                .Where(x => x.Place != null)
-                .Select(x => x.Place!)
-                .Select(x => new Marker()
+                .Where(product => product.Place != null)
+                .DistinctBy(x=> x.PlaceId)
+                .Select(product => product.Place!)
+                .Select(place => new Marker()
                 {
-                    Id = x.Id.ToString(),
-                    Name = x.Name,
-                    Latitude = x.Latitude,
-                    Longitude = x.Longitude
+                    Id = place.Id.ToString(),
+                    Name = place.Name,
+                    Latitude = place.Latitude,
+                    Longitude = place.Longitude
                 });
 
             await _mapService.ClearPlaceMarkersAsync();

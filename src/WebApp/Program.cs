@@ -97,6 +97,8 @@ builder.Services.AddScoped<UserApiClient>();
 builder.Services.AddScoped<AdminPlaceApiClient>();
 builder.Services.AddScoped<AdminProductApiClient>();
 builder.Services.AddScoped<AdminRestroomApiClient>();
+
+builder.Services.AddScoped<ProductApiClient>();
 builder.Services.AddScoped<PlaceApiClient>();
 
 builder.Services.AddTransient<IIndexViewModel, IndexViewModel>();

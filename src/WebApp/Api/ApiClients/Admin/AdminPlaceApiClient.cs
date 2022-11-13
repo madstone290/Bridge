@@ -2,6 +2,7 @@ using Bridge.Application.Common;
 using Bridge.Application.Places.Commands;
 using Bridge.Application.Places.Queries;
 using Bridge.Application.Places.ReadModels;
+using Bridge.Application.Products.Queries;
 using Bridge.Domain.Places.Enums;
 using Bridge.Shared;
 using Bridge.Shared.Extensions;

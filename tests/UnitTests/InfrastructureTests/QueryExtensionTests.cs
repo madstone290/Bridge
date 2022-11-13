@@ -26,10 +26,10 @@ namespace Bridge.UnitTests.InfrastructureTests
         }
 
         [Theory]
-        [InlineData("https://naver.com?id=34", "id", "34", "55")]
-        [InlineData("https://naver.com?id=34&name=john", "name", "john", "bruce")]
-        [InlineData("https://naver.com?id=34&age=20&name=bruce", "age", "20", "30")]
-        public void Override_Existing_QueryParameter(string uri, string paramName, string oldValue, string newValue)
+        [InlineData("https://naver.com?id=34", "id", "55")]
+        [InlineData("https://naver.com?id=34&name=john", "name", "bruce")]
+        [InlineData("https://naver.com?id=34&age=20&name=bruce", "age", "30")]
+        public void Override_Existing_QueryParameter(string uri, string paramName, string newValue)
         {
             // Arrange
 

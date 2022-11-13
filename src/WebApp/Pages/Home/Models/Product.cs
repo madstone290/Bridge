@@ -1,9 +1,24 @@
+using Bridge.Application.Products.ReadModels;
 using Bridge.Domain.Products.Enums;
 
 namespace Bridge.WebApp.Pages.Home.Models
 {
     public class Product
     {
+        public static Product Create(ProductReadModel x)
+        {
+            return new Product()
+            {
+                Id = x.Id,
+                Place = x.Place == null ? null : Place.Create(x.Place),
+                Type = x.Type,
+                Name = x.Name,
+                PlaceId = x.PlaceId,
+                Price = x.Price,
+                Categories= x.Categories,
+            };
+        }
+
         public Guid Id { get; set; }
 
         public Place? Place { get; set; }
@@ -34,11 +49,6 @@ namespace Bridge.WebApp.Pages.Home.Models
         public IEnumerable<ProductCategory> Categories { get; set; } = Enumerable.Empty<ProductCategory>();
 
         /// <summary>
-        /// 제품 이미지 소스
-        /// </summary>
-        public string? ImageSrc { get; set; }
-
-        /// <summary>
         /// 제품유형 문자열
         /// </summary>
         public string TypeString => Type.ToString();
@@ -46,31 +56,18 @@ namespace Bridge.WebApp.Pages.Home.Models
         /// <summary>
         /// 제품 가격 문자열
         /// </summary>
-        public string PriceString => Price?.ToString() ?? string.Empty;
+        public string PriceString => $"{Price:0}원" ?? string.Empty;
 
         /// <summary>
         /// 카테고리 문자열
         /// </summary>
         public string CategoriesString => string.Join(", ", Categories);
 
-
         /// <summary>
-        /// 거리
+        /// 제품 이미지
         /// </summary>
-        public double? Distance { get; set; }
+        public string? ImageSrc { get; set; }
 
-        /// <summary>
-        /// 거리
-        /// </summary>
-        public string DistanceString
-        {
-            get
-            {
-                if (Distance < 1000)
-                    return $"{Distance:0}m";
-                else
-                    return $"{Distance / 1000:0.0}km";
-            }
-        }
+
     }
 }

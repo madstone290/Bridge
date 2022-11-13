@@ -1,5 +1,6 @@
 @using Bridge.WebApp.Pages.Home.Models
 @using Bridge.WebApp.Pages.Home.ViewModels
+@using Bridge.WebApp.Pages.Home.Views.Components
 @attribute [Route(PageRoutes.Home)]
 @attribute [AllowAnonymous]
 @implements IAsyncDisposable
@@ -32,11 +33,11 @@
             <MudTabPanel Style="width:190px;" Text="제품">
                  @if (VM.ProductSearched && !VM.Products.Any())
                 {
-                    <Bridge.WebApp.Pages.Home.Views.Components.NoSearchResult />
+                    <NoSearchResult />
                 }
                 else
                 {
-                      <Bridge.WebApp.Pages.Home.Views.Components.ProductResultList ListElementId="@VM.PlaceListElementId"
+                    <ProductResultList ListElementId="@VM.ProductListElementId"
                                                                                    Products="@VM.Products"
                                                                                    OnProductClicked="@(new EventCallback<Product>(this, VM.OnProductSelected))"
                                                                                    SelectedProduct="@VM.SelectedProduct" />
@@ -45,11 +46,11 @@
             <MudTabPanel Style="width:190px;" Text="장소">
                 @if (VM.PlaceSearched && !VM.Places.Any())
                 {
-                    <Bridge.WebApp.Pages.Home.Views.Components.NoSearchResult />
+                    <NoSearchResult />
                 }
                 else
                 {
-                    <Bridge.WebApp.Pages.Home.Views.Components.PlaceResultList ListElementId="@VM.PlaceListElementId"
+                    <PlaceResultList ListElementId="@VM.PlaceListElementId"
                                                                            Places="@VM.Places"
                                                                            OnPlaceClicked="@(new EventCallback<Place>(this, VM.OnPlaceSelected))"
                                                                            SelectedPlace="@VM.SelectedPlace" />
