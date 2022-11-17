@@ -101,7 +101,8 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
             };
 
             _mapService.SetOnSelectedMarkerChangedCallback(new(Receiver, OnSelectedMarkerChangedCallback));
-            _mapService.MyLocationChangedCallback = (new(Receiver, OnMyLocationChanged));
+            _mapService.ChangeMyLocationClickCallback = (new(Receiver, OnChangeMyLocationClick));
+            _mapService.AddPlaceClickCallback = new(Receiver, OnAddPlaceClick);
             await _mapService.InitAsync(mapOptions);
         }
 
@@ -124,10 +125,16 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
             }
         }
 
-        private async Task OnMyLocationChanged(MapPoint location)
+        private async Task OnChangeMyLocationClick(MapPoint location)
         {
             CurrentLocation = new LatLon(location.Y, location.X);
             await GetCurrentAddressAsync();
+        }
+
+        private async Task OnAddPlaceClick(MapPoint location)
+        {
+            //todo add popup
+            Console.WriteLine("add a place at x:{0}, y:{1}", location.X, location.Y);
         }
 
         private bool CanSearch()

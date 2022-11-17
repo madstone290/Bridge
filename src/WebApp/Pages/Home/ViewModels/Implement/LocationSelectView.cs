@@ -37,7 +37,7 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
 
         public async Task Initialize()
         {
-            _mapService.MyLocationChangedCallback = new(Receiver, OnMyLocationChanged);
+            _mapService.ChangeMyLocationClickCallback = new(Receiver, OnMyLocationChanged);
             var mapOptions = new NaverMapService.MapOptions()
             {
                 MapId = MapElementId,

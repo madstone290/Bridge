@@ -8,14 +8,16 @@
 const OnCenterChangedId = 'OnCenterChanged';
 
 /**
- * 닷넷참조 함수식별자. 내 위치 변경시 호출
- * */
-const OnMyLocationChangedId = 'OnMyLocationChanged';
-
-/**
  * 닷넷참조 함수식별자. 사용자가 마커를 선택하는 경우 호출
  * */
 const OnSelectedMarkerChangedId = 'OnSelectedPlaceMarkerChanged';
+
+/**
+ * 닷넷참조 함수식별자. 내 위치 변경 클릭시 호출
+ * */
+const OnChangeMyLocationClickId = 'OnChangeMyLocationClick';
+
+const OnAddPlaceClickId = 'OnAddPlaceClick';
 
 const MENU_Id = {
     menu1: 'context_menu1',
@@ -131,8 +133,12 @@ export function init(dotNetRef, mapId, centerX, centerY) {
 
         if (menuId == MENU_Id.menu1) {
             setMyLocation({ lat: y, lng: x });
-            _dotNetRef.invokeMethodAsync(OnMyLocationChangedId, x, y);
+            _dotNetRef.invokeMethodAsync(OnChangeMyLocationClickId, x, y);
         }
+        else if (menuId == MENU_Id.menu2) {
+            _dotNetRef.invokeMethodAsync(OnAddPlaceClickId, x, y);
+        }
+
         _markerFunctions.hide(_menuMarker);
     });
 

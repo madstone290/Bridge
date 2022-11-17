@@ -59,9 +59,10 @@ namespace Bridge.WebApp.Services.DynamicMap.Naver
             }
         }
 
-        public EventCallback<MapPoint> MyLocationChangedCallback { get; set; }
         public EventCallback<MapPoint> CenterChangedCallback { get; set; }
         public EventCallback<string> SelectedMarkerChangedCallback { get; set; }
+        public EventCallback<MapPoint> ChangeMyLocationClickCallback { get; set; }
+        public EventCallback<MapPoint> AddPlaceClickCallback { get; set; }
 
         public void SetCenterChangedCallback(EventCallback<MapPoint> callback)
         {
@@ -86,18 +87,6 @@ namespace Bridge.WebApp.Services.DynamicMap.Naver
         }
 
         /// <summary>
-        /// 내 위치 설정 메뉴 클릭
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        [JSInvokable]
-        public void OnMyLocationChanged(double x, double y)
-        {
-            if (MyLocationChangedCallback.HasDelegate)
-                MyLocationChangedCallback.InvokeAsync(new MapPoint() { X = x, Y = y });
-        }
-
-        /// <summary>
         /// 선택 마커가 변경된 경우
         /// </summary>
         /// <param name="markerId"></param>
@@ -106,6 +95,30 @@ namespace Bridge.WebApp.Services.DynamicMap.Naver
         {
             if (SelectedMarkerChangedCallback.HasDelegate)
                 SelectedMarkerChangedCallback.InvokeAsync(markerId);
+        }
+
+        /// <summary>
+        /// 내위치 변경 클릭
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        [JSInvokable]
+        public void OnChangeMyLocationClick(double x, double y)
+        {
+            if (ChangeMyLocationClickCallback.HasDelegate)
+                ChangeMyLocationClickCallback.InvokeAsync(new MapPoint() { X = x, Y = y });
+        }
+
+        /// <summary>
+        /// 장소추가 클릭
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        [JSInvokable]
+        public void OnAddPlaceClick(double x, double y)
+        {
+            if (AddPlaceClickCallback.HasDelegate)
+                AddPlaceClickCallback.InvokeAsync(new MapPoint() { X = x, Y = y });
         }
 
         public async Task InitAsync(IMapOptions mapOptions)
