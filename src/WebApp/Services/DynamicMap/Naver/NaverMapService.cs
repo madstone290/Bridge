@@ -73,6 +73,11 @@ namespace Bridge.WebApp.Services.DynamicMap.Naver
             SelectedMarkerChangedCallback = callback;
         }
 
+        /// <summary>
+        /// 지도 중심이 변경된 경우
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
         [JSInvokable]
         public void OnCenterChanged(double x, double y)
         {
@@ -80,6 +85,11 @@ namespace Bridge.WebApp.Services.DynamicMap.Naver
                 CenterChangedCallback.InvokeAsync(new MapPoint() { X = x, Y = y });
         }
 
+        /// <summary>
+        /// 내 위치 설정 메뉴 클릭
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
         [JSInvokable]
         public void OnMyLocationChanged(double x, double y)
         {
@@ -87,6 +97,10 @@ namespace Bridge.WebApp.Services.DynamicMap.Naver
                 MyLocationChangedCallback.InvokeAsync(new MapPoint() { X = x, Y = y });
         }
 
+        /// <summary>
+        /// 선택 마커가 변경된 경우
+        /// </summary>
+        /// <param name="markerId"></param>
         [JSInvokable]
         public void OnSelectedPlaceMarkerChanged(string markerId)
         {
