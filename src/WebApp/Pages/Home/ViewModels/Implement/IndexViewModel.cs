@@ -2,6 +2,7 @@ using Bridge.Application.Places.Queries;
 using Bridge.Application.Products.Queries;
 using Bridge.WebApp.Api.ApiClients;
 using Bridge.WebApp.Pages.Home.Models;
+using Bridge.WebApp.Pages.Home.Views;
 using Bridge.WebApp.Services;
 using Bridge.WebApp.Services.DynamicMap;
 using Bridge.WebApp.Services.DynamicMap.Naver;
@@ -26,9 +27,10 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
         private readonly IHtmlGeoService _geoService;
         private readonly IReverseGeocodeService _reverseGeocodeService;
         private readonly ICommonJsService _commonJsService;
+        private readonly IDialogService _dialogService;
 
 
-        public IndexViewModel(ProductApiClient productApiClient, PlaceApiClient placeApiClient, ISnackbar snackbar, IDynamicMapService mapService, IHtmlGeoService geoService, IReverseGeocodeService reverseGeocodeService, ICommonJsService commonJsService)
+        public IndexViewModel(ProductApiClient productApiClient, PlaceApiClient placeApiClient, ISnackbar snackbar, IDynamicMapService mapService, IHtmlGeoService geoService, IReverseGeocodeService reverseGeocodeService, ICommonJsService commonJsService, IDialogService dialogService)
         {
             _productApiClient = productApiClient;
             _placeApiClient = placeApiClient;
@@ -37,6 +39,7 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
             _geoService = geoService;
             _reverseGeocodeService = reverseGeocodeService;
             _commonJsService = commonJsService;
+            _dialogService = dialogService;
         }
 
         public string MapElementId { get; } = "MapId";
@@ -133,8 +136,16 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
 
         private async Task OnAddPlaceClick(MapPoint location)
         {
-            //todo add popup
-            Console.WriteLine("add a place at x:{0}, y:{1}", location.X, location.Y);
+            var parameters = new DialogParameters 
+            {
+            };
+            var options = new DialogOptions { MaxWidth = MaxWidth.Large };
+            var dialog = _dialogService.Show<PlaceAddView>(string.Empty, parameters, options);
+            var dialogResult = await dialog.Result;
+            if (!dialogResult.Cancelled)
+            {
+                await OnSearchClick();
+            }
         }
 
         private bool CanSearch()

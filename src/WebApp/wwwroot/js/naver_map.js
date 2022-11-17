@@ -77,8 +77,8 @@ const _markerIcons = {
     menu: {
         content: `
 <div style="background-color:white; border:solid 1px #eee;">
-    <div id="${MENU_Id.menu1}" style="padding: 4px;" onmouseover="this.style.backgroundColor='#eee'" onmouseleave="this.style.backgroundColor=null">이 위치에서 검색</div>
-    <div id="${MENU_Id.menu2}" style="padding: 4px;" onmouseover="this.style.backgroundColor='#eee'" onmouseleave="this.style.backgroundColor=null">이 위치에 장소 추가</div>
+    <div id="${MENU_Id.menu1}" style="padding: 4px;" onmouseover="this.style.backgroundColor='#eee'" onmouseleave="this.style.backgroundColor=null">내 위치 변경</div>
+    <div id="${MENU_Id.menu2}" style="padding: 4px;" onmouseover="this.style.backgroundColor='#eee'" onmouseleave="this.style.backgroundColor=null">장소 추가</div>
 </div>`,
         origin: new naver.maps.Point(0, 0),
         anchor: new naver.maps.Point(0, 0)

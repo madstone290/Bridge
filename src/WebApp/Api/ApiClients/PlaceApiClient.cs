@@ -1,3 +1,4 @@
+using Bridge.Application.Places.Commands;
 using Bridge.Application.Places.Queries;
 using Bridge.Application.Places.ReadModels;
 using Bridge.Shared;
@@ -8,6 +9,11 @@ namespace Bridge.WebApp.Api.ApiClients
     {
         public PlaceApiClient(HttpClient httpClient) : base(httpClient)
         {
+        }
+
+        public async Task<ApiResult<Guid>> AddPlace(CreatePlaceCommand command)
+        {
+            return await SendAsync<Guid>(HttpMethod.Post, ApiRoutes.Places.Create, command);
         }
 
         /// <summary>

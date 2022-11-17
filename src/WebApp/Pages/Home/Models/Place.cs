@@ -1,10 +1,25 @@
 using Bridge.Application.Places.ReadModels;
 using Bridge.Domain.Places.Enums;
+using FluentValidation;
 
 namespace Bridge.WebApp.Pages.Home.Models
 {
     public class Place
     {
+        public class Validator : BaseValidator<Place>
+        {
+            public Validator()
+            {
+                RuleFor(x => x.Name)
+                    .NotEmpty()
+                    .WithMessage("* 필수");
+
+                RuleFor(x => x.BaseAddress)
+                    .NotEmpty()
+                    .WithMessage("* 필수");
+            }
+        }
+
         public static Place Create(PlaceReadModel x)
         {
             return new Place()

@@ -1,3 +1,4 @@
+using Bridge.Application.Places.Commands;
 using Bridge.Application.Places.Queries;
 using Bridge.Application.Places.ReadModels;
 using Bridge.Shared;
@@ -35,6 +36,15 @@ namespace Bridge.Api.Controllers
         {
             var places = await _mediator.Send(query);
             return Ok(places);
+        }
+
+        [HttpPost]
+        [Route(ApiRoutes.Places.Create)]
+        [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK)]
+        public async Task<IActionResult> AddPlace([FromBody] CreatePlaceCommand command)
+        {
+            var id = await _mediator.Send(command);
+            return Ok(id);
         }
     }
 }
