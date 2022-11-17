@@ -15,9 +15,9 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
         private readonly AdminPlaceApiClient _placeApiClient;
         private readonly AdminProductApiClient _productApiClient;
         private readonly NavigationManager _navManager;
-        private readonly IApiResultValidationService _validationService;
+        private readonly IResultValidationService _validationService;
 
-        public PlaceProductListViewModel(AdminPlaceApiClient placeApiClient, AdminProductApiClient productApiClient, NavigationManager navManager, IApiResultValidationService validationService)
+        public PlaceProductListViewModel(AdminPlaceApiClient placeApiClient, AdminProductApiClient productApiClient, NavigationManager navManager, IResultValidationService validationService)
         {
             _placeApiClient = placeApiClient;
             _productApiClient = productApiClient;

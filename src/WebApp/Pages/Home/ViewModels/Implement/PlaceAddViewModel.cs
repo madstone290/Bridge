@@ -11,9 +11,9 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
     {
         private readonly Place.Validator _validator = new();
         private readonly PlaceApiClient _placeApiClient;
-        private readonly IApiResultValidationService _validationService;
+        private readonly IResultValidationService _validationService;
 
-        public PlaceAddViewModel(PlaceApiClient placeApiClient, IReverseGeocodeService reverseGeocodeService, IApiResultValidationService validationService)
+        public PlaceAddViewModel(PlaceApiClient placeApiClient, IReverseGeocodeService reverseGeocodeService, IResultValidationService validationService)
         {
             _placeApiClient = placeApiClient;
             _validationService = validationService;

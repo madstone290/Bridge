@@ -82,7 +82,7 @@ builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddScoped<ICommonJsService, CommonJsService>();
 builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<IExcelService, ExcelService>();
-builder.Services.AddScoped<IApiResultValidationService, SnackbarApiResultValidationService>();
+builder.Services.AddScoped<IResultValidationService, SnackbarResultValidationService>();
 builder.Services.AddScoped<NaverReverseGeocodeApi>();
 builder.Services.AddScoped<IReverseGeocodeService, NaverReverseGeocodeService>();
 builder.Services.AddScoped<IDynamicMapService, NaverMapService>();

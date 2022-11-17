@@ -35,11 +35,11 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
         private readonly AdminRestroomApiClient _restroomApiClient;
         private readonly AdminPlaceApiClient _placeApiClient;
         private readonly IExcelService _excelService;
-        private readonly IApiResultValidationService _validationService;
+        private readonly IResultValidationService _validationService;
         private readonly IDialogService _dialogService;
         private readonly NavigationManager _navManager;
 
-        public PlaceListViewModel(AdminRestroomApiClient restroomApiClient, AdminPlaceApiClient placeApiClient, IExcelService excelService, IApiResultValidationService validationService, IDialogService dialogService, NavigationManager navManager)
+        public PlaceListViewModel(AdminRestroomApiClient restroomApiClient, AdminPlaceApiClient placeApiClient, IExcelService excelService, IResultValidationService validationService, IDialogService dialogService, NavigationManager navManager)
         {
             _restroomApiClient = restroomApiClient;
             _placeApiClient = placeApiClient;

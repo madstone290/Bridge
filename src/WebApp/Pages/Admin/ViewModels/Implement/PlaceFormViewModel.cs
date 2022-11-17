@@ -13,10 +13,10 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
         private readonly Place.Validator _validator = new();
 
         private readonly AdminPlaceApiClient _placeApiClient;
-        private readonly IApiResultValidationService _validationService;
+        private readonly IResultValidationService _validationService;
         private readonly ISnackbar _snackbar;
 
-        public PlaceFormViewModel(AdminPlaceApiClient placeApiClient, IApiResultValidationService validationService, ISnackbar snackbar)
+        public PlaceFormViewModel(AdminPlaceApiClient placeApiClient, IResultValidationService validationService, ISnackbar snackbar)
         {
             _placeApiClient = placeApiClient;
             _validationService = validationService;

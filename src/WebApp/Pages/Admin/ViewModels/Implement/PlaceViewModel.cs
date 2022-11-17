@@ -19,11 +19,11 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
 
         private readonly AdminPlaceApiClient _placeApiClient;
         private readonly AdminProductApiClient _productApiClient;
-        private readonly IApiResultValidationService _validationService;
+        private readonly IResultValidationService _validationService;
         private readonly IDialogService _dialogService;
         private readonly ISnackbar _snackbar;
 
-        public PlaceViewModel(AdminPlaceApiClient placeApiClient, AdminProductApiClient productApiClient, IApiResultValidationService validationService, IDialogService dialogService, ISnackbar snackbar)
+        public PlaceViewModel(AdminPlaceApiClient placeApiClient, AdminProductApiClient productApiClient, IResultValidationService validationService, IDialogService dialogService, ISnackbar snackbar)
         {
             _placeApiClient = placeApiClient;
             _productApiClient = productApiClient;

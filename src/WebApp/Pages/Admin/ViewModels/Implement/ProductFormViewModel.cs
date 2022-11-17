@@ -12,10 +12,10 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
         private readonly Product.Validator _validator = new();
 
         private readonly AdminProductApiClient _productApiClient;
-        private readonly IApiResultValidationService _validationService;
+        private readonly IResultValidationService _validationService;
         private readonly ISnackbar _snackbar;
 
-        public ProductFormViewModel(AdminProductApiClient productApiClient, IApiResultValidationService validationService, ISnackbar snackbar)
+        public ProductFormViewModel(AdminProductApiClient productApiClient, IResultValidationService validationService, ISnackbar snackbar)
         {
             _productApiClient = productApiClient;
             _validationService = validationService;

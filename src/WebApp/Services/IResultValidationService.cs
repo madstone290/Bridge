@@ -1,19 +1,20 @@
+using Bridge.Shared;
 using Bridge.WebApp.Api;
 using MudBlazor;
 
 namespace Bridge.WebApp.Services
 {
     /// <summary>
-    /// API 처리결과 유효성을 검증하고 결과를 출력한다
+    /// 결과객체의 유효성을 검증하고 메시지를 출력한다
     /// </summary>
-    public interface IApiResultValidationService
+    public interface IResultValidationService
     {
         /// <summary>
         /// api 처리결과가 성공적이어야 한다
         /// </summary>
         /// <param name="apiResult"></param>
         /// <returns></returns>
-        bool Validate(IApiResult apiResult);
+        bool Validate(Result apiResult);
 
         /// <summary>
         /// api 처리결과가 성공적이어야 한다
@@ -21,22 +22,22 @@ namespace Bridge.WebApp.Services
         /// <param name="result"></param>
         /// <param name="allowNullData">데이터 널 허용여부</param>
         /// <returns></returns>
-        bool Validate<TData>(ApiResult<TData> result, bool allowNullData = false);
+        bool Validate<TData>(Result<TData> result, bool allowNullData = false);
     }
 
     /// <summary>
-    /// API 처리결과 유효성을 검증하고 결과를 Snackbar로 출력한다.
+    /// 결과객체의 유효성을 검증하고 결과를 Snackbar로 출력한다.
     /// </summary>
-    public class SnackbarApiResultValidationService : IApiResultValidationService
+    public class SnackbarResultValidationService : IResultValidationService
     {
         private readonly ISnackbar _snackbar;
         
-        public SnackbarApiResultValidationService(ISnackbar snackbar)
+        public SnackbarResultValidationService(ISnackbar snackbar)
         {
             _snackbar = snackbar;
         }
 
-        public bool Validate<TData>(ApiResult<TData> result, bool nullableData = false)
+        public bool Validate<TData>(Result<TData> result, bool nullableData = false)
         {
             if (!result.Success)
             {
@@ -56,7 +57,7 @@ namespace Bridge.WebApp.Services
             return true;
         }
 
-        public bool Validate(IApiResult result)
+        public bool Validate(Result result)
         {
             if (!result.Success)
             {
