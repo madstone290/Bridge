@@ -29,20 +29,7 @@
             <MudIconButton Icon="@Icons.Material.Outlined.Close" OnClick="VM.OnClearClick" />
         </div>
 
-        <MudTabs Class="result-line" ActivePanelIndex="@(VM.SelectedTab == ResultTab.Product ? 0 : 1)" ActivePanelIndexChanged="OnSelectedTabChanged">
-            <MudTabPanel Style="width:190px;" Text="제품">
-                 @if (VM.ProductSearched && !VM.Products.Any())
-                {
-                    <NoSearchResult />
-                }
-                else
-                {
-                    <ProductResultList ListElementId="@VM.ProductListElementId"
-                                                                                   Products="@VM.Products"
-                                                                                   OnProductClicked="@(new EventCallback<Product>(this, VM.OnProductSelected))"
-                                                                                   SelectedProduct="@VM.SelectedProduct" />
-                }
-            </MudTabPanel>
+        <MudTabs Class="result-line" ActivePanelIndex="@(VM.SelectedTab == ResultTab.Place ? 0 : 1)" ActivePanelIndexChanged="OnSelectedTabChanged">
             <MudTabPanel Style="width:190px;" Text="장소">
                 @if (VM.PlaceSearched && !VM.Places.Any())
                 {
@@ -51,9 +38,22 @@
                 else
                 {
                     <PlaceResultList ListElementId="@VM.PlaceListElementId"
-                                                                           Places="@VM.Places"
-                                                                           OnPlaceClicked="@(new EventCallback<Place>(this, VM.OnPlaceSelected))"
-                                                                           SelectedPlace="@VM.SelectedPlace" />
+                                 Places="@VM.Places"
+                                 OnPlaceClicked="@(new EventCallback<Place>(this, VM.OnPlaceSelected))"
+                                 SelectedPlace="@VM.SelectedPlace" />
+                }
+            </MudTabPanel>
+            <MudTabPanel Style="width:190px;" Text="제품">
+                @if (VM.ProductSearched && !VM.Products.Any())
+                {
+                    <NoSearchResult />
+                }
+                else
+                {
+                    <ProductResultList ListElementId="@VM.ProductListElementId"
+                                   Products="@VM.Products"
+                                   OnProductClicked="@(new EventCallback<Product>(this, VM.OnProductSelected))"
+                                   SelectedProduct="@VM.SelectedProduct" />
                 }
             </MudTabPanel>
         </MudTabs>
@@ -66,7 +66,7 @@
 
     private async Task OnSelectedTabChanged(int index)
     {
-        await VM.OnSelectedTabChanged(index == 0 ? ResultTab.Product : ResultTab.Place);
+        await VM.OnSelectedTabChanged(index == 0 ? ResultTab.Place: ResultTab.Product);
     }
 
     protected override async Task OnInitializedAsync()
