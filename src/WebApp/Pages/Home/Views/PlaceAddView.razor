@@ -72,6 +72,7 @@
     protected override async Task OnInitializedAsync()
     {
         VM.MudDialog = MudDialog;
+        await Task.CompletedTask;
     }
 
     protected async Task OnSaveClick()

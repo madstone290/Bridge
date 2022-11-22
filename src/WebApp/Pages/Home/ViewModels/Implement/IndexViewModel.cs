@@ -1,6 +1,7 @@
 using Bridge.Application.Places.Queries;
 using Bridge.Application.Products.Queries;
 using Bridge.WebApp.Api.ApiClients;
+using Bridge.WebApp.Pages.Admin.Views;
 using Bridge.WebApp.Pages.Home.Models;
 using Bridge.WebApp.Pages.Home.Views;
 using Bridge.WebApp.Services;
@@ -29,8 +30,17 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
         private readonly ICommonJsService _commonJsService;
         private readonly IDialogService _dialogService;
 
+        private Place? _selectedPlace;
 
-        public IndexViewModel(ProductApiClient productApiClient, PlaceApiClient placeApiClient, ISnackbar snackbar, IDynamicMapService mapService, IHtmlGeoService geoService, IReverseGeocodeService reverseGeocodeService, ICommonJsService commonJsService, IDialogService dialogService)
+        public IndexViewModel(ProductApiClient productApiClient,
+                              PlaceApiClient placeApiClient,
+                              ISnackbar snackbar,
+                              IDynamicMapService mapService,
+                              IHtmlGeoService geoService,
+                              IReverseGeocodeService reverseGeocodeService,
+                              ICommonJsService commonJsService,
+                              IDialogService dialogService,
+                              IPlaceDetailViewModel placeDetailVM)
         {
             _productApiClient = productApiClient;
             _placeApiClient = placeApiClient;
@@ -40,8 +50,10 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
             _reverseGeocodeService = reverseGeocodeService;
             _commonJsService = commonJsService;
             _dialogService = dialogService;
+            PlaceDetailVM = placeDetailVM;
         }
 
+        public IPlaceDetailViewModel PlaceDetailVM { get; set; } = null!;
         public string MapElementId { get; } = "MapId";
         public string ProductListElementId { get; } = "ProductList";
         public string PlaceListElementId { get; } = "PlaceList";
@@ -50,7 +62,21 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
         public string SearchText { get; set; } = string.Empty;
         public LatLon? CurrentLocation { get; set; }
         public string? CurrentAddress { get; set; }
-        public Place? SelectedPlace { get; set; }
+
+        public Place? SelectedPlace
+        {
+            get => _selectedPlace;
+            set
+            {
+                _selectedPlace = value;
+                if (value != null)
+                {
+                    PlaceDetailVM.Place = value;
+                    PlaceDetailVM.LoadProducts();
+                }
+            }
+        }
+
         public Product? SelectedProduct { get; set; }
         public IEnumerable<Place> Places => _places;
         public EventCallback SearchCompleted { get; set; }
@@ -316,6 +342,7 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
             _products.Clear();
             PlaceSearched = false;
             ProductSearched = false;
+            SelectedPlace = null;
 
             await CreatePlaceMarkers();
         }

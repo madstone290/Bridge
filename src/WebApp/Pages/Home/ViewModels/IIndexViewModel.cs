@@ -6,6 +6,8 @@ namespace Bridge.WebApp.Pages.Home.ViewModels
 {
     public interface IIndexViewModel : IAsyncDisposable
     {
+        IPlaceDetailViewModel PlaceDetailVM { get; set; }
+
         ResultTab SelectedTab { get; set; }
 
         /// <summary>

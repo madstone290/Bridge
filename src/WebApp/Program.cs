@@ -104,6 +104,7 @@ builder.Services.AddScoped<PlaceApiClient>();
 builder.Services.AddTransient<IIndexViewModel, IndexViewModel>();
 builder.Services.AddTransient<ILocationSelectViewModel, LocationSelectViewModel>();
 builder.Services.AddTransient<IPlaceAddViewModel, PlaceAddViewModel>();
+builder.Services.AddTransient<IPlaceDetailViewModel, PlaceDetailViewModel>();
 
 builder.Services.AddTransient<IPlaceListViewModel, PlaceListViewModel>();
 builder.Services.AddTransient<IPlaceViewModel, PlaceViewModel>();

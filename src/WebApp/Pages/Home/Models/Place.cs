@@ -163,5 +163,28 @@ namespace Bridge.WebApp.Pages.Home.Models
         /// </summary>
         public string? ImageUrl { get; set; }
 
+        public IEnumerable<OpeningTime> OpeningTimesFromMonday
+        {
+            get
+            {
+                var openingTimes = new List<OpeningTime>
+                {
+                    GetOpeningTime(DayOfWeek.Monday),
+                    GetOpeningTime(DayOfWeek.Tuesday),
+                    GetOpeningTime(DayOfWeek.Wednesday),
+                    GetOpeningTime(DayOfWeek.Thursday),
+                    GetOpeningTime(DayOfWeek.Friday),
+                    GetOpeningTime(DayOfWeek.Saturday),
+                    GetOpeningTime(DayOfWeek.Sunday),
+                };
+                return openingTimes;
+            }
+        }
+
+        private OpeningTime GetOpeningTime(DayOfWeek day)
+        {
+            return OpeningTimes.FirstOrDefault(x => x.Day == day) ?? new OpeningTime() { Day = day };
+        }
+
     }
 }

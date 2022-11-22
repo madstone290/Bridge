@@ -1,5 +1,6 @@
 @using Bridge.WebApp.Pages.Home.Models
 @using Bridge.WebApp.Pages.Home.ViewModels
+@using Bridge.WebApp.Pages.Home.ViewModels.Implement
 @using Bridge.WebApp.Pages.Home.Views.Components
 @attribute [Route(PageRoutes.Home)]
 @attribute [AllowAnonymous]
@@ -13,60 +14,68 @@
     <div id="@VM.MapElementId" style="width:100%; height:100%;">
     </div>
 
-    <div class="search-container">
-        <div class="address-line">
-            <MudText Color="Color.Info">@VM.CurrentAddress</MudText>
+    <div class="left-panel">
+        <div class="search-container">
+            <div class="address-line">
+                <MudText Color="Color.Info">@VM.CurrentAddress</MudText>
+            </div>
+
+            <div class="search-line">
+                <AdvTextField @ref="_searchField"
+                              Placeholder="검색어를 입력하세요"
+                              T="string"
+                              DisableUnderLine="true"
+                              @bind-Value="VM.SearchText"
+                              OnKeyUp="VM.OnSearchFieldKeyUp" />
+                <MudIconButton Icon="@Icons.Material.Outlined.Search" OnClick="VM.OnSearchClick" />
+                <MudIconButton Icon="@Icons.Material.Outlined.Close" OnClick="VM.OnClearClick" />
+            </div>
+
+            <MudTabs Class="result-line" ActivePanelIndex="@(VM.SelectedTab == ResultTab.Place ? 0 : 1)" ActivePanelIndexChanged="OnSelectedTabChanged">
+                <MudTabPanel Style="width:190px;" Text="장소">
+                    @if (VM.PlaceSearched && !VM.Places.Any())
+                    {
+                        <NoSearchResult />
+                    }
+                    else
+                    {
+                        <PlaceResultList ListElementId="@VM.PlaceListElementId"
+                                     Places="@VM.Places"
+                                     OnPlaceClicked="@(new EventCallback<Place>(this, VM.OnPlaceSelected))"
+                                     SelectedPlace="@VM.SelectedPlace" />
+                    }
+                </MudTabPanel>
+                <MudTabPanel Style="width:190px;" Text="제품">
+                    @if (VM.ProductSearched && !VM.Products.Any())
+                    {
+                        <NoSearchResult />
+                    }
+                    else
+                    {
+                        <ProductResultList ListElementId="@VM.ProductListElementId"
+                                       Products="@VM.Products"
+                                       OnProductClicked="@(new EventCallback<Product>(this, VM.OnProductSelected))"
+                                       SelectedProduct="@VM.SelectedProduct" />
+                    }
+                </MudTabPanel>
+            </MudTabs>
+
+
         </div>
 
-        <div class="search-line">
-            <AdvTextField @ref="_searchField"
-                          Placeholder="검색어를 입력하세요"
-                          T="string"
-                          DisableUnderLine="true"
-                          @bind-Value="VM.SearchText"
-                          OnKeyUp="VM.OnSearchFieldKeyUp" />
-            <MudIconButton Icon="@Icons.Material.Outlined.Search" OnClick="VM.OnSearchClick" />
-            <MudIconButton Icon="@Icons.Material.Outlined.Close" OnClick="VM.OnClearClick" />
+        <div class="detail-container @(VM.SelectedTab == ResultTab.Place && VM.SelectedPlace != null ? "visible" : "")">
+            <PlaceDetailView @ref="_placeDetailView" VM="VM.PlaceDetailVM"/>
         </div>
-
-        <MudTabs Class="result-line" ActivePanelIndex="@(VM.SelectedTab == ResultTab.Place ? 0 : 1)" ActivePanelIndexChanged="OnSelectedTabChanged">
-            <MudTabPanel Style="width:190px;" Text="장소">
-                @if (VM.PlaceSearched && !VM.Places.Any())
-                {
-                    <NoSearchResult />
-                }
-                else
-                {
-                    <PlaceResultList ListElementId="@VM.PlaceListElementId"
-                                 Places="@VM.Places"
-                                 OnPlaceClicked="@(new EventCallback<Place>(this, VM.OnPlaceSelected))"
-                                 SelectedPlace="@VM.SelectedPlace" />
-                }
-            </MudTabPanel>
-            <MudTabPanel Style="width:190px;" Text="제품">
-                @if (VM.ProductSearched && !VM.Products.Any())
-                {
-                    <NoSearchResult />
-                }
-                else
-                {
-                    <ProductResultList ListElementId="@VM.ProductListElementId"
-                                   Products="@VM.Products"
-                                   OnProductClicked="@(new EventCallback<Product>(this, VM.OnProductSelected))"
-                                   SelectedProduct="@VM.SelectedProduct" />
-                }
-            </MudTabPanel>
-        </MudTabs>
-
-
     </div>
+
 </div>
 @code {
     private MudTextField<string>? _searchField;
+    private PlaceDetailView? _placeDetailView;
 
     private async Task OnSelectedTabChanged(int index)
     {
-        await VM.OnSelectedTabChanged(index == 0 ? ResultTab.Place: ResultTab.Product);
+        await VM.OnSelectedTabChanged(index == 0 ? ResultTab.Place : ResultTab.Product);
     }
 
     protected override async Task OnInitializedAsync()

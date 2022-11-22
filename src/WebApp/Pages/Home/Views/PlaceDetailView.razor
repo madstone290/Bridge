@@ -1,0 +1,83 @@
+@using Bridge.WebApp.Pages.Home.Models
+@using Bridge.WebApp.Pages.Home.ViewModels
+@using System.Diagnostics
+<div class="place-detail">
+    <div class="basic-info">
+        <MudText Typo="Typo.h5">기본 정보</MudText>
+        <MudSpacer />
+        <MudDivider Style="margin-bottom:4px;" />
+        <MudGrid Spacing="1">
+            <MudItem xs="12">
+                <MudImage Src="@VM.Place.ImageUrl" Width="100" Height="100" />
+            </MudItem>
+            <MudItem xs="12">
+                <AdvTextField @bind-Value="VM.Place.Name"
+                              Label="장소명" />
+            </MudItem>
+            <MudItem xs="12">
+                <AdvTextField @bind-Value="VM.Place.BaseAddress"
+                              Label="기본주소" />
+            </MudItem>
+            <MudItem xs="12">
+                <AdvTextField @bind-Value="VM.Place.DetailAddress"
+                              Label="상세주소" />
+            </MudItem>
+            <MudItem xs="12">
+                <AdvTextField @bind-Value="VM.Place.ContactNumber"
+                              Label="연락처" />
+            </MudItem>
+        </MudGrid>
+    </div>
+    <div class="opening-time">
+        <MudText Typo="Typo.h5">영업시간</MudText>
+        <MudSpacer />
+        <MudDivider Style="margin-bottom:4px;" />
+        <MudGrid Spacing="1">
+            <MudItem xs="12">
+                @foreach (var openingTime in VM.Place.OpeningTimesFromMonday)
+                {
+                    <MudText>@openingTime.ToSingleLineString()</MudText>
+                }
+            </MudItem>
+        </MudGrid>
+    </div>
+    <div class="product-list">
+        <MudText Typo="Typo.h5">제품목록</MudText>
+        <MudSpacer />
+        <MudDivider Style="margin-bottom:4px;" />
+        <MudTable T="Product"
+                  Hover="true"
+                  Dense="true"
+                  Items="VM.Products">
+            <HeaderContent>
+                <MudTh>타입</MudTh>
+                <MudTh>제품명</MudTh>
+                <MudTh>가격</MudTh>
+            </HeaderContent>
+
+            <RowTemplate>
+                <MudTd DataLabel="타입">
+                    @context.TypeString
+                </MudTd>
+                <MudTd DataLabel="제품명">
+                    @context.Name
+                </MudTd>
+                <MudTd DataLabel="가격">
+                    @context.PriceString
+                </MudTd>
+            </RowTemplate>
+        </MudTable>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public IPlaceDetailViewModel VM { get; set; } = null!;
+
+    protected override Task OnInitializedAsync()
+    {
+        VM.PropertyChanged += (s, e) => StateHasChanged();
+        return base.OnInitializedAsync();
+    }
+}
