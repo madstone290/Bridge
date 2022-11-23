@@ -15,6 +15,11 @@ namespace Bridge.WebApp.Pages.Home.ViewModels
         /// </summary>
         IHandleEvent Receiver { set; }
 
+        /// <summary>
+        /// 사용자 인증 여부
+        /// </summary>
+        bool IsAuthenticated { get; }
+
         string MapElementId { get; }
         
         bool ProductSearched { get; }
@@ -93,5 +98,9 @@ namespace Bridge.WebApp.Pages.Home.ViewModels
         /// <returns></returns>
         Task OnSelectedTabChanged(ResultTab tab);
 
+
+        Task OnLoginClick();
+
+        Task OnLogoutClick();
     }
 }

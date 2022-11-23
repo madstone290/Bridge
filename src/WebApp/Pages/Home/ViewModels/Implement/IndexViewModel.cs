@@ -90,10 +90,14 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
         public IHandleEvent Receiver { get; set; } = null!;
         public IEnumerable<Product> Products => _products;
         public ResultTab SelectedTab { get; set; }
-        
+
+        public bool IsAuthenticated { get; private set; }
 
         public async Task InitAsync()
         {
+            var state = await _authService.GetAuthStateAsync();
+            IsAuthenticated = state.IsAuthenticated;
+            
             await GetCurrentLocationAsync();
             await Task.WhenAll(GetCurrentAddressAsync(), InitDynamicMapAsync());
 
@@ -397,5 +401,16 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
             GC.SuppressFinalize(this);
         }
 
+        public async Task OnLoginClick()
+        {
+            _navigationManager.NavigateTo(PageRoutes.Identity.Login);
+            await Task.CompletedTask;
+        }
+
+        public async Task OnLogoutClick()
+        {
+            _navigationManager.NavigateTo(PageRoutes.Identity.Logout);
+            await Task.CompletedTask;
+        }
     }
 }

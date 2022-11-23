@@ -128,6 +128,12 @@
     display: initial;
 }
 
+::deep .user-status-panel {
+    position: fixed;
+    right: 20px;
+    top: 20px;
+}
+
 ::deep .map-menu-panel {
     position: fixed;
     left: 95%;

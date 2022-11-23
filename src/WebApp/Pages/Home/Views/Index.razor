@@ -64,8 +64,22 @@
         </div>
 
         <div class="detail-container @(VM.SelectedTab == ResultTab.Place && VM.SelectedPlace != null ? "visible" : "")">
-            <PlaceDetailView @ref="_placeDetailView" VM="VM.PlaceDetailVM"/>
+            <PlaceDetailView @ref="_placeDetailView" VM="VM.PlaceDetailVM" />
         </div>
+    </div>
+    <div class="user-status-panel">
+        @if (!VM.IsAuthenticated)
+        {
+            <MudTooltip>
+                <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="VM.OnLoginClick">로그인</MudButton>
+            </MudTooltip>
+        }
+        else
+        {
+            <MudTooltip>
+                <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="VM.OnLogoutClick">로그아웃</MudButton>
+            </MudTooltip>
+        }
     </div>
 
     <div class="map-menu-panel">
