@@ -8,6 +8,7 @@ using Bridge.WebApp.Services;
 using Bridge.WebApp.Services.DynamicMap;
 using Bridge.WebApp.Services.DynamicMap.Naver;
 using Bridge.WebApp.Services.GeoLocation;
+using Bridge.WebApp.Services.Identity;
 using Bridge.WebApp.Services.ReverseGeocode;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -29,6 +30,8 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
         private readonly IReverseGeocodeService _reverseGeocodeService;
         private readonly ICommonJsService _commonJsService;
         private readonly IDialogService _dialogService;
+        private readonly IAuthService _authService;
+        private readonly NavigationManager _navigationManager;
 
         private Place? _selectedPlace;
 
@@ -40,7 +43,9 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
                               IReverseGeocodeService reverseGeocodeService,
                               ICommonJsService commonJsService,
                               IDialogService dialogService,
-                              IPlaceDetailViewModel placeDetailVM)
+                              IPlaceDetailViewModel placeDetailVM,
+                              IAuthService authService,
+                              NavigationManager navigationManager)
         {
             _productApiClient = productApiClient;
             _placeApiClient = placeApiClient;
@@ -51,6 +56,8 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
             _commonJsService = commonJsService;
             _dialogService = dialogService;
             PlaceDetailVM = placeDetailVM;
+            _authService = authService;
+            _navigationManager = navigationManager;
         }
 
         public IPlaceDetailViewModel PlaceDetailVM { get; set; } = null!;
@@ -162,6 +169,14 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
 
         public async Task OnAddPlaceClick()
         {
+            var state = await _authService.GetAuthStateAsync();
+            if (!state.IsAuthenticated)
+            {
+                // redirect to login page
+                _navigationManager.NavigateTo(PageRoutes.Identity.Login);
+                return;
+            }
+
             var parameters = new DialogParameters 
             {
             };

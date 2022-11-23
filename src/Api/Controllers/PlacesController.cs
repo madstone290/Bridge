@@ -2,7 +2,9 @@ using Bridge.Application.Places.Commands;
 using Bridge.Application.Places.Queries;
 using Bridge.Application.Places.ReadModels;
 using Bridge.Shared;
+using Bridge.Shared.Constants;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bridge.Api.Controllers
@@ -39,6 +41,7 @@ namespace Bridge.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(PolicyConstants.AdminOrProvider)]
         [Route(ApiRoutes.Places.Create)]
         [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK)]
         public async Task<IActionResult> AddPlace([FromBody] CreatePlaceCommand command)
