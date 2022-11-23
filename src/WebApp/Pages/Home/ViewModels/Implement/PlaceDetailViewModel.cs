@@ -1,7 +1,6 @@
 using Bridge.WebApp.Api.ApiClients;
-using Bridge.WebApp.Pages.Admin.Views.Components;
+using Bridge.WebApp.Pages.Common.Models;
 using Bridge.WebApp.Pages.Common.Views;
-using Bridge.WebApp.Pages.Home.Models;
 using Bridge.WebApp.Services;
 using MudBlazor;
 using System.ComponentModel;

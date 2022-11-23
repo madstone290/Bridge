@@ -1,6 +1,8 @@
 @using Bridge.Domain.Places.Enums
 @using Bridge.WebApp.Pages.Admin.Models
 @using Bridge.WebApp.Pages.Admin.ViewModels
+@using Bridge.WebApp.Pages.Common.Models
+@using Bridge.WebApp.Pages.Common.Views.Components
 @attribute [Route(PageRoutes.Admin.PlaceList)]
 @attribute [Authorize(Policy = Bridge.Shared.Constants.PolicyConstants.Admin)]
 @inject IPlaceListViewModel VM
@@ -109,7 +111,7 @@
                         <td colspan="4">
                             @foreach (var openingTime in context.OpeningTimesFromMonday)
                             {
-                                <Bridge.WebApp.Pages.Admin.Views.Components.OpeningTimeView OpeningTime="openingTime" IsReadOnly="true" />
+                                <OpeningTimeView OpeningTime="openingTime" IsReadOnly="true" />
                             }
                         </td>
                     </MudTr>

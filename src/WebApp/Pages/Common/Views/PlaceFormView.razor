@@ -1,13 +1,14 @@
 @using Bridge.Domain.Places.Enums
 @using Bridge.WebApp.Pages.Common.ViewModels
+@using Bridge.WebApp.Pages.Common.Views.Components
 @inject IPlaceFormViewModel VM
 
 <MudDialog>
     <DialogContent>
-        <div Style="max-height:750px; padding:10px; overflow-y: scroll">
+        <div style="max-height:750px; padding:10px; overflow-y: scroll">
             <MudForm @bind-IsValid="VM.IsPlaceValid"
                      ValidationDelay="0">
-                <div class="container">
+                <div>
                     <MudText Typo="Typo.h5">기본 정보</MudText>
                     <MudSpacer />
                     <MudDivider Style="margin-bottom:4px;"/>
@@ -40,7 +41,7 @@
                                 @{
                                     foreach (var placeType in Enum.GetValues<PlaceType>())
                                     {
-                                                            <MudSelectItem Value="@placeType"></MudSelectItem>
+                                                                <MudSelectItem Value="@placeType"></MudSelectItem>
                                     }
                                 }
                             </AdvSelect>
@@ -87,7 +88,7 @@
                         <MudItem xs="12">
                             @foreach (var openingTime in VM.Place.OpeningTimes)
                             {
-                                <Bridge.WebApp.Pages.Admin.Views.Components.OpeningTimeView OpeningTime="openingTime" IsReadOnly="false" />
+                                <OpeningTimeView OpeningTime="openingTime" IsReadOnly="false" />
                             }
                         </MudItem>
                     </MudGrid>

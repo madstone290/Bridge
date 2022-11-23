@@ -1,4 +1,4 @@
-using Bridge.WebApp.Pages.Home.Models;
+using Bridge.WebApp.Pages.Common.Models;
 using MudBlazor;
 
 namespace Bridge.WebApp.Pages.Home.ViewModels

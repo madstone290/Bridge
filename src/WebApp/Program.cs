@@ -7,7 +7,6 @@ using Bridge.WebApp.Api.ApiClients.Identity;
 using Bridge.WebApp.Extensions;
 using Bridge.WebApp.Pages.Admin.ViewModels;
 using Bridge.WebApp.Pages.Admin.ViewModels.Implement;
-using Bridge.WebApp.Pages.Admin.Views.Components;
 using Bridge.WebApp.Pages.Common.ViewModels;
 using Bridge.WebApp.Pages.Common.ViewModels.Implement;
 using Bridge.WebApp.Pages.Home.ViewModels;
@@ -103,6 +102,10 @@ builder.Services.AddScoped<AdminRestroomApiClient>();
 builder.Services.AddScoped<ProductApiClient>();
 builder.Services.AddScoped<PlaceApiClient>();
 
+builder.Services.AddTransient<IPlaceFormViewModel, PlaceFormViewModel>();
+builder.Services.AddTransient<IProductFormViewModel, ProductFormViewModel>();
+builder.Services.AddTransient<IOpeningTimeViewModel, OpeningTimeViewModel>();
+
 builder.Services.AddTransient<IIndexViewModel, IndexViewModel>();
 builder.Services.AddTransient<ILocationSelectViewModel, LocationSelectViewModel>();
 builder.Services.AddTransient<IPlaceAddViewModel, PlaceAddViewModel>();
@@ -111,10 +114,8 @@ builder.Services.AddTransient<IPlaceDetailViewModel, PlaceDetailViewModel>();
 builder.Services.AddTransient<IPlaceListViewModel, PlaceListViewModel>();
 builder.Services.AddTransient<IPlaceViewModel, PlaceViewModel>();
 builder.Services.AddTransient<IPlaceProductListViewModel, PlaceProductListViewModel>();
-builder.Services.AddTransient<IOpeningTimeViewModel, OpeningTimeViewModel>();
 builder.Services.AddTransient<IRestroomFormViewModel, RestroomFormViewModel>();
-builder.Services.AddTransient<IProductFormViewModel, ProductFormViewModel>();
-builder.Services.AddTransient<IPlaceFormViewModel, PlaceFormViewModel>();
+
 
 var app = builder.Build();
 

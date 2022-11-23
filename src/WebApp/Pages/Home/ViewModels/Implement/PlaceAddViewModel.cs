@@ -1,6 +1,6 @@
 using Bridge.Application.Places.Commands;
 using Bridge.WebApp.Api.ApiClients;
-using Bridge.WebApp.Pages.Home.Models;
+using Bridge.WebApp.Pages.Common.Models;
 using Bridge.WebApp.Services;
 using Bridge.WebApp.Services.ReverseGeocode;
 using MudBlazor;

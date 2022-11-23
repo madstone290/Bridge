@@ -1,7 +1,7 @@
 using Bridge.Application.Places.ReadModels;
 using Bridge.Shared.Extensions;
 using Bridge.WebApp.Api.ApiClients.Admin;
-using Bridge.WebApp.Pages.Admin.Models;
+using Bridge.WebApp.Pages.Common.Models;
 using Bridge.WebApp.Services;
 using Microsoft.AspNetCore.Components;
 

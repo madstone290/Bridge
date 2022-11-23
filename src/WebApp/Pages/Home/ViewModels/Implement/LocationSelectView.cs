@@ -1,4 +1,4 @@
-using Bridge.WebApp.Pages.Home.Models;
+using Bridge.WebApp.Pages.Common.Models;
 using Bridge.WebApp.Services.DynamicMap;
 using Bridge.WebApp.Services.DynamicMap.Naver;
 using Bridge.WebApp.Services.ReverseGeocode;

@@ -1,6 +1,6 @@
 using Bridge.Application.Places.Commands;
 using Bridge.WebApp.Api.ApiClients.Admin;
-using Bridge.WebApp.Pages.Admin.Models;
+using Bridge.WebApp.Pages.Common.Models;
 using Bridge.WebApp.Services;
 using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;

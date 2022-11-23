@@ -1,6 +1,8 @@
 @using Bridge.Domain.Places.Enums
 @using Bridge.WebApp.Pages.Admin.Models
 @using Bridge.WebApp.Pages.Admin.ViewModels
+@using Bridge.WebApp.Pages.Common.Models
+@using Bridge.WebApp.Pages.Common.Views.Components
 @inject IPlaceViewModel VM
 
 @attribute [Route(PageRoutes.Admin.PlaceView)]
@@ -127,7 +129,7 @@
                     <MudItem xs="12">
                         @foreach (var openingTime in VM.Place.OpeningTimes)
                         {
-                            <Bridge.WebApp.Pages.Admin.Views.Components.OpeningTimeView OpeningTime="openingTime" IsReadOnly="VM.OpeningTimeReadOnly" />
+                            <OpeningTimeView OpeningTime="openingTime" IsReadOnly="VM.OpeningTimeReadOnly" />
                         }
                     </MudItem>
                 </MudGrid>

@@ -1,4 +1,4 @@
-﻿using Bridge.WebApp.Pages.Home.Models;
+using Bridge.WebApp.Pages.Common.Models;
 
 namespace Bridge.WebApp.Pages.Home.ViewModels
 {

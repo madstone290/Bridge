@@ -1,4 +1,4 @@
-using Bridge.WebApp.Pages.Admin.Models;
+using Bridge.WebApp.Pages.Common.Models;
 using Microsoft.AspNetCore.Components.Forms;
 
 namespace Bridge.WebApp.Pages.Common.ViewModels

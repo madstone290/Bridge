@@ -1,8 +1,8 @@
 using Bridge.Application.Places.Queries;
 using Bridge.Application.Products.Queries;
 using Bridge.WebApp.Api.ApiClients;
-using Bridge.WebApp.Pages.Admin.Views;
-using Bridge.WebApp.Pages.Home.Models;
+using Bridge.WebApp.Pages.Common.Models;
+using Bridge.WebApp.Pages.Common.Views;
 using Bridge.WebApp.Pages.Home.Views;
 using Bridge.WebApp.Services;
 using Bridge.WebApp.Services.DynamicMap;
@@ -97,7 +97,7 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
         {
             var state = await _authService.GetAuthStateAsync();
             IsAuthenticated = state.IsAuthenticated;
-            
+
             await GetCurrentLocationAsync();
             await Task.WhenAll(GetCurrentAddressAsync(), InitDynamicMapAsync());
 
@@ -150,7 +150,7 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
         {
             if (Guid.TryParse(markerId, out Guid placeId))
             {
-                if(SelectedTab == ResultTab.Product)
+                if (SelectedTab == ResultTab.Product)
                 {
                     var product = Products.First(x => x.PlaceId == placeId);
                     SelectedProduct = product;
@@ -181,11 +181,12 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
                 return;
             }
 
-            var parameters = new DialogParameters 
+            var parameters = new DialogParameters
             {
+                { nameof(PlaceFormView.FormMode), FormMode.Create }
             };
             var options = new DialogOptions { MaxWidth = MaxWidth.Large };
-            var dialog = _dialogService.Show<PlaceAddView>(string.Empty, parameters, options);
+            var dialog = _dialogService.Show<PlaceFormView>(string.Empty, parameters, options);
             var dialogResult = await dialog.Result;
             if (!dialogResult.Cancelled)
             {
@@ -195,7 +196,7 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
 
         private bool CanSearch()
         {
-            if(string.IsNullOrEmpty(SearchText))
+            if (string.IsNullOrEmpty(SearchText))
                 return false;
             if (CurrentLocation == null)
                 return false;
@@ -265,7 +266,7 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
         {
             var markers = Products
                 .Where(product => product.Place != null)
-                .DistinctBy(x=> x.PlaceId)
+                .DistinctBy(x => x.PlaceId)
                 .Select(product => product.Place!)
                 .Select(place => new Marker()
                 {
@@ -333,17 +334,17 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
 
             if (tab == ResultTab.Product)
             {
-                if(!ProductSearched)
+                if (!ProductSearched)
                     await SearchProductsAsync(CurrentLocation!);
                 await CreateProductMarkersAsync();
             }
-            else if(tab == ResultTab.Place)
+            else if (tab == ResultTab.Place)
             {
-                if(!PlaceSearched)
+                if (!PlaceSearched)
                     await SearchPlacesAsync(CurrentLocation!);
                 await CreatePlaceMarkers();
             }
-            
+
         }
 
         public async Task OnClearClick()

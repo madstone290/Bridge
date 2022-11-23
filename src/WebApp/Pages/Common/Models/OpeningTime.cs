@@ -1,7 +1,11 @@
-namespace Bridge.WebApp.Pages.Home.Models
+using Bridge.Application.Places.Dtos;
+
+namespace Bridge.WebApp.Pages.Common.Models
 {
     public class OpeningTime
     {
+        public OpeningTime() { }
+        public OpeningTime(DayOfWeek day) { Day = day; }
 
         private static readonly Dictionary<DayOfWeek, string> _dayStrings = new()
         {
@@ -14,15 +18,24 @@ namespace Bridge.WebApp.Pages.Home.Models
             { DayOfWeek.Sunday, "일요일" },
         };
 
-        /// <summary>
-        /// 영업요일
-        /// </summary>
-        public DayOfWeek Day { get; set; }
+        public static OpeningTime Create(OpeningTimeDto t)
+        {
+            return new OpeningTime()
+            {
+                Day = t.Day,
+                IsDayoff = t.IsDayoff,
+                Is24Hours = t.Is24Hours,
+                OpenTime = t.OpenTime,
+                CloseTime = t.CloseTime,
+                BreakStartTime = t.BreakStartTime,
+                BreakEndTime = t.BreakEndTime
+            };
+        }
 
         /// <summary>
         /// 영업요일
         /// </summary>
-        public string DayString => _dayStrings[Day];
+        public DayOfWeek Day { get; set; }
 
         /// <summary>
         /// 휴무일
@@ -39,38 +52,43 @@ namespace Bridge.WebApp.Pages.Home.Models
         /// </summary>
         public TimeSpan? OpenTime { get; set; }
 
-        public string OpenTimeString => OpenTime.HasValue
-            ? $"{OpenTime:hh\\:mm}"
-            : "??";
-
         /// <summary>
         /// 폐점 시간
         /// </summary>
         public TimeSpan? CloseTime { get; set; }
-
-        public string CloseTimeString => CloseTime.HasValue
-            ? $"{CloseTime:hh\\:mm}"
-            : "??";
 
         /// <summary>
         /// 휴식 시작시간
         /// </summary>
         public TimeSpan? BreakStartTime { get; set; }
 
-        public string BreakStartTimeString => BreakStartTime.HasValue
-           ? $"{BreakStartTime:hh\\:mm}"
-           : string.Empty;
-
         /// <summary>
         /// 휴식 종료시간
         /// </summary>
         public TimeSpan? BreakEndTime { get; set; }
 
+        /// <summary>
+        /// 영업요일
+        /// </summary>
+        public string DayString => _dayStrings[Day];
+
+        public string OpenTimeString => OpenTime.HasValue
+            ? $"{OpenTime:hh\\:mm}"
+            : "??";
+
+        public string CloseTimeString => CloseTime.HasValue
+            ? $"{CloseTime:hh\\:mm}"
+            : "??";
+
+        public string BreakStartTimeString => BreakStartTime.HasValue
+           ? $"{BreakStartTime:hh\\:mm}"
+           : string.Empty;
+
         public string BreakEndTimeString => BreakEndTime.HasValue
             ? $"{BreakEndTime:hh\\:mm}"
             : string.Empty;
 
-        string? BreakTimeString()
+        private string? GetBreakTimeString()
         {
             if (BreakStartTime.HasValue && BreakEndTime.HasValue)
                 return $"  휴식 {BreakStartTimeString}~{BreakEndTimeString}";
@@ -86,9 +104,31 @@ namespace Bridge.WebApp.Pages.Home.Models
             if (IsDayoff)
                 return $"{DayString} 휴무일";
             if (Is24Hours)
-                return $"{DayString} 24시간 영업" + BreakTimeString();
+                return $"{DayString} 24시간 영업" + GetBreakTimeString();
 
-            return $"{DayString} {OpenTimeString}~{CloseTimeString}" + BreakTimeString();
+            return $"{DayString} {OpenTimeString}~{CloseTimeString}" + GetBreakTimeString();
         }
+
+        public void SyncIs24Hours()
+        {
+            if (Is24Hours)
+            {
+                OpenTime = null;
+                CloseTime = null;
+                IsDayoff = false;
+            }
+        }
+
+        public void SyncIsDayoff()
+        {
+            if (IsDayoff)
+            {
+                OpenTime = null;
+                CloseTime = null;
+                Is24Hours = false;
+            }
+        }
+
+
     }
 }

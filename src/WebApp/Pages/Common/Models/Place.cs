@@ -2,7 +2,7 @@ using Bridge.Application.Places.ReadModels;
 using Bridge.Domain.Places.Enums;
 using FluentValidation;
 
-namespace Bridge.WebApp.Pages.Home.Models
+namespace Bridge.WebApp.Pages.Common.Models
 {
     public class Place
     {
@@ -19,6 +19,18 @@ namespace Bridge.WebApp.Pages.Home.Models
                     .WithMessage("* 필수");
             }
         }
+
+        private readonly List<OpeningTime> _openingTimes = new()
+        {
+            new OpeningTime(DayOfWeek.Monday),
+            new OpeningTime(DayOfWeek.Tuesday),
+            new OpeningTime(DayOfWeek.Wednesday),
+            new OpeningTime(DayOfWeek.Thursday),
+            new OpeningTime(DayOfWeek.Friday),
+            new OpeningTime(DayOfWeek.Saturday),
+            new OpeningTime(DayOfWeek.Sunday),
+        };
+
 
         public static Place Create(PlaceReadModel x)
         {
@@ -92,16 +104,7 @@ namespace Bridge.WebApp.Pages.Home.Models
         /// <summary>
         /// 거리
         /// </summary>
-        public string DistanceString
-        {
-            get
-            {
-                if (Distance < 1000)
-                    return $"{Distance:0}m";
-                else
-                    return $"{Distance / 1000:0.0}km";
-            }
-        }
+        public string DistanceString => $"{Distance:0}m";
 
         /// <summary>
         /// 위도
@@ -136,7 +139,7 @@ namespace Bridge.WebApp.Pages.Home.Models
         /// <summary>
         /// 장소 카테고리
         /// </summary>
-        public List<PlaceCategory> Categories { get; set; } = new();
+        public IEnumerable<PlaceCategory> Categories { get; set; } = Enumerable.Empty<PlaceCategory>();
 
         /// <summary>
         /// 카테고리 문자열
@@ -149,19 +152,51 @@ namespace Bridge.WebApp.Pages.Home.Models
         public string? ContactNumber { get; set; }
 
         /// <summary>
-        /// 영업시간
-        /// </summary>
-        public List<OpeningTime> OpeningTimes { get; set; } = new();
-
-        /// <summary>
         /// 영업시간 보여주기 여부
         /// </summary>
         public bool ShowOpeningTimes { get; set; }
 
+        #region Form 속성
         /// <summary>
-        /// 이미지 URL
+        /// 이미지 변경 여부
+        /// </summary>
+        public bool ImageChanged { get; set; }
+
+        /// <summary>
+        /// 이미지 이름
+        /// </summary>
+        public string? ImageName { get; set; }
+
+        /// <summary>
+        /// 이미지 데이터
+        /// </summary>
+        public byte[]? ImageData { get; set; }
+
+        /// <summary>
+        /// 이미지 Url
         /// </summary>
         public string? ImageUrl { get; set; }
+        #endregion
+
+        /// <summary>
+        /// 영업시간
+        /// </summary>
+        public IEnumerable<OpeningTime> OpeningTimes
+        {
+            get => _openingTimes;
+            set
+            {
+                foreach (var openingTime in _openingTimes.ToArray())
+                {
+                    var entry = value.FirstOrDefault(x => x.Day == openingTime.Day);
+                    if (entry != null)
+                    {
+                        _openingTimes.Remove(_openingTimes.First(x => x.Day == openingTime.Day));
+                        _openingTimes.Add(entry);
+                    }
+                }
+            }
+        }
 
         public IEnumerable<OpeningTime> OpeningTimesFromMonday
         {
@@ -169,21 +204,16 @@ namespace Bridge.WebApp.Pages.Home.Models
             {
                 var openingTimes = new List<OpeningTime>
                 {
-                    GetOpeningTime(DayOfWeek.Monday),
-                    GetOpeningTime(DayOfWeek.Tuesday),
-                    GetOpeningTime(DayOfWeek.Wednesday),
-                    GetOpeningTime(DayOfWeek.Thursday),
-                    GetOpeningTime(DayOfWeek.Friday),
-                    GetOpeningTime(DayOfWeek.Saturday),
-                    GetOpeningTime(DayOfWeek.Sunday),
+                    OpeningTimes.First(x => x.Day == DayOfWeek.Monday),
+                    OpeningTimes.First(x => x.Day == DayOfWeek.Tuesday),
+                    OpeningTimes.First(x => x.Day == DayOfWeek.Wednesday),
+                    OpeningTimes.First(x => x.Day == DayOfWeek.Thursday),
+                    OpeningTimes.First(x => x.Day == DayOfWeek.Friday),
+                    OpeningTimes.First(x => x.Day == DayOfWeek.Saturday),
+                    OpeningTimes.First(x => x.Day == DayOfWeek.Sunday)
                 };
                 return openingTimes;
             }
-        }
-
-        private OpeningTime GetOpeningTime(DayOfWeek day)
-        {
-            return OpeningTimes.FirstOrDefault(x => x.Day == day) ?? new OpeningTime() { Day = day };
         }
 
     }

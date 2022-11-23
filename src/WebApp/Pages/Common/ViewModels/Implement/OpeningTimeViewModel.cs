@@ -1,6 +1,6 @@
-﻿using Bridge.WebApp.Pages.Admin.Models;
+using Bridge.WebApp.Pages.Common.Models;
 
-namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
+namespace Bridge.WebApp.Pages.Common.ViewModels.Implement
 {
     public class OpeningTimeViewModel : IOpeningTimeViewModel
     {

@@ -3,6 +3,7 @@ using Bridge.Shared.Extensions;
 using Bridge.WebApp.Api.ApiClients.Admin;
 using Bridge.WebApp.Pages.Admin.Models;
 using Bridge.WebApp.Pages.Admin.Views.Components;
+using Bridge.WebApp.Pages.Common.Models;
 using Bridge.WebApp.Pages.Common.Views;
 using Bridge.WebApp.Services;
 using Bridge.WebApp.Shared;
@@ -75,7 +76,7 @@ namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
             PageCount = placeList.TotalPages;
 
             _placeList.Clear();
-            _placeList.AddRange(placeList.List.Select(x => Place.CreateFromReadModel(x)));
+            _placeList.AddRange(placeList.List.Select(x => Place.Create(x)));
         }
 
         public Task Initialize()

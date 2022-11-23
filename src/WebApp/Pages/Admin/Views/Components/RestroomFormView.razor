@@ -1,6 +1,7 @@
 @using Bridge.Domain.Places.Enums
 @using Bridge.WebApp.Pages.Admin.Models
 @using Bridge.WebApp.Pages.Admin.ViewModels
+@using Bridge.WebApp.Pages.Common.Views.Components
 @inject IRestroomFormViewModel VM
 
 <MudDialog>
@@ -82,7 +83,7 @@
                         <MudItem xs="12">
                             @foreach (var openingTime in VM.Restroom.OpeningTimes)
                             {
-                                <Bridge.WebApp.Pages.Admin.Views.Components.OpeningTimeView OpeningTime="openingTime" IsReadOnly="false" />
+                                <OpeningTimeView OpeningTime="openingTime" IsReadOnly="false" />
                             }
                         </MudItem>
                     </MudGrid>

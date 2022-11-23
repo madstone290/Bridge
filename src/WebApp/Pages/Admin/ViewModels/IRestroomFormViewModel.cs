@@ -1,5 +1,6 @@
 using Bridge.Domain.Places.Enums;
 using Bridge.WebApp.Pages.Admin.Models;
+using Bridge.WebApp.Pages.Common.Models;
 
 namespace Bridge.WebApp.Pages.Admin.ViewModels
 {

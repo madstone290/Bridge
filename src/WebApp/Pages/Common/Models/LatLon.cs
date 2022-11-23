@@ -1,4 +1,4 @@
-namespace Bridge.WebApp.Pages.Home.Models
+namespace Bridge.WebApp.Pages.Common.Models
 {
     /// <summary>
     /// 위도/경도
