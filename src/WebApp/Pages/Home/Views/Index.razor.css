@@ -128,7 +128,7 @@
     display: initial;
 }
 
-::deep .floating-panel{
+::deep .map-menu-panel {
     position: fixed;
     left: 95%;
     top: 90%;
