@@ -52,5 +52,10 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
                 Products = result.Data!.Select(x => Product.Create(x));
             }
         }
+
+        public async Task OnAddProductClick()
+        {
+            Console.WriteLine("OnAddProductClick");   
+        }
     }
 }

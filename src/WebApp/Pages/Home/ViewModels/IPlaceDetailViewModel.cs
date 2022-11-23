@@ -12,5 +12,7 @@ namespace Bridge.WebApp.Pages.Home.ViewModels
         IEnumerable<Product> Products { get; }
 
         Task LoadProducts();
+
+        Task OnAddProductClick();
     }
 }

@@ -42,7 +42,11 @@
         </MudGrid>
     </div>
     <div class="product-list">
-        <MudText Typo="Typo.h5">제품목록</MudText>
+        <div class="product-title">
+            <MudText Typo="Typo.h5">제품</MudText>
+            <MudSpacer />
+            <MudButton Class="button" Variant="Variant.Outlined" OnClick="VM.OnAddProductClick">추가</MudButton>
+        </div>
         <MudSpacer />
         <MudDivider Style="margin-bottom:4px;" />
         <MudTable T="Product"
