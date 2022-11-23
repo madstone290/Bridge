@@ -136,6 +136,6 @@
 
 ::deep .map-menu-panel {
     position: fixed;
-    left: 95%;
-    top: 90%;
+    right: 20px;
+    bottom: 40px;
 }
