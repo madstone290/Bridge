@@ -8,6 +8,8 @@ using Bridge.WebApp.Extensions;
 using Bridge.WebApp.Pages.Admin.ViewModels;
 using Bridge.WebApp.Pages.Admin.ViewModels.Implement;
 using Bridge.WebApp.Pages.Admin.Views.Components;
+using Bridge.WebApp.Pages.Common.ViewModels;
+using Bridge.WebApp.Pages.Common.ViewModels.Implement;
 using Bridge.WebApp.Pages.Home.ViewModels;
 using Bridge.WebApp.Pages.Home.ViewModels.Implement;
 using Bridge.WebApp.Services;

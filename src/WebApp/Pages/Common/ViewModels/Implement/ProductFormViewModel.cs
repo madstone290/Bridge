@@ -5,7 +5,7 @@ using Bridge.WebApp.Services;
 using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
 
-namespace Bridge.WebApp.Pages.Admin.ViewModels.Implement
+namespace Bridge.WebApp.Pages.Common.ViewModels.Implement
 {
     public class ProductFormViewModel : IProductFormViewModel
     {

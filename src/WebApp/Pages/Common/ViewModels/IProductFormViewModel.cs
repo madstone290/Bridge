@@ -1,7 +1,7 @@
 using Bridge.WebApp.Pages.Admin.Models;
 using Microsoft.AspNetCore.Components.Forms;
 
-namespace Bridge.WebApp.Pages.Admin.ViewModels
+namespace Bridge.WebApp.Pages.Common.ViewModels
 {
     public interface IProductFormViewModel : IFormValidation<Product>, IModal
     {

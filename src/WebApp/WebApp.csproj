@@ -29,7 +29,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Pages\Common\" />
+      <Folder Include="Pages\Common\Models\" />
     </ItemGroup>
     
 </Project>

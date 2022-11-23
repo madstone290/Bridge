@@ -1,6 +1,9 @@
 using Bridge.WebApp.Api.ApiClients;
+using Bridge.WebApp.Pages.Admin.Views.Components;
+using Bridge.WebApp.Pages.Common.Views;
 using Bridge.WebApp.Pages.Home.Models;
 using Bridge.WebApp.Services;
+using MudBlazor;
 using System.ComponentModel;
 
 namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
@@ -10,14 +13,17 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
 
         private readonly ProductApiClient _productApiClient;
         private readonly IResultValidationService _resultValidationService;
+        private readonly IDialogService _dialogService;
+
 
         private Place _place = new();
         private List<Product> _products = new();
 
-        public PlaceDetailViewModel(ProductApiClient productApiClient, IResultValidationService resultValidationService)
+        public PlaceDetailViewModel(ProductApiClient productApiClient, IResultValidationService resultValidationService, IDialogService dialogService)
         {
             _productApiClient = productApiClient;
             _resultValidationService = resultValidationService;
+            _dialogService = dialogService;
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -55,7 +61,19 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
 
         public async Task OnAddProductClick()
         {
-            Console.WriteLine("OnAddProductClick");   
+            var parameters = new DialogParameters
+            {
+                { nameof(ProductFormView.FormMode), FormMode.Create },
+                { nameof(ProductFormView.PlaceId), Place.Id }
+            };
+
+            var options = new DialogOptions { MaxWidth = MaxWidth.Large };
+            var dialog = _dialogService.Show<ProductFormView>(string.Empty, parameters, options);
+            var dialogResult = await dialog.Result;
+            if (!dialogResult.Cancelled)
+            {
+                await LoadProducts();
+            }
         }
     }
 }
