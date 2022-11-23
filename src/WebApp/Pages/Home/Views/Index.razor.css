@@ -128,3 +128,9 @@
 ::deep .left-panel .detail-container.visible {
     display: initial;
 }
+
+::deep .floating-panel{
+    position: fixed;
+    left: 95%;
+    top: 90%;
+}

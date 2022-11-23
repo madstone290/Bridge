@@ -62,6 +62,12 @@ namespace Bridge.WebApp.Pages.Home.ViewModels
         Task InitAsync();
 
         /// <summary>
+        /// 장소 추가 클릭
+        /// </summary>
+        /// <returns></returns>
+        Task OnAddPlaceClick();
+
+        /// <summary>
         /// 검색 클릭
         /// </summary>
         /// <returns></returns>

@@ -160,7 +160,7 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
             await GetCurrentAddressAsync();
         }
 
-        private async Task OnAddPlaceClick(MapPoint location)
+        public async Task OnAddPlaceClick()
         {
             var parameters = new DialogParameters 
             {
@@ -235,8 +235,6 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
             }
 
             _products.Clear();
-            //_products.Add(new Product() { Name = "제품1", Distance = 200 });
-            //_products.Add(new Product() { Name = "제품2", Distance = 300 });
             _products.AddRange(apiResult.Data.Select(x => Product.Create(x))
                 .OrderBy(x => x.Place?.Distance));
 
