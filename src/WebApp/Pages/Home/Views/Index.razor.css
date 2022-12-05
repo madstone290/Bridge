@@ -13,11 +13,11 @@
     flex-direction: row;
 }
 
-::deep .left-panel .search-container {
-    width: 400px;
-    padding: 8px;
-    background: white;
-}
+    ::deep .left-panel .search-container {
+        width: 400px;
+        padding: 8px;
+        background: white;
+    }
 
 ::deep .address-line {
     height: 24px;
@@ -124,15 +124,20 @@
     padding: 4px;
     display: none;
 }
-::deep .left-panel .detail-container.visible {
-    display: initial;
-}
+
+    ::deep .left-panel .detail-container.visible {
+        display: initial;
+    }
 
 ::deep .user-status-panel {
     position: fixed;
     right: 20px;
     top: 20px;
 }
+
+    ::deep .user-status-panel > * {
+        margin: 0px 4px 0px 0px;
+    }
 
 ::deep .map-menu-panel {
     position: fixed;
