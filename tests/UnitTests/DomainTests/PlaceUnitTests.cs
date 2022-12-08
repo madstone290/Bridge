@@ -35,7 +35,7 @@ namespace Bridge.UnitTests.DomainTests
             // Act
             var action = () =>
             {
-                var place = Place.Create(PlaceType.Restaurant, name, address, location);
+                var place = new Place(Guid.NewGuid().ToString(), PlaceType.Restaurant, name, address, location);
             };
 
             // Assert

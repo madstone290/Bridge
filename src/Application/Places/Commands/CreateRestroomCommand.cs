@@ -10,6 +10,11 @@ namespace Bridge.Application.Places.Commands
     public record CreateRestroomCommand : ICommand<Guid>
     {
         /// <summary>
+        /// 사용자
+        /// </summary>
+        public string UserId { get; set; } = string.Empty;
+
+        /// <summary>
         /// 화장실명
         /// </summary>
         public string Name { get; set; } = string.Empty;
@@ -76,7 +81,7 @@ namespace Bridge.Application.Places.Commands
         public override async Task<Guid> HandleCommand(CreateRestroomCommand command, CancellationToken cancellationToken)
         {
             var addressLocation = await _addressLocationService.CreateAddressLocationAsync(command.Address.BaseAddress, command.Address.DetailAddress);
-            var restroom = new Restroom(command.Name, addressLocation.Item1, addressLocation.Item2);
+            var restroom = new Restroom(command.UserId, command.Name, addressLocation.Item1, addressLocation.Item2);
             restroom.SetLastUpdate(command.LastUpdateDateTimeLocal);
             restroom.UpdateRestroom(command.IsUnisex, command.DiaperTableLocation,
                                  command.MaleToilet, command.MaleUrinal, command.MaleDisabledToilet,

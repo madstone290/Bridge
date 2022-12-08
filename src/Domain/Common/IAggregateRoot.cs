@@ -1,9 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Bridge.Domain.Common
 {
     /// <summary>
@@ -11,5 +5,6 @@ namespace Bridge.Domain.Common
     /// </summary>
     public interface IAggregateRoot
     {
+        string OwnerId { get; }
     }
 }

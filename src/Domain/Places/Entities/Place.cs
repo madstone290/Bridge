@@ -26,8 +26,10 @@ namespace Bridge.Domain.Places.Entities
         /// </summary>
         private ISet<PlaceCategory> _categories = new HashSet<PlaceCategory>();
 
-        protected Place() { }
-        protected Place(PlaceType type, string name, Address address, Location location)
+        protected Place() : base() { }
+
+        public Place(string ownerId, PlaceType type, string name, Address address, Location location)
+            : base(ownerId)
         {
             Status = PlaceStatus.Open;
             CreationDateTimeUtc = DateTime.UtcNow;
@@ -42,17 +44,6 @@ namespace Bridge.Domain.Places.Entities
             _openingTimes.Add(OpeningTime.Create(DayOfWeek.Thursday));
             _openingTimes.Add(OpeningTime.Create(DayOfWeek.Friday));
             _openingTimes.Add(OpeningTime.Create(DayOfWeek.Saturday));
-        }
-
-        /// <summary>
-        /// 장소를 생성한다
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="location"></param>
-        /// <returns></returns>
-        public static Place Create(PlaceType type, string name, Address address, Location location)
-        {
-            return new Place(type, name, address, location);
         }
 
         /// <summary>

@@ -2,7 +2,6 @@ using Bridge.Application.Common;
 using Bridge.Application.Places.Commands;
 using Bridge.Application.Places.Queries;
 using Bridge.Application.Places.ReadModels;
-using Bridge.Application.Products.Queries;
 using Bridge.Domain.Places.Enums;
 using Bridge.Shared;
 using Bridge.Shared.Constants;
@@ -13,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Bridge.Api.Controllers.Admin
 {
     [Tags("Admin Places")]
-    [Authorize(Policy = PolicyConstants.Admin)]
+    [Authorize]
     public class PlacesController : ApiController
     {
         private readonly IMediator _mediator;
@@ -66,6 +65,7 @@ namespace Bridge.Api.Controllers.Admin
         [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK)]
         public async Task<IActionResult> CreatePlace([FromBody] CreatePlaceCommand command)
         {
+            command.UserId = UserId;
             var placeId = await _mediator.Send(command);
             return Ok(placeId);
         }
@@ -76,6 +76,7 @@ namespace Bridge.Api.Controllers.Admin
         public async Task<IActionResult> UpdatePlace([FromRoute] Guid id, [FromBody] UpdatePlaceCommand command)
         {
             command.Id = id;
+            command.UserId = UserId;
             await _mediator.Send(command);
             return Ok();
         }
@@ -86,6 +87,7 @@ namespace Bridge.Api.Controllers.Admin
         public async Task<IActionResult> UpdatePlaceBaseInfo([FromRoute] Guid id, [FromBody] UpdatePlaceBaseInfoCommand command)
         {
             command.Id = id;
+            command.UserId = UserId;
             await _mediator.Send(command);
             return Ok();
         }
@@ -97,6 +99,7 @@ namespace Bridge.Api.Controllers.Admin
         public async Task<IActionResult> UpdatePlaceOpeningTimes([FromRoute] Guid id, [FromBody] UpdatePlaceOpeningTimesCommand command)
         {
             command.Id = id;
+            command.UserId = UserId;
             await _mediator.Send(command);
             return Ok();
         }
@@ -106,6 +109,7 @@ namespace Bridge.Api.Controllers.Admin
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> UpdateCategories([FromRoute] Guid id, [FromBody] UpdatePlaceCategoryCommand command)
         {
+            command.UserId = UserId;
             command.PlaceId = id;
             await _mediator.Send(command);
             return Ok();
@@ -116,7 +120,11 @@ namespace Bridge.Api.Controllers.Admin
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> ClosePlace([FromRoute] Guid id)
         {
-            var command = new ClosePlaceCommand() { Id = id };
+            var command = new ClosePlaceCommand() 
+            { 
+                UserId = UserId, 
+                Id = id 
+            };
             await _mediator.Send(command);
             return Ok();
         }

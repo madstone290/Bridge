@@ -46,6 +46,7 @@ namespace Bridge.Api.Controllers
         [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK)]
         public async Task<IActionResult> AddPlace([FromBody] CreatePlaceCommand command)
         {
+            command.UserId = UserId;
             var id = await _mediator.Send(command);
             return Ok(id);
         }

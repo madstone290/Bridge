@@ -2,6 +2,7 @@ using Bridge.Application.Common;
 using Bridge.Application.Common.Services;
 using Bridge.Application.Places.Repos;
 using Bridge.Application.Products.Repos;
+using Bridge.Application.Users;
 using Bridge.Domain.Places.Repos;
 using Bridge.Domain.Products.Repos;
 using Bridge.Infrastructure.Data;
@@ -70,6 +71,8 @@ namespace Bridge.Infrastructure
             services.AddScoped<IPlaceReadRepository, PlaceReadRepository>();
             services.AddScoped<IProductReadRepository, ProductReadRepository>();
             services.AddScoped<IRestroomReadRepository, RestroomReadRepository>();
+
+            services.AddScoped<IUserService, UserService>();
         }
 
     }

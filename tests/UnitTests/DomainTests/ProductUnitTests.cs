@@ -41,7 +41,7 @@ namespace Bridge.UnitTests.DomainTests
             // Act
             var action = () =>
             {
-                var product = Product.Create(name, place);
+                var product = new Product(Guid.NewGuid().ToString(), name, place);
             };
 
             // Assert

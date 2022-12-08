@@ -10,7 +10,7 @@ namespace Bridge.Domain.Places.Entities.Places
     public class Restroom : Place
     {
         protected Restroom() { }
-        public Restroom(string name, Address address, Location location) : base(PlaceType.Restroom, name, address, location)
+        public Restroom(string userId, string name, Address address, Location location) : base(userId, PlaceType.Restroom, name, address, location)
         {
         }
 

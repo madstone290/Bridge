@@ -212,17 +212,17 @@ namespace Bridge.IntegrationTests.Admin
             };
 
             // Act
-            var addRequest = new HttpRequestMessage(HttpMethod.Put, ApiRoutes.Admin.Places.UpdateBaseInfo.Replace("{id}", $"{placeId}"))
+            var updateRequest = new HttpRequestMessage(HttpMethod.Put, ApiRoutes.Admin.Places.UpdateBaseInfo.Replace("{id}", $"{placeId}"))
             {
                 Content = JsonContent.Create(command)
             };
-            var addResponse = await _client.SendAsAdminAsync(addRequest);
+            var updateResponse = await _client.SendAsAdminAsync(updateRequest);
 
             var getRequest = new HttpRequestMessage(HttpMethod.Get, ApiRoutes.Admin.Places.Get.Replace("{id}", $"{placeId}"));
             var getResponse = await _client.SendAsAdminAsync(getRequest);
 
             // Assert
-            addResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+            updateResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
             var place = await getResponse.Content.ReadFromJsonAsync<PlaceReadModel>() ?? null!;
             place.Name.Should().Be(name);
             place.Address.DetailAddress.Should().Be(command.Address.DetailAddress);

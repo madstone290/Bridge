@@ -27,6 +27,7 @@ namespace Bridge.Infrastructure.Identity.Services
         {
             var claims = await _userManager.GetClaimsAsync(user);
             claims.Add(new Claim("UserType", user.UserDetails.UserType.ToString()));
+            claims.Add(new Claim("UserId", user.Id.ToString()));
 
             return claims;
         }

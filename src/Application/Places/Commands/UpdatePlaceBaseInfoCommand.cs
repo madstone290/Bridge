@@ -2,6 +2,7 @@ using Bridge.Application.Common;
 using Bridge.Application.Common.Exceptions.EntityNotFoundExceptions;
 using Bridge.Application.Common.Services;
 using Bridge.Application.Places.Dtos;
+using Bridge.Application.Users;
 using Bridge.Domain.Places.Enums;
 using Bridge.Domain.Places.Repos;
 using MediatR;
@@ -13,6 +14,11 @@ namespace Bridge.Application.Places.Commands
     /// </summary>
     public class UpdatePlaceBaseInfoCommand : ICommand<Unit>
     {
+        /// <summary>
+        /// 사용자
+        /// </summary>
+        public string UserId { get; set; } = string.Empty;
+
         /// <summary>
         /// 장소 아이디
         /// </summary>
@@ -60,22 +66,26 @@ namespace Bridge.Application.Places.Commands
         private readonly IAddressLocationService _addressLocationService;
         private readonly IFileUploadService _fileUploadService;
         private readonly IPlaceRepository _placeRepository;
+        private readonly IUserService _userService;
         private readonly IUnitOfWork _unitOfWork;
 
         public UpdatePlaceBaseInfoCommandHandler(IAddressLocationService addressMapService,
                                                  IFileUploadService fileUploadService,
                                                  IPlaceRepository placeRepository,
-                                                 IUnitOfWork unitOfWork)
+                                                 IUnitOfWork unitOfWork,
+                                                 IUserService userService)
         {
             _addressLocationService = addressMapService;
             _fileUploadService = fileUploadService;
             _placeRepository = placeRepository;
             _unitOfWork = unitOfWork;
+            _userService = userService;
         }
 
         public override async Task<Unit> HandleCommand(UpdatePlaceBaseInfoCommand command, CancellationToken cancellationToken)
         {
             var place = await _placeRepository.FindByIdAsync(command.Id) ?? throw new PlaceNotFoundException(new { command.Id });
+            await PermissionChecker.ThrowIfNoPermission(place, command.UserId, _userService);
 
             place.SetName(command.Name);
             var addressLocation = await _addressLocationService.CreateAddressLocationAsync(command.Address.BaseAddress, command.Address.DetailAddress);

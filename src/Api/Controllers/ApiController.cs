@@ -1,4 +1,4 @@
-﻿using Bridge.Api.ActionFilters;
+using Bridge.Api.ActionFilters;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bridge.Api.Controllers
@@ -10,6 +10,6 @@ namespace Bridge.Api.Controllers
     [ServiceFilter(typeof(ExceptionFilter))]
     public class ApiController : ControllerBase
     {
-
+        public string UserId => HttpContext.User.Claims.FirstOrDefault(x => x.Type == "UserId")?.Value ?? string.Empty;
     }
 }

@@ -13,6 +13,11 @@ namespace Bridge.Application.Places.Commands
     public class CreatePlaceCommand : ICommand<Guid>
     {
         /// <summary>
+        /// 사용자
+        /// </summary>
+        public string UserId { get; set; } = string.Empty;
+
+        /// <summary>
         /// 장소유형
         /// </summary>
         public PlaceType Type { get; set; }
@@ -74,7 +79,7 @@ namespace Bridge.Application.Places.Commands
         public override async Task<Guid> HandleCommand(CreatePlaceCommand command, CancellationToken cancellationToken)
         {
             var addressLocation = await _addressLocationService.CreateAddressLocationAsync(command.Address.BaseAddress, command.Address.DetailAddress);
-            var place = Place.Create(command.Type, command.Name, addressLocation.Item1, addressLocation.Item2);
+            var place = new Place(command.UserId, command.Type, command.Name, addressLocation.Item1, addressLocation.Item2);
             place.SetContactNumber(command.ContactNumber);
 
             foreach (var category in command.Categories)

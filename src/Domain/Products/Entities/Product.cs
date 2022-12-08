@@ -21,8 +21,9 @@ namespace Bridge.Domain.Products.Entities
         /// </summary>
         private ISet<ProductCategory> _categories = new HashSet<ProductCategory>();
 
-        private Product() { }
-        private Product(string name, Place place)
+        protected Product() : base() { }
+
+        public Product(string userId, string name, Place place) : base(userId)
         {
             Status = ProductStatus.Used;
             CreationDateTime = DateTime.UtcNow;
@@ -30,11 +31,6 @@ namespace Bridge.Domain.Products.Entities
             
             Place = place;
             PlaceId = place.Id;
-        }
-
-        public static Product Create(string name, Place place)
-        {
-            return new Product(name, place);
         }
 
         /// <summary>

@@ -7,7 +7,7 @@ namespace Bridge.UnitTests.DomainTests.Builders
     {
         public Product Build(Place place, string? name = null)
         {
-            return Product.Create(
+            return new Product(Guid.NewGuid().ToString(),
                 name ?? Guid.NewGuid().ToString(),
                 place);
         }

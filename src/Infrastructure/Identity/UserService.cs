@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Identity;
 using Bridge.Shared.Extensions;
 using Bridge.Infrastructure.Identity.Services;
 using Bridge.Infrastructure.Identity.Entities;
-using System.Security.Claims;
+using Bridge.Application.Users;
 
 namespace Bridge.Infrastructure.Identity
 {
-    public class UserService
+    public class UserService : IUserService
     {
         private readonly UserManager<BridgeUser> _userManager;
         private readonly IMailService _mailService;
@@ -144,6 +144,12 @@ namespace Bridge.Infrastructure.Identity
             };
         }
 
-
+        public async Task<bool> IsAdminAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null || user.UserDetails.UserType != UserType.Admin)
+                return false;
+            return true;
+        }
     }
 }

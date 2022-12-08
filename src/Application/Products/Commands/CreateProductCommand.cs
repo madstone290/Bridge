@@ -1,5 +1,6 @@
 using Bridge.Application.Common;
 using Bridge.Application.Common.Exceptions.EntityNotFoundExceptions;
+using Bridge.Application.Users;
 using Bridge.Domain.Places.Repos;
 using Bridge.Domain.Products.Entities;
 using Bridge.Domain.Products.Enums;
@@ -9,6 +10,11 @@ namespace Bridge.Application.Products.Commands
 {
     public class CreateProductCommand : ICommand<Guid>
     {
+        /// <summary>
+        /// 사용자
+        /// </summary>
+        public string UserId { get; set; } = string.Empty;
+
         /// <summary>
         /// 제품명
         /// </summary>
@@ -35,20 +41,23 @@ namespace Bridge.Application.Products.Commands
     {
         private readonly IProductRepository _productRepository;
         private readonly IPlaceRepository _placeRepository;
+        private readonly IUserService _userService;
         private readonly IUnitOfWork _unitOfWork;
 
-        public CreateProductCommandHandler(IProductRepository productRepository, IPlaceRepository placeRepository, IUnitOfWork unitOfWork)
+        public CreateProductCommandHandler(IProductRepository productRepository, IPlaceRepository placeRepository, IUnitOfWork unitOfWork, IUserService userService)
         {
             _productRepository = productRepository;
             _placeRepository = placeRepository;
             _unitOfWork = unitOfWork;
+            _userService = userService;
         }
 
         public override async Task<Guid> HandleCommand(CreateProductCommand command, CancellationToken cancellationToken)
         {
             var place = await _placeRepository.FindByIdAsync(command.PlaceId) ?? throw new PlaceNotFoundException(new { command.PlaceId });
+            await PermissionChecker.ThrowIfNoPermission(place, command.UserId, _userService);
 
-            Product product = Product.Create(command.Name, place);
+            Product product = new Product(command.UserId, command.Name, place);
             product.SetPrice(command.Price);
 
             foreach (var category in command.Categories)

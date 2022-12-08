@@ -1,5 +1,6 @@
 using Bridge.Application.Common;
 using Bridge.Application.Common.Exceptions.EntityNotFoundExceptions;
+using Bridge.Application.Users;
 using Bridge.Domain.Products.Enums;
 using Bridge.Domain.Products.Repos;
 using MediatR;
@@ -8,6 +9,11 @@ namespace Bridge.Application.Products.Commands
 {
     public class UpdateProductCommand : ICommand
     {
+        /// <summary>
+        /// 사용자
+        /// </summary>
+        public string UserId { get; set; } = string.Empty;
+
         /// <summary>
         /// 제품 아이디
         /// </summary>
@@ -32,17 +38,20 @@ namespace Bridge.Application.Products.Commands
     public class UpdateProductCommandHandler : CommandHandler<UpdateProductCommand, Unit>
     {
         private readonly IProductRepository _productRepository;
+        private readonly IUserService _userService;
         private readonly IUnitOfWork _unitOfWork;
 
-        public UpdateProductCommandHandler(IProductRepository productRepository, IUnitOfWork unitOfWork)
+        public UpdateProductCommandHandler(IProductRepository productRepository, IUnitOfWork unitOfWork, IUserService userService)
         {
             _productRepository = productRepository;
             _unitOfWork = unitOfWork;
+            _userService = userService;
         }
 
         public override async Task<Unit> HandleCommand(UpdateProductCommand command, CancellationToken cancellationToken)
         {
             var product = await _productRepository.FindByIdAsync(command.Id) ?? throw new ProductNotFoundException(new { command.Id });
+            await PermissionChecker.ThrowIfNoPermission(product, command.UserId, _userService);
 
             product.SetName(command.Name);
             product.SetPrice(command.Price);

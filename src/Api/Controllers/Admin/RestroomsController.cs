@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Bridge.Api.Controllers.Admin
 {
     [Tags("Admin Restroom")]
-    [Authorize(Policy = PolicyConstants.Admin)]
+    [Authorize]
     public class RestroomsController : ApiController
     {
         private readonly IMediator _mediator;
@@ -35,6 +35,7 @@ namespace Bridge.Api.Controllers.Admin
         [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK)]
         public async Task<IActionResult> CreateRestroom([FromBody] CreateRestroomCommand command)
         {
+            command.UserId = UserId;
             var placeId = await _mediator.Send(command);
             return Ok(placeId);
         }
@@ -44,6 +45,9 @@ namespace Bridge.Api.Controllers.Admin
         [ProducesResponseType( StatusCodes.Status200OK)]
         public async Task<IActionResult> CreateRestroom([FromBody] CreateRestroomBatchCommand command)
         {
+            foreach (var subcommand in command.Commands)
+                subcommand.UserId = UserId;
+
             var result = await _mediator.Send(command);
             return Ok(result);
         }
@@ -53,6 +57,7 @@ namespace Bridge.Api.Controllers.Admin
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> UpdateRestroom([FromRoute] Guid id, [FromBody] UpdateRestroomCommand command)
         {
+            command.UserId = UserId;
             command.Id = id;
             await _mediator.Send(command);
             return Ok();

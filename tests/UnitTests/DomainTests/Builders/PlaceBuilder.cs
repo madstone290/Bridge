@@ -8,7 +8,7 @@ namespace Bridge.UnitTests.DomainTests.Builders
     {
         public Place Build(string? name = null, Location? location = null)
         {
-            var place = Place.Create(
+            var place = new Place(Guid.NewGuid().ToString(),
                 PlaceType.Restaurant,
                 name ?? Guid.NewGuid().ToString(),
                 new AddressBuilder().DaeguAddress1,

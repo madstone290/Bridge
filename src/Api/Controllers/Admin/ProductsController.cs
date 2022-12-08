@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Bridge.Api.Controllers.Admin
 {
     [Tags("Admin Products")]
-    [Authorize(Policy = PolicyConstants.Admin)]
+    [Authorize]
     public class ProductsController : ApiController
     {
         private readonly IMediator _mediator;
@@ -67,6 +67,7 @@ namespace Bridge.Api.Controllers.Admin
         [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK)]
         public async Task<IActionResult> CreateProduct([FromBody] CreateProductCommand command)
         {
+            command.UserId = UserId;
             var placeId = await _mediator.Send(command);
             return Ok(placeId);
         }
@@ -76,6 +77,7 @@ namespace Bridge.Api.Controllers.Admin
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> UpdateProduct([FromRoute] Guid id, [FromBody] UpdateProductCommand command)
         {
+            command.UserId = UserId;
             command.Id = id;
             await _mediator.Send(command);
             return Ok();
@@ -86,7 +88,11 @@ namespace Bridge.Api.Controllers.Admin
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> Discard([FromRoute] Guid id)
         {
-            var command = new DiscardProductCommand() { Id = id };
+            var command = new DiscardProductCommand()
+            { 
+                UserId = UserId,
+                Id = id 
+            };
             await _mediator.Send(command);
             return Ok();
         }
