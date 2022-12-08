@@ -11,5 +11,9 @@ namespace Bridge.Domain.Common
     /// </summary>
     public class AggregateRoot : Entity, IAggregateRoot
     {
+        /// <summary>
+        /// 소유자 아이디
+        /// </summary>
+        public string OwnerId { get; private set; } = string.Empty;
     }
 }
