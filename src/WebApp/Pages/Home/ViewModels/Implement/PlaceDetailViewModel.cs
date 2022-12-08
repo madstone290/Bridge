@@ -2,6 +2,7 @@ using Bridge.WebApp.Api.ApiClients;
 using Bridge.WebApp.Pages.Common.Models;
 using Bridge.WebApp.Pages.Common.Views;
 using Bridge.WebApp.Services;
+using Bridge.WebApp.Services.Identity;
 using MudBlazor;
 using System.ComponentModel;
 
@@ -9,20 +10,25 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
 {
     public class PlaceDetailViewModel : IPlaceDetailViewModel
     {
-
         private readonly ProductApiClient _productApiClient;
         private readonly IResultValidationService _resultValidationService;
         private readonly IDialogService _dialogService;
+        private readonly IAuthService _authService;
 
 
         private Place _place = new();
         private List<Product> _products = new();
+        /// <summary>
+        /// 로그인한 사용자의 아이디
+        /// </summary>
+        private string _userId = string.Empty;
 
-        public PlaceDetailViewModel(ProductApiClient productApiClient, IResultValidationService resultValidationService, IDialogService dialogService)
+        public PlaceDetailViewModel(ProductApiClient productApiClient, IResultValidationService resultValidationService, IDialogService dialogService, IAuthService authService)
         {
             _productApiClient = productApiClient;
             _resultValidationService = resultValidationService;
             _dialogService = dialogService;
+            _authService = authService;
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -47,7 +53,7 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
             }
         }
 
-
+        public bool IsPlaceOwner => !string.IsNullOrWhiteSpace(_userId) && _userId == Place.OwnerId;
 
         public async Task LoadProducts()
         {
@@ -73,6 +79,12 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
             {
                 await LoadProducts();
             }
+        }
+
+        public async Task LoadUserAsync()
+        {
+            var authState = await _authService.GetAuthStateAsync();
+            _userId = authState.UserId;
         }
     }
 }

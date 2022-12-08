@@ -68,11 +68,12 @@ namespace Bridge.WebApp.Services.Identity
             };
         }
 
-        public static AuthState Authenticated(string email, string userType, string accessToken, string refreshToken)
+        public static AuthState Authenticated(string email, string userId, string userType, string accessToken, string refreshToken)
         {
             return new AuthState()
             {
                 Email = email,
+                UserId = userId,
                 UserType = userType,
                 AccessToken = accessToken,
                 RefreshToken = refreshToken,
@@ -91,9 +92,14 @@ namespace Bridge.WebApp.Services.Identity
         public string Email { get; init; } = string.Empty;
 
         /// <summary>
+        /// 사용자 아이디
+        /// </summary>
+        public string UserId { get; init; } = string.Empty;
+
+        /// <summary>
         /// 사용자 타입
         /// </summary>
-        public string UserType { get; set; } = string.Empty;
+        public string UserType { get; init; } = string.Empty;
 
         /// <summary>
         /// 액세스 토큰
@@ -113,7 +119,7 @@ namespace Bridge.WebApp.Services.Identity
         /// <returns></returns>
         public AuthState Refresh(string accessToken, string refreshToken)
         {
-            return Authenticated(Email, UserType, accessToken, refreshToken);
+            return Authenticated(Email, UserId, UserType, accessToken, refreshToken);
         }
     }
 
@@ -156,7 +162,7 @@ namespace Bridge.WebApp.Services.Identity
                 return new AuthResult() { Success = false, Error = "결과 데이터가 없습니다" };
 
             var loginResult = apiResult.Data;
-            var authState = AuthState.Authenticated(email, loginResult.UserType, loginResult.AccessToken, loginResult.RefreshToken);
+            var authState = AuthState.Authenticated(email, loginResult.UserId, loginResult.UserType, loginResult.AccessToken, loginResult.RefreshToken);
             await _cookieService.SetCookieAsync(LocalStorageKeyConstants.AuthState, authState);
 
             var principal = GetPrincipalFromAuthState(authState);

@@ -115,6 +115,7 @@ namespace Bridge.Infrastructure.Identity
 
             return new LoginResult()
             {
+                UserId = user.Id.ToString(),
                 UserType = user.UserDetails.UserType.ToString(),
                 AccessToken = accessToken,
                 RefreshToken = refreshToken,

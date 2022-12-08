@@ -45,7 +45,10 @@
         <div class="product-title">
             <MudText Typo="Typo.h5">제품</MudText>
             <MudSpacer />
-            <MudButton Class="button" Variant="Variant.Outlined" OnClick="VM.OnAddProductClick">추가</MudButton>
+            @if(VM.IsPlaceOwner)
+            {
+                <MudButton Class="button" Variant="Variant.Outlined" OnClick="VM.OnAddProductClick">추가</MudButton>
+            }
         </div>
         <MudSpacer />
         <MudDivider Style="margin-bottom:4px;" />
@@ -79,9 +82,9 @@
     [Parameter]
     public IPlaceDetailViewModel VM { get; set; } = null!;
 
-    protected override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
         VM.PropertyChanged += (s, e) => StateHasChanged();
-        return base.OnInitializedAsync();
+        await VM.LoadUserAsync();
     }
 }

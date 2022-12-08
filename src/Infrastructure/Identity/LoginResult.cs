@@ -5,6 +5,8 @@ namespace Bridge.Infrastructure.Identity
     /// </summary>
     public class LoginResult
     {
+        public string UserId { get; set; } = string.Empty;
+
         /// <summary>
         /// 사용자 타입
         /// </summary>

@@ -8,6 +8,11 @@ namespace Bridge.Application.Places.ReadModels
         #region Stored Properties
 
         /// <summary>
+        /// 소유자
+        /// </summary>
+        public string OwnerId { get; set; } = string.Empty;
+
+        /// <summary>
         /// 아이디
         /// </summary>
         public Guid Id { get; set; }

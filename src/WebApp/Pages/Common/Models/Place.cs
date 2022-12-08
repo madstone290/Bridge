@@ -36,6 +36,7 @@ namespace Bridge.WebApp.Pages.Common.Models
         {
             return new Place()
             {
+                OwnerId = x.OwnerId,
                 Id = x.Id,
                 Type = x.Type,
                 Name = x.Name,
@@ -60,6 +61,8 @@ namespace Bridge.WebApp.Pages.Common.Models
                 }).ToList()
             };
         }
+
+        public string OwnerId { get; set; } = string.Empty;
 
         /// <summary>
         /// 아이디

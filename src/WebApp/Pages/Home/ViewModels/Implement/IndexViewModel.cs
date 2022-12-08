@@ -103,6 +103,8 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
 
             if (CurrentLocation != null)
                 await _mapService.SetMyLocationAsync(new MapPoint() { X = CurrentLocation.Longitude, Y = CurrentLocation.Latitude });
+
+            await PlaceDetailVM.LoadUserAsync();
         }
 
         private async Task GetCurrentLocationAsync()
