@@ -117,7 +117,7 @@ namespace Bridge.WebApp.Pages.Common.ViewModels.Implement
                 _place.OpeningTimes = placeDto.OpeningTimes.Select(x => OpeningTime.Create(x));
 
                 if (placeDto.ImagePath != null)
-                    _place.ImageUrl = new Uri(_placeApiClient.HttpClient.BaseAddress!, placeDto.ImagePath).ToString();
+                    _place.ImageUrl = new Uri(_placeApiClient.HttpClient.BaseAddress!, Path.Combine("Files", placeDto.ImagePath)).ToString();
 
             }
         }

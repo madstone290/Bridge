@@ -134,7 +134,7 @@ app.UseHttpsRedirection();
 
 app.UseStaticFiles(new StaticFileOptions
 {
-    FileProvider = new PhysicalFileProvider(Path.Combine(app.Environment.ContentRootPath, "Files")),
+    FileProvider = new PhysicalFileProvider(app.Configuration.GetValue<string>("UploadDirectory")),
     RequestPath = new PathString("/Files"),
 });
 

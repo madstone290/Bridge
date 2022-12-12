@@ -307,7 +307,7 @@ namespace Bridge.WebApp.Pages.Home.ViewModels.Implement
             {
                 var place = Place.Create(x);
                 if (x.ImagePath != null)
-                    place.ImageUrl = new Uri(_placeApiClient.HttpClient.BaseAddress!, x.ImagePath).ToString();
+                    place.ImageUrl = new Uri(_placeApiClient.HttpClient.BaseAddress!, Path.Combine("Files", x.ImagePath)).ToString();
                 return place;
             })
             .OrderBy(x => x.Distance));

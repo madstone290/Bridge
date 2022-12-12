@@ -1,5 +1,7 @@
 using Bridge.Application.Common.Services;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace Bridge.Infrastructure.Services
 {
@@ -8,14 +10,17 @@ namespace Bridge.Infrastructure.Services
     /// </summary>
     public class InternalFileUploadService : IFileUploadService
     {
-        private readonly IWebHostEnvironment _hostEnvironment;
+        /// <summary>
+        /// 업로드용 디렉토리
+        /// </summary>
+        private string UploadDirectory { get; }
 
-        public InternalFileUploadService(IWebHostEnvironment hostEnvironment)
+        public InternalFileUploadService(IConfiguration configuration)
         {
-            this._hostEnvironment = hostEnvironment;
+            UploadDirectory = configuration.GetValue<string>("UploadDirectory");
         }
 
-        private static string GetNextFilePath(string rootPath, string filePath)
+        private static string GetNextFilePath(string rootDirectory, string filePath)
         {
             var directory = Path.GetDirectoryName(filePath)!;
             var baseName = Path.GetFileNameWithoutExtension(filePath);
@@ -25,7 +30,7 @@ namespace Bridge.Infrastructure.Services
             var pattern = string.Format("({0})", patternNumber);
             var nextFilePath = Path.Combine(directory, baseName + pattern + extension);
 
-            while (File.Exists(Path.Combine(rootPath, nextFilePath)))
+            while (File.Exists(Path.Combine(rootDirectory, nextFilePath)))
             {
                 patternNumber++;
                 pattern = string.Format("({0})", patternNumber);
@@ -36,8 +41,7 @@ namespace Bridge.Infrastructure.Services
 
         public void DeleteFile(string filePath)
         {
-            var rootPath = _hostEnvironment.ContentRootPath;
-            var fullPath = Path.Combine(rootPath, filePath);
+            var fullPath = Path.Combine(UploadDirectory, filePath);
             if (File.Exists(fullPath))
                 File.Delete(fullPath);
         }
@@ -47,10 +51,8 @@ namespace Bridge.Infrastructure.Services
             if (string.IsNullOrWhiteSpace(fileName) || data == null || data.Length == 0)
                 return null;
 
-            var rootPath = _hostEnvironment.ContentRootPath;
-            var baseDirectory = "Files";
-            var filePath = Path.Combine(baseDirectory, directoryName, fileName);
-            var fullPath = Path.Combine(rootPath, filePath);
+            var filePath = Path.Combine(directoryName, fileName);
+            var fullPath = Path.Combine(UploadDirectory, filePath);
 
             var directoryFullName = Path.GetDirectoryName(fullPath)!;
             if (!Directory.Exists(directoryFullName))
@@ -58,8 +60,8 @@ namespace Bridge.Infrastructure.Services
 
             if (File.Exists(fullPath))
             {
-                filePath = GetNextFilePath(rootPath, filePath);
-                fullPath = Path.Combine(rootPath, filePath);
+                filePath = GetNextFilePath(UploadDirectory, filePath);
+                fullPath = Path.Combine(UploadDirectory, filePath);
             }
             using (var outputStream = new FileStream(fullPath, FileMode.Create))
             {
