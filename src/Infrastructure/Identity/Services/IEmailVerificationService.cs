@@ -1,3 +1,5 @@
+using Bridge.Shared.Constants;
+
 namespace Bridge.Infrastructure.Identity.Services
 { 
     /// <summary>
@@ -21,6 +23,9 @@ namespace Bridge.Infrastructure.Identity.Services
     {
         public bool Verify(string email)
         {
+            if (email.ToLower() == IdentityConstants.SharedAdminEmail)
+                return true;
+
             // 모든 이메일에 대해 검증실패
             return false;
         }

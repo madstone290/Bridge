@@ -1,4 +1,4 @@
-using Bridge.Infrastructure.Identity.Entities;
+using Bridge.Shared.Constants;
 
 namespace Bridge.Infrastructure.Identity.Services
 {
@@ -17,11 +17,11 @@ namespace Bridge.Infrastructure.Identity.Services
 
     public class AdminUserService : IAdminUserService
     {
-        private const string MasterEmail = "madstone290@gmail.com";
-
         public bool VerifyAdmin(string email)
         {
-            if(email.ToLower() == MasterEmail)
+            if(email.ToLower() == IdentityConstants.MasterEmail)
+                return true;
+            if (email.ToLower() == IdentityConstants.SharedAdminEmail)
                 return true;
 
             return false;

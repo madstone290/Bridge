@@ -48,6 +48,12 @@
                 <MudItem xs="12">
                     <MudButton FullWidth="true" Variant="Variant.Filled" Color="Color.Primary" DisableElevation="true" OnClick="@RequestLoginAsync">로그인</MudButton>
                 </MudItem>
+                <MudItem xs="12">
+                    <MudButton FullWidth="true" Variant="Variant.Filled" Color="Color.Secondary" DisableElevation="true" OnClick="@RequestAdminLoginAsync">관리자로 로그인</MudButton>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudButton FullWidth="true" Variant="Variant.Filled" Color="Color.Primary" DisableElevation="true" OnClick="@GoToRegister">가입하기</MudButton>
+                </MudItem>
 
             </MudGrid>
         </MudForm>

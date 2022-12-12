@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using Bridge.WebApp.Services;
+using Bridge.Shared.Constants;
 
 namespace Bridge.WebApp.Pages.Identity
 {
@@ -104,6 +105,19 @@ namespace Bridge.WebApp.Pages.Identity
                     Error = authResult.Error;
 
             }
+        }
+
+        private async Task RequestAdminLoginAsync()
+        {
+            _loginModel.Email = IdentityConstants.SharedAdminEmail;
+            _loginModel.Password = IdentityConstants.SharedAdminPassword;
+
+            await RequestLoginAsync();
+        }
+
+        private void GoToRegister()
+        {
+            NavManager.NavigateTo(PageRoutes.Identity.Register, true);
         }
     }
 }
