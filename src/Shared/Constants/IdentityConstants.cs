@@ -7,3 +7,4 @@ namespace Bridge.Shared.Constants
         public const string SharedAdminPassword = "Admin123!@#";
     }
 }
+    

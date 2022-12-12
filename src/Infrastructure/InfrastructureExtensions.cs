@@ -60,7 +60,6 @@ namespace Bridge.Infrastructure
             services.AddScoped<IFileUploadService, InternalFileUploadService>();
             services.AddScoped<IAddressLocationService, AddressLocationService>();
             services.AddScoped<IMailService, MailService>();
-            services.AddScoped<IAdminUserService, AdminUserService>();
             services.AddScoped<ICoordinateService, CoordinateService>();
 
             // repositories
