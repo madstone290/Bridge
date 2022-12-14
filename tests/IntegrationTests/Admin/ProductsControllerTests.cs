@@ -40,7 +40,7 @@ namespace Bridge.IntegrationTests.Admin
             };
         }
        
-        [Fact]
+        [Fact(Skip = "Policy changed")]
         public async Task Cosummer_Is_Forbidden()
         {
             // Arrange

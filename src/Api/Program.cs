@@ -3,7 +3,9 @@ using Bridge.Api.Extensions;
 using Bridge.Api.Middlewares;
 using Bridge.Application;
 using Bridge.Infrastructure;
+using Bridge.Infrastructure.Extensions;
 using Bridge.Infrastructure.Identity.Services;
+using Bridge.Infrastructure.Services;
 using Bridge.Shared.ApiContract;
 using Bridge.Shared.Constants;
 using MediatR;
@@ -18,7 +20,7 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Configuration.HandleArgs(args);
+builder.Services.AddOptionsEx<InternalFileUploadService.Config>(options => options.UploadDirectory = builder.Configuration.GetValue<string>("UploadDirectory"));
 
 if (builder.Environment.IsProduction())
     builder.Configuration.AddJsonFile("Secrets/db_production_config.json");

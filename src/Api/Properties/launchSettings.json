@@ -2,7 +2,7 @@
   "profiles": {
     "Api": {
       "commandName": "Project",
-      "commandLineArgs": "UploadDirectory=C:\\_Home\\Sources\\VisualStudio\\managed\\Bridge\\src\\Api\\Files",
+      "commandLineArgs": "Color=Red UploadDirectory=C:\\_Home\\Sources\\VisualStudio\\managed\\Bridge\\src\\Api\\Files",
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {

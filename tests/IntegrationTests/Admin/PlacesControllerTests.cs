@@ -32,8 +32,9 @@ namespace Bridge.IntegrationTests.Admin
                 DetailAddress = details ?? "아테네 1440호"
             };
         }
-      
-        [Fact]
+
+
+        [Fact(Skip = "Policy changed")]
         public async Task Consumer_Cannot_Access()
         {
             // Arrange
@@ -50,7 +51,7 @@ namespace Bridge.IntegrationTests.Admin
             };
             var createRequest = new HttpRequestMessage(HttpMethod.Post, ApiRoutes.Admin.Places.Create) { Content = JsonContent.Create(command) };
             var getRequest = new HttpRequestMessage(HttpMethod.Get, ApiRoutes.Admin.Places.Get.AddQueryParam("id", 1));
-            
+
             // Act
             var createResponse = await _client.SendAsConsumerAsync(createRequest);
             var getResponse = await _client.SendAsConsumerAsync(getRequest);

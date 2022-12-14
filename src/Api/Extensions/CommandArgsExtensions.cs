@@ -19,7 +19,7 @@ namespace Bridge.Api.Extensions
                     new KeyValuePair<string, string>("DevOpsColor", color)
                 });
             }
-
+            
             var uploadDirectoryArg = args.FirstOrDefault(x => x.StartsWith("UploadDirectory=", StringComparison.OrdinalIgnoreCase));
             if (uploadDirectoryArg == null)
                 throw new Exception("Upload directory must be provided");

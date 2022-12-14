@@ -4,6 +4,7 @@ using Bridge.IntegrationTests.Config.ApiClients;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Newtonsoft.Json.Linq;
@@ -40,9 +41,13 @@ namespace Bridge.IntegrationTests.Config
             webApplicationFactory = new WebApplicationFactory<Program>()
               .WithWebHostBuilder(webHostBuilder =>
               {
+                  webHostBuilder.ConfigureAppConfiguration((context, config) =>
+                  {
+                      config.AddCommandLine(new string[] { "UploadDirectory=C:\\_Home\\Sources\\VisualStudio\\managed\\Bridge\\tests\\IntegrationTests\\UploadedFiles" });
+                  });
+
                   webHostBuilder.ConfigureTestServices(services =>
                   {
-
                       // replace BridgeContext
                       services.RemoveAll<DbContextOptions<BridgeContext>>();
 
@@ -65,11 +70,9 @@ namespace Bridge.IntegrationTests.Config
                       // replace IEmailVerificationService
                       services.RemoveAll<IEmailVerificationService>();
                       services.AddScoped<IEmailVerificationService, TestEmailVerificationService>();
-
                   });
               });
 
-            
             using var scope = webApplicationFactory.Services.CreateScope();
 
             // DB 마이그레이션

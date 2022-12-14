@@ -1,7 +1,6 @@
 using Bridge.Application.Common.Services;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using System.ComponentModel.DataAnnotations;
 
 namespace Bridge.Infrastructure.Services
 {
@@ -10,14 +9,20 @@ namespace Bridge.Infrastructure.Services
     /// </summary>
     public class InternalFileUploadService : IFileUploadService
     {
+        public class Config
+        {
+            [Required]
+            public string UploadDirectory { get; set; } = string.Empty;
+        }
+
         /// <summary>
         /// 업로드용 디렉토리
         /// </summary>
         private string UploadDirectory { get; }
 
-        public InternalFileUploadService(IConfiguration configuration)
+        public InternalFileUploadService(IOptions<Config> configOptions)
         {
-            UploadDirectory = configuration.GetValue<string>("UploadDirectory");
+            UploadDirectory = configOptions.Value.UploadDirectory;
         }
 
         private static string GetNextFilePath(string rootDirectory, string filePath)
@@ -46,12 +51,12 @@ namespace Bridge.Infrastructure.Services
                 File.Delete(fullPath);
         }
 
-        public string? UploadFile(string directoryName, string fileName, byte[] data)
+        public string? UploadFile(string category, string fileName, byte[] data)
         {
             if (string.IsNullOrWhiteSpace(fileName) || data == null || data.Length == 0)
                 return null;
 
-            var filePath = Path.Combine(directoryName, fileName);
+            var filePath = Path.Combine(category, fileName);
             var fullPath = Path.Combine(UploadDirectory, filePath);
 
             var directoryFullName = Path.GetDirectoryName(fullPath)!;

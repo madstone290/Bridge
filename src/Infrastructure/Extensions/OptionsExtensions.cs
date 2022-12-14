@@ -26,6 +26,14 @@ namespace Bridge.Infrastructure.Extensions
                 .ValidateOnStart();
         }
 
-     
+        public static OptionsBuilder<TOptions> AddOptionsEx<TOptions>(this IServiceCollection services, Action<TOptions> configureOptions)
+         where TOptions : class
+        {
+            return services.AddOptions<TOptions>()
+                .Configure(configureOptions)
+                .ValidateDataAnnotations()
+                .ValidateOnStart();
+        }
+
     }
 }

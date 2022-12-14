@@ -23,7 +23,7 @@ namespace Bridge.Api.Controllers
         [Route("Color")]
         public string GetDeploymentColor()
         {
-            return _configuration.GetValue<string>("DevOpsColor") ?? "n/a";
+            return _configuration.GetValue<string>("Color") ?? "no color";
         }
 
         [HttpGet]
