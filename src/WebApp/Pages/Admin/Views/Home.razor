@@ -1,6 +1,12 @@
 @attribute [Route(PageRoutes.Admin.Home)]
 @attribute [Authorize(Policy = Bridge.Shared.Constants.PolicyConstants.Admin)]
 
+<MudGrid Spacing="4" Style="padding: 20px 20px 20px 20px;">
+    <MudItem xs="3">
+        <MudButton Size="Size.Large" Variant="Variant.Outlined" Color="Color.Primary" Href="@PageRoutes.Admin.PlaceList">장소 관리</MudButton>
+    </MudItem>
+</MudGrid>
+
 @code {
 
 }
