@@ -28,6 +28,7 @@
                                   @bind-Value="@_loginModel.Password"
                                   For="@(()=>_loginModel.Password)"
                                   Label="비밀번호"
+                                  OnlyValidateIfDirty="true"
                                   OnKeyUp="Password_OnKeyUp"
                                   InputType="InputType.Password" />
 
