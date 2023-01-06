@@ -66,16 +66,17 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.AddSingleton<HttpClient>((sp) =>
 {
-    var apiAddress = builder.Environment.IsProduction()
-        ? new Uri(builder.Configuration["ApiUrls:Production"])
-        : new Uri(builder.Configuration["ApiUrls:Development"]);
+    var urlString = builder.Environment.IsProduction()
+        ? builder.Configuration["API_URL"]
+        : builder.Configuration["ApiUrls:Development"];
+    var apiUrl = new Uri(urlString);
     var clientHandler = new HttpClientHandler
     {
         AllowAutoRedirect = false
     };
     return new HttpClient(clientHandler)
     {
-        BaseAddress = apiAddress
+        BaseAddress = apiUrl
     };
 });
 

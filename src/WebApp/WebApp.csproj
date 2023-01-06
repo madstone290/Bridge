@@ -6,6 +6,9 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <RootNamespace>Bridge.WebApp</RootNamespace>
         <AssemblyVersion>1.0.7.0</AssemblyVersion>
+        <UserSecretsId>0b744f13-0ce0-4766-b4f1-1a8d267ae8b7</UserSecretsId>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <DockerfileContext>..\..</DockerfileContext>
     </PropertyGroup>
 
     <ItemGroup>
@@ -19,6 +22,7 @@
         <PackageReference Include="Blazored.LocalStorage" Version="4.2.0" />
         <PackageReference Include="ClosedXML" Version="0.97.0" />
         <PackageReference Include="FluentValidation" Version="11.2.2" />
+        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
         <PackageReference Include="MudBlazor" Version="6.0.15" />
     </ItemGroup>
     
