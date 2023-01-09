@@ -1,0 +1,71 @@
+name: Deploy WebApp Docker
+
+env:
+  # docker
+  DOCKER_FILE: src/WebApp/Dockerfile
+  DOCKER_IMAGE_NAME: bridge-web
+  
+
+  # secret files
+  SECRET_DIR: src/WebApp/Secrets
+  ENCRYPTION_SERVICE_CONFIG_FILE: encryption_service_config.json
+  NAVER_API_CONFIG_FILE: naver_api_config.json
+  
+  # deploy
+  PROJ_DIR: src/WebApp
+  
+  # publish directory
+  SOURCE_DIR: publish 
+  # deploy directory in the remote machine
+  TARGET_DIR: bridge/web/publish 
+  
+  DEPLOY_SCRIPT: |
+    cd bridge/scripts
+    bash switchDeploy.sh web-config.sh
+    
+  # slack
+  SLACK_AUTHOR: '' # hide author_name with empty string
+
+on:
+  push:
+    tags:
+      - web-docker-release*
+      
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Create secrets
+      run: |
+        mkdir -p ${{ env.SECRET_DIR }}
+        echo '${{ secrets.ENCRYPTION_SERVICE_CONFIG }}' > ${{ env.SECRET_DIR }}/${{ env.ENCRYPTION_SERVICE_CONFIG_FILE }}
+        echo '${{ secrets.NAVER_API_CONFIG }}' > ${{ env.SECRET_DIR }}/${{ env.NAVER_API_CONFIG_FILE }}
+        
+    - name: Login to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+        
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+        
+    - name: Build and push
+      uses: docker/build-push-action@v3
+      with:
+        context: .
+        file: ./${{ env.DOCKER_FILE }}
+        push: true
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:latest
+    
+    - name: Report
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        author_name: ${{ env.SLACK_AUTHOR }}
+        fields: eventName,message,commit,author,ref,workflow,job,took,pullRequest
+      env: 
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} 
+      if: always() 
