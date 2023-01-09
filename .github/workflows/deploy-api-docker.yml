@@ -3,7 +3,7 @@ name: Deploy Api
 env:
   # docker
   DOCKER_FILE: src/Api/Dockerfile
-  DOCKER_IMAGE_NAME: madstone290/bridge-api
+  DOCKER_IMAGE_NAME: bridge-api
   
 
   # secret files
@@ -55,9 +55,9 @@ jobs:
       uses: docker/build-push-action@v3
       with:
         context: .
-        file: ./${{ DOCKER_FILE }}
+        file: ./${{ env.DOCKER_FILE }}
         push: true
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ DOCKER_IMAGE_NAME }}:latest
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:latest
     
     - name: Report
       uses: 8398a7/action-slack@v3
