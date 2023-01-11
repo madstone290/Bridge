@@ -27,9 +27,10 @@ env:
   SLACK_AUTHOR: '' # hide author_name with empty string
 
 on:
+  workflow_dispatch:
   push:
     tags:
-      - web-docker-release*
+      - web-v*
       
 jobs:
   deploy:
@@ -58,7 +59,7 @@ jobs:
         context: .
         file: ./${{ env.DOCKER_FILE }}
         push: true
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:latest
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:${{ steps.meta.outputs.tags }}
     
     - name: Report
       uses: 8398a7/action-slack@v3
