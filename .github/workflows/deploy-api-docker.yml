@@ -15,8 +15,8 @@ env:
   GEOCODE_API_CONFIG_FILE: geocode_api_config.json
   
   DEPLOY_SCRIPT: |
-    cd bridge/scripts
-    bash switchDeploy.sh api-config.sh
+    cd docker/bridge
+    bash switch-api.sh blue
     
   # slack
   SLACK_AUTHOR: '' # hide author_name with empty string
@@ -63,6 +63,15 @@ jobs:
         file: ./${{ env.DOCKER_FILE }}
         push: true
         tags: ${{ steps.meta.outputs.tags }}
+    
+    - name: Deploy
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_KEY }}
+        port: ${{ secrets.SSH_PORT }}
+        script: ${{ env.DEPLOY_SCRIPT }}
     
     - name: Report
       uses: 8398a7/action-slack@v3
