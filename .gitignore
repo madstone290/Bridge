@@ -12,6 +12,9 @@ publish/
 # Secret files
 [Ss]ecret[s]/
 
+# launch settings
+launchSettings.json
+
 # User-specific files
 *.editorconfig
 *.rsuser

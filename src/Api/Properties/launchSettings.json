@@ -21,6 +21,7 @@
     },
     "Docker": {
       "commandName": "Docker",
+      "commandLineArgs": "UploadDirectory=C:\\Users\\Admin\\Desktop\\temp",
       "launchBrowser": true,
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
       "publishAllPorts": true,
