@@ -1,4 +1,6 @@
+@using Bridge.WebApp.Pages.Common.Models
 @using Bridge.WebApp.Pages.Home.ViewModels
+@using Bridge.WebApp.Pages.Home.Views.Components
 @attribute [Route("/mobile")]
 @attribute [AllowAnonymous]
 @inject IIndexViewModel VM
@@ -23,28 +25,22 @@
             <MudIconButton Icon="@Icons.Material.Outlined.Close" OnClick="VM.OnClearClick" />
         </div>
 
-        @if (VM.PlaceSearched && !VM.Places.Any())
-        {
-            <div class="place-list">
-                <div style="padding:20px;">
-                    검색결과가 없습니다
-                </div>
-            </div>
-        }
-        else
-        {
-            <MudList id="@VM.PlaceListElementId" Class="place-list" Clickable="true">
-                @foreach (var place in VM.Places)
-                {
-                    <MudListItem id="@place.Id" Class="list-item" Value="place" OnClick="@(()=> VM.OnPlaceSelected(place))">
-                        
-                    </MudListItem>
-                }
-            </MudList>
-        }
+        <div class="search-result">
+             @if (VM.PlaceSearched && !VM.Places.Any())
+            {
+                <NoSearchResult />
+            }
+            else
+            {
+                <PlaceResultList ListElementId="@VM.PlaceListElementId"
+                             Places="@VM.Places"
+                             OnPlaceClicked="@(new EventCallback<Place>(this, VM.OnPlaceSelected))"
+                             SelectedPlace="@VM.SelectedPlace" />
+            }
+        </div>
     </div>
 
-    <div id="@VM.MapElementId" style="width:100%; height:35vh;">
+    <div id="@VM.MapElementId" style="width:100%; height:60vh;">
     </div>
 </div>
 @code {
