@@ -51,11 +51,15 @@ getDeployColor(){
 }
 
 deployBlue(){
+	echo >&2 ">> docker pull $DOCKER_IMAGE"
+	docker pull $DOCKER_IMAGE
 	echo >&2 ">> docker run -d --name $BLUE_CONTAINER --network $DOCKER_NETWORK --ip $BLUE_IP $DOCKER_IMAGE COLOR=$BLUE"
 	docker run -d --name $BLUE_CONTAINER --network $DOCKER_NETWORK --ip $BLUE_IP $DOCKER_IMAGE COLOR=$BLUE
 }
 
 deployGreen(){
+	echo >&2 ">> docker pull $DOCKER_IMAGE"
+	docker pull $DOCKER_IMAGE
 	echo >&2 ">> docker run -d --name $GREEN_CONTAINER --network $DOCKER_NETWORK --ip $GREEN_IP $DOCKER_IMAGE COLOR=$GREEN"
 	docker run -d --name $GREEN_CONTAINER --network $DOCKER_NETWORK --ip $GREEN_IP $DOCKER_IMAGE COLOR=$GREEN
 }
